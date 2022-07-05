@@ -2,6 +2,80 @@
 use App\Models\User;
 use App\Models\UserOtp;
 
+function numberToRomawi($number)
+{
+    $solution = '';
+    $lookup = [
+        1000 => 'M',
+        900 => 'CM',
+        500 => 'D',
+        400 => 'CD',
+        100 => 'C',
+        90 => 'XC',
+        50 => 'L',
+        40 => 'XL',
+        10 => 'X',
+        9 => 'IX',
+        5 => 'V',
+        4 => 'IV',
+        1 => 'I',
+    ];
+
+    foreach($lookup as $limit => $glyph){
+        while ($number >= $limit) {
+            $solution .= $glyph;
+            $number -= $limit;
+        }
+    }
+
+    return $solution;
+}
+
+function countDay($now,$end)
+{
+    $now = strtotime($now); // or your date as well
+    $your_date = strtotime($end);
+    $datediff = $now - $your_date;
+
+    return round($datediff / (60 * 60 * 24));
+}
+
+function hitung_masa($start,$end){
+    $birthDate = new \DateTime($start);
+	$today = new \DateTime($end);
+	if ($birthDate > $today) { 
+	    return 0;
+    }
+    $tahun = $today->diff($birthDate)->y;
+
+    return $tahun;
+}
+
+function hitung_masa_bulan($start,$end){
+    $birthDate = new \DateTime($start);
+	$today = new \DateTime($end);
+	if ($birthDate > $today) { 
+	    return 0;
+    }
+    $tahun = $today->diff($birthDate)->y;
+
+    return ($tahun*12) + $today->diff($birthDate)->m + 1;
+}
+
+function hitung_umur($tanggal_lahir,$pembulatan=1){
+    $birthDate = new \DateTime($tanggal_lahir);
+	$today = new \DateTime("today");
+	if ($birthDate > $today) { 
+	    return 0;
+    }
+    $tahun = $today->diff($birthDate)->y;
+
+    if($pembulatan==1 and $today->diff($birthDate)->m > 6) $tahun++; // Roundup
+    if($pembulatan==2 and $today->diff($birthDate)->m > 1) $tahun++; // Rounddown
+    
+    return $tahun;
+}
+
 function gl_number($item)
 {
     return $item->general_ledger_number .($item->revisi!=0 ? " - R{$item->revisi}" : "");

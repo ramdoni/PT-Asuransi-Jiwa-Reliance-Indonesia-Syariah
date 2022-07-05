@@ -1,0 +1,259 @@
+<?php
+
+namespace App\Http\Livewire\Pengajuan;
+
+use App\Models\Pengajuan;
+use App\Models\Kepesertaan;
+use Livewire\Component;
+use App\Models\PengajuanHistory;
+use App\Models\Finance\Income;
+use App\Models\Finance\Polis;
+use App\Models\Finance\SyariahUnderwriting;
+
+class Edit extends Component
+{
+    public $data,$no_pengajuan,$kepesertaan=[],$kepesertaan_proses,$kepesertaan_approve,$kepesertaan_reject;
+    public $check_all=0,$check_id=[],$check_arr,$selected,$status_reject=2,$note;
+    protected $listeners = ['reload-page'=>'$refresh'];
+    public function render()
+    {
+        $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->get();
+        $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->get();
+        $this->kepesertaan_reject = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->get();
+
+        $this->data->total_akseptasi = $this->kepesertaan_proses->count();
+        $this->data->total_approve = $this->kepesertaan_approve->count();
+        $this->data->total_reject = $this->kepesertaan_reject->count();
+        $this->data->save();
+
+        return view('livewire.pengajuan.edit');
+    }
+
+    public function mount(Pengajuan $data)
+    {
+        $this->data = $data;
+        $this->no_pengajuan = $data->no_pengajuan;
+    }
+
+    public function updated($propertyName)
+    {
+        if($propertyName=='check_all' and $this->check_all==1){
+            foreach($this->data->kepesertaan as $k => $item){
+                $this->check_id[$k] = $item->id;
+            }
+        }elseif($propertyName=='check_all' and $this->check_all==0){
+            $this->check_id = [];
+        }
+    }
+
+    public function submit_head_teknik()
+    {
+        $this->data->status = 2;
+        $this->data->save();
+
+        $this->emit('message-success','Data berhasil di proses');
+        $this->emit('reload-page');
+    }
+
+    public function submit_head_syariah()
+    {
+        // generate DN Number
+        $dn_number = $this->data->polis->no_polis ."/". str_pad($this->data->id,4, '0', STR_PAD_LEFT)."AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
+        $this->data->dn_number = $dn_number;
+        $this->data->status = 3;
+        $this->data->save();
+
+        $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
+                                        \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
+                                        \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
+                                        \DB::raw("SUM(kontribusi) as total_kontribusi"),
+                                        \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
+                                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita"),
+                                        )->where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->first();
+
+        $nilai_manfaat = $select->total_nilai_manfaat;
+        $dana_tabbaru = $select->total_dana_tabarru;
+        $dana_ujrah = $select->total_dana_ujrah;
+        $kontribusi = $select->total_kontribusi;
+        $ektra_kontribusi = $select->total_extract_kontribusi;
+        $extra_mortalita = $select->total_extra_mortalita;
+        $total_kontribusi = $extra_mortalita+$kontribusi+$ektra_kontribusi;
+        $net_kontribusi = $total_kontribusi;
+
+
+        $select_tertunda =  Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
+                                        \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
+                                        \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
+                                        \DB::raw("SUM(kontribusi) as total_kontribusi"),
+                                        \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
+                                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita"),
+                                        )->where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->first();
+
+        $manfaat_Kepesertaan_tertunda = $select_tertunda->total_nilai_manfaat;
+        $kontribusi_kepesertaan_tertunda =  $select_tertunda->total_kontribusi;
+
+        SyariahUnderwriting::insert([
+            'bulan' => date('F'),
+            'user_memo' => \Auth::user()->name,
+            'user_akseptasi' => \Auth::user()->name,
+            'transaksi_id' => $this->data->no_pengajuan,
+            'tanggal_produksi'=> date('Y-m-d'),
+            'no_debit_note' => $this->data->dn_number,
+            'no_polis' => $this->data->polis->no_polis, 
+            'pemegang_polis' => $this->data->polis->nama,
+            'alamat' => $this->data->polis->alamat,
+            'jenis_produk' => $this->data->polis->produk->nama,
+            'jml_kepesertaan_tertunda' => $this->data->total_reject,
+            'manfaat_Kepesertaan_tertunda' => $manfaat_Kepesertaan_tertunda,
+            'kontribusi_kepesertaan_tertunda' => $kontribusi_kepesertaan_tertunda,
+            'jml_kepesertaan' => $this->data->total_approve,
+            // 'no_kepesertaan_awal' => $no_kepesertaan_awal,
+            // $data->no_kepesertaan_akhir = $no_kepesertaan_akhir;
+            // $data->masa_awal_asuransi = $masa_awal_asuransi;
+            // $data->masa_akhir_asuransi = $masa_akhir_asuransi;
+            'nilai_manfaat' => $nilai_manfaat,
+            'dana_tabbaru' => $dana_tabbaru,
+            'dana_ujrah' => $dana_ujrah,
+            'kontribusi' => $kontribusi,
+            'ektra_kontribusi' => $ektra_kontribusi,
+            'total_kontribusi' => $total_kontribusi,
+            // $data->pot_langsung = $pot_langsung;
+            // $data->jumlah_diskon = $jumlah_diskon;
+            // $data->status_potongan = $status_potongan;
+            // $data->handling_fee = $handling_fee;
+            // $data->jumlah_fee = $jumlah_fee;
+            // $data->pph = $pph;
+            // $data->jumlah_pph = $jumlah_pph;
+            // $data->ppn = $ppn;
+            // $data->jumlah_ppn = $jumlah_ppn;
+            // $data->biaya_polis = $biaya_polis;
+            // $data->biaya_sertifikat = $biaya_sertifikat;
+            // $data->extpst = $extpst;
+            'net_kontribusi' => $net_kontribusi,
+            // $data->terbilang = $terbilang;
+            // if($tgl_update_database) $data->tgl_update_database = date('Y-m-d',($tgl_update_database));
+            'tgl_update_sistem' => date('Y-m-d'),
+            // $data->no_berkas_sistem = $no_berkas_sistem;
+            // if($tgl_posting_sistem) $data->tgl_posting_sistem = date('Y-m-d',($tgl_posting_sistem));
+            // $data->ket_posting = $ket_posting;
+            // $data->grace_periode = $grace_periode;
+            // $data->grace_periode_number = $grace_periode_number;
+            // if($tgl_jatuh_tempo) $data->tgl_jatuh_tempo = date('Y-m-d',($tgl_jatuh_tempo));
+            // if($tgl_lunas) $data->tgl_lunas = date('Y-m-d',($tgl_lunas));
+            // $data->pembayaran = $pembayaran;
+            // $data->piutang = $piutang;
+            // $data->total_peserta = $total_peserta;
+            // $data->outstanding_peserta = $outstanding_peserta;
+            // $data->produksi_cash_basis = $produksi_cash_basis;
+            // $data->ket_lampiran = $ket_lampiran;
+            // $data->pengeluaran_ujroh = $pengeluaran_ujroh;
+            'status' => 1,
+            'user_id' => \Auth::user()->id
+        ]);
+        
+        // find polis
+        $polis = Polis::where('no_polis',$this->data->polis->no_polis)->first();
+        if(!$polis){
+            $polis = new Polis();
+            $polis->no_polis = $this->data->polis->no_polis;
+            $polis->no_polis = $this->data->polis->pemegang_polis;
+            $polis->alamat = $this->data->polis->alamat;
+            $polis->save();
+        }
+
+        // insert finance
+        $income = new Income();
+        $income->user_id = \Auth::user()->id;
+        $income->reference_no = $this->data->dn_number;
+        $income->reference_date = date('Y-m-d');
+        $income->nominal = $total_kontribusi;
+        $income->client = $this->data->polis->no_polis .'/'. $this->data->polis->nama;
+        $income->reference_type = 'Premium Receivable';
+        $income->transaction_table = 'syariah_underwriting';
+        $income->transaction_id = $this->data->id;
+        $income->type = 2; // Syariah
+        $income->policy_id = $polis->id;
+        $income->save();
+
+        $this->emit('message-success','Data berhasil di proses');
+        $this->emit('reload-page');
+    }
+
+    public function set_id(Kepesertaan $data)
+    {
+        $this->selected = $data;
+    }
+
+    public function approve(Kepesertaan $data)
+    {
+        $data->status_akseptasi = 1;
+        $data->save();
+
+        PengajuanHistory::insert([
+            'pengajuan_id' => $data->pengajuan_id,
+            'kepesertaan_id' => $data->id,
+            'user_id' => \Auth::user()->id,
+            'status' => 1
+        ]);
+        $this->emit('message-success','Data berhasil di setujui');
+        $this->emit('reload-page');
+    }
+
+    public function submit_rejected()
+    {
+        $this->selected->reason_reject = $this->note;
+        $this->selected->status_akseptasi = 2;
+        $this->selected->save();
+
+        PengajuanHistory::insert([
+            'pengajuan_id' => $this->selected->pengajuan_id,
+            'kepesertaan_id' => $this->selected->id,
+            'reason' => $this->note,
+            'user_id' => \Auth::user()->id,
+            'status' => 2
+        ]);
+
+        $this->emit('message-success','Data berhasil di proses');
+
+        $this->emit('reload-page');
+        $this->emit('modal','hide');
+    }
+
+    public function approveAll()
+    {
+        foreach($this->data->kepesertaan as $item){
+            $item->status_akseptasi = 1;
+            $item->save();
+            
+            PengajuanHistory::insert([
+                'pengajuan_id' => $item->pengajuan_id,
+                'kepesertaan_id' => $item->id,
+                'user_id' => \Auth::user()->id,
+                'status' => 1
+            ]);
+        }
+        $this->check_id = []; $this->check_all = 0;
+
+        $this->emit('message-success','Data berhasil di setujui');
+        $this->emit('reload-page');
+    }
+
+    public function rejectAll()
+    {
+        foreach($this->data->kepesertaan as $item){
+            $item->status_akseptasi = 2;
+            $item->save();
+            
+            PengajuanHistory::insert([
+                'pengajuan_id' => $item->pengajuan_id,
+                'kepesertaan_id' => $item->id,
+                'user_id' => \Auth::user()->id,
+                'status' => 2
+            ]);
+        }
+        $this->check_id = [];$this->check_all = 0;
+
+        $this->emit('reload-page');        
+        $this->emit('message-success','Data berhasil diproses');
+    }
+}

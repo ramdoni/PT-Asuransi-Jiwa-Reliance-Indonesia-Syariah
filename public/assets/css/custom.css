@@ -1,5 +1,5 @@
-.theme-cyan .page-loader-wrapper{
-    background:#49c5b645;
+.theme-blue .page-loader-wrapper{
+    background:#fefefe;
 }
 .lds-ring {
     display: inline-block;
@@ -46,8 +46,8 @@
     padding-bottom:4px;
     font-size:13px;
 }
-.table-nowrap tr td{
-    white-space:unset !important;
+.table-nowrap tr td,.table-nowrap tr th{
+    white-space:nowrap !important;
 }
 .select2-selection__placeholder{
     color:#495057 !important;

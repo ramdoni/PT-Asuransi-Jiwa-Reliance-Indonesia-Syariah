@@ -77,14 +77,14 @@
                         <i class="fa fa-check-circle"></i> <span class="message"></span>
                     </div>
                     <div class="col-lg-5 col-md-8 col-sm-12">      
-                        @if (trim($__env->yieldContent('parentPageTitle')))
-                            <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> @yield('parentPageTitle')</h2>
+                        @if (trim($__env->yieldContent('title')))
+                            <h2><a href="javascript:void(0);" onclick="history.back()" class="btn btn-xs "><i class="fa fa-arrow-left"></i></a> @yield('title')</h2>
                         @endif                  
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a href="/"><i class="icon-home"></i></a>
                             </li>
-                            <li class="breadcrumb-item">@yield('title')</li>
+                            <li class="breadcrumb-item">@yield('sub-title')</li>
                         </ul>
                     </div> 
 
@@ -112,7 +112,11 @@
     @endif
     <script>
         Livewire.on('modal', (act) => {
-            if(act=='hide') $('.modal').modal('hide');
+            if(act=='hide') 
+                $('.modal').modal('hide');
+            else{
+                $(act).modal('show');
+            }
         });
         Livewire.on('message-success', (msg) => {
             $('.alert-success').show();
