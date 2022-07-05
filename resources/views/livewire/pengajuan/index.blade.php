@@ -64,7 +64,12 @@
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif
                                     </td>
-                                    <td>{{$item->dn_number?$item->dn_number:'-'}}</td>
+                                    <td>
+                                        @if($item->dn_number)
+                                            <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
+                                        @endif
+                                        {{$item->dn_number?$item->dn_number:'-'}}
+                                    </td>
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
