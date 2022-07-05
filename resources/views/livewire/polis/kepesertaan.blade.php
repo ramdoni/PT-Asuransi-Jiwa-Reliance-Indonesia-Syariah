@@ -4,10 +4,6 @@
             <input type="text" class="form-control" wire:model="keyword" placeholder="Searching..." />
         </div>
         <div class="col-md-10 form-group">
-            @if($data->status_akseptansi==0)
-                <a href="javascript:void(0)" class="btn btn-warning" data-toggle="modal" data-target="#modal_upload"><i class="fa fa-upload"></i> Upload Peserta</a>
-                <a href="javascript:void(0)" wire:click="calculate" wire:loading.remove wire:target="calculate" class="btn btn-danger" ><i class="fa fa-refresh"></i> Hitung</a>
-            @endif
             <span wire:loading>
                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                 <span class="sr-only">{{ __('Loading...') }}</span>
@@ -19,7 +15,6 @@
             <thead style="background: #eee;">
                 <tr>
                     <th>No</th>
-                    <th>Hitung</th>
                     <th>Ket</th>
                     <th>Bordero</th>
                     <th>Nama Bank</th>
@@ -50,13 +45,6 @@
                 @foreach($kepesertaan as $k => $item)
                     <tr>
                         <td>{{$k+1}}</td>
-                        <td class="text-center">
-                            @if($item->is_hitung==1)
-                                <span title="Sudah dihitung"><i class="text-success fa fa-check-circle"></i></span>
-                            @else
-                                <span title="Belum dihitung"><i class="text-danger fa fa-close"></i></span>
-                            @endif
-                        </td>
                         <td></td>
                         <td></td>
                         <td>{{$item->bank}}</td>

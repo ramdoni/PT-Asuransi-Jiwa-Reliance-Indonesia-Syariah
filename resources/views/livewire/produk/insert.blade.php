@@ -40,20 +40,6 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Extra Mortalita</label>
-                            <select class="form-control" wire:model="extra_mortalita_id">
-                                <option value=""> -- Pilih -- </option>
-                                @foreach($extra_mortalita as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                            @error('extra_mortalita_id')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">

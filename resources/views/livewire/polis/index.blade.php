@@ -35,7 +35,7 @@
                         <thead style="background: #eee;">
                             <tr>
                                 <th>No</th>
-                                <th></th>
+                                <th>Status</th>
                                 <th>No Polis</th>
                                 <th>Nama Pemegang Polis</th>
                                 <th>Provinsi</th>
@@ -49,7 +49,6 @@
                                 <th>Keterangan</th>
                                 <th>Status</th>
                                 <th>Rate(%)</th>
-                                {{-- <th>Kode Rate Actuary</th> --}}
                                 <th>Masa Leluasa (Grace Period)</th>
                                 <th>Kelengkapakn Berkas Manfaat Asuransi</th>
                                 <th>Kadaluarsa Klaim</th>
@@ -156,14 +155,8 @@
                                         @if($item->status_approval==0)
                                             <span class="badge badge-warning">Draft</span>
                                         @endif
-                                        @if($item->status_approval==1)
-                                            <span class="badge badge-info">Head Teknik</span>
-                                        @endif
-                                        @if($item->status_approval==2)
-                                            <span class="badge badge-info">Head Syariah</span>
-                                        @endif
                                         @if($item->status_approval==3)
-                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Done</span>
+                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Complete</span>
                                         @endif
                                     </td>
                                     <td><a href="{{route('polis.edit',$item->id)}}">{{$item->no_polis}}</a></td>

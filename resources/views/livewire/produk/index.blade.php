@@ -38,7 +38,6 @@
                                 <th>Singkatan Produk</th>
                                 <th>Nama Produk</th>
                                 <th>Klasifikasi</th>
-                                <th class="text-center">Extra Mortalita</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -49,7 +48,6 @@
                                     <td><a href="javascript:void(0)" wire:click="$emit('set-id',{{$item->id}})" data-toggle="modal" data-target="#modal_edit">{{$item->singkatan}}</a></td>
                                     <td>{{$item->nama}}</td>
                                     <td>{{$item->klasifikasi}}</td>
-                                    <td class="text-center">{{isset($item->em->name) ? $item->em->name : '-'}}</td>
                                     <td><a href="javascript:void(0)" class="text-danger" wire:click="delete({{$item->id}})"><i class="fa fa-trash"></i></a></td>
                                 </tr>
                             @endforeach
