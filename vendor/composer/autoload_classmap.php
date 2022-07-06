@@ -21,6 +21,7 @@ return array(
     'App\\Http\\Controllers\\ClaimController' => $baseDir . '/app/Http/Controllers/ClaimController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\IndexController' => $baseDir . '/app/Http/Controllers/IndexController.php',
+    'App\\Http\\Controllers\\PengajuanController' => $baseDir . '/app/Http/Controllers/PengajuanController.php',
     'App\\Http\\Controllers\\PesertaController' => $baseDir . '/app/Http/Controllers/PesertaController.php',
     'App\\Http\\Controllers\\PremiumReceivableController' => $baseDir . '/app/Http/Controllers/PremiumReceivableController.php',
     'App\\Http\\Controllers\\RecoveryController' => $baseDir . '/app/Http/Controllers/RecoveryController.php',

@@ -142,33 +142,129 @@ class Edit extends Component
         $this->refund_cut_loss = $this->data->refund_cut_loss;
     }
     
-    public function submit_akseptasi()
+    public function submit_issued()
     {
         $this->data->status_approval = 1;
         $this->data->save();
 
-        session()->flash('message-success',__('Polis berhasil disubmit, menunggu selanjutnya diproses oleh Head Teknik / Underwriting'));
-
-        return redirect()->route('polis.index');
+        $this->save();
     }
 
-    public function submit_head_teknik()
+    public function submit_draft()
     {
-        $this->data->status_approval = 2;
-        $this->data->save();
-
-        session()->flash('message-success',__('Polis berhasil disubmit, selanjutnya diproses oleh Head Syariah'));
-
-        return redirect()->route('polis.index');
+        $this->data->status_approval = 0;
+        $this->data->save();    
+        
+        $this->save();
     }
 
-    public function submit_head_syariah()
+    public function save()
     {
-        $this->data->status_approval = 3;
-        $this->data->save();
+        $this->data->nama = $this->nama;
+        $this->data->provinsi_id = $this->provinsi_id;
+        $this->data->alamat = $this->alamat;
+        $this->data->produk_id = $this->produk_id;
+        $this->data->awal = $this->awal;
+        $this->data->akhir = $this->akhir;
+        $this->data->rate = $this->rate;
+        $this->data->keterangan = $this->keterangan;
+        $this->data->status = $this->status;
+        $this->data->masa_leluasa = $this->masa_leluasa;
+        $this->data->kelengkapan_berkas = $this->kelengkapan_berkas;
+        $this->data->kadaluara_klaim = $this->kadaluarsa_klaim;
+        $this->data->pemulihan_kepesertaan = $this->pemulihan_kepesertaan;
+        $this->data->penyelesaian_perselisihan = $this->penyelesaian_perselisihan;
+        $this->data->iuran_tabbaru = $this->iuran_tabbaru;
+        $this->data->ujrah_atas_pengelolaan = $this->ujrah_atas_pengelolaan;
+        $this->data->nisbah_hasil_investasi_peserta = $this->nisbah_hasil_investasi_peserta;
+        $this->data->nisbah_hasil_investasi_pengelolaan = $this->nisbah_hasil_investasi_pengelolaan;
+        $this->data->surplus_uw_tabbaru = $this->surplus_uw_tabbaru;
+        $this->data->surplus_uw_peserta = $this->surplus_uw_peserta;
+        $this->data->surplus_uw_pengelola = $this->surplus_uw_pengelola;
+        $this->data->usia_minimal = $this->usia_minimal;
+        $this->data->reasuradur_id = $this->reasuradur_id;
+        $this->data->tipe = $this->tipe;
+        $this->data->model = $this->model;
+        $this->data->rate_persen = $this->rate_persen;
+        $this->data->ri_com = $this->ri_com;
+        $this->data->stnc = $this->stnc;
+        $this->data->kadaluarsa_reas  = $this->kadaluarsa_reas;
+        $this->data->no_perjanjian_reas  = $this->no_perjanjian_reas;
+        $this->data->perkalian_biaya_penutupan  = $this->perkalian_biaya_penutupan;
+        $this->data->potong_langsung = $this->potong_langsung;
+        $this->data->fee_base_brokerage = $this->fee_base_brokerage;
+        $this->data->maintenance = $this->maintenance;
+        $this->data->admin_agency = $this->admin_agency;
+        $this->data->agen_penutup = $this->agen_penutup;
+        $this->data->operasional_agency = $this->operasional_agency;
+        $this->data->ujroh_handling_fee_broker = $this->ujroh_handling_fee_broker;
+        $this->data->referal_fee = $this->referal_fee;
+        $this->data->pph = $this->pph;
+        $this->data->ppn = $this->ppn;
+        $this->data->tujuan_pembayaran_nota_penutupan = $this->tujuan_pembayaran_nota_penutupan; 
+        $this->data->no_rekening = $this->no_rekening;
+        $this->data->bank = $this->bank;
+        $this->data->tujuan_pembayaran_update = $this->tujuan_pembayaran_update;
+        $this->data->pks = $this->pks;
+        $this->data->produksi_kontribusi = $this->produksi_kontribusi;
+        $this->data->surat_permohonan_tarif_kontribusi = $this->surat_permohonan_tarif_kontribusi;
+        $this->data->fitur_produk = $this->fitur_produk;
+        $this->data->tabel_rate_premi = $this->tabel_rate_premi;
+        $this->data->spajks = $this->spajks;
+        $this->data->spajks_sementara = $this->spajks_sementara;
+        $this->data->copy_ktp = $this->copy_ktp;
+        $this->data->copy_npwp = $this->copy_npwp;
+        $this->data->npwp = $this->npwp;
+        $this->data->copy_siup = $this->copy_siup;
+        $this->data->nota_penutupan = $this->nota_penutupan;
+        $this->data->tujuan_pembayaran_nama_penerima_refund = $this->tujuan_pembayaran_nama_penerima_refund;
+        $this->data->bank_refund = $this->bank_refund;
+        $this->data->no_rekening_refund = $this->no_rekening_refund;
+        $this->data->tujuan_pengiriman_surat = $this->tujuan_pengiriman_surat;
+        $this->data->mcu_dicover_ajri = $this->mcu_dicover_ajri;
+        $this->data->kabupaten_id = $this->kabupaten_id;
+        $this->data->kode_kabupaten = $this->kode_kabupaten;
+        $this->data->ket_diskon = $this->ket_diskon;
+        $this->data->sektor_ekonomi = $this->sektor_ekonomi;
+        $this->data->mitra_pengimbang = $this->mitra_pengimbang;
+        $this->data->kerjasama_pemasaran = $this->kerjasama_pemasaran;
+        $this->data->asuransi_mikro = $this->asuransi_mikro;
+        $this->data->pic_marketing = $this->pic_marketing;
+        $this->data->dc_aaji = $this->dc_aaji;
+        $this->data->dc_ojk = $this->dc_ojk;
+        $this->data->office = $this->office;
+        $this->data->channel = $this->channel;
+        $this->data->segment = $this->segment;
+        $this->data->line_of_business = $this->line_of_business;
+        $this->data->source_of_business = $this->source_of_business;
+        $this->data->no_nota_penutupan = $this->no_nota_penutupan;
+        $this->data->no_perjanjian_kerjasama = $this->no_perjanjian_kerjasama;
+        $this->data->peninjauan_ulang = $this->peninjauan_ulang;
+        $this->data->pembayaran_klaim = $this->pembayaran_klaim;
+        $this->data->retroaktif = $this->retroaktif;
+        $this->data->waiting_period = $this->waiting_period;
+        $this->data->rate_single_usia - $this->rate_single_usia;
+        $this->data->total_bp = $this->total_bp;
+        $this->data->no_sb = $this->no_sb;
+        $this->data->uw_limit = $this->uw_limit;
+        $this->data->margin_rate = $this->margin_rate;
+        $this->data->ri_comm = $this->ri_comm;
+        $this->data->share_reinsurance = $this->share_reinsurance;
+        $this->data->lost_ratio = $this->lost_ratio;
+        $this->data->profit_margin = $this->profit_margin;
+        $this->data->contingency_margin = $this->contingency_margin;
+        $this->data->business_source = $this->business_source;
+        $this->data->refund = $this->refund;
+        $this->data->refund_to_pengalihan = $this->refund_to_pengalihan;
+        $this->data->dana_tabbaru_reas = $this->dana_tabbaru_reas;
+        $this->data->dana_ujroh_reas = $this->dana_ujroh_reas;
+        $this->data->stop_loss = $this->stop_loss;
+        $this->data->cut_loss = $this->cut_loss;
+        $this->data->refund_cut_loss = $this->refund_cut_loss;
+        $this->data->save();  
 
         session()->flash('message-success',__('Polis berhasil disubmit'));
 
-        return redirect()->route('polis.index');        
+        return redirect()->route('polis.index');
     }
 }

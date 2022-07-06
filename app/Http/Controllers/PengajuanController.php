@@ -11,7 +11,7 @@ class PengajuanController extends Controller
     {
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('livewire.pengajuan.print-dn',['data'=>$id]);
-        
+
         return $pdf->stream();
     }
 }

@@ -679,6 +679,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Http\\Controllers\\ClaimController' => __DIR__ . '/../..' . '/app/Http/Controllers/ClaimController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\IndexController' => __DIR__ . '/../..' . '/app/Http/Controllers/IndexController.php',
+        'App\\Http\\Controllers\\PengajuanController' => __DIR__ . '/../..' . '/app/Http/Controllers/PengajuanController.php',
         'App\\Http\\Controllers\\PesertaController' => __DIR__ . '/../..' . '/app/Http/Controllers/PesertaController.php',
         'App\\Http\\Controllers\\PremiumReceivableController' => __DIR__ . '/../..' . '/app/Http/Controllers/PremiumReceivableController.php',
         'App\\Http\\Controllers\\RecoveryController' => __DIR__ . '/../..' . '/app/Http/Controllers/RecoveryController.php',
