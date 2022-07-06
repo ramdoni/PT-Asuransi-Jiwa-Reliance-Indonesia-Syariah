@@ -155,8 +155,8 @@
                                         @if($item->status_approval==0)
                                             <span class="badge badge-warning">Draft</span>
                                         @endif
-                                        @if($item->status_approval==3)
-                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Complete</span>
+                                        @if($item->status_approval==1)
+                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Issued</span>
                                         @endif
                                     </td>
                                     <td><a href="{{route('polis.edit',$item->id)}}">{{$item->no_polis}}</a></td>

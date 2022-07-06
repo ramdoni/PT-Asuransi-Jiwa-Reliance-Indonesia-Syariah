@@ -63,6 +63,24 @@ class Edit extends Component
         $this->data->status = 3;
         $this->data->save();
 
+        // generate no peserta
+        $no_peserta_awal = '';
+        $no_peserta_akhir = '';
+        foreach($this->data->kepesertaan->where('status_akseptasi',1) as $k => $peserta){
+            $no_peserta = $this->data->polis->produk->id ."-". date('ym').str_pad($peserta->id,4, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis_id,6, '0', STR_PAD_LEFT);
+            $peserta->no_peserta = $no_peserta;
+            $peserta->save();
+
+            if($k==0)
+                $no_peserta_awal = $no_peserta;
+            else
+                $no_peserta_akhir = $no_peserta;
+        }
+
+        $this->data->no_peserta_awal = $no_peserta_awal;
+        $this->data->no_peserta_akhir = $no_peserta_akhir;
+        $this->data->save();
+
         $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
                                         \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
                                         \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),

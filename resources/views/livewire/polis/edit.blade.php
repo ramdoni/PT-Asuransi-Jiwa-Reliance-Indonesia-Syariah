@@ -572,22 +572,14 @@
             </div>
             <div class="body">
                 <hr />
-                <span wire:loading wire:target="save,submit_akseptasi,submit_head_teknik,submit_head_syariah">
+                <span wire:loading wire:target="save,submit_draft,submit_issued">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <span class="sr-only">{{ __('Loading...') }}</span>
                 </span>
-                <div class="form-group" wire:loading.remove wire:target="save,submit_akseptasi,submit_head_teknik,submit_head_syariah">
+                <div class="form-group" wire:loading.remove wire:target="save,submit_draft,submit_issued">
                     <a href="javascript:void(0)" class="mr-3" onclick="history.back()"><i class="fa fa-arrow-left"></i> Kembali</a>
-                    @if($data->status_approval==0)
-                        <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> Save as Draft</button>
-                        <button type="button" wire:click="submit_akseptasi" class="btn btn-warning"><i class="fa fa-arrow-right"></i> Submit to Head Teknik</button>
-                    @endif
-                    @if($data->status_approval==1 and \Auth::user()->user_access_id==3)
-                        <button type="button" wire:click="submit_head_teknik" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit to Head Syariah</button>
-                    @endif
-                    @if($data->status_approval==2 and \Auth::user()->user_access_id==4)
-                        <button type="button" wire:click="submit_head_syariah" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Polis</button>
-                    @endif
+                    <button type="button" class="btn btn-info" wire:click="submit_draft"><i class="fa fa-save"></i> Save as Draft</button>
+                    <button type="button" class="btn btn-success" wire:click="submit_issued"><i class="fa fa-arrow-right"></i> Issued</button>
                 </div>
             </div>
         </div>
