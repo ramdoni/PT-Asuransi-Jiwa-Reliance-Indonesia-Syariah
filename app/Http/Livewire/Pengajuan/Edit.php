@@ -68,7 +68,7 @@ class Edit extends Component
                                         \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
                                         \DB::raw("SUM(kontribusi) as total_kontribusi"),
                                         \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
-                                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita"),
+                                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita")
                                         )->where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->first();
 
         $nilai_manfaat = $select->total_nilai_manfaat;
@@ -86,7 +86,7 @@ class Edit extends Component
                                         \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
                                         \DB::raw("SUM(kontribusi) as total_kontribusi"),
                                         \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
-                                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita"),
+                                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita")
                                         )->where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->first();
 
         $manfaat_Kepesertaan_tertunda = $select_tertunda->total_nilai_manfaat;
