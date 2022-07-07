@@ -182,13 +182,11 @@
                 </tr>
                 <tr>
                     <td><strong>Nama Produk</strong></td>
-                    <td> : {{$data->polis->produk->nama}}</td>
+                    <td> : {{isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-'}}</td>
                 </tr>
             </table>
             <p>Dengan ini kami lampirkan : </p>
             <p><strong>1 Daftar Kepesertaan Asuransi Jiwa Kumpulan Syariah</strong></p>
-            <br />
-            <br />
             <table style="width:70%;">
                 <tr>
                     <td style="width:30%">Total Peserta</td>

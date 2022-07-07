@@ -187,6 +187,8 @@ class Insert extends Component
             $item->save();
         }
 
+        $this->hitung();
+
         session()->flash('message-success',__('Pengajuan berhasil diupload, silahkan menunggu persetujuan'));
 
         return redirect()->route('pengajuan.index');
@@ -238,8 +240,8 @@ class Insert extends Component
             }else{
                 $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where('usia',$data->usia)->first();
 
-                if(!$uw) $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi) ->where('usia',$data->usia)->first();
-                if($uw) {
+                if(!$uw) $uw = UnderwritingLimit::where('usia',$data->usia)->orderBy('max_amount','ASC')->first();
+                if($uw){
                     $data->uw = $uw->keterangan;
                     $data->ul = $uw->keterangan;
                 }

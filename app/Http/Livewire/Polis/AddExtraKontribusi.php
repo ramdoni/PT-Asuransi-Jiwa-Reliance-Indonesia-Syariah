@@ -76,7 +76,7 @@ class AddExtraKontribusi extends Component
         }else{
             $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where('usia',$data->usia)->first();
 
-            if(!$uw) $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi) ->where('usia',$data->usia)->first();
+            if(!$uw) $uw = UnderwritingLimit::where('usia',$data->usia)->orderBy('max_amount','ASC')->first();
             if($uw) {
                 $data->uw = $uw->keterangan;
                 $data->ul = $uw->keterangan;

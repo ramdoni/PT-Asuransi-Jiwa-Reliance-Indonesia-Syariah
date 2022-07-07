@@ -32,7 +32,7 @@ class Insert extends Component
 
     public function mount()
     {
-        $this->rates = Rate::get();
+        // $this->rates = Rate::get();
         $this->produks = Produk::get();
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
         $this->no_polis = date('ym').str_pad(Polis::count()+1,6, '0', STR_PAD_LEFT);
@@ -52,7 +52,7 @@ class Insert extends Component
             'nama'=>'required',
             'provinsi_id'=>'required',
             'alamat'=>'required',
-            'ketentuan_uw_reas'=>'required|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:51200',
+            // 'ketentuan_uw_reas'=>'required|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:51200',
             'line_of_business' => 'required',
             'iuran_tabbaru' => 'required'
         ]);

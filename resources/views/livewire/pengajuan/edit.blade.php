@@ -101,7 +101,9 @@
                                             <tr>
                                                 <td>{{$k+1}}</td>
                                                 <td class="text-center">
-                                                    <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @if($data->status!=3)
+                                                        <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <span wire:loading wire:target="approve({{$item->id}})">
@@ -109,10 +111,12 @@
                                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                                     </span>
                                                     @if(($item->status==1 or $item->status==0) and (\Auth::user()->user_access_id==3 || \Auth::user()->user_access_id==4))
-                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
-                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
-                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
-                                                        </div>
+                                                        @if($data->status!=3)
+                                                            <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                                <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                                <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                            </div>
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td>{{$item->bank}}</td>
@@ -195,7 +199,9 @@
                                             <tr>
                                                 <td>{{$k+1}}</td>
                                                 <td>
-                                                    <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                    @if($data->status!=3)
+                                                        <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                    @endif
                                                 </td>
                                                 <td>{{$item->bank}}</td>
                                                 <td>{{$item->cab}}</td>
@@ -284,13 +290,15 @@
                                                     <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                                 </td>
                                                 <td>
-                                                    <span wire:loading wire:target="approve({{$item->id}})">
-                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                        <span class="sr-only">{{ __('Loading...') }}</span>
-                                                    </span>
-                                                    <div wire:loading.remove wire:target="approve({{$item->id}})">
-                                                        <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
-                                                    </div>
+                                                    @if($data->status!=3)
+                                                        <span wire:loading wire:target="approve({{$item->id}})">
+                                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                                        </span>
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                        </div>
+                                                    @endif
                                                 </td>
                                                 <td>{{$item->reason_reject}}</td>
                                                 <td>{{$item->bank}}</td>
