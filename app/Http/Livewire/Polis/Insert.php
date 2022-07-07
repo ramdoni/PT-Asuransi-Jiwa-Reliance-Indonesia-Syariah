@@ -13,7 +13,7 @@ class Insert extends Component
 {
     public $no_polis,$nama,$provinsi_id,$alamat,$produks=[],$provinsi=[],$produk_id,$awal,$akhir,$keterangan,$status;
     public $masa_leluasa,$kadaluarsa_klaim,$pemulihan_kepesertaan,$reasuradur_id,$kelengkapan_berkas,$penyelesaian_perselisihan;
-    public $iuran_tabbaru,$ujrah_atas_pengelolaan,$nisbah_hasil_investasi_peserta,$nisbah_hasil_investasi_pengelolaan,$surplus_uw_tabbaru;
+    public $iuran_tabbaru,$ujrah_atas_pengelolaan,$nisbah_hasil_investasi_peserta,$nisbah_hasil_investasi_pengelolaan,$surplus_uw_peserta,$surplus_uw_pengelola,$surplus_uw_tabbaru;
     public $usia_minimal,$tipe,$model,$rate_persen,$ri_com,$ketentuan_uw_reas,$stnc,$kadaluarsa_reas,$no_perjanjian_reas,$perkalian_biaya_penutupan;
     public $rates=[],$reasuradur=[],$rate,$potong_langsung,$fee_base_brokerage,$maintenance,$admin_agency,$agen_penutup,$operasional_agency;
     public $ujroh_handling_fee_broker,$referal_fee,$pph,$ppn,$tujuan_pembayaran_nota_penutupan,$no_rekening,$bank,$tujuan_pembayaran_update;
@@ -48,7 +48,7 @@ class Insert extends Component
     public function save()
     {
         $this->validate([
-            'no_polis'=>'required',
+            // 'no_polis'=>'required',
             'nama'=>'required',
             'provinsi_id'=>'required',
             'alamat'=>'required',
@@ -169,7 +169,8 @@ class Insert extends Component
             $data->save();
         }
 
-        $this->emit('modal','hide');
-        $this->emit('reload-page');
+        session()->flash('message-success',__('Polis berhasil disubmit'));
+
+        return redirect()->route('polis.index');
     }
 }
