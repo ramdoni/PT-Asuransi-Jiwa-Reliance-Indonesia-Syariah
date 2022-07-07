@@ -10,7 +10,7 @@
             <form wire:submit.prevent="save">
                 <div class="form-group">
                     <label>Persentase</label>
-                    <input type="text" class="form-control" wire:model="amount" />
+                    <input type="number" class="form-control" wire:model="amount" />
                     @error('amount')
                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                     @enderror
