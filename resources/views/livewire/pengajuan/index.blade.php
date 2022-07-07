@@ -40,6 +40,8 @@
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Tanggal Pengajuan</th>
+                                <th>Tanggal Akseptasi</th>
+                                <th>Aging</th>
                                 <th class="text-center">Total Akseptasi</th>
                                 <th class="text-center">Total Diterima</th>
                                 <th class="text-center">Total Ditolak</th>
@@ -73,6 +75,8 @@
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
+                                    <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
+                                    <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : '-'}}</td>
                                     <td class="text-center">{{$item->total_akseptasi}}</td>
                                     <td class="text-center">{{$item->total_approve}}</td>
                                     <td class="text-center">{{$item->total_reject}}</td>

@@ -35,7 +35,7 @@
                             <tbody>
                                 @foreach($row_usia as $usia)
                                     <tr>
-                                        <td>{{$usia->usia}}</td>
+                                        <td style="background: #eee;">{{$usia->usia}}</td>
                                         @foreach($row_tahun as $tahun)
                                             <td>{{isset($raw_data[$tahun->tahun][$usia->usia]) ? $raw_data[$tahun->tahun][$usia->usia] : '-'}}</td>
                                         @endforeach

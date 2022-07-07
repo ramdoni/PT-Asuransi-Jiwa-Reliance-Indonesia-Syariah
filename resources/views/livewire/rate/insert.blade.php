@@ -11,7 +11,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Tahun</label>
+                            <label>Usia</label>
                             <input type="text" class="form-control" wire:model="tahun" />
                             @error('tahun')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Bulan</label>
+                            <label>Masa Asuransi</label>
                             <input type="text" class="form-control" wire:model="bulan" />
                             @error('bulan')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>

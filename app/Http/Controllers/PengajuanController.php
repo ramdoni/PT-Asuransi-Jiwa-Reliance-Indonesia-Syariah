@@ -15,7 +15,7 @@ class PengajuanController extends Controller
 
         $kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('basic');
         $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
-        $potongan_langsung = ($kontribusi + $extra_kontribusi)*10/100;
+        $potongan_langsung = ($kontribusi + $extra_kontribusi)*(10/100);
         
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('livewire.pengajuan.print-dn',['data'=>$id,'head_teknik'=>$head_teknik,'kontribusi'=>$kontribusi,'extra_kontribusi'=>$extra_kontribusi,'potongan_langsung'=>$potongan_langsung]);

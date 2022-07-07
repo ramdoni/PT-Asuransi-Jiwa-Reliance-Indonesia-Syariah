@@ -309,18 +309,26 @@
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
                                                 <td class="text-right">{{format_idr($item->kontribusi)}}</td>
                                                 <td>
-                                                    @if($item->use_em==0)
-                                                        <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
+                                                    @if($item->status !=3)
+                                                        @if($item->use_em==0)
+                                                            <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
+                                                        @else
+                                                            <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><span class="text-right">{{format_idr($item->extra_mortalita)}}</span></a>
+                                                            <a href="{{route('peserta.print-em',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
+                                                        @endif
                                                     @else
-                                                        <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><span class="text-right">{{format_idr($item->extra_mortalita)}}</span></a>
-                                                        <a href="{{route('peserta.print-em',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
+                                                        {{format_idr($item->extra_mortalita)}}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if($item->extra_kontribusi)
-                                                        <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
+                                                    @if($item->status !=3)
+                                                        @if($item->extra_kontribusi)
+                                                            <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
+                                                        @else
+                                                            <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi"><i class="fa fa-plus"></i></a>
+                                                        @endif
                                                     @else
-                                                        <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi"><i class="fa fa-plus"></i></a>
+                                                        {{format_idr($item->extra_kontribusi)}}
                                                     @endif
                                                 </td>
                                                 <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>

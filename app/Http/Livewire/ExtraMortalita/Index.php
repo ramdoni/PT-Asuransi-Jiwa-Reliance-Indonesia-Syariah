@@ -9,7 +9,7 @@ use Livewire\Component;
 class Index extends Component
 {
     public $extra_mortalita_id;
-    protected $listeners = ['reload'=>'$refresh'];
+    protected $listeners = ['reload-page'=>'$refresh'];
     public function render()
     {
         $data = ExtraMortalita::get();

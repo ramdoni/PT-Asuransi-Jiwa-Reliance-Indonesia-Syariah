@@ -203,10 +203,10 @@ function status_account_balance($status)
     }
 }
 
-function calculate_aging($date)
+function calculate_aging($date,$end_date)
 {
     $start_date = new \DateTime($date);
-    $today = new \DateTime("today");
+    $today = new \DateTime($end_date);
     if ($start_date > $today) { 
         return 0;
     }
