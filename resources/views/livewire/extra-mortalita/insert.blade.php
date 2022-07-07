@@ -18,7 +18,7 @@
                 <div class="form-group col-md-6">
                     <label>File (xlsx)</label>
                     <input type="file" class="form-control" wire:model="file" />
-                    <a href="{{asset('template/template-em.xlsx')}}"><i class="fa fa-download"></i> Templae</a>
+                    <a href="{{asset('template/template-em.xlsx')}}"><i class="fa fa-download"></i> Template</a>
                     @error('file')
                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                     @enderror

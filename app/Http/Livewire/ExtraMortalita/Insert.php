@@ -20,18 +20,15 @@ class Insert extends Component
     {
         $this->validate([
             'name'=>'required',
+            'file'=>'required|mimes:xlsx|max:51200' // 50MB maksimal
         ]);
 
         $em = new ExtraMortalita();
         $em->name = $this->name;
         $em->save();
 
-
         \LogActivity::add('[web] Upload EM');
-        $this->validate([
-            'file'=>'required|mimes:xlsx|max:51200' // 50MB maksimal
-        ]);
-        
+    
         $path = $this->file->getRealPath();
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         $reader->setReadDataOnly(true);
@@ -58,7 +55,8 @@ class Insert extends Component
             }
         }
         
-        $this->emit('modal','hide');
-        $this->emit('reload-page');
+        session()->flash('message-success',__('Data saved successfully'));
+
+        return redirect()->route('extra-mortalita.index');
     }
 }
