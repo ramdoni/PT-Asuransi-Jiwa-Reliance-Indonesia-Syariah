@@ -14,7 +14,7 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
     public function render()
     {
-        $data = Polis::orderBy('id','desc');
+        $data = Polis::with(['produk'])->orderBy('id','desc');
         
         if($this->filter_keyword) $data->where(function($table){
             foreach(\Illuminate\Support\Facades\Schema::getColumnListing('polis') as $column){

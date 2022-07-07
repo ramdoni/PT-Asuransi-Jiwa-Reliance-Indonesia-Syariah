@@ -31,7 +31,7 @@
             </div>
             <div class="body">
                 <div class="table-responsive">
-                    <table class="table table-hover m-b-0 c_list table-nowrap">
+                    <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
                         <thead style="background: #eee;">
                             <tr>
                                 <th>No</th>
@@ -166,7 +166,7 @@
                                     <td>{{$item->tahun_terbit_polis}}</td>
                                     <td>{{isset($item->produk->singkatan) ? $item->produk->singkatan : '-'}}</td>
                                     <td>{{isset($item->produk->nama) ? $item->produk->nama : '-'}}</td>
-                                    <td>{{isset($item->produk->klasifikasi) ? $item->produk->klyaasifikasi : '-'}}</td>
+                                    <td>{{isset($item->produk->klasifikasi) ? $item->produk->klasifikasi : '-'}}</td>
                                     <td>{{$item->awal ? date('d-m-Y',strtotime($item->awal)) : '-'}}</td>
                                     <td>{{$item->akhir ? date('d-m-Y',strtotime($item->akhir)) : '-'}}</td>
                                     <td>{{$item->keterangan}}</td>
@@ -282,7 +282,11 @@
         </div>
     </div>
 </div>
-
-<div wire:ignore.self class="modal fade" id="modal_edit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @livewire('polis.edit')
-</div>
+@push('after-scripts')
+    <script>
+        $(document).ready(function() { 
+            var table = $('#data_table').DataTable( { scrollY: "300px", scrollX: true, scrollCollapse: true, paging: false } ); 
+            new $.fn.dataTable.FixedColumns( table, { leftColumns: 4 } ); 
+        } );
+    </script>
+@endpush

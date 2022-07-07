@@ -212,7 +212,7 @@ function calculate_aging($date,$end_date)
     }
 
     $date1=date_create($date);
-    $date2=date_create();
+    $date2=date_create($end_date);
     $diff=date_diff($date1,$date2);
     return $diff->format("%R%a days");
 }

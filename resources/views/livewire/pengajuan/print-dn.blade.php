@@ -48,7 +48,7 @@
         <div class="container">
             <br />
             <hr style="border-bottom:1px solid #000;border-top:3px solid #000;height:2px;border-right:0;border-left:0;" />
-            <h1 style="text-align:center">Debit Note</h1>
+            <h1 style="text-align:center">DEBIT NOTE</h1>
             <hr style="border-bottom:3px solid #000;border-top:1px solid #000;height:2px;border-right:0;border-left:0;" />
             <table width="100%">
                 <tr>
@@ -71,7 +71,7 @@
                     <th>JUMLAH (Rp)</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding-top:10px;padding-bottom:10px;">
+                    <td colspan="2" style="padding-top:10px;padding-bottom:10px;text-align:justify;">
                         Tagihan Penutupan Asuransi produk <strong>RELIANCE PEMBIAYAAN SYARIAH</strong> dengan No Polis {{$data->polis->no_polis}} dan Jumlah Peserta {{$data->kepesertaan->where('status_akseptasi',1)->count()}} orang (No Peserta {{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " - {$data->no_peserta_akhir}" : '' }}  ).                     
                     </td>
                 </tr>
@@ -133,6 +133,7 @@
                 <small style="font-size:10px;">Catatan: Harap pembayaran kontribusi mencantumkan nomor Debit Note.</small>
             </p>
             <div style="page-break-after: always;"></div>
+            <br />
             <br />
             <br />
             <br />
@@ -229,6 +230,7 @@
             <p>
                 Hormat kami<br />
                 <strong>PT. ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>
+                <br />
                 <br />
                 <br />
                 <br />

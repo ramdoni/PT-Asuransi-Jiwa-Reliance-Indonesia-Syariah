@@ -82,6 +82,8 @@
         </table>
     </div>
 </div>
+
+{{--
 <div wire:ignore.self class="modal fade" id="modal_add_extra_kontribusi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-extra-kontribusi')
 </div>
@@ -97,3 +99,4 @@
 <div wire:ignore.self class="modal fade" id="modal_check_double" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.kepesertaan-check-double',['data'=>$data])
 </div>
+--}}

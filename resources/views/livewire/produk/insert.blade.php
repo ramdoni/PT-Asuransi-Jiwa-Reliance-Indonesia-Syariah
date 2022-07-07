@@ -11,6 +11,15 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            <label>Kode Produk</label>
+                            <input type="text" class="form-control" wire:model="kode" />
+                            @error('kode')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
                             <label>Nama Produk</label>
                             <input type="text" class="form-control" wire:model="nama" />
                             @error('nama')

@@ -102,6 +102,7 @@
             <br />
             <br />
             <br />
+            <br />
             <p>
                 <b><u>{{ \Auth::user()->name }}</u></b><br />
                 Head of Teknik Syariah

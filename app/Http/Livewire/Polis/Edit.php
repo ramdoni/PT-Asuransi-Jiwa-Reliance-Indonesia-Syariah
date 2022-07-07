@@ -33,12 +33,12 @@ class Edit extends Component
     {
         $this->data = $id;
 
-        $this->rates = Rate::get();
+        // $this->rates = Rate::get();
         $this->no_polis = $this->data->no_polis;
         $this->nama = $this->data->nama;
         $this->alamat = $this->data->alamat;
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
-        $this->rates = Rate::get();
+        // $this->rates = Rate::get();
         $this->produks = Produk::get();
         $this->provinsi_id = $this->data->provinsi_id;
         $this->alamat = $this->data->alamat;

@@ -98,7 +98,6 @@ class Edit extends Component
         $total_kontribusi = $extra_mortalita+$kontribusi+$ektra_kontribusi;
         $net_kontribusi = $total_kontribusi;
 
-
         $select_tertunda =  Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
                                         \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
                                         \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),

@@ -57,7 +57,7 @@
                         <div class="tab-pane active show" id="kepesertaan_postpone">
                             <div class="table-responsive"> 
                                 <table class="table table-hover m-b-0 c_list table-nowrap">
-                                    <thead style="background: #eee;">
+                                    <thead style="background: #eee;text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
                                             <th class="text-center">
@@ -70,7 +70,7 @@
                                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                                     </span>
                                                     <a href="javascript:void(0)" wire:click="approveAll" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima Semua</a>
-                                                    <a href="javascript:void(0)" wire:click="rejectAll" class="badge badge-danger badge-active"><i class="fa fa-trash"></i> Ditolak Semua</a>
+                                                    <!-- <a href="javascript:void(0)" wire:click="rejectAll" class="badge badge-danger badge-active"><i class="fa fa-trash"></i> Ditolak Semua</a> -->
                                                 @endif
                                             </th>
                                             <th>Nama Bank</th>
@@ -78,7 +78,6 @@
                                             <th>No KTP</th>
                                             <th>No Telepon</th>
                                             <th>Gender</th>
-                                            <th>No Peserta</th>
                                             <th>Nama Peserta</th>
                                             <th>Tgl. Lahir</th>
                                             <th>Usia</th>
@@ -110,7 +109,7 @@
                                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                                     </span>
-                                                    @if(($item->status==1 or $item->status==0) and (\Auth::user()->user_access_id==3 || \Auth::user()->user_access_id==4))
+                                                    @if(($item->status==1 or $item->status==0) and (\Auth::user()->user_access_id==3 || \Auth::user()->user_access_id==4 || \Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
                                                         @if($data->status!=3)
                                                             <div wire:loading.remove wire:target="approve({{$item->id}})">
                                                                 <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
@@ -124,7 +123,6 @@
                                                 <td>{{$item->no_ktp}}</td>
                                                 <td>{{$item->no_telepon}}</td>
                                                 <td>{{$item->jenis_kelamin}}</td>
-                                                <td>{{$item->no_peserta}}</td>
                                                 <td>{{$item->nama}}</td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
@@ -167,7 +165,7 @@
                         <div class="tab-pane" id="kepesertaan_approve">
                             <div class="table-responsive"> 
                                 <table class="table table-hover m-b-0 c_list table-nowrap">
-                                    <thead style="background: #eee;">
+                                    <thead style="background: #eee;text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
                                             <th></th>
@@ -251,7 +249,7 @@
                         <div class="tab-pane" id="kepesertaan_reject">
                             <div class="table-responsive"> 
                                 <table class="table table-hover m-b-0 c_list table-nowrap">
-                                    <thead style="background: #eee;">
+                                    <thead style="background: #eee;text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
                                             <th class="text-center">
@@ -264,7 +262,6 @@
                                             <th>No KTP</th>
                                             <th>No Telepon</th>
                                             <th>Gender</th>
-                                            <th>No Peserta</th>
                                             <th>Nama Peserta</th>
                                             <th>Tgl. Lahir</th>
                                             <th>Usia</th>
@@ -306,7 +303,6 @@
                                                 <td>{{$item->no_ktp}}</td>
                                                 <td>{{$item->no_telepon}}</td>
                                                 <td>{{$item->jenis_kelamin}}</td>
-                                                <td>{{$item->no_peserta}}</td>
                                                 <td>{{$item->nama}}</td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>

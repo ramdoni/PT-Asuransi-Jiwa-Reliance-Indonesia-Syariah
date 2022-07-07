@@ -25,6 +25,11 @@
     <link rel="stylesheet" href="{{ asset('assets/css/color_skins.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}?v={{ date('YmdHis') }}">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+
+    <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}" />
+    <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}" defer></script>
+    <script src="{{ asset('assets/vendor/datatables/FixedColumns-4.1.0/js/dataTables.fixedColumns.min.js') }}" defer></script>
+
     @stack('after-styles')
     @if (trim($__env->yieldContent('page-styles')))
         @yield('page-styles')

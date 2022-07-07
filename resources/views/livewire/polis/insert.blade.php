@@ -358,9 +358,8 @@
                                 <label>Ket Diskon/HF di Memo</label>
                                 <select class="form-control" wire:model="ket_diskon">
                                     <option value=""> -- pilih -- </option>
-                                    <option>Diskon</option>
-                                    <option>Handling Fee</option>
-                                    <option>Ujroh Fee</option>
+                                    <option>Potong Langsung</option>
+                                    <option>Brokerage Ujroh</option>
                                 </select>
                             </div>
                             <div class="form-group">
