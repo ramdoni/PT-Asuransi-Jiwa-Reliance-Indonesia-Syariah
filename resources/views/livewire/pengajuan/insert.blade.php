@@ -22,12 +22,15 @@
                                         <option value="{{$item->id}}">{{$item->no_polis}} / {{$item->nama}}</option>
                                     @endforeach
                                 </select>
+                                @if($message_error)
+                                    <span class="text-danger">{{$message_error}}</span>
+                                @endif
                                 @error('polis_id')
                                     <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                 @enderror
                             </div>
                         </div>
-                        @if($polis_id)
+                        @if($polis_id and $message_error=="")
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Perhitungan Usia</label>

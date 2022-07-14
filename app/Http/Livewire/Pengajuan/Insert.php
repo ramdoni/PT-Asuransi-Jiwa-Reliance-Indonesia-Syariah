@@ -14,7 +14,7 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
-    public $total_double=0,$total_pengajuan=0,$perhitungan_usia,$masa_asuransi;
+    public $total_double=0,$total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '';
     protected $listeners = ['reload-page'=>'$refresh'];
     public function render()
     {
@@ -80,6 +80,17 @@ class Insert extends Component
 
     public function updated($propertyName)
     {
+        if($propertyName=='polis_id'){
+            $find_polis = Polis::find($this->polis_id);
+            if($find_polis){
+                if($find_polis->rate_->count()==0 || $find_polis->uw_limit_->count()==0)
+                    $this->message_error = 'Rate / UW limit belum tersedia';
+                else
+                    $this->message_error = '';
+            }
+        }
+
+
         if($propertyName=='check_all' and $this->check_all==1){
             foreach($this->kepesertaan as $k => $item){
                 $this->check_id[$k] = $item->id;
