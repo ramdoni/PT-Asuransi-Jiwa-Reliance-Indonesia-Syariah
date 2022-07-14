@@ -12,27 +12,31 @@
                     <thead style="background: #eee;">
                         <tr>
                             <th colspan="2">Jumlah Uang Pertanggungan</th>
-                            <th colspan="{{$usia->count()}}">Usia</th>
+                            <th colspan="{{$usia ? $usia->count() : 0}}">Usia</th>
 
                         </tr>
                         <tr>
                             <th>Nilai Bawah</th>
                             <th>Nilai Atas</th>
-                            @foreach($usia as $item)
-                                <th>{{$item->usia}}</th>
-                            @endforeach
+                            @if($usia)
+                                @foreach($usia as $item)
+                                    <th>{{$item->usia}}</th>
+                                @endforeach
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($nilai_bawah_atas as $n)
-                            <tr>
-                                <td>{{format_idr($n->min_amount)}}</td>
-                                <td>{{format_idr($n->max_amount)}}</td>
-                                @foreach($usia as $item)
-                                    <td>{{isset($rows[$n->usia][$n->min_amount][$n->max_amount]) ? $rows[$n->usia][$n->min_amount][$n->max_amount] : '-'}}</td>
-                                @endforeach
-                            </tr>
-                        @endforeach
+                        @if($nilai_bawah_atas)
+                            @foreach($nilai_bawah_atas as $n)
+                                <tr>
+                                    <td>{{format_idr($n->min_amount)}}</td>
+                                    <td>{{format_idr($n->max_amount)}}</td>
+                                    @foreach($usia as $item)
+                                        <td>{{isset($rows[$n->usia][$n->min_amount][$n->max_amount]) ? $rows[$n->usia][$n->min_amount][$n->max_amount] : '-'}}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

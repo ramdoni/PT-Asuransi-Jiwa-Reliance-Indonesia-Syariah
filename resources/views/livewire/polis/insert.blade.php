@@ -60,7 +60,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-6">
-                                    <label>Akhir <span class="text-danger">*</span></label>
+                                    <label>Akhir <span class="text-danger">*</span> </label> <span>{{$status}}</span>
                                     <input type="date" class="form-control" wire:model="akhir">
                                     @error('akhir')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -76,15 +76,7 @@
                                         <option value="Renewal">Renewal</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label>Status</label>
-                                    <select class="form-control" wire:model="status">
-                                        <option value="">-- pilih --</option>
-                                        <option value="Inforce">Inforce</option>
-                                    </select>
-                                </div>
                             </div>
-                            
                             <div class="form-group">
                                 <label>Masa Leluasa (Grace Periode) *hari</label>
                                 <input type="number" class="form-control" wire:model="masa_leluasa" placeholder="Hari Kalender" />

@@ -9,7 +9,7 @@ use App\Models\Rate;
 
 class Insert extends Component
 {
-    public $singkatan,$nama,$klasifikasi;
+    public $singkatan,$nama,$klasifikasi,$kode;
     public function render()
     {
         return view('livewire.produk.insert');
@@ -25,12 +25,14 @@ class Insert extends Component
         $this->validate([
             'singkatan'=>'required',
             'nama'=>'required',
+            'kode' => 'required',
             'klasifikasi'=>'required',
         ]);
 
         $data = new Produk();
         $data->singkatan = $this->singkatan;
         $data->nama = $this->nama;
+        $data->kode = $this->kode;
         $data->klasifikasi = $this->klasifikasi;
         $data->save();
         

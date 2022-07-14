@@ -11,24 +11,30 @@ use Livewire\WithFileUploads;
 class UnderwritingLimit extends Component
 {
     use WithFileUploads;
-    public $data,$file,$nilai_bawah_atas=[],$usia=[],$tahun=[];
-    
+    public $data,$file,$nilai_bawah_atas,$usia,$tahun=[],$uw=[],$rows=[];
+    protected $listeners = ['set_id','reload-page'=>'$refresh'];
     public function render()
     {
+        
+        return view('livewire.polis.underwriting-limit');
+    }
+
+    public function set_id(Polis $data)
+    {
+        $this->data = $data;
+
         $data = ModelUnderwritingLimit::where('polis_id',$this->data->id)->get();
         $rows = [];
 
         foreach($data as $k => $item){
             $rows[$item->usia][$item->min_amount][$item->max_amount] = $item->keterangan;
         }
-        return view('livewire.polis.underwriting-limit')->with(['uw'=>$data,'rows'=>$rows]);
-    }
-    
-    public function mount(Polis $data)
-    {
+
+        $this->rows = $rows;
+        $this->uw = $data;
+
         $this->nilai_bawah_atas = ModelUnderwritingLimit::groupBy('min_amount','max_amount')->orderBy('max_amount','ASC')->get();
         $this->usia = ModelUnderwritingLimit::groupBy('usia')->get();
-        $this->data = $data;
     }
 
     public function upload()
@@ -45,6 +51,7 @@ class UnderwritingLimit extends Component
         $sheetData = $xlsx->getActiveSheet()->toArray();
         
         if(count($sheetData) > 0){
+            ModelUnderwritingLimit::where('polis_id',$this->data->id)->delete();
             $countLimit = 1;
             $total_failed = 0;
             $total_success = 0;

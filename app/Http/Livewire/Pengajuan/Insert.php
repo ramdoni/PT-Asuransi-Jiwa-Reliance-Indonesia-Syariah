@@ -157,6 +157,8 @@ class Insert extends Component
 
             $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
             $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->get()->count();
+
+            $this->emit('attach-file');
         }
 
         $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>0])->get()->count();
@@ -175,7 +177,7 @@ class Insert extends Component
         $pengajuan->perhitungan_usia = $this->perhitungan_usia;
         $pengajuan->polis_id = $this->polis_id;
         $pengajuan->no_pengajuan = $this->no_pengajuan;
-        $pengajuan->status = 1;
+        $pengajuan->status = 0;
         $pengajuan->total_akseptasi = $this->total_pengajuan;
         $pengajuan->total_approve = 0;
         $pengajuan->total_reject = 0;
@@ -207,7 +209,7 @@ class Insert extends Component
                 $data->kontribusi_keterangan = 'max. 15 th';
             else{
                 // find rate
-                $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan])->first();
+                $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$data->polis_id])->first();
                 $data->rate = $rate ? $rate->rate : 0;
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }
@@ -238,9 +240,9 @@ class Insert extends Component
                 $data->ul = "X+N=75";
                 $data->uw = "X+N=75";
             }else{
-                $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where('usia',$data->usia)->first();
+                $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
 
-                if(!$uw) $uw = UnderwritingLimit::where('usia',$data->usia)->orderBy('max_amount','ASC')->first();
+                if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
                 if($uw){
                     $data->uw = $uw->keterangan;
                     $data->ul = $uw->keterangan;

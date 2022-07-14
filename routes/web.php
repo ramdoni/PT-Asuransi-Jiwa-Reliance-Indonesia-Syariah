@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('extra-mortalita',App\Http\Livewire\ExtraMortalita\Index::class)->name('extra-mortalita.index');
     Route::get('peserta/print-em/{id}',[App\Http\Controllers\PesertaController::class,'printEm'])->name('peserta.print-em');
     Route::get('pengajuan/print-dn/{id}',[App\Http\Controllers\PengajuanController::class,'printEm'])->name('pengajuan.print-dn');
+    Route::get('pengajuan/download-report/{id}',[App\Http\Controllers\PengajuanController::class,'downloadReport'])->name('pengajuan.download-report');
 });
 
 // Administrator

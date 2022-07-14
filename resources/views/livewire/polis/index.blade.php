@@ -49,6 +49,7 @@
                                 <th>Keterangan</th>
                                 <th>Status</th>
                                 <th>Rate(%)</th>
+                                <th>UW Limit(%)</th>
                                 <th>Masa Leluasa (Grace Period)</th>
                                 <th>Kelengkapakn Berkas Manfaat Asuransi</th>
                                 <th>Kadaluarsa Klaim</th>
@@ -171,7 +172,20 @@
                                     <td>{{$item->akhir ? date('d-m-Y',strtotime($item->akhir)) : '-'}}</td>
                                     <td>{{$item->keterangan}}</td>
                                     <td>{{$item->status}}</td>
-                                    <td>{{$item->rate}}</td>
+                                    <td class="text-center">
+                                        @if($item->rate__count)
+                                            <a href="javascript:void(0)"  wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_rate" class="text-success"><i class="fa fa-check-circle"></i></a>
+                                        @else
+                                            <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_rate"><i class="fa fa-plus"></i> Rate</a>
+                                        @endif 
+                                    </td>
+                                    <td class="text-center">
+                                        @if($item->uw_limit__count)
+                                            <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_uw_limit" class="text-success"><i class="fa fa-check-circle"></i></a>
+                                        @else
+                                            <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_uw_limit"><i class="fa fa-plus"></i> UW Limit</a>
+                                        @endif 
+                                    </td>
                                     <td>{{$item->masa_leluasa}}</td>
                                     <td>{{$item->kelengkapan_berkas}}</td>
                                     <td>{{$item->kadaluarsa_klaim}}</td>
@@ -282,10 +296,19 @@
         </div>
     </div>
 </div>
+
+<div wire:ignore.self class="modal fade" id="modal_add_uw_limit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('polis.underwriting-limit')
+</div>
+
+<div wire:ignore.self class="modal fade" id="modal_add_rate" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('rate.upload')
+</div>
+
 @push('after-scripts')
     <script>
         $(document).ready(function() { 
-            var table = $('#data_table').DataTable( { scrollY: "300px", scrollX: true, scrollCollapse: true, paging: false } ); 
+            var table = $('#data_table').DataTable( { "searching": false,scrollY: "300px", scrollX: true, scrollCollapse: true, paging: false } ); 
             new $.fn.dataTable.FixedColumns( table, { leftColumns: 4 } ); 
         } );
     </script>

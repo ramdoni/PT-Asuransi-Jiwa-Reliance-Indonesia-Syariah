@@ -31,7 +31,7 @@
                                         <td><strong>Status</strong></td>
                                         <td>
                                             @if($data->status==0)
-                                                <span class="badge badge-warning">Draft</span>
+                                                <span class="badge badge-warning">Underwriting</span>
                                             @endif
                                             @if($data->status==1)
                                                 <span class="badge badge-info">Head Teknik</span>
@@ -49,14 +49,14 @@
                         </div>
                     </div>
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#kepesertaan_postpone">{{ __('Proses') }} <span class="badge badge-danger">{{$kepesertaan_proses->count()}}</span></a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#kepesertaan_approve">{{ __('Diterima') }}  <span class="badge badge-danger">{{$kepesertaan_approve->count()}}</span></a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#kepesertaan_reject">{{ __('Ditolak') }} <span class="badge badge-danger">{{$kepesertaan_reject->count()}}</span></a></li>
+                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_postpone' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_postpone')" data-toggle="tab" href="#kepesertaan_postpone">{{ __('Proses') }} <span class="badge badge-danger">{{$kepesertaan_proses->count()}}</span></a></li>
+                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_approve' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_approve')" data-toggle="tab" href="#kepesertaan_approve">{{ __('Diterima') }}  <span class="badge badge-danger">{{$kepesertaan_approve->count()}}</span></a></li>
+                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_reject' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_reject')" data-toggle="tab" href="#kepesertaan_reject">{{ __('Ditolak') }} <span class="badge badge-danger">{{$kepesertaan_reject->count()}}</span></a></li>
                     </ul>
                     <div class="tab-content px-0">
-                        <div class="tab-pane active show" id="kepesertaan_postpone">
+                        <div class="tab-pane {{$tab_active=='tab_postpone' ? 'active show' : ''}}" id="kepesertaan_postpone">
                             <div class="table-responsive"> 
-                                <table class="table table-hover m-b-0 c_list table-nowrap">
+                                <table class="table table-hover m-b-0 c_list table-nowrap" id="table_postpone">
                                     <thead style="background: #eee;text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
@@ -100,7 +100,13 @@
                                             <tr>
                                                 <td>{{$k+1}}</td>
                                                 <td class="text-center">
-                                                    @if($data->status!=3)
+                                                    @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                        <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @endif
+                                                    @if($data->status==1 and \Auth::user()->user_access_id==3)
+                                                        <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @endif
+                                                    @if($data->status==2 and\Auth::user()->user_access_id==4)
                                                         <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                                     @endif
                                                 </td>
@@ -109,13 +115,26 @@
                                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                                     </span>
-                                                    @if(($item->status==1 or $item->status==0) and (\Auth::user()->user_access_id==3 || \Auth::user()->user_access_id==4 || \Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
-                                                        @if($data->status!=3)
-                                                            <div wire:loading.remove wire:target="approve({{$item->id}})">
-                                                                <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
-                                                                <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
-                                                            </div>
-                                                        @endif
+                                                    {{-- Underwriting --}}
+                                                    @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                        </div>
+                                                    @endif
+                                                    {{-- Head Teknik --}}
+                                                    @if($data->status==1 and \Auth::user()->user_access_id==3)
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                        </div>
+                                                    @endif
+                                                    {{-- Head Syariah --}}
+                                                    @if($data->status==2 and \Auth::user()->user_access_id==4)
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                        </div>
                                                     @endif
                                                 </td>
                                                 <td>{{$item->bank}}</td>
@@ -162,9 +181,9 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane" id="kepesertaan_approve">
+                        <div class="tab-pane {{$tab_active=='tab_approve' ? 'active show' : ''}}" id="kepesertaan_approve">
                             <div class="table-responsive"> 
-                                <table class="table table-hover m-b-0 c_list table-nowrap">
+                                <table class="table table-hover m-b-0 c_list table-nowrap" id="table_approve">
                                     <thead style="background: #eee;text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
@@ -197,8 +216,23 @@
                                             <tr>
                                                 <td>{{$k+1}}</td>
                                                 <td>
-                                                    @if($data->status!=3)
-                                                        <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                    {{-- Underwriting --}}
+                                                    @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                        </div>
+                                                    @endif
+                                                    {{-- Head Teknik --}}
+                                                    @if($data->status==1 and \Auth::user()->user_access_id==3)
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                        </div>
+                                                    @endif
+                                                    {{-- Head Syariah --}}
+                                                    @if($data->status==2 and \Auth::user()->user_access_id==4)
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                        </div>
                                                     @endif
                                                 </td>
                                                 <td>{{$item->bank}}</td>
@@ -246,16 +280,25 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane" id="kepesertaan_reject">
+                        <div class="tab-pane {{$tab_active=='tab_reject' ? 'active show' : ''}}" id="kepesertaan_reject" >
                             <div class="table-responsive"> 
-                                <table class="table table-hover m-b-0 c_list table-nowrap">
+                                <table class="table table-hover m-b-0 c_list table-nowrap" id="table_reject">
                                     <thead style="background: #eee;text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
                                             <th class="text-center">
                                                 <label>Check All <br /><input type="checkbox" wire:model="check_all" value="1" /></label>
                                             </th>
-                                            <th></th>
+                                            <th>
+                                                @if(count($check_id)>0)
+                                                    <span wire:loading wire:target="approveAll,rejectAll">
+                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                                    </span>
+                                                    <a href="javascript:void(0)" wire:click="approveAll" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima Semua</a>
+                                                    <!-- <a href="javascript:void(0)" wire:click="rejectAll" class="badge badge-danger badge-active"><i class="fa fa-trash"></i> Ditolak Semua</a> -->
+                                                @endif
+                                            </th>
                                             <th>Reason</th>
                                             <th>Nama Bank</th>
                                             <th>KC/KP</th>
@@ -284,14 +327,35 @@
                                             <tr>
                                                 <td>{{$k+1}}</td>
                                                 <td class="text-center">
-                                                    <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                        <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @endif
+                                                    @if($data->status==1 and \Auth::user()->user_access_id==3)
+                                                        <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @endif
+                                                    @if($data->status==2 and \Auth::user()->user_access_id==4)
+                                                        <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                                    @endif
                                                 </td>
                                                 <td>
-                                                    @if($data->status!=3)
-                                                        <span wire:loading wire:target="approve({{$item->id}})">
-                                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                            <span class="sr-only">{{ __('Loading...') }}</span>
-                                                        </span>
+                                                    <span wire:loading wire:target="approve({{$item->id}})">
+                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                                    </span>
+                                                    {{-- Underwriting --}}
+                                                    @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                        </div>
+                                                    @endif
+                                                    {{-- Head Teknik --}}
+                                                    @if($data->status==1 and \Auth::user()->user_access_id==3)
+                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                        </div>
+                                                    @endif
+                                                    {{-- Head Syariah --}}
+                                                    @if($data->status==2 and \Auth::user()->user_access_id==4)
                                                         <div wire:loading.remove wire:target="approve({{$item->id}})">
                                                             <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
                                                         </div>
@@ -354,10 +418,13 @@
                     <hr />
                     <div class="form-group">
                         <a href="javascript:void(0)" class="mr-2" onclick="history.back()"><i class="fa fa-arrow-left"></i> Kembali</a>
-                        <span wire:loading wire:target="submit_head_teknik,submit_head_syariah">
+                        <span wire:loading wire:target="submit_head_teknik,submit_head_syariah,submit_underwriting">
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
+                        @if($data->status==0 and (\Auth::user()->user_access_id==2 || \Auth::user()->user_access_id==1))
+                            <button type="button" wire:loading.remove wire:target="submit_underwriting" wire:click="submit_underwriting" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                        @endif
                         @if($data->status==1 and \Auth::user()->user_access_id==3)
                             <button type="button" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
                         @endif
@@ -369,7 +436,6 @@
             </div>
         </div>
     </div>
-
     <div wire:ignore.self class="modal fade" id="modal_reject_selected" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog"  role="document">
             <div class="modal-content">
@@ -411,3 +477,17 @@
 <div wire:ignore.self class="modal fade" id="modal_add_em" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-em')
 </div>
+@push('after-scripts')
+    <script>
+        $(document).ready(function() { 
+            // var table_postpone = $('#table_postpone').DataTable( { "searching": false, scrollX: true, scrollCollapse: true, paging: false } ); 
+            // new $.fn.dataTable.FixedColumns( table_postpone, { leftColumns: 4 } ); 
+
+            // var table_approve = $('#table_approve').DataTable( { "searching": false, scrollX: true, scrollCollapse: true, paging: false } ); 
+            // new $.fn.dataTable.FixedColumns( table_approve, { leftColumns: 4 } ); 
+
+            // var table_reject = $('#table_reject').DataTable( { "searching": false,scrollX: true, scrollCollapse: true, paging: false } ); 
+            // new $.fn.dataTable.FixedColumns( table_reject, { leftColumns: 4 } ); 
+        } );
+    </script>
+@endpush

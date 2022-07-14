@@ -7,6 +7,7 @@ use App\Models\Polis;
 use App\Models\Produk;
 use App\Models\Provinsi;
 use App\Models\Rate;
+use App\Models\Reasuradur;
 use Livewire\WithFileUploads;
 
 class Insert extends Component
@@ -36,6 +37,7 @@ class Insert extends Component
         $this->produks = Produk::get();
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
         $this->no_polis = date('ym').str_pad(Polis::count()+1,6, '0', STR_PAD_LEFT);
+        $this->reasuradur = Reasuradur::get();
     }
 
     public function updated($propertyName)
@@ -43,6 +45,16 @@ class Insert extends Component
         if($this->produk_id)  $this->no_polis = $this->produk_id.date('ym').str_pad(Polis::where('produk_id',$this->produk_id)->count()+1,6, '0', STR_PAD_LEFT);
         if($propertyName =='iuran_tabbaru' and $this->iuran_tabbaru > 0) 
         $this->ujrah_atas_pengelolaan = 100 - $this->iuran_tabbaru;
+
+        if($propertyName =='akhir'){
+            if(date('Y-m-d') > $this->akhir){
+                $this->status  = 'Mature';
+            }
+
+            if(date('Y-m-d') <= $this->akhir){
+                $this->status  = 'Inforce';
+            }
+        }
     }
 
     public function save()

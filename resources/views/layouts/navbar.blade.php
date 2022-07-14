@@ -4,8 +4,8 @@
             <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
         </div>
         <div class="navbar-brand">
-            @if (get_setting('logo'))
-                <a href="/"><img src="{{ get_setting('logo') }}" alt="Lucid Logo" class="img-responsive logo"></a>
+            @if (isset($logo))
+                <a href="/"><img src="{{ $logo }}" class="img-responsive logo"></a>
             @endif
         </div>
         <div class="navbar-right">
@@ -18,9 +18,9 @@
                                 <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Data Master</a>
                                 <ul class="dropdown-menu user-menu menu-icon">
                                     <li><a href="{{ route('extra-mortalita.index') }}">Extra Mortalita</a></li>
-                                    <li><a href="{{ route('uw-limit.index') }}">UW Limit</a></li>
+                                    {{-- <li><a href="{{ route('uw-limit.index') }}">UW Limit</a></li> --}}
                                     <li><a href="{{ route('produk.index') }}">Produk</a></li>
-                                    <li><a href="{{ route('rate.index') }}">Rate</a></li>
+                                    {{-- <li><a href="{{ route('rate.index') }}">Rate</a></li> --}}
                                     <li><a href="{{ route('reasuradur.index') }}">Reasuradur</a></li>
                                     <li><a href="{{ route('users.index') }}">Users</a></li>
                                 </ul>

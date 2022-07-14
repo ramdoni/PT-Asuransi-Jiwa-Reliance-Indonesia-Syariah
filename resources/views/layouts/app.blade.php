@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-
+@php($company = get_setting('company'))
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ get_setting('favicon') }}" type="image/x-icon"> <!-- Favicon-->
-    <title>@yield('title') - {{ get_setting('company') }}</title>
+    <title>@yield('title') - {{ $company }}</title>
     <meta name="description" content="@yield('meta_description', config('app.name'))">
     <meta name="author" content="@yield('meta_author', config('app.name'))">
     @yield('meta')
@@ -41,9 +41,10 @@
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            @if (get_setting('logo'))
+            @php($logo = get_setting('logo'))
+            @if ($logo)
                 <div class="m-t-30">
-                    <img src="{{ get_setting('logo') }}" height="48" alt="{{ get_setting('company') }}">
+                    <img src="{{ $logo }}" height="48" alt="{{ $company }}">
                 </div>
             @endif
             <p>Please wait...</p>
@@ -51,7 +52,7 @@
     </div>
 
     <div id="wrapper">
-        @include('layouts.navbar')
+        @include('layouts.navbar',['logo'=>$logo])
         @include('layouts.sidebar')
         <div id="main-content">
             <div class="container-fluid">

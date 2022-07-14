@@ -21,7 +21,7 @@
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <span class="sr-only">{{ __('Loading...') }}</span>
                 </span>
-                <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
+                <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-save"></i> Upload</button>
             </div>
         </form>
     </div>

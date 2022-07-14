@@ -14,7 +14,9 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
     public function render()
     {
-        $data = Polis::with(['produk'])->orderBy('id','desc');
+        $data = Polis::with(['produk','provinsi'])
+                        ->withCount(['rate_','uw_limit_'])
+                        ->orderBy('id','desc');
         
         if($this->filter_keyword) $data->where(function($table){
             foreach(\Illuminate\Support\Facades\Schema::getColumnListing('polis') as $column){

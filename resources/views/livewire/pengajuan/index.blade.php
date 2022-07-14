@@ -54,7 +54,7 @@
                                     <td style="width: 50px;">{{ $k + 1 }}</td>
                                     <td class="text-center">
                                         @if($item->status==0)
-                                            <span class="badge badge-warning">Draft</span>
+                                            <span class="badge badge-warning">Underwriting</span>
                                         @endif
                                         @if($item->status==1)
                                             <span class="badge badge-info">Head Teknik</span>
@@ -68,6 +68,7 @@
                                     </td>
                                     <td>
                                         @if($item->dn_number)
+                                            <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}})"><i class="fa fa-download"></i></a>
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}

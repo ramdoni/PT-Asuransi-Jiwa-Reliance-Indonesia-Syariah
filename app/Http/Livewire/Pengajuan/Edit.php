@@ -13,7 +13,7 @@ use App\Models\Finance\SyariahUnderwriting;
 class Edit extends Component
 {
     public $data,$no_pengajuan,$kepesertaan=[],$kepesertaan_proses,$kepesertaan_approve,$kepesertaan_reject;
-    public $check_all=0,$check_id=[],$check_arr,$selected,$status_reject=2,$note;
+    public $check_all=0,$check_id=[],$check_arr,$selected,$status_reject=2,$note,$tab_active='tab_postpone';
     protected $listeners = ['reload-page'=>'$refresh'];
     public function render()
     {
@@ -44,6 +44,15 @@ class Edit extends Component
         }elseif($propertyName=='check_all' and $this->check_all==0){
             $this->check_id = [];
         }
+    }
+
+    public function submit_underwriting()
+    {
+        $this->data->status = 1;
+        $this->data->save();
+
+        $this->emit('message-success','Data berhasil di proses');
+        $this->emit('reload-page');
     }
 
     public function submit_head_teknik()

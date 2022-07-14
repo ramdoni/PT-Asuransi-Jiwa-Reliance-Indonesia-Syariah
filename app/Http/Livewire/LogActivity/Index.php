@@ -12,7 +12,7 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
     public function render()
     {
-        $data = \App\Models\LogActivity::orderBy('id','desc');
+        $data = \App\Models\LogActivity::with('user')->orderBy('id','desc');
         if($this->keyword) $data = $data->where(function($table){
             $table->where('subject', 'LIKE',"%{$this->keyword}%")
                 ->orWhere('url', 'LIKE',"%{$this->keyword}%")

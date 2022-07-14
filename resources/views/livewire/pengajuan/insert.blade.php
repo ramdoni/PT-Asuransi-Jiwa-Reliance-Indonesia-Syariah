@@ -62,7 +62,7 @@
                                         <a href="javascript:void(0)" wire:loading.remove wire:target="clear_file,save" wire:click="clear_file" class="text-danger mt-5"><i class="fa fa-times"></i> Clear</a>
                                         <a href="javascript:void(0)" wire:loading.remove wire:target="hitung" wire:click="hitung" class="btn btn-warning mx-2"><i class="fa fa-refresh"></i> Hitung</a>
                                         @if($total_pengajuan >0 and $total_double==0)
-                                            <button wire:loading.remove wire:target="save,file" type="submit" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit Pengajuan</button>
+                                            <button wire:loading.remove wire:target="save,file" type="submit" class="btn btn-info"><i class="fa fa-check-circle"></i> Upload Pengajuan</button>
                                         @endif
                                     @endif
                                     @if(count($check_id)>0)
@@ -206,9 +206,9 @@
                                             <td>{{$item->tanggal_stnc ? date('d-M-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
                                             <td>{{$item->ul}}</td>
                                         </tr>
-                                        <tr style="background:#eae9e9;">
-                                            <td colspan="10"></td>
-                                        </tr>
+                                        {{-- <tr style="background:#eae9e9;">
+                                            <td colspan="25"></td>
+                                        </tr> --}}
                                     @else
                                         <tr>
                                             <td>{{$k+1}}</td>
@@ -263,7 +263,7 @@
                                 @endforeach
                                 @if(count($kepesertaan)==0)
                                     <tr>
-                                        <td colspan="26">Empty</td>
+                                        <td colspan="25">Empty</td>
                                     </tr>
                                 @endif
                             </tbody>

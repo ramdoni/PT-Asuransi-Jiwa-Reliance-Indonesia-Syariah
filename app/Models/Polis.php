@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Produk;
 use App\Models\Provinsi;
-use App\Models\Kepersertaan;
+use App\Models\UnderwritingLimit;
 
 class Polis extends Model
 {
@@ -27,5 +27,15 @@ class Polis extends Model
     public function pesertas()
     {
         return $this->hasMany(Kepesertaan::class,'polis_id','id');
+    }
+    
+    public function rate_()
+    {
+        return $this->hasMany(Rate::class,'polis_id','id');
+    }
+
+    public function uw_limit_()
+    {
+        return $this->hasMany(UnderwritingLimit::class,'polis_id','id');
     }
 }
