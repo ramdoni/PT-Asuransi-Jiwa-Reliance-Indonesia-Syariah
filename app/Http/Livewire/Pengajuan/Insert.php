@@ -14,7 +14,7 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
-    public $total_double=0,$total_pengajuan=0,$perhitungan_usia;
+    public $total_double=0,$total_pengajuan=0,$perhitungan_usia,$masa_asuransi;
     protected $listeners = ['reload-page'=>'$refresh'];
     public function render()
     {
@@ -139,15 +139,14 @@ class Insert extends Component
                 if($item[12]) $data->tanggal_mulai = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
                 if($item[13]) $data->tanggal_akhir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
                 $data->basic = $item[14];
-                $data->sub_basic1 = $item[15];
-                $data->sub_basic2 = $item[16];
-                $data->sub_basic3 = $item[17];
-                $data->rider1 = $item[18];
-                $data->rider2 = $item[19];
-                $data->rider3 = $item[20];
+                $data->tinggi_badan = $item[15];
+                $data->berat_badan = $item[16];
                 $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
                 $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
                 $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir);
+                
+                if($this->masa_asuransi==2) $data->masa_bulan + $data->masa_bulan + 1;
+                
                 $data->kontribusi = 0;
                 $data->is_temp = 1;
                 $data->save();
@@ -168,12 +167,14 @@ class Insert extends Component
     {
         $this->validate([
             'file'=>'required|mimes:xlsx|max:51200', // 50MB maksimal
-            'polis_id'=>'required'
+            'polis_id'=>'required',
+            'masa_asuransi' => 'required'
         ]);
 
         \LogActivity::add('[web] Upload Kepesertaan');
         
         $pengajuan = new Pengajuan();
+        $pengajuan->masa_asuransi = $this->masa_asuransi;
         $pengajuan->perhitungan_usia = $this->perhitungan_usia;
         $pengajuan->polis_id = $this->polis_id;
         $pengajuan->no_pengajuan = $this->no_pengajuan;

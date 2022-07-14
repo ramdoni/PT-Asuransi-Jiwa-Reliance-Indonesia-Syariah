@@ -43,6 +43,19 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
+                                    <label>Masa Asuransi</label>
+                                    <select class="form-control" wire:model="masa_asuransi">
+                                        <option value=""> -- Pilih -- </option>
+                                        <option value="1">Day to Day</option>
+                                        <option value="2">Day to Day +1</option>
+                                    </select>
+                                    @error('masa_asuransi')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
                                     <label>File (xlsx)</label>
                                     <span wire:loading wire:target="file">
                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -54,7 +67,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>&nbsp;</label>
                                     <br />
@@ -100,8 +113,11 @@
                                     <th>Nama Peserta</th>
                                     <th>Tgl. Lahir</th>
                                     <th>Usia</th>
+                                    <th>TB</th>
+                                    <th>BB</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
+                                    <th>Masa Asuransi</th>
                                     <th class="text-right">Nilai Manfaat Asuransi</th>
                                     <th class="text-right">Dana Tabarru</th>
                                     <th class="text-right">Dana Ujrah</th>
@@ -131,8 +147,11 @@
                                             <td>{{isset($item->parent->nama) ? $item->parent->nama : '-'}}</td>
                                             <td>{{isset($item->parent->tanggal_lahir) ? date('d-M-Y',strtotime($item->parent->tanggal_lahir)) : '-'}}</td>
                                             <td class="text-center">{{isset($item->parent->usia) ? $item->parent->usia : '-'}}</td>
+                                            <td>{{isset($item->parent->tinggi_badan) ? $item->parent->tinggi_badan : '-'}}</td>
+                                            <td>{{isset($item->parent->berat_badan) ? $item->parent->berat_badan : '-'}}</td>
                                             <td>{{isset($item->parent->tanggal_mulai) ? date('d-M-Y',strtotime($item->parent->tanggal_mulai)) : '-'}}</td>
                                             <td>{{isset($item->parent->tanggal_akhir) ? date('d-M-Y',strtotime($item->parent->tanggal_akhir)) : '-'}}</td>
+                                            <td></td>
                                             <td class="text-right">{{isset($item->parent->basic) ? format_idr($item->parent->basic) : '-'}}</td>
                                             <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                             <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
@@ -181,8 +200,11 @@
                                             <td>{{$item->nama}}</td>
                                             <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                             <td class="text-center">{{$item->usia}}</td>
+                                            <td>{{$item->tinggi_badan}}</td>
+                                            <td>{{$item->berat_badan}}</td>
                                             <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                             <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
+                                            <td>{{$item->masa_bulan}}</td>
                                             <td class="text-right">{{format_idr($item->basic)}}</td>
                                             <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                             <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
@@ -234,8 +256,11 @@
                                             <td>{{$item->nama}}</td>
                                             <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                             <td class="text-center">{{$item->usia}}</td>
+                                            <td>{{$item->tinggi_badan}}</td>
+                                            <td>{{$item->berat_badan}}</td>
                                             <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                             <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
+                                            <td>{{$item->masa_bulan}}</td>
                                             <td class="text-right">{{format_idr($item->basic)}}</td>
                                             <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                             <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>

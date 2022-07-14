@@ -104,8 +104,6 @@
                     <td style="padding-left: 20px">Biaya Sertifikat/Kartu @ Rp0</td>
                     <td style="text-align: right;"></td>
                 </tr>
-                
-                
             </table>
             <p>Pembayaran Kontribusi dapat dilakukan melalui transfer ke rekening sebagai berikut:</p>
             <table>
@@ -147,7 +145,7 @@
                         <table>
                             <tr>
                                 <td>Nomor</td>
-                                <td> : {{$data->dn_number}}</td>
+                                <td> : {{$data->no_surat}}</td>
                             </tr>
                             <tr>
                                 <td>Perihal</td>

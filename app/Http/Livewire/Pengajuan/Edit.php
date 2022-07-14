@@ -69,6 +69,8 @@ class Edit extends Component
         // generate DN Number
         $dn_number = $this->data->polis->no_polis ."/". str_pad($this->data->id,4, '0', STR_PAD_LEFT)."AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
         $this->data->dn_number = $dn_number;
+        $no_surat = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/UWS-M/AJRI-US/'.numberToRomawi(date('m')).'/'.date('Y');
+        $this->data->no_surat = $no_surat;
         $this->data->status = 3;
         $this->data->save();
 

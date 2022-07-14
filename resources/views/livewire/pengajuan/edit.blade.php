@@ -81,6 +81,8 @@
                                             <th>Nama Peserta</th>
                                             <th>Tgl. Lahir</th>
                                             <th>Usia</th>
+                                            <th>TB</th>
+                                            <th>BB</th>
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th class="text-right">Nilai Manfaat Asuransi</th>
@@ -145,6 +147,8 @@
                                                 <td>{{$item->nama}}</td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
+                                                <td>{{$item->tinggi_badan}}</td>
+                                                <td>{{$item->berat_badan}}</td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-right">{{format_idr($item->basic)}}</td>
@@ -197,6 +201,8 @@
                                             <th>Nama Peserta</th>
                                             <th>Tgl. Lahir</th>
                                             <th>Usia</th>
+                                            <th>TB</th>
+                                            <th>BB</th>
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th class="text-right">Nilai Manfaat Asuransi</th>
@@ -244,6 +250,8 @@
                                                 <td>{{$item->nama}}</td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
+                                                <td>{{$item->tinggi_badan}}</td>
+                                                <td>{{$item->berat_badan}}</td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-right">{{format_idr($item->basic)}}</td>
@@ -261,6 +269,7 @@
                                                 <td>
                                                     @if($item->extra_kontribusi)
                                                         <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
+                                                        <a href="{{route('peserta.print-ek',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                     @else
                                                         <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi"><i class="fa fa-plus"></i></a>
                                                     @endif
@@ -308,6 +317,8 @@
                                             <th>Nama Peserta</th>
                                             <th>Tgl. Lahir</th>
                                             <th>Usia</th>
+                                            <th>TB</th>
+                                            <th>BB</th>
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th class="text-right">Nilai Manfaat Asuransi</th>
@@ -370,6 +381,8 @@
                                                 <td>{{$item->nama}}</td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
+                                                <td>{{$item->tinggi_badan}}</td>
+                                                <td>{{$item->berat_badan}}</td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-right">{{format_idr($item->basic)}}</td>

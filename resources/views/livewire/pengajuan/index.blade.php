@@ -35,7 +35,7 @@
                         <thead style="background: #eee;">
                             <tr>
                                 <th>No</th>
-                                <th class="text-center">Status</th>
+                                <th class="text-center">Status Approval</th>
                                 <th>DN Number</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
@@ -45,7 +45,7 @@
                                 <th class="text-center">Total Akseptasi</th>
                                 <th class="text-center">Total Diterima</th>
                                 <th class="text-center">Total Ditolak</th>
-                                <th></th>
+                                <th>Account Manager</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,7 +68,6 @@
                                     </td>
                                     <td>
                                         @if($item->dn_number)
-                                            <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}})"><i class="fa fa-download"></i></a>
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}
@@ -77,10 +76,20 @@
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
                                     <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
-                                    <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : '-'}}</td>
+                                    <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
                                     <td class="text-center">{{$item->total_akseptasi}}</td>
-                                    <td class="text-center">{{$item->total_approve}}</td>
-                                    <td class="text-center">{{$item->total_reject}}</td>
+                                    <td class="text-center">
+                                        {{$item->total_approve}}
+                                        @if($item->dn_number)
+                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}})"><i class="fa fa-download"></i></a>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        {{$item->total_reject}}
+                                        @if($item->dn_number)
+                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}})"><i class="fa fa-download"></i></a>
+                                        @endif
+                                    </td>
                                     <td>
                                         @if($item->status==1 and \Auth::user()->user_access_id==3)
                                             <a href="{{route('pengajuan.edit',$item->id)}}" class="badge badge-info badge-active"><i class="fa fa-arrow-right"></i> Proses</a>
@@ -89,6 +98,7 @@
                                             <a href="{{route('pengajuan.edit',$item->id)}}" class="badge badge-info badge-active" ><i class="fa fa-arrow-right"></i> Proses</a>
                                         @endif
                                     </td>
+                                    <td></td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
