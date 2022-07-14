@@ -62,6 +62,7 @@
                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                     </span>
                                     <input type="file" wire:loading.remove wire:target="file" class="form-control" wire:model="file" />
+                                    <a href="{{asset('template/template-kepesertaan.xlsx')}}"><i class="fa fa-download"></i> Template</a>
                                     @error('file')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                     @enderror
