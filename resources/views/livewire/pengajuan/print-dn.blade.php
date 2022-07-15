@@ -136,7 +136,7 @@
             <table width="100%">
                 <tr>
                     <td style="width: 50%">
-                        Jakarta, {{date('d F ')}}
+                        Jakarta, {{date('d F Y')}}
                     </td>
                     <td style="width: 50%">
                         <table>
