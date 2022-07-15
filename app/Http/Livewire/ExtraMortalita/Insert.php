@@ -39,20 +39,30 @@ class Insert extends Component
             $countLimit = 1;
             $total_failed = 0;
             $total_success = 0;
+            $array_data = [];
+            $k_insert = 0;
             foreach($sheetData as $key => $item){
                 if($key<=1) continue;
                 
                 for($i=1;$i<=300;$i++){
                     if(!isset($item[$i])) continue;
-                    $data = ExtraMortalitaRate::where(['tahun'=>$item[0],'usia'=>$i])->first();
-                    if(!$data) $data = new ExtraMortalitaRate();
-                    $data->extra_mortalita_id = $em->id;
-                    $data->usia = $item[0];
-                    $data->tahun = $i;
-                    $data->rate = $item[$i];
-                    $data->save();
+                    // $data = ExtraMortalitaRate::where(['tahun'=>$item[0],'usia'=>$i])->first();
+                    // if(!$data) $data = new ExtraMortalitaRate();
+                    // $data->extra_mortalita_id = $em->id;
+                    // $data->usia = $item[0];
+                    // $data->tahun = $i;
+                    //$data->rate = $item[$i];
+                    //$data->save();
+
+                    $array_data[$k_insert]['rate'] = $item[$i];
+                    $array_data[$k_insert]['tahun'] = $i;
+                    $array_data[$k_insert]['usia'] = $item[0];
+                    $array_data[$k_insert]['extra_mortalita_id'] = $em->id;
+                    $k_insert++;
                 }
             }
+            
+            ExtraMortalitaRate::insert($array_data);
         }
         
         session()->flash('message-success',__('Data saved successfully'));
