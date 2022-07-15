@@ -81,13 +81,13 @@
                                     <td class="text-center">
                                         {{$item->total_approve}}
                                         @if($item->dn_number)
-                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}})"><i class="fa fa-download"></i></a>
+                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         {{$item->total_reject}}
                                         @if($item->dn_number)
-                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}})"><i class="fa fa-download"></i></a>
+                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}},2)"><i class="fa fa-download"></i></a>
                                         @endif
                                     </td>
                                     <td>

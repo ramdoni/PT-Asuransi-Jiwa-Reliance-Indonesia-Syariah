@@ -27,9 +27,13 @@ class Index extends Component
                                     // ->setCategory("Health Check")
                                     ;
 
+        $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';
+        if($status==1) $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';
+        if($status==2) $title = 'DAFTAR KEPESERTAAN TERTUNDA ASURANSI JIWA KUMPULAN SYARIAH';
+        
         $activeSheet = $objPHPExcel->setActiveSheetIndex(0);
         // $activeSheet->getStyle('A1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('689a3b');
-        $activeSheet->setCellValue('A1', 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH');
+        $activeSheet->setCellValue('A1', $title);
         $activeSheet->mergeCells("A1:O1");
         $activeSheet->getRowDimension('1')->setRowHeight(34);
         $activeSheet->getStyle('B1')->getFont()->setSize(16);
@@ -42,10 +46,10 @@ class Index extends Component
                     ->setCellValue('C5', "'".$data->polis->no_polis)
 
                     ->setCellValue('B6', 'PEMEGANG POLIS')
-                    ->setCellValue('C6', $data->polis->nama)
+                    ->setCellValue('C6', isset($data->polis->nama) ? $data->polis->nama : '-')
 
                     ->setCellValue('B7', 'PRODUK ASURANSI')
-                    ->setCellValue('C7', $data->polis->produk->nama);
+                    ->setCellValue('C7', isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-');
 
         $activeSheet->getStyle('A8:O8')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('c2d7f3');
         $activeSheet
