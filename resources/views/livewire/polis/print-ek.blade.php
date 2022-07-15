@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Surat Pernyataan Extra Mortalita</title>
+        <title>Surat Pernyataan Extra Kontribusi</title>
         <style>
             @page { margin: 0px; }
             body { margin: 0px; }
@@ -28,7 +28,7 @@
                             </tr>
                             <tr>
                                 <td>Perihal </td>
-                                <td>: Pemberitahuan Extra Mortalita</td>
+                                <td>: Pemberitahuan Extra Kontribusi</td>
                             </tr>
                             <tr>
                                 <td>Lamp </td>
@@ -87,8 +87,8 @@
                     <th style="text-align:left;">{{date('d F Y',strtotime($data->tanggal_mulai))}}</th>
                 </tr>
             </table>
-            <p style="text-align: justify;">dengan ini disampaikan bahwa berdasarkan data calon Peserta tersebut diatas setelah diseleksi berdasarkan dokumen Surat Pernyataan Kesehatan (SPK), calon Peserta dapat diterima dengan akseptasi Non Medical Substandard dengan Extra Mortalita dikarenakan {{$data->status_em}}</p>
-            <p style="text-align: justify;">Bila Calon peserta bersedia dikenakan Extra Mortalita tersebut, mohon Surat Persetujuan Extra Mortalita (terlampir), ditandatangani oleh yang bersangkutan dan disampaikan kembali kepada PT. Asuransi Jiwa Reliance Indonesia Unit Syariah.</p>
+            <p style="text-align: justify;">dengan ini disampaikan bahwa berdasarkan data calon Peserta tersebut diatas setelah diseleksi berdasarkan dokumen Surat Pernyataan Kesehatan (SPK), calon Peserta dapat diterima dengan akseptasi Non Medical Substandard dengan Extra Kontribusi dikarenakan {{$data->status_ek}}</p>
+            <p style="text-align: justify;">Bila Calon peserta bersedia dikenakan Extra Kontribusi tersebut, mohon Surat Persetujuan Extra Kontribusi (terlampir), ditandatangani oleh yang bersangkutan dan disampaikan kembali kepada PT. Asuransi Jiwa Reliance Indonesia Unit Syariah.</p>
             <p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terimakasih.</p>
             <br />
             <br />
@@ -119,15 +119,15 @@
                 <strong>Bapak / Ibu</strong><br />
                 Di tempat
             </p>
-            <p>Hal. : SURAT PERNYATAAN EXTRA MORTALITA a/n <b>{{$data->nama}}</b></p>
+            <p>Hal. : SURAT PERNYATAAN EXTRA KONTRIBUSI a/n <b>{{$data->nama}}</b></p>
             <p>Dengan hormat,</p>
             <p style="text-align: justify;">Terima kasih atas kepercayaan Bapak/Ibu untuk membeli produk Asuransi Jiwa yang kami tawarkan, namun sebelum proses dilanjutkan, perlu diberitahukan kepada Bapak/Ibu bahwa kami dapat melakukan akseptasi atas penutupan Asuransi Jiwa atas nama Bapak/Ibu dengan status substandard.</p>
             <p>Status substandard ini disebabkan oleh karena :<br />
                 <ul>
-                    <li>{{$data->status_em}}</li>
+                    <li>{{$data->status_ek}}</li>
                 </ul>
             </p>
-            <p>Oleh karena status substandard tersebut, maka Bapak/Ibu dikenakan Extra Mortalita dari Kontribusi Standar, Perhitungan lengkapnya adalah sebagai berikut :</p>
+            <p>Oleh karena status substandard tersebut, maka Bapak/Ibu dikenakan Extra Kontribusi dari Kontribusi Standar, Perhitungan lengkapnya adalah sebagai berikut :</p>
             <hr />
             <table>
                 <tr>
@@ -137,10 +137,10 @@
                     <td style="text-align: right;">{{format_idr($data->kontribusi)}}</td>
                 </tr>
                 <tr>
-                    <td>Extra Mortalita</td>
+                    <td>Extra Kontribusi</td>
                     <td> = </td>
                     <td>Rp . </td>
-                    <td style="text-align: right;">{{format_idr($data->extra_mortalita)}}</td>
+                    <td style="text-align: right;">{{format_idr($data->extra_kontribusi)}}</td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
@@ -150,7 +150,7 @@
                     <td>Total Kontribusi</td>
                     <td> = </td>
                     <th>Rp . </th>
-                    <th style="text-align: right;">{{format_idr($data->kontribusi + $data->extra_mortalita)}}</th>
+                    <th style="text-align: right;">{{format_idr($data->kontribusi + $data->extra_kontribusi)}}</th>
                 </tr>
                 <tr>
                     <td colspan="4"><strong>sekaligus</strong>/tahun/semester/triwulan/bulanan</td>
@@ -190,7 +190,7 @@
                 </tr>
             </table>
             <p style="text-align: justify;">
-                Menyatakan bahwa saya menyetujui atas pembebanan Extra Mortalita atas penutupan Asuransi Jiwa Produk {{$data->polis->produk->nama}} sesuai dengan SURAT PERNYATAAN EXTRA MORTALITA No. : {{$data->nomor_em}}
+                Menyatakan bahwa saya menyetujui atas pembebanan Extra Kontribusi atas penutupan Asuransi Jiwa Produk {{$data->polis->produk->nama}} sesuai dengan SURAT PERNYATAAN EXTRA KONTRIBSI No. : {{$data->nomor_ek}}
             </p>
             <table style="width:90%;margin:auto;">
                 <tr>

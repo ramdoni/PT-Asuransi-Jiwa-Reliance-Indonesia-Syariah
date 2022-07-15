@@ -14,4 +14,12 @@ class PesertaController extends Controller
         
         return $pdf->stream();
     }
+
+    public function printEk(Kepesertaan $id)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.polis.print-ek',['data'=>$id]);
+        
+        return $pdf->stream();
+    }
 }

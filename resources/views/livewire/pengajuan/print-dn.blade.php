@@ -8,9 +8,6 @@
                 font-family: Arial, Helvetica, sans-serif;
                 font-size:12px;
             }
-            p {
-                font-size:14px;
-            }
             h1 {font-size: 30px;}
             .container {padding-left:70px;padding-right:70px;}
             table.style1 tr td {padding-top:5px;}

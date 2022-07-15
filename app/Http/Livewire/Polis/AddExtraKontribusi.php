@@ -9,7 +9,7 @@ use App\Models\UnderwritingLimit;
 
 class AddExtraKontribusi extends Component
 {
-    public $amount,$data;
+    public $amount,$data,$ek_status;
     protected $listeners = ['set_id'];
     public function render()
     {
@@ -24,7 +24,11 @@ class AddExtraKontribusi extends Component
     public function save()
     {
         $this->validate([
-            'amount'=> 'required'
+            'amount'=> 'required',
+            'ek_status' => 'required'
+        ],[
+            'ek_status.required' => 'Status Substandard required',
+            'amount.required' => 'Persenstase required',
         ]); 
 
         $dana_tabbaru = ($this->data->kontribusi*$this->data->polis->iuran_tabbaru)/100;
@@ -33,6 +37,7 @@ class AddExtraKontribusi extends Component
 
         $this->data->dana_tabarru = $dana_tabbaru + $this->data->extra_mortalita + $this->amount;
         $this->data->extra_kontribusi = $extra_kontribusi;
+        $this->data->ek_status = $this->ek_status;
         $this->data->save();
 
         // mulai hitung ulang

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldAccountMaanagerToPengajuan extends Migration
+class AddFieldNomorEkToKepesertaan extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddFieldAccountMaanagerToPengajuan extends Migration
      */
     public function up()
     {
-        Schema::table('pengajuan', function (Blueprint $table) {
-            $table->integer('account_manager_id')->nullable();
+        Schema::table('kepesertaan', function (Blueprint $table) {
+            $table->string('nomor_ek',100)->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddFieldAccountMaanagerToPengajuan extends Migration
      */
     public function down()
     {
-        Schema::table('pengajuan', function (Blueprint $table) {
+        Schema::table('kepesertaan', function (Blueprint $table) {
             //
         });
     }

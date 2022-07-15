@@ -14,7 +14,7 @@ class Index extends Component
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
     }
 
-    public function downloadExcel(Pengajuan $data)
+    public function downloadExcel(Pengajuan $data,$status=1)
     {
         $objPHPExcel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         // Set document properties
@@ -82,7 +82,7 @@ class Index extends Component
         $activeSheet->getColumnDimension('O')->setAutoSize(true);
         $num=9;
 
-        foreach($data->kepesertaan->where('status_akseptasi',1) as $k => $i){
+        foreach($data->kepesertaan->where('status_akseptasi',$status) as $k => $i){
             $activeSheet
                 ->setCellValue('A'.$num,($k+1))
                 ->setCellValue('B'.$num,$i->ket)

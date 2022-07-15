@@ -22,9 +22,4 @@ class PengajuanController extends Controller
 
         return $pdf->stream();
     }
-
-    public function downloadReport(Pengajuan $id)
-    {
-        
-    }
 }
