@@ -38,6 +38,7 @@ class AddExtraKontribusi extends Component
         $this->data->dana_tabarru = $dana_tabbaru + $this->data->extra_mortalita + $this->amount;
         $this->data->extra_kontribusi = $extra_kontribusi;
         $this->data->ek_status = $this->ek_status;
+        $this->data->nomor_ek = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/EK-UWS/AJRIUS/'.numberToRomawi(date('m')).'/'.date('Y');
         $this->data->save();
 
         // mulai hitung ulang

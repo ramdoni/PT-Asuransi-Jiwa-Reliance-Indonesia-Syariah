@@ -45,6 +45,7 @@ class AddEm extends Component
         }
         $this->data->use_em = 1;
         $this->data->status_em = $this->status;
+        $this->data->nomor_em = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/EM-UWS/AJRIUS/'.numberToRomawi(date('m')).'/'.date('Y');;
         $this->data->save();
 
         // mulai hitung ulang

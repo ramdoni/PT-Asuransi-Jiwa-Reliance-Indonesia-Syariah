@@ -24,7 +24,7 @@
                         <table>
                             <tr>
                                 <td>Nomor </td>
-                                <td>: {{$data->nomor_em}}</td>
+                                <td>: {{$data->nomor_ek}}</td>
                             </tr>
                             <tr>
                                 <td>Perihal </td>
