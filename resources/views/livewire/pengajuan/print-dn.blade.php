@@ -81,16 +81,16 @@
                     <td style="text-align: right;">{{ format_idr($extra_kontribusi)}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">Potong Langsung 10%</td>
+                    <td style="padding-left: 20px">{{isset($item->polis->ket_diskon) ? $item->polis->ket_diskon : ''}} {{isset($item->polis->potong_langsung) ? $item->polis->potong_langsung.'%' : ''}}</td>
                     <td style="text-align: right;">{{format_idr($potongan_langsung)}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">PPN 0%</td>
+                    <td style="padding-left: 20px">PPN {{isset($item->polis->ppn) ? $item->polis->ppn : ''}}%</td>
                     <td style="text-align: right;">
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">PPh 0%</td>
+                    <td style="padding-left: 20px">PPh {{isset($item->polis->pph) ? $item->polis->pph : ''}}%</td>
                     <td style="text-align: right;"></td>
                 </tr>
                 <tr>
@@ -100,6 +100,16 @@
                 <tr>
                     <td style="padding-left: 20px">Biaya Sertifikat/Kartu @ Rp0</td>
                     <td style="text-align: right;"></td>
+                </tr>
+                <tr>
+                    <th>Total Kontribusi Dibayar</th>
+                    <td style="text-align: right;"><b>{{format_idr($total)}}</b></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Terbilang : {{terbilang($total)}}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Masa Tenggang Pembayaran sampai dengan : {{$data->tanggal_jatuh_tempo ? date('d F Y',strtotime($data->tanggal_jatuh_tempo)) : ''}}</td>
                 </tr>
             </table>
             <p>Pembayaran Kontribusi dapat dilakukan melalui transfer ke rekening sebagai berikut:</p>
@@ -120,9 +130,11 @@
             <p>
                 Hormat Kami,<br />
                 <strong>PT ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>
-                <br />
-                <br />
-                <br />
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
                 <b><u>{{$head_teknik}}</u></b><br />
                 Head of Teknik Syariah<br />
                 <small style="font-size:10px;">Catatan: Harap pembayaran kontribusi mencantumkan nomor Debit Note.</small>
@@ -182,53 +194,54 @@
                 </tr>
             </table>
             <p>Dengan ini kami lampirkan : </p>
-            <p><strong>1 Daftar Kepesertaan Asuransi Jiwa Kumpulan Syariah</strong></p>
-            <table style="width:70%;">
+            <p style="padding-left: 20px;"><strong>1. Daftar Kepesertaan Asuransi Jiwa Kumpulan Syariah</strong></p>
+            <table style="width:100%;">
                 <tr>
-                    <td style="width:30%">Total Peserta</td>
+                    <td style="width:40%;padding-left: 33px;">Total Peserta</td>
                     <td style="width: 50px;"> : </td>
                     <td style="text-align:right;">{{$data->kepesertaan->where('status_akseptasi',1)->count()}}</td>
                 </tr>
                 <tr>
-                    <td>No. Peserta</td>
+                    <td style="padding-left: 33px;">No. Peserta</td>
                     <td> : </td>
                     <td style="text-align:right;">{{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " - {$data->no_peserta_akhir}" : '' }}</td>
                 </tr>
                 <tr>
-                    <td>Total Nilai Manfaat Asuransi</td>
+                    <td style="padding-left: 33px;">Total Nilai Manfaat Asuransi</td>
                     <td> : Rp</td>
                     <td style="text-align:right;">{{ format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('basic')) }}</td>
                 </tr>
                 <tr>
-                    <td>Total Kontribusi</td>
+                    <td style="padding-left: 33px;">Total Kontribusi</td>
                     <td> : Rp </td>
                     <td style="text-align:right;">{{ format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi')) }}</td>
                 </tr>
             </table>
-            <p><strong>2. Daftar Kepesertaan Tertunda Asuransi Jiwa Kumpulan Syariah</strong></p>
-            <table style="width:70%;">
+            <p style="padding-left: 20px;"><strong>2. Daftar Kepesertaan Tertunda Asuransi Jiwa Kumpulan Syariah</strong></p>
+            <table style="width:100%;">
                 <tr>
-                    <td style="width:30%">Total Peserta</td>
+                    <td style="width:40%;padding-left: 35px;">Total Peserta</td>
                     <td style="width: 50px;"> : </td>
                     <td style="text-align: right"> {{$data->kepesertaan->whereIn('status_akseptasi',[2,3])->count()}}</td>
                 </tr>
                 <tr>
-                    <td>Total Nilai Manfaat Asuransi</td>
+                    <td style="padding-left: 35px;">Total Nilai Manfaat Asuransi</td>
                     <td> : Rp </td>
                     <td style="text-align: right"> {{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</td>
                 </tr>
             </table>
             <br/>
-            <p><strong>3. Debit Note</strong></p>
+            <p style="padding-left:20px;"><strong>3. Debit Note</strong></p>
             <p style="text-align: justify">Dapat diinformasikan bahwa Data Kepesertaan tersebut telah diakseptasi sesuai dengan ketentuan penerimaan kepesertaan yang tercantum di dalam Polis. Apabila terdapat pertanyaan, silahkan menghubungi kami pada hotline 021–5793 0008, di hari Senin – Jumat pukul 09.00 – 17.00 WIB dengan Dept. Underwriting Syariah.</p>
             <p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terima kasih</p>
             <p>
                 Hormat kami<br />
                 <strong>PT. ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>
-                <br />
-                <br />
-                <br />
-                <br />
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
                 <b><u>{{$head_teknik}}</u></b><br />
                 Head of Teknik Syariah<br />
             </p>

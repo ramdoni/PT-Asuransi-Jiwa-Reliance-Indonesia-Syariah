@@ -87,7 +87,8 @@ class Edit extends Component
             else
                 $no_peserta_akhir = $no_peserta;
         }
-
+        if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
+        
         $this->data->no_peserta_awal = $no_peserta_awal;
         $this->data->no_peserta_akhir = $no_peserta_akhir;
         $this->data->save();

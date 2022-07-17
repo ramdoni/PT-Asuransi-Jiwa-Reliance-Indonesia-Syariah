@@ -66,7 +66,9 @@ class Insert extends Component
             'alamat'=>'required',
             // 'ketentuan_uw_reas'=>'required|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png|max:51200',
             'line_of_business' => 'required',
-            'iuran_tabbaru' => 'required'
+            'iuran_tabbaru' => 'required',
+            'ket_diskon' => 'required',
+            'masa_leluasa' => 'required'
         ]);
 
         $data = new Polis();

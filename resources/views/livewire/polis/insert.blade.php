@@ -80,6 +80,9 @@
                             <div class="form-group">
                                 <label>Masa Leluasa (Grace Periode) *hari</label>
                                 <input type="number" class="form-control" wire:model="masa_leluasa" placeholder="Hari Kalender" />
+                                @error('masa_leluasa')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label>Kelengkapan Berkas Manfaat Asuransi</label>
@@ -347,12 +350,15 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Ket Diskon/HF di Memo</label>
+                                <label>Ket Diskon/HF di Memo <span class="text-danger">*</span></label>
                                 <select class="form-control" wire:model="ket_diskon">
                                     <option value=""> -- pilih -- </option>
                                     <option>Potong Langsung</option>
                                     <option>Brokerage Ujroh</option>
                                 </select>
+                                @error('ket_diskon')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label>Sektor Keuangan</label>

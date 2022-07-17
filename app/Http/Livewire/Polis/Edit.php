@@ -160,6 +160,16 @@ class Edit extends Component
 
     public function save()
     {
+        $this->validate([
+            'nama'=>'required',
+            'provinsi_id'=>'required',
+            'alamat'=>'required',
+            'line_of_business' => 'required',
+            'iuran_tabbaru' => 'required',
+            'ket_diskon' => 'required',
+            'masa_leluasa' => 'required'
+        ]);
+
         $this->data->nama = $this->nama;
         $this->data->provinsi_id = $this->provinsi_id;
         $this->data->alamat = $this->alamat;
