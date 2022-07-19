@@ -16,6 +16,7 @@ class Insert extends Component
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
     public $total_double=0,$total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '';
     protected $listeners = ['reload-page'=>'$refresh'];
+    public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
     public function render()
     {
         if($this->polis_id){
@@ -101,77 +102,83 @@ class Insert extends Component
 
         if($propertyName=='polis_id') Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->delete();
 
-        if($propertyName=='file'){
-            $this->validate([
-                'file'=>'required|mimes:xlsx|max:51200', // 50MB maksimal
-            ]);
-            
-            $path = $this->file->getRealPath();
-            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-            $reader->setReadDataOnly(true);
-            $xlsx = $reader->load($path);
-            $sheetData = $xlsx->getActiveSheet()->toArray();
-            $total_data = 0;
-            $total_double = 0;
-            $total_success = 0;
-            Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->delete();
-            foreach($sheetData as $key => $item){
-                if($key<=1) continue;
-                /**
-                 * Skip
-                 * Nama, Tanggal lahir
-                 */
-                if($item[1]=="" || $item[10]=="") continue;
-                
-                $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
-
-                $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->first();
-                
-                $data = new Kepesertaan();
-                
-                if($check){
-                    $data->is_double = 1;
-                    $data->parent_id = $check->id;
-                    $total_double++;
-                }
-
-                $data->polis_id = $this->polis_id;
-                $data->nama = $item[1];
-                $data->no_ktp = $item[2];
-                $data->alamat = $item[3];
-                $data->no_telepon = $item[4];
-                $data->pekerjaan = $item[5];
-                $data->bank = $item[6];
-                $data->cab = $item[7];
-                $data->no_closing = $item[8];
-                $data->no_akad_kredit = $item[9];
-                if($item[10]) $data->tanggal_lahir = $tanggal_lahir;
-                $data->jenis_kelamin = $item[11];
-                if($item[12]) $data->tanggal_mulai = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
-                if($item[13]) $data->tanggal_akhir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
-                $data->basic = $item[14];
-                $data->tinggi_badan = $item[15];
-                $data->berat_badan = $item[16];
-                $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
-                $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
-                $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir);
-                
-                if($this->masa_asuransi==2) $data->masa_bulan + $data->masa_bulan + 1;
-                
-                $data->kontribusi = 0;
-                $data->is_temp = 1;
-                $data->save();
-
-                $total_data++;
-            }
-
-            $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
-            $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->get()->count();
-
-            $this->emit('attach-file');
+        if($propertyName=='file' || $propertyName =='masa_asuransi'){
+            if($this->file) $this->temp_upload();
+            if($this->file and $this->masa_asuransi) $this->temp_upload();   
         }
 
         $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>0])->get()->count();
+    }
+
+    public function temp_upload()
+    {
+        $this->validate([
+            'file'=>'required|mimes:xlsx|max:51200', // 50MB maksimal
+        ]);
+        
+        $path = $this->file->getRealPath();
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        $reader->setReadDataOnly(true);
+        $xlsx = $reader->load($path);
+        $sheetData = $xlsx->getActiveSheet()->toArray();
+        $total_data = 0;
+        $total_double = 0;
+        $total_success = 0;
+        Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->delete();
+        foreach($sheetData as $key => $item){
+            if($key<=1) continue;
+            /**
+             * Skip
+             * Nama, Tanggal lahir
+             */
+            if($item[1]=="" || $item[10]=="") continue;
+            
+            $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
+
+            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->first();
+            
+            $data = new Kepesertaan();
+            
+            if($check){
+                $data->is_double = 1;
+                $data->parent_id = $check->id;
+                $total_double++;
+            }
+
+            $data->polis_id = $this->polis_id;
+            $data->nama = $item[1];
+            $data->no_ktp = $item[2];
+            $data->alamat = $item[3];
+            $data->no_telepon = $item[4];
+            $data->pekerjaan = $item[5];
+            $data->bank = $item[6];
+            $data->cab = $item[7];
+            $data->no_closing = $item[8];
+            $data->no_akad_kredit = $item[9];
+            if($item[10]) $data->tanggal_lahir = $tanggal_lahir;
+            $data->jenis_kelamin = $item[11];
+            if($item[12]) $data->tanggal_mulai = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
+            if($item[13]) $data->tanggal_akhir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
+            $data->basic = $item[14];
+            $data->tinggi_badan = $item[15];
+            $data->berat_badan = $item[16];
+            $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
+            $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
+            $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
+            
+            // if($this->masa_asuransi==2) $data->masa_bulan = $data->masa_bulan + 1;
+            
+            $data->kontribusi = 0;
+            $data->is_temp = 1;
+            $data->save();
+
+            $total_data++;
+        }
+
+        $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
+        $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->get()->count();
+
+        $this->emit('attach-file');
     }
 
     public function save()

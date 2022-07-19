@@ -66,7 +66,7 @@ function countDay($now,$end)
     $datediff = $now - $your_date;
 
     return round($datediff / (60 * 60 * 24));
-}
+} 
 
 function hitung_masa($start,$end){
     $birthDate = new \DateTime($start);
@@ -79,7 +79,7 @@ function hitung_masa($start,$end){
     return $tahun;
 }
 
-function hitung_masa_bulan($start,$end){
+function hitung_masa_bulan($start,$end,$masa_asuransi=1){
     $birthDate = new \DateTime($start);
 	$today = new \DateTime($end);
 	if ($birthDate > $today) { 
@@ -87,7 +87,7 @@ function hitung_masa_bulan($start,$end){
     }
     $tahun = $today->diff($birthDate)->y;
 
-    return ($tahun*12) + $today->diff($birthDate)->m + 1;
+    return ($tahun*12) + $today->diff($birthDate)->m;
 }
 
 function hitung_umur($tanggal_lahir,$pembulatan=1){
@@ -98,8 +98,8 @@ function hitung_umur($tanggal_lahir,$pembulatan=1){
     }
     $tahun = $today->diff($birthDate)->y;
 
-    if($pembulatan==1 and $today->diff($birthDate)->m > 6) $tahun++; // Roundup
-    if($pembulatan==2 and $today->diff($birthDate)->m > 1) $tahun++; // Rounddown
+    if($pembulatan==1 and $today->diff($birthDate)->m > 6) $tahun++; // Nears
+    if($pembulatan==2 and $today->diff($birthDate)->m > 12) $tahun++; // Actual
     
     return $tahun;
 }

@@ -50,7 +50,7 @@
                                     <select class="form-control" wire:model="masa_asuransi">
                                         <option value=""> -- Pilih -- </option>
                                         <option value="1">Day to Day</option>
-                                        <option value="2">Day to Day +1</option>
+                                        <option value="2">Day to Day -1</option>
                                     </select>
                                     @error('masa_asuransi')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -86,7 +86,7 @@
                                         <a href="javascript:void(0)" wire:click="keepAll" wire:model="modelKeepAll" class="btn btn-success"><i class="fa fa-check-circle"></i> Keep All</a>
                                         <a href="javascript:void(0)" wire:click="deleteAll" class="btn btn-danger"><i class="fa fa-trash"></i> Delete All</a>
                                     @endif
-                                    <span wire:loading wire:target="clear_file,save,hitung,polis_id,keepAll,deleteAll">
+                                    <span wire:loading wire:target="clear_file,save,hitung,polis_id,masa_asuransi,keepAll,deleteAll">
                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                     </span>
@@ -265,26 +265,47 @@
                                             <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                             <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                             <td>{{$item->masa_bulan}}</td>
-                                            <td class="text-right">{{format_idr($item->basic)}}</td>
-                                            <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
-                                            <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
-                                            <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                                            <td class="text-right">
+                                                {{format_idr($item->basic)}}
+                                                @php($total_nilai_manfaat += $item->basic)
+                                            </td>
+                                            <td class="text-right">
+                                                {{format_idr($item->dana_tabarru)}}
+                                                @php($total_dana_tabbaru += $item->dana_tabarru)
+                                            </td>
+                                            <td class="text-right">
+                                                {{format_idr($item->dana_ujrah)}}
+                                                @php($total_dana_tabbaru += $item->dana_ujrah)
+                                            </td>
+                                            <td class="text-right">
+                                                {{format_idr($item->kontribusi)}}
+                                                @php($total_kontribusi += $item->kontribusi)
+                                            </td>
                                             <td>
                                                 @if($item->use_em==0)
                                                     <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
                                                 @else
-                                                    <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><span class="text-right">{{format_idr($item->extra_mortalita)}}</span></a>
+                                                    <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><span class="text-right">
+                                                        {{format_idr($item->extra_mortalita)}}
+                                                        @php($total_em += $item->extra_mortalita)
+                                                    </span></a>
                                                     <a href="{{route('peserta.print-em',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($item->extra_kontribusi)
-                                                    <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
+                                                    <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">
+                                                        {{format_idr($item->extra_kontribusi)}}
+                                                        @php($total_ek += $item->extra_ek)
+                                                    </a>
                                                 @else
                                                     <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi"><i class="fa fa-plus"></i></a>
                                                 @endif
                                             </td>
-                                            <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi+$item->extra_mortalita)}}</td>
+                                            <td class="text-right">
+                                                {{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi+$item->extra_mortalita)}}
+                                                @php($total_total_kontribusi += $item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi+$item->extra_mortalita)
+                                            </td>
                                             <td>{{$item->tanggal_stnc ? date('d-M-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
                                             <td>{{$item->ul}}</td>
                                         </tr>
@@ -296,6 +317,18 @@
                                     </tr>
                                 @endif
                             </tbody>
+                            <tfoot style="background: #eee;">
+                                <tr>
+                                    <th colspan="19">Total</th>
+                                    <th class="text-right">{{format_idr($total_nilai_manfaat)}}</th>
+                                    <th class="text-right">{{format_idr($total_dana_tabbaru)}}</th>
+                                    <th class="text-right">{{format_idr($total_dana_ujrah)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                    <th class="text-right">{{format_idr($total_em)}}</th>
+                                    <th class="text-right">{{format_idr($total_ek)}}</th>
+                                    <th class="text-right">{{format_idr($total_total_kontribusi)}}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </form>

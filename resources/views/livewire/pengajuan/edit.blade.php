@@ -155,7 +155,7 @@
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
                                                 <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                                <td>
+                                                <td class="text-right">
                                                     @if($item->use_em==0)
                                                         <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
                                                     @else
@@ -163,7 +163,7 @@
                                                         <a href="{{route('peserta.print-em',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="text-right">
                                                     @if($item->extra_kontribusi)
                                                         <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
                                                         <a href="{{route('peserta.print-ek',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
@@ -183,6 +183,18 @@
                                             </tr>
                                         @endif
                                     </tbody>
+                                    <tfoot style="background: #eee;">
+                                        <tr>
+                                            <th colspan="15">Total</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('basic'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_tabarru'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_ujrah'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('extra_mortalita'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('extra_kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -259,7 +271,7 @@
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
                                                 <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                                <td>
+                                                <td class="text-right">
                                                     @if($item->use_em==0)
                                                         <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
                                                     @else
@@ -267,7 +279,7 @@
                                                         <a href="{{route('peserta.print-em',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="text-right">
                                                     @if($item->extra_kontribusi)
                                                         <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
                                                         <a href="{{route('peserta.print-ek',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
@@ -287,6 +299,18 @@
                                             </tr>
                                         @endif
                                     </tbody>
+                                    <tfoot style="background: #eee;">
+                                        <tr>
+                                            <th colspan="15">Total</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('basic'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -386,11 +410,19 @@
                                                 <td>{{$item->berat_badan}}</td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
-                                                <td class="text-right">{{format_idr($item->basic)}}</td>
-                                                <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
-                                                <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
-                                                <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                                <td>
+                                                <td class="text-right">
+                                                    {{format_idr($item->basic)}}
+                                                </td>
+                                                <td class="text-right">
+                                                    {{format_idr($item->dana_tabarru)}}
+                                                </td>
+                                                <td class="text-right">
+                                                    {{format_idr($item->dana_ujrah)}}
+                                                </td>
+                                                <td class="text-right">
+                                                    {{format_idr($item->kontribusi)}}
+                                                </td>
+                                                <td class="text-right">
                                                     @if($item->status !=3)
                                                         @if($item->use_em==0)
                                                             <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
@@ -402,7 +434,7 @@
                                                         {{format_idr($item->extra_mortalita)}}
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="text-right">
                                                     @if($item->status !=3)
                                                         @if($item->extra_kontribusi)
                                                             <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
@@ -426,6 +458,18 @@
                                             </tr>
                                         @endif
                                     </tbody>
+                                    <tfoot style="background: #eee;">
+                                        <tr>
+                                            <th colspan="15">Total</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_tabarru'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_ujrah'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('kontribusi')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

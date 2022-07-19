@@ -33,8 +33,8 @@ class UnderwritingLimit extends Component
         $this->rows = $rows;
         $this->uw = $data;
 
-        $this->nilai_bawah_atas = ModelUnderwritingLimit::groupBy('min_amount','max_amount')->orderBy('max_amount','ASC')->get();
-        $this->usia = ModelUnderwritingLimit::groupBy('usia')->get();
+        $this->nilai_bawah_atas = ModelUnderwritingLimit::where('polis_id',$this->data->id)->groupBy('min_amount','max_amount')->orderBy('max_amount','ASC')->get();
+        $this->usia = ModelUnderwritingLimit::where('polis_id',$this->data->id)->groupBy('usia')->get();
     }
 
     public function upload()

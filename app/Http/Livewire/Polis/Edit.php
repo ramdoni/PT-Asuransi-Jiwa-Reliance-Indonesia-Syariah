@@ -7,6 +7,7 @@ use App\Models\Polis;
 use App\Models\Provinsi;
 use App\Models\Rate;
 use App\Models\Produk;
+use App\Models\Reasuradur;
 
 class Edit extends Component
 {
@@ -18,9 +19,9 @@ class Edit extends Component
     public $ujroh_handling_fee_broker,$referal_fee,$pph,$ppn,$tujuan_pembayaran_nota_penutupan,$no_rekening,$bank,$tujuan_pembayaran_update;
     public $pks,$produksi_kontribusi,$surat_permohonan_tarif_kontribusi,$fitur_produk,$tabel_rate_premi,$spajks,$spajks_sementara,$copy_ktp;
     public $copy_npwp,$npwp,$copy_siup,$nota_penutupan,$tujuan_pembayaran_nama_penerima_refund,$bank_refund,$no_rekening_refund,$tujuan_pengiriman_surat;
-    public $mcu_dicover_ajri,$kabupaten_id,$kode_kabupaten,$ket_diskon,$sektor_ekonomi,$mitra_pengimbang,$kerjasama_pemasaran,$asuransi_mikro,$pic_marketing;
+    public $mcu_dicover_ajri,$kabupaten_id,$kode_kabupaten,$cabang_pemasaran,$ket_diskon,$sektor_keuangan,$sektor_ekonomi,$mitra_pengimbang,$kerjasama_pemasaran,$asuransi_mikro,$pic_marketing;
     public $dc_aaji,$dc_ojk,$office,$channel,$segment,$line_of_business,$source_of_business,$no_nota_penutupan,$no_perjanjian_kerjasama,$peninjauan_ulang,$pembayaran_klaim;
-    public $retroaktif,$waiting_period,$rate_single_usia,$total_bp,$no_sb,$uw_limit,$margin_rate,$ri_comm,$share_reinsurance,$lost_ratio,$profit_margin,$contingency_margin,$business_source;
+    public $retroaktif,$waiting_period,$rate_single_usia,$total_bp,$no_sb,$uw_limit,$margin_rate,$ri_comm,$share_reinsurance,$lost_ratio,$profit_margin,$contingency_margin,$gae,$business_source;
     public $refund,$refund_to_pengalihan,$dana_tabbaru_reas,$dana_ujroh_reas,$stop_loss,$cut_loss,$refund_cut_loss;
     public $data;
     protected $listeners = ['set-id'=>'set_id'];
@@ -32,6 +33,10 @@ class Edit extends Component
     public function mount(Polis $id)
     {
         $this->data = $id;
+        
+        $this->produks = Produk::get();
+        $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
+        $this->reasuradur = Reasuradur::get();
 
         // $this->rates = Rate::get();
         $this->no_polis = $this->data->no_polis;
@@ -103,7 +108,9 @@ class Edit extends Component
         $this->mcu_dicover_ajri = $this->data->mcu_dicover_ajri;
         $this->kabupaten_id = $this->data->kabupaten_id;
         $this->kode_kabupaten = $this->data->kode_kabupaten;
+        $this->cabang_pemasaran = $this->data->cabang_pemasaran;
         $this->ket_diskon = $this->data->ket_diskon;
+        $this->sektor_keuangan = $this->data->sektor_keuangan;
         $this->sektor_ekonomi = $this->data->sektor_ekonomi;
         $this->mitra_pengimbang = $this->data->mitra_pengimbang;
         $this->kerjasama_pemasaran = $this->data->kerjasama_pemasaran;
@@ -122,7 +129,7 @@ class Edit extends Component
         $this->pembayaran_klaim = $this->data->pembayaran_klaim;
         $this->retroaktif = $this->data->retroaktif;
         $this->waiting_period = $this->data->waiting_period;
-        $this->rate_single_usia - $this->data->rate_single_usia;
+        $this->rate_single_usia = $this->data->rate_single_usia;
         $this->total_bp = $this->data->total_bp;
         $this->no_sb = $this->data->no_sb;
         $this->uw_limit = $this->data->uw_limit;
@@ -131,7 +138,8 @@ class Edit extends Component
         $this->share_reinsurance = $this->data->share_reinsurance;
         $this->lost_ratio = $this->data->lost_ratio;
         $this->profit_margin = $this->data->profit_margin;
-        $this->contingency_margin = $this->contingency_margin;
+        $this->contingency_margin = $this->data->contingency_margin;
+        $this->gae = $this->data->gae;
         $this->business_source = $this->data->business_source;
         $this->refund = $this->data->refund;
         $this->refund_to_pengalihan = $this->data->refund_to_pengalihan;
@@ -234,7 +242,9 @@ class Edit extends Component
         $this->data->mcu_dicover_ajri = $this->mcu_dicover_ajri;
         $this->data->kabupaten_id = $this->kabupaten_id;
         $this->data->kode_kabupaten = $this->kode_kabupaten;
+        $this->data->cabang_pemasaran = $this->cabang_pemasaran;
         $this->data->ket_diskon = $this->ket_diskon;
+        $this->data->sektor_keuangan = $this->sektor_keuangan;
         $this->data->sektor_ekonomi = $this->sektor_ekonomi;
         $this->data->mitra_pengimbang = $this->mitra_pengimbang;
         $this->data->kerjasama_pemasaran = $this->kerjasama_pemasaran;
@@ -252,8 +262,8 @@ class Edit extends Component
         $this->data->peninjauan_ulang = $this->peninjauan_ulang;
         $this->data->pembayaran_klaim = $this->pembayaran_klaim;
         $this->data->retroaktif = $this->retroaktif;
-        $this->data->waiting_period = $this->waiting_period;
-        $this->data->rate_single_usia - $this->rate_single_usia;
+        if($this->waiting_period) $this->data->waiting_period = $this->waiting_period;
+        $this->data->rate_single_usia = $this->rate_single_usia;
         $this->data->total_bp = $this->total_bp;
         $this->data->no_sb = $this->no_sb;
         $this->data->uw_limit = $this->uw_limit;
@@ -263,6 +273,7 @@ class Edit extends Component
         $this->data->lost_ratio = $this->lost_ratio;
         $this->data->profit_margin = $this->profit_margin;
         $this->data->contingency_margin = $this->contingency_margin;
+        $this->data->gae = $this->gae;
         $this->data->business_source = $this->business_source;
         $this->data->refund = $this->refund;
         $this->data->refund_to_pengalihan = $this->refund_to_pengalihan;

@@ -518,7 +518,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Loss ratio (to be review 40% - 50% to gross)</label>
-                                <input type="text" class="form-control" wire:model="lost_ration" />
+                                <input type="text" class="form-control" wire:model="lost_ratio" />
                             </div>
                             <div class="form-group">
                                 <label>Profit Margin</label>
@@ -527,6 +527,10 @@
                             <div class="form-group">
                                 <label>Contingency Margin</label>
                                 <input type="text" class="form-control" wire:model="contingency_margin" />
+                            </div>
+                            <div class="form-group">
+                                <label>GAE (%)</label>
+                                <input type="text" class="form-control" wire:model="gae" />
                             </div>
                             <div class="form-group">
                                 <label>Business Source (Man Risk Recommendation) & UW Guideline</label>

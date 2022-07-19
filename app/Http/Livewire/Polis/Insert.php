@@ -20,9 +20,9 @@ class Insert extends Component
     public $ujroh_handling_fee_broker,$referal_fee,$pph,$ppn,$tujuan_pembayaran_nota_penutupan,$no_rekening,$bank,$tujuan_pembayaran_update;
     public $pks,$produksi_kontribusi,$surat_permohonan_tarif_kontribusi,$fitur_produk,$tabel_rate_premi,$spajks,$spajks_sementara,$copy_ktp;
     public $copy_npwp,$npwp,$copy_siup,$nota_penutupan,$tujuan_pembayaran_nama_penerima_refund,$bank_refund,$no_rekening_refund,$tujuan_pengiriman_surat;
-    public $mcu_dicover_ajri,$kabupaten_id,$kode_kabupaten,$ket_diskon,$sektor_ekonomi,$mitra_pengimbang,$kerjasama_pemasaran,$asuransi_mikro,$pic_marketing;
+    public $mcu_dicover_ajri,$kabupaten_id,$kode_kabupaten,$cabang_pemasaran,$ket_diskon,$sektor_keuangan,$sektor_ekonomi,$mitra_pengimbang,$kerjasama_pemasaran,$asuransi_mikro,$pic_marketing;
     public $dc_aaji,$dc_ojk,$office,$channel,$segment,$line_of_business,$source_of_business,$no_nota_penutupan,$no_perjanjian_kerjasama,$peninjauan_ulang,$pembayaran_klaim;
-    public $retroaktif,$waiting_period,$rate_single_usia,$total_bp,$no_sb,$uw_limit,$margin_rate,$ri_comm,$share_reinsurance,$lost_ratio,$profit_margin,$contingency_margin,$business_source;
+    public $retroaktif,$waiting_period,$rate_single_usia,$total_bp,$no_sb,$uw_limit,$margin_rate,$ri_comm,$share_reinsurance,$lost_ratio,$profit_margin,$contingency_margin,$gae,$business_source;
     public $refund,$refund_to_pengalihan,$dana_tabbaru_reas,$dana_ujroh_reas,$stop_loss,$cut_loss,$refund_cut_loss;
     use WithFileUploads;
 
@@ -137,7 +137,9 @@ class Insert extends Component
         $data->mcu_dicover_ajri = $this->mcu_dicover_ajri;
         $data->kabupaten_id = $this->kabupaten_id;
         $data->kode_kabupaten = $this->kode_kabupaten;
+        $data->cabang_pemasaran = $this->cabang_pemasaran;
         $data->ket_diskon = $this->ket_diskon;
+        $data->sektor_keuangan = $this->sektor_keuangan;
         $data->sektor_ekonomi = $this->sektor_ekonomi;
         $data->mitra_pengimbang = $this->mitra_pengimbang;
         $data->kerjasama_pemasaran = $this->kerjasama_pemasaran;
@@ -155,8 +157,8 @@ class Insert extends Component
         $data->peninjauan_ulang = $this->peninjauan_ulang;
         $data->pembayaran_klaim = $this->pembayaran_klaim;
         $data->retroaktif = $this->retroaktif;
-        $data->waiting_period = $this->waiting_period;
-        $data->rate_single_usia - $this->rate_single_usia;
+        if($this->waiting_period) $data->waiting_period = $this->waiting_period;
+        $data->rate_single_usia = $this->rate_single_usia;
         $data->total_bp = $this->total_bp;
         $data->no_sb = $this->no_sb;
         $data->uw_limit = $this->uw_limit;
@@ -166,6 +168,7 @@ class Insert extends Component
         $data->lost_ratio = $this->lost_ratio;
         $data->profit_margin = $this->profit_margin;
         $data->contingency_margin = $this->contingency_margin;
+        $data->gae = $this->gae;
         $data->business_source = $this->business_source;
         $data->refund = $this->refund;
         $data->refund_to_pengalihan = $this->refund_to_pengalihan;

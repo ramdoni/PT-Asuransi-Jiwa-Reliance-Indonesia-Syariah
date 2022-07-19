@@ -11,7 +11,7 @@
                 <table class="table table-hover m-b-0 c_list">
                     <thead style="background: #eee;">
                         <tr>
-                            <th colspan="2">Jumlah Uang Pertanggungan</th>
+                            <th colspan="2">Jumlah Uang Asuransi</th>
                             <th colspan="{{$usia ? $usia->count() : 0}}">Usia</th>
 
                         </tr>
