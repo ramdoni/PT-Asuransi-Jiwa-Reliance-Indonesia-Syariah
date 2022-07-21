@@ -85,16 +85,16 @@
                     <td style="text-align: right;">{{ format_idr($extra_kontribusi)}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">{{isset($item->polis->ket_diskon) ? $item->polis->ket_diskon : ''}} {{isset($item->polis->potong_langsung) ? $item->polis->potong_langsung.'%' : ''}}</td>
+                    <td style="padding-left: 20px">{{isset($data->polis->ket_diskon) ? $data->polis->ket_diskon : ''}} {{isset($data->polis->potong_langsung) ? $data->polis->potong_langsung.'%' : ''}}</td>
                     <td style="text-align: right;">{{format_idr($potongan_langsung)}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">PPN {{isset($item->polis->ppn) ? $item->polis->ppn : ''}}%</td>
+                    <td style="padding-left: 20px">PPN {{isset($data->polis->ppn) ? $data->polis->ppn : ''}}%</td>
                     <td style="text-align: right;">
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">PPh {{isset($item->polis->pph) ? $item->polis->pph : ''}}%</td>
+                    <td style="padding-left: 20px">PPh {{isset($data->polis->pph) ? $data->polis->pph : ''}}%</td>
                     <td style="text-align: right;"></td>
                 </tr>
                 <tr>
