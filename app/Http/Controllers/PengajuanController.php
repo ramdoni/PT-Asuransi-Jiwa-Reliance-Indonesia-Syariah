@@ -16,7 +16,8 @@ class PengajuanController extends Controller
         $kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('kontribusi');
         $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
         $extra_mortalita = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita');
-        $potongan_langsung = ($kontribusi + $extra_kontribusi)*(10/100);
+        $potongan_langsung = 0;
+        if(isset($id->polis->potongan_langsung)) $potongan_langsung = ($kontribusi + $extra_kontribusi)*($id->polis->potong_langsung/100);
 
         $total = $kontribusi;
 
