@@ -37,7 +37,7 @@ class Insert extends Component
         $this->produks = Produk::get();
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
         $this->no_polis = date('ym').str_pad(Polis::count()+1,6, '0', STR_PAD_LEFT);
-        $this->running_number = str_pad(Polis::count()+1,6, '0', STR_PAD_LEFT);
+        $this->running_number = Polis::count()+1;
         $this->reasuradur = Reasuradur::get();
     }
 
