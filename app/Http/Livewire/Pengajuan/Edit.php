@@ -87,11 +87,11 @@ class Edit extends Component
         // generate no peserta
         $no_peserta_awal = '';
         $no_peserta_akhir = '';
-        $running_number = Kepesertaan::where(['polis_id'=>$this->data->polis_id,'status'=>1])->where('pengajuan','<>',$this->data->id)->get()->count();
+        $running_number = Kepesertaan::where(['polis_id'=>$this->data->polis_id,'status_akseptasi'=>1])->where('pengajuan_id','<>',$this->data->id)->get()->count();
 
         foreach($this->data->kepesertaan->where('status_akseptasi',1) as $k => $peserta){
             $running_number++;
-            $no_peserta = $this->data->polis->produk->id ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis_id,3, '0', STR_PAD_LEFT);
+            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
             $peserta->no_peserta = $no_peserta;
             $peserta->save();
 
@@ -145,7 +145,7 @@ class Edit extends Component
             'no_polis' => $this->data->polis->no_polis, 
             'pemegang_polis' => $this->data->polis->nama,
             'alamat' => $this->data->polis->alamat,
-            'jenis_produk' => $this->data->polis->produk->nama,
+            'jenis_produk' => isset($this->data->polis->produk->nama) ? $this->data->polis->produk->nama : '-',
             'jml_kepesertaan_tertunda' => $this->data->total_reject,
             'manfaat_Kepesertaan_tertunda' => $manfaat_Kepesertaan_tertunda,
             'kontribusi_kepesertaan_tertunda' => $kontribusi_kepesertaan_tertunda,

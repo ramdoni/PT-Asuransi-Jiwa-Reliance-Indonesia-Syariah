@@ -81,6 +81,10 @@
                     <td style="text-align: right;">{{ format_idr($extra_kontribusi)}}</td>
                 </tr>
                 <tr>
+                    <td style="padding-left: 20px">Extra Mortalita</td>
+                    <td style="text-align: right;">{{ format_idr($extra_kontribusi)}}</td>
+                </tr>
+                <tr>
                     <td style="padding-left: 20px">{{isset($item->polis->ket_diskon) ? $item->polis->ket_diskon : ''}} {{isset($item->polis->potong_langsung) ? $item->polis->potong_langsung.'%' : ''}}</td>
                     <td style="text-align: right;">{{format_idr($potongan_langsung)}}</td>
                 </tr>

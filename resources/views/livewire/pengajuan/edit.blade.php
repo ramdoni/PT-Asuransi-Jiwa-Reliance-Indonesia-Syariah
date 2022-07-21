@@ -12,7 +12,12 @@
                                     @if($data->dn_number)
                                         <tr>
                                             <td><strong>Debit Note Number</strong></td>
-                                            <td>: {{$data->dn_number}}</td>
+                                            <td>: 
+                                                {{$data->dn_number}}
+                                                @if($data->dn_number)
+                                                    <a href="{{route('pengajuan.print-dn',$data->id)}}" target="_blank"><i class="fa fa-print"></i></a>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endif
                                     <tr>

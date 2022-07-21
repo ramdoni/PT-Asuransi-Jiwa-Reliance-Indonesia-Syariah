@@ -127,10 +127,16 @@
         Livewire.on('message-success', (msg) => {
             $('.alert-success').show();
             $('.alert-success .message').html(msg);
+            $('html, body').animate({
+                scrollTop: $("#wrapper").offset().top
+            }, 0);
         });
         Livewire.on('message-error', (msg) => {
             $('.alert-error').show();
             $('.alert-error .message').html(msg);
+            $('html, body').animate({
+                scrollTop: $("#wrapper").offset().top
+            }, 0);
         });
     </script>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
