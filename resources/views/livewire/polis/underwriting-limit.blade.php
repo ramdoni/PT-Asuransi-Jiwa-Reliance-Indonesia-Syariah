@@ -28,11 +28,12 @@
                     <tbody>
                         @if($nilai_bawah_atas)
                             @foreach($nilai_bawah_atas as $n)
+                                @if($n->min_amount==0 and $n->max_amount==0) @continue @endif
                                 <tr>
                                     <td>{{format_idr($n->min_amount)}}</td>
                                     <td>{{format_idr($n->max_amount)}}</td>
                                     @foreach($usia as $item)
-                                        <td>{{isset($rows[$n->usia][$n->min_amount][$n->max_amount]) ? $rows[$n->usia][$n->min_amount][$n->max_amount] : '-'}}</td>
+                                        <td>{{isset($rows[$item->usia][$n->min_amount][$n->max_amount]) ? $rows[$item->usia][$n->min_amount][$n->max_amount] : '-'}}</td>
                                     @endforeach
                                 </tr>
                             @endforeach

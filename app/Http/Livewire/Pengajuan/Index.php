@@ -51,8 +51,10 @@ class Index extends Component
                     ->setCellValue('B7', 'PRODUK ASURANSI')
                     ->setCellValue('C7', isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-');
 
-        $activeSheet->getStyle('A8:O8')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('c2d7f3');
-        $activeSheet
+        
+        if($status==1){
+            $activeSheet->getStyle('A8:O8')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('c2d7f3');
+            $activeSheet
                     ->setCellValue('A8', 'NO')
                     ->setCellValue('B8', 'KET')
                     ->setCellValue('C8', 'NO PESERTA')
@@ -68,6 +70,26 @@ class Index extends Component
                     ->setCellValue('M8', 'TOTAL KONTRIBUSI')
                     ->setCellValue('N8', 'TGL STNC')
                     ->setCellValue('O8', 'UL');
+        }
+
+        if($status==2){
+            $activeSheet->getStyle('A8:N8')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('c2d7f3');
+            $activeSheet
+                    ->setCellValue('A8', 'NO')
+                    ->setCellValue('B8', 'KET')
+                    ->setCellValue('C8', 'NAMA PESERTA')
+                    ->setCellValue('D8', 'TGL. LAHIR')
+                    ->setCellValue('E8', 'USIA')
+                    ->setCellValue('F8', 'MULAI ASURANSI')
+                    ->setCellValue('G8', 'AKHIR ASURANSI')
+                    ->setCellValue('H8', 'NILAI MANFAAT ASURANSI')
+                    ->setCellValue('I8', 'DANA TABBARU')
+                    ->setCellValue('J8', 'DANA UJRAH')
+                    ->setCellValue('K8', 'KONTRIBUSI')
+                    ->setCellValue('L8', 'TOTAL KONTRIBUSI')
+                    ->setCellValue('M8', 'TGL STNC')
+                    ->setCellValue('N8', 'UL');
+        }
 
         $activeSheet->getColumnDimension('A')->setWidth(5);
         $activeSheet->getColumnDimension('B')->setAutoSize(true);
@@ -86,25 +108,49 @@ class Index extends Component
         $activeSheet->getColumnDimension('O')->setAutoSize(true);
         $num=9;
 
-        foreach($data->kepesertaan->where('status_akseptasi',$status) as $k => $i){
-            $activeSheet
-                ->setCellValue('A'.$num,($k+1))
-                ->setCellValue('B'.$num,$i->ket)
-                ->setCellValue('C'.$num,$i->no_peserta)
-                ->setCellValue('D'.$num,$i->nama)
-                ->setCellValue('E'.$num,$i->tanggal_lahir)
-                ->setCellValue('F'.$num,$i->usia)
-                ->setCellValue('G'.$num,$i->tanggal_mulai?date('d-m-Y',strtotime($i->tanggal_mulai)) : '-')
-                ->setCellValue('H'.$num,$i->tanggal_akhir?date('d-m-Y',strtotime($i->tanggal_mulai)) : '-')
-                ->setCellValue('I'.$num,$i->basic)
-                ->setCellValue('J'.$num,$i->dana_tabarru)
-                ->setCellValue('K'.$num,$i->dana_ujrah)
-                ->setCellValue('L'.$num,$i->kontribusi)
-                ->setCellValue('M'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
-                ->setCellValue('N'.$num,$i->tanggal_stnc)
-                ->setCellValue('O'.$num,$i->ul);
-            
-            $num++;
+        if($status==1){
+            foreach($data->kepesertaan->where('status_akseptasi',$status) as $k => $i){
+                $activeSheet
+                    ->setCellValue('A'.$num,($k+1))
+                    ->setCellValue('B'.$num,$i->reason_reject)
+                    ->setCellValue('C'.$num,$i->no_peserta)
+                    ->setCellValue('D'.$num,$i->nama)
+                    ->setCellValue('E'.$num,$i->tanggal_lahir)
+                    ->setCellValue('F'.$num,$i->usia)
+                    ->setCellValue('G'.$num,$i->tanggal_mulai?date('d-m-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('H'.$num,$i->tanggal_akhir?date('d-m-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('I'.$num,$i->basic)
+                    ->setCellValue('J'.$num,$i->dana_tabarru)
+                    ->setCellValue('K'.$num,$i->dana_ujrah)
+                    ->setCellValue('L'.$num,$i->kontribusi)
+                    ->setCellValue('M'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
+                    ->setCellValue('N'.$num,$i->tanggal_stnc)
+                    ->setCellValue('O'.$num,$i->ul);
+                
+                $num++;
+            }
+        }
+
+        if($status==2){
+            foreach($data->kepesertaan->where('status_akseptasi',$status) as $k => $i){
+                $activeSheet
+                    ->setCellValue('A'.$num,($k+1))
+                    ->setCellValue('B'.$num,$i->reason_reject)
+                    ->setCellValue('C'.$num,$i->nama)
+                    ->setCellValue('D'.$num,$i->tanggal_lahir)
+                    ->setCellValue('E'.$num,$i->usia)
+                    ->setCellValue('F'.$num,$i->tanggal_mulai?date('d-m-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('G'.$num,$i->tanggal_akhir?date('d-m-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('H'.$num,$i->basic)
+                    ->setCellValue('I'.$num,$i->dana_tabarru)
+                    ->setCellValue('J'.$num,$i->dana_ujrah)
+                    ->setCellValue('K'.$num,$i->kontribusi)
+                    ->setCellValue('L'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
+                    ->setCellValue('M'.$num,$i->tanggal_stnc)
+                    ->setCellValue('N'.$num,$i->ul);
+                
+                $num++;
+            }
         }
 
         // Rename worksheet

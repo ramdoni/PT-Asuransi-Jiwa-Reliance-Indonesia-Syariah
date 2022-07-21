@@ -56,7 +56,7 @@ class AddEm extends Component
             $data->kontribusi_keterangan = 'max. 15 th';
         else{
             // find rate
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan])->first();
+            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$data->polis_id])->first();
             $data->rate = $rate ? $rate->rate : 0;
             $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
         }
@@ -87,9 +87,9 @@ class AddEm extends Component
             $data->ul = "X+N=75";
             $data->uw = "X+N=75";
         }else{
-            $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where('usia',$data->usia)->first();
+            $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
 
-            if(!$uw) $uw = UnderwritingLimit::where('usia',$data->usia)->orderBy('max_amount','ASC')->first();
+            if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw) {
                 $data->uw = $uw->keterangan;
                 $data->ul = $uw->keterangan;

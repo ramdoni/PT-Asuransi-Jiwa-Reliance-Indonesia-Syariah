@@ -192,7 +192,7 @@
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('extra_mortalita'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('extra_kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi')+$data->kepesertaan->where('status_akseptasi',0)->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',0)->sum('extra_kontribusi'))}}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -308,7 +308,7 @@
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi')+$data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita')+$data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))}}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -517,6 +517,7 @@
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                             @enderror
                         </div>
+                    
                     </div>
                     <div class="modal-footer">
                         <span wire:loading>

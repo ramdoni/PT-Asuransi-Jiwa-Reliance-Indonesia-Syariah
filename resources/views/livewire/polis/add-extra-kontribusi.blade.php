@@ -23,11 +23,11 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <span wire:loading wire:target="save">
+                    <span wire:loading>
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <span class="sr-only">{{ __('Loading...') }}</span>
                     </span>
-                    <button type="submit" wire:loading.remove wire:target="save" class="btn btn-info"><i class="fa fa-save"></i> Submit</button>
+                    <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-save"></i> Submit</button>
                 </div>
             </form>
         </div>

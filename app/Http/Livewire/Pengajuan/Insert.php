@@ -102,10 +102,7 @@ class Insert extends Component
 
         if($propertyName=='polis_id') Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->delete();
 
-        if($propertyName=='file' || $propertyName =='masa_asuransi'){
-            if($this->file) $this->temp_upload();
-            if($this->file and $this->masa_asuransi) $this->temp_upload();   
-        }
+        if($propertyName=='file') $this->temp_upload();
 
         $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>0])->get()->count();
     }
@@ -220,8 +217,14 @@ class Insert extends Component
         //$datas = Kepesertaan::where('pengajuan_id',$this->data->id)->orderBy('id','ASC')->get();
         foreach($this->kepesertaan as $data){
             // generate no peserta
+            
             //$no_peserta = $data->polis->produk->id ."-". date('ym').str_pad($data->id,4, '0', STR_PAD_LEFT).'-'.str_pad($data->polis_id,6, '0', STR_PAD_LEFT);
             //$data->no_peserta = $no_peserta;
+
+            $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
+            $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
+            $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
+
             $nilai_manfaat_asuransi = $data->basic;
 
             if($data->masa_bulan /12 >15)

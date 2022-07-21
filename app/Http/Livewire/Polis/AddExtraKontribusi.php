@@ -32,7 +32,6 @@ class AddExtraKontribusi extends Component
         ]); 
 
         $dana_tabbaru = ($this->data->kontribusi*$this->data->polis->iuran_tabbaru)/100;
-        
         $extra_kontribusi = ($this->data->kontribusi*$this->amount)/100;
 
         $this->data->dana_tabarru = $dana_tabbaru + $this->data->extra_mortalita + $this->amount;
@@ -40,16 +39,16 @@ class AddExtraKontribusi extends Component
         $this->data->ek_status = $this->ek_status;
         $this->data->nomor_ek = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/EK-UWS/AJRIUS/'.numberToRomawi(date('m')).'/'.date('Y');
         $this->data->save();
-
         // mulai hitung ulang
         $data = $this->data;
+        
         $nilai_manfaat_asuransi = $data->basic;
 
         if($data->masa_bulan /12 >15)
             $data->kontribusi_keterangan = 'max. 15 th';
         else{
             // find rate
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan])->first();
+            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$data->polis_id])->first();
             $data->rate = $rate ? $rate->rate : 0;
             $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
         }
@@ -80,9 +79,9 @@ class AddExtraKontribusi extends Component
             $data->ul = "X+N=75";
             $data->uw = "X+N=75";
         }else{
-            $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where('usia',$data->usia)->first();
+            $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
 
-            if(!$uw) $uw = UnderwritingLimit::where('usia',$data->usia)->orderBy('max_amount','ASC')->first();
+            if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw) {
                 $data->uw = $uw->keterangan;
                 $data->ul = $uw->keterangan;

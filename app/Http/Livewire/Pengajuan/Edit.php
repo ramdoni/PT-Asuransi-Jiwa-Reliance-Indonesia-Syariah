@@ -49,6 +49,9 @@ class Edit extends Component
 
     public function submit_underwriting()
     {
+        $this->data->total_akseptasi = $this->kepesertaan_proses->count();
+        $this->data->total_approve = $this->kepesertaan_approve->count();
+        $this->data->total_reject = $this->kepesertaan_reject->count();
         $this->data->status = 1;
         $this->data->save();
 
@@ -58,6 +61,9 @@ class Edit extends Component
 
     public function submit_head_teknik()
     {
+        $this->data->total_akseptasi = $this->kepesertaan_proses->count();
+        $this->data->total_approve = $this->kepesertaan_approve->count();
+        $this->data->total_reject = $this->kepesertaan_reject->count();
         $this->data->status = 2;
         $this->data->save();
 
@@ -73,13 +79,19 @@ class Edit extends Component
         $no_surat = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/UWS-M/AJRI-US/'.numberToRomawi(date('m')).'/'.date('Y');
         $this->data->no_surat = $no_surat;
         $this->data->status = 3;
+        $this->data->total_akseptasi = $this->kepesertaan_proses->count();
+        $this->data->total_approve = $this->kepesertaan_approve->count();
+        $this->data->total_reject = $this->kepesertaan_reject->count();
         $this->data->save();
 
         // generate no peserta
         $no_peserta_awal = '';
         $no_peserta_akhir = '';
+        $running_number = Kepesertaan::where(['polis_id'=>$this->data->polis_id,'status'=>1])->where('pengajuan','<>',$this->data->id)->get()->count();
+
         foreach($this->data->kepesertaan->where('status_akseptasi',1) as $k => $peserta){
-            $no_peserta = $this->data->polis->produk->id ."-". date('ym').str_pad($peserta->id,4, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis_id,6, '0', STR_PAD_LEFT);
+            $running_number++;
+            $no_peserta = $this->data->polis->produk->id ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis_id,3, '0', STR_PAD_LEFT);
             $peserta->no_peserta = $no_peserta;
             $peserta->save();
 
@@ -88,6 +100,7 @@ class Edit extends Component
             else
                 $no_peserta_akhir = $no_peserta;
         }
+        
         if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
         
         $this->data->no_peserta_awal = $no_peserta_awal;

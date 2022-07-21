@@ -15,14 +15,13 @@ class UnderwritingLimit extends Component
     protected $listeners = ['set_id','reload-page'=>'$refresh'];
     public function render()
     {
-        
         return view('livewire.polis.underwriting-limit');
     }
 
     public function set_id(Polis $data)
     {
         $this->data = $data;
-
+        
         $data = ModelUnderwritingLimit::where('polis_id',$this->data->id)->get();
         $rows = [];
 
@@ -52,6 +51,7 @@ class UnderwritingLimit extends Component
         
         if(count($sheetData) > 0){
             ModelUnderwritingLimit::where('polis_id',$this->data->id)->delete();
+            
             $countLimit = 1;
             $total_failed = 0;
             $total_success = 0;
@@ -69,6 +69,9 @@ class UnderwritingLimit extends Component
                 if($key<=1) continue;
                 // get header
                 foreach($data_header as $k_header => $val_header){
+                    
+                    if($item[$k_header+2]=="") continue;
+
                     $data = new ModelUnderwritingLimit();
                     $data->polis_id = $this->data->id;
                     $data->min_amount = $item[0];

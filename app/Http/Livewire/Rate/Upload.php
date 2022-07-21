@@ -9,7 +9,7 @@ use App\Models\Rate;
 class Upload extends Component
 {
     use WithFileUploads;
-    public $file,$polis_id;
+    public $file,$polis_id,$data,$get_bulan,$raw_data;
     protected $listeners = ['set_id'];
     public function render()
     {
@@ -19,6 +19,19 @@ class Upload extends Component
     public function set_id($id)
     {
         $this->polis_id = $id;
+
+
+        $data = Rate::where('polis_id',$this->polis_id)->groupBy('tahun')->get();
+        $get_bulan = Rate::where('polis_id',$this->polis_id)->groupBy('bulan')->get();
+
+        $raw_data = [];
+        foreach(Rate::where('polis_id',$this->polis_id)->get() as $item){
+            $raw_data[$item->tahun][$item->bulan] = $item->rate;
+        }
+        
+        $this->raw_data = $raw_data;
+        $this->data = $data;
+        $this->get_bulan = $get_bulan;
     }
 
     public function save()

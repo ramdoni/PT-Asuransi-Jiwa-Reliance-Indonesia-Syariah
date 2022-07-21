@@ -87,7 +87,12 @@ function hitung_masa_bulan($start,$end,$masa_asuransi=1){
     }
     $tahun = $today->diff($birthDate)->y;
 
-    return ($tahun*12) + $today->diff($birthDate)->m;
+    $bulan =  ($tahun*12) + $today->diff($birthDate)->m;
+
+    if($masa_asuransi==2)
+        return (int)$bulan + 1;
+    else
+        return $bulan;
 }
 
 function hitung_umur($tanggal_lahir,$pembulatan=1){

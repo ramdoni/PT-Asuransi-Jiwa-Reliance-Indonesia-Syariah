@@ -275,7 +275,7 @@
                                             </td>
                                             <td class="text-right">
                                                 {{format_idr($item->dana_ujrah)}}
-                                                @php($total_dana_tabbaru += $item->dana_ujrah)
+                                                @php($total_dana_ujrah += $item->dana_ujrah)
                                             </td>
                                             <td class="text-right">
                                                 {{format_idr($item->kontribusi)}}

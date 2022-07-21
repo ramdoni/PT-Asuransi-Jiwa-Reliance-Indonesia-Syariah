@@ -87,7 +87,7 @@
                     <th style="text-align:left;">{{date('d F Y',strtotime($data->tanggal_mulai))}}</th>
                 </tr>
             </table>
-            <p style="text-align: justify;">dengan ini disampaikan bahwa berdasarkan data calon Peserta tersebut diatas setelah diseleksi berdasarkan dokumen Surat Pernyataan Kesehatan (SPK), calon Peserta dapat diterima dengan akseptasi Non Medical Substandard dengan Extra Kontribusi dikarenakan {{$data->status_ek}}</p>
+            <p style="text-align: justify;">dengan ini disampaikan bahwa berdasarkan data calon Peserta tersebut diatas setelah diseleksi berdasarkan dokumen Surat Pernyataan Kesehatan (SPK), calon Peserta dapat diterima dengan akseptasi Non Medical Substandard dengan Extra Kontribusi dikarenakan {{$data->ek_status}}</p>
             <p style="text-align: justify;">Bila Calon peserta bersedia dikenakan Extra Kontribusi tersebut, mohon Surat Persetujuan Extra Kontribusi (terlampir), ditandatangani oleh yang bersangkutan dan disampaikan kembali kepada PT. Asuransi Jiwa Reliance Indonesia Unit Syariah.</p>
             <p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terimakasih.</p>
             <br />
@@ -111,8 +111,8 @@
             <br />
             <table style="width: 100%">
                 <tr>
-                    <td style="width:50%">Nomor</td>
-                    <td style="width:50%">Jakarta, {{date('d F Y')}}</td>
+                    <td style="width:50%">Nomor : {{$data->nomor_ek}}</td>
+                    <td style="width:50%;text-align:right;">Jakarta, {{date('d F Y')}}</td>
                 </tr>
             </table>
             <p>Kepada Yth,<br />
@@ -124,7 +124,7 @@
             <p style="text-align: justify;">Terima kasih atas kepercayaan Bapak/Ibu untuk membeli produk Asuransi Jiwa yang kami tawarkan, namun sebelum proses dilanjutkan, perlu diberitahukan kepada Bapak/Ibu bahwa kami dapat melakukan akseptasi atas penutupan Asuransi Jiwa atas nama Bapak/Ibu dengan status substandard.</p>
             <p>Status substandard ini disebabkan oleh karena :<br />
                 <ul>
-                    <li>{{$data->status_ek}}</li>
+                    <li>{{$data->ek_status}}</li>
                 </ul>
             </p>
             <p>Oleh karena status substandard tersebut, maka Bapak/Ibu dikenakan Extra Kontribusi dari Kontribusi Standar, Perhitungan lengkapnya adalah sebagai berikut :</p>

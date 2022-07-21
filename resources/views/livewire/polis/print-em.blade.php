@@ -111,8 +111,8 @@
             <br />
             <table style="width: 100%">
                 <tr>
-                    <td style="width:50%">Nomor</td>
-                    <td style="width:50%">Jakarta, {{date('d F Y')}}</td>
+                    <td style="width:50%">Nomor : {{$data->nomor_em}} </td>
+                    <td style="width:50%;text-align:right;">Jakarta, {{date('d F Y')}}</td>
                 </tr>
             </table>
             <p>Kepada Yth,<br />
