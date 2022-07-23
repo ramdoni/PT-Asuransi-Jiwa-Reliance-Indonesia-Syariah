@@ -82,6 +82,7 @@ class Edit extends Component
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
         $this->data->total_approve = $this->kepesertaan_approve->count();
         $this->data->total_reject = $this->kepesertaan_reject->count();
+        $this->data->head_syariah_submit = date('Y-m-d');
         $this->data->save();
 
         // generate no peserta
