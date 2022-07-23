@@ -12,7 +12,7 @@ use App\Models\Finance\SyariahUnderwriting;
 
 class Edit extends Component
 {
-    public $data,$no_pengajuan,$kepesertaan=[],$kepesertaan_proses,$kepesertaan_approve,$kepesertaan_reject;
+    public $data,$no_pengajuan,$kepesertaan=[],$kepesertaan_proses,$kepesertaan_approve,$kepesertaan_reject,$note_edit;
     public $check_all=0,$check_id=[],$check_arr,$selected,$status_reject=2,$note,$tab_active='tab_postpone';
     protected $listeners = ['reload-page'=>'$refresh'];
     public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
@@ -45,6 +45,8 @@ class Edit extends Component
         }elseif($propertyName=='check_all' and $this->check_all==0){
             $this->check_id = [];
         }
+
+        if($propertyName=='note') $this->note_edit = $this->note;
     }
 
     public function submit_underwriting()
@@ -89,16 +91,19 @@ class Edit extends Component
         $no_peserta_akhir = '';
         $running_number = Kepesertaan::where(['polis_id'=>$this->data->polis_id,'status_akseptasi'=>1])->where('pengajuan_id','<>',$this->data->id)->get()->count();
 
-        foreach($this->data->kepesertaan->where('status_akseptasi',1) as $k => $peserta){
+        $key=0;
+        foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
             $running_number++;
             $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
             $peserta->no_peserta = $no_peserta;
             $peserta->save();
 
-            if($k==0)
+            if($key==0)
                 $no_peserta_awal = $no_peserta;
             else
                 $no_peserta_akhir = $no_peserta;
+
+            $key++;
         }
         
         if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
@@ -244,7 +249,12 @@ class Edit extends Component
 
     public function submit_rejected()
     {
-        $this->selected->reason_reject = $this->note;
+        $this->validate([
+            'note_edit' => 'required'
+        ],[
+            'note_edit.required' => 'Note required'
+        ]);
+        $this->selected->reason_reject = $this->note_edit;
         $this->selected->status_akseptasi = 2;
         $this->selected->save();
 
