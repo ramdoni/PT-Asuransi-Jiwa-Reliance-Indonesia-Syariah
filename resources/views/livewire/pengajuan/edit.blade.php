@@ -146,16 +146,16 @@
                                                         </div>
                                                     @endif
                                                 </td>
-                                                <td>{{$item->bank}}</td>
-                                                <td>{{$item->cab}}</td>
-                                                <td>{{$item->no_ktp}}</td>
-                                                <td>{{$item->no_telepon}}</td>
-                                                <td>{{$item->jenis_kelamin}}</td>
-                                                <td>{{$item->nama}}</td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'bank'})" data-toggle="modal" data-target="#modal_editable">{!!$item->bank?$item->bank:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'cab'})" data-toggle="modal" data-target="#modal_editable">{!!$item->cab?$item->cab:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_telepon'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_telepon?$item->no_telepon:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'jenis_kelamin'})" data-toggle="modal" data-target="#modal_editable">{!!$item->jenis_kelamin?$item->jenis_kelamin:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'nama'})" data-toggle="modal" data-target="#modal_editable">{!!$item->nama?$item->nama:'<i>Edit</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
-                                                <td>{{$item->tinggi_badan}}</td>
-                                                <td>{{$item->berat_badan}}</td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'tinggi_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->tinggi_badan?$item->tinggi_badan:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'berat_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->berat_badan?$item->berat_badan:'<i>Edit</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-right">{{format_idr($item->basic)}}</td>
@@ -192,7 +192,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="15">Total</th>
+                                            <th colspan="15" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('basic'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_tabarru'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_ujrah'))}}</th>
@@ -263,17 +263,17 @@
                                                         </div>
                                                     @endif
                                                 </td>
-                                                <td>{{$item->bank}}</td>
-                                                <td>{{$item->cab}}</td>
-                                                <td>{{$item->no_ktp}}</td>
-                                                <td>{{$item->no_telepon}}</td>
-                                                <td>{{$item->jenis_kelamin}}</td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'bank'})" data-toggle="modal" data-target="#modal_editable">{!!$item->bank?$item->bank:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'cab'})" data-toggle="modal" data-target="#modal_editable">{!!$item->cab?$item->cab:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_telepon'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_telepon?$item->no_telepon:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'jenis_kelamin'})" data-toggle="modal" data-target="#modal_editable">{!!$item->jenis_kelamin?$item->jenis_kelamin:'<i>Edit</i>'!!}</a></td>
                                                 <td>{{$item->no_peserta}}</td>
-                                                <td>{{$item->nama}}</td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'nama'})" data-toggle="modal" data-target="#modal_editable">{!!$item->nama?$item->nama:'<i>Edit</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
-                                                <td>{{$item->tinggi_badan}}</td>
-                                                <td>{{$item->berat_badan}}</td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'tinggi_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->tinggi_badan?$item->tinggi_badan:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'berat_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->berat_badan?$item->berat_badan:'<i>Edit</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-right">{{format_idr($item->basic)}}</td>
@@ -310,7 +310,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="15">Total</th>
+                                            <th colspan="15" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('basic'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))}}</th>
@@ -409,16 +409,16 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$item->reason_reject}}</td>
-                                                <td>{{$item->bank}}</td>
-                                                <td>{{$item->cab}}</td>
-                                                <td>{{$item->no_ktp}}</td>
-                                                <td>{{$item->no_telepon}}</td>
-                                                <td>{{$item->jenis_kelamin}}</td>
-                                                <td>{{$item->nama}}</td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'bank'})" data-toggle="modal" data-target="#modal_editable">{!!$item->bank?$item->bank:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'cab'})" data-toggle="modal" data-target="#modal_editable">{!!$item->cab?$item->cab:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_telepon'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_telepon?$item->no_telepon:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'jenis_kelamin'})" data-toggle="modal" data-target="#modal_editable">{!!$item->jenis_kelamin?$item->jenis_kelamin:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'nama'})" data-toggle="modal" data-target="#modal_editable">{!!$item->nama?$item->nama:'<i>Edit</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
-                                                <td>{{$item->tinggi_badan}}</td>
-                                                <td>{{$item->berat_badan}}</td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'tinggi_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->tinggi_badan?$item->tinggi_badan:'<i>Edit</i>'!!}</a></td>
+                                                <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'berat_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->berat_badan?$item->berat_badan:'<i>Edit</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-right">
@@ -471,7 +471,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="15">Total</th>
+                                            <th colspan="15" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_tabarru'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_ujrah'))}}</th>
@@ -559,6 +559,10 @@
 </div>
 <div wire:ignore.self class="modal fade" id="modal_add_em" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-em')
+</div>
+
+<div wire:ignore.self class="modal fade" id="modal_editable" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('pengajuan.editable')
 </div>
 @push('after-scripts')
     <script>

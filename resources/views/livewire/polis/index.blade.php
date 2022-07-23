@@ -308,7 +308,7 @@
 @push('after-scripts')
     <script>
         $(document).ready(function() { 
-            var table = $('#data_table').DataTable( { "searching": false,scrollY: "300px", scrollX: true, scrollCollapse: true, paging: false } ); 
+            var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
             new $.fn.dataTable.FixedColumns( table, { leftColumns: 4 } ); 
         } );
     </script>
