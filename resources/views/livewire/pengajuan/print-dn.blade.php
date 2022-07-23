@@ -69,7 +69,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" style="padding-top:10px;padding-bottom:10px;text-align:justify;">
-                        Tagihan Penutupan Asuransi produk <strong>RELIANCE PEMBIAYAAN SYARIAH</strong> dengan No Polis {{$data->polis->no_polis}} dan Jumlah Peserta {{$data->kepesertaan->where('status_akseptasi',1)->count()}} orang (No Peserta {{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " - {$data->no_peserta_akhir}" : '' }}  ).                     
+                        Tagihan Penutupan Asuransi produk <strong>RELIANCE PEMBIAYAAN SYARIAH</strong> dengan No Polis {{$data->polis->no_polis}} dan Jumlah Peserta {{$data->kepesertaan->where('status_akseptasi',1)->count()}} orang (No Peserta {{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " sd {$data->no_peserta_akhir}" : '' }}  ).                     
                     </td>
                 </tr>
                 <tr>
@@ -208,7 +208,7 @@
                 <tr>
                     <td style="padding-left: 33px;">No. Peserta</td>
                     <td> : </td>
-                    <td style="text-align:right;">{{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " - {$data->no_peserta_akhir}" : '' }}</td>
+                    <td style="text-align:right;">{{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " sd {$data->no_peserta_akhir}" : '' }}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 33px;">Total Nilai Manfaat Asuransi</td>

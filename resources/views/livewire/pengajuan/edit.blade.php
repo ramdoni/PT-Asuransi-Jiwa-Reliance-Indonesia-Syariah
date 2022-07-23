@@ -103,9 +103,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php($index_proses = 0)
                                         @foreach($data->kepesertaan->where('status_akseptasi',0) as $k => $item)
+                                            @php($index_proses++)
                                             <tr>
-                                                <td>{{$k+1}}</td>
+                                                <td>{{$index_proses}}</td>
                                                 <td class="text-center">
                                                     @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
                                                         <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
@@ -236,9 +238,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php($index_approve = 0)
                                         @foreach($data->kepesertaan->where('status_akseptasi',1) as $k => $item)
+                                            @php($index_approve++)
                                             <tr>
-                                                <td>{{$k+1}}</td>
+                                                <td>{{$index_approve}}</td>
                                                 <td>
                                                     {{-- Underwriting --}}
                                                     @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
@@ -364,9 +368,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php($index_reject = 0)
                                         @foreach($data->kepesertaan->whereIn('status_akseptasi',[2,3]) as $k => $item)
+                                            @php($index_reject++)
                                             <tr>
-                                                <td>{{$k+1}}</td>
+                                                <td>{{$index_reject}}</td>
                                                 <td class="text-center">
                                                     @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
                                                         <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
@@ -479,6 +485,11 @@
                             </div>
                         </div>
                     </div>
+                    @if($data->kepesertaan->where('status_akseptasi',0)->count() > 0)
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <i class="fa fa-times-circle"></i> Data Peserta akan bisa di proses, setelah semua peserta sudah di akseptasi
+                        </div>
+                    @endif
                     <hr />
                     <div class="form-group">
                         <a href="javascript:void(0)" class="mr-2" onclick="history.back()"><i class="fa fa-arrow-left"></i> Kembali</a>
@@ -486,14 +497,16 @@
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        @if($data->status==0 and (\Auth::user()->user_access_id==2 || \Auth::user()->user_access_id==1))
-                            <button type="button" wire:loading.remove wire:target="submit_underwriting" wire:click="submit_underwriting" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
-                        @endif
-                        @if($data->status==1 and \Auth::user()->user_access_id==3)
-                            <button type="button" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
-                        @endif
-                        @if($data->status==2 and \Auth::user()->user_access_id==4)
-                            <button type="button" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                        @if($data->kepesertaan->where('status_akseptasi',0)->count() == 0)
+                            @if($data->status==0 and (\Auth::user()->user_access_id==2 || \Auth::user()->user_access_id==1))
+                                <button type="button" wire:loading.remove wire:target="submit_underwriting" wire:click="submit_underwriting" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                            @endif
+                            @if($data->status==1 and \Auth::user()->user_access_id==3)
+                                <button type="button" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                            @endif
+                            @if($data->status==2 and \Auth::user()->user_access_id==4)
+                                <button type="button" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                            @endif
                         @endif
                     </div>
                 </form>
@@ -518,18 +531,23 @@
                                     <option>{{$item}}</option>
                                 @endforeach
                             </select>
-                            @error('note')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
                         </div>
-                    
+                        @if($note_edit)
+                            <div class="form-group">
+                                <label>Editable</label>
+                                <textarea class="form-control" wire:model="note_edit"></textarea>
+                            </div>
+                        @endif
+                        @error('note_edit')
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                        @enderror
                     </div>
                     <div class="modal-footer">
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-upload"></i> Submit</button>
+                        <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-save"></i> Submit</button>
                     </div>
                 </form>
             </div>
