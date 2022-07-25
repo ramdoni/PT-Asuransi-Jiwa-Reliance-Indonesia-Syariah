@@ -37,7 +37,7 @@
                                 <th>No</th>
                                 <th class="text-center">Status Approval</th>
                                 <th>Nomor DN</th>
-                                <th>Total DN</th>
+                                <th class="text-right">Total DN</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Tanggal Pengajuan</th>
@@ -76,7 +76,7 @@
                                             <a href="javascript:void(0)" title="Unpaid"> <i class="text-warning fa fa-info"></i></a>
                                         @endif
                                     </td>
-                                    <td></td>
+                                    <td class="text-right">{{format_idr($item->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</td>
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>

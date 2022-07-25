@@ -8,7 +8,7 @@ use App\Models\User;
 
 class PengajuanController extends Controller
 {
-    public function printEm(Pengajuan $id)
+    public function printDN(Pengajuan $id)
     {
         $user = User::where('user_access_id',3)->first();
         $head_teknik = $user ? $user->name : '-';
