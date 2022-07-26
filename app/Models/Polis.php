@@ -11,7 +11,8 @@ use App\Models\UnderwritingLimit;
 class Polis extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
+    public $timestamps = true;
     protected $table = 'polis';
 
     public function produk()

@@ -18,17 +18,16 @@
                                 <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Data Master</a>
                                 <ul class="dropdown-menu user-menu menu-icon">
                                     <li><a href="{{ route('extra-mortalita.index') }}">Extra Mortalita</a></li>
-                                    {{-- <li><a href="{{ route('uw-limit.index') }}">UW Limit</a></li> --}}
                                     <li><a href="{{ route('produk.index') }}">Produk</a></li>
-                                    {{-- <li><a href="{{ route('rate.index') }}">Rate</a></li> --}}
                                     <li><a href="{{ route('reasuradur.index') }}">Reasuradur</a></li>
                                     <li><a href="{{ route('users.index') }}">Users</a></li>
                                 </ul>
                             </li>
-                            <li>
-                                <a href="{{ route('polis.index') }}" class="text-info icon-menu px-1">Pemegang Polis</a>
-                            </li>
+                            <li><a href="{{ route('polis.index') }}" class="text-info icon-menu px-1">Pemegang Polis</a></li>
                             <li><a href="{{ route('pengajuan.index') }}" class="text-info icon-menu px-1">Pengajuan</a></li>
+                            <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
+                            <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
+                            <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
                         @endif
                         <!--Finance-->
                         @if (\Auth::user()->user_access_id == 2)

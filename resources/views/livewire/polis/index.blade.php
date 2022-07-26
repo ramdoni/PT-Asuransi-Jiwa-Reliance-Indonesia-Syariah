@@ -22,6 +22,7 @@
                     </div>
                     <div class="col-md-9">
                         <a href="{{route('polis.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pemegang Polis</a>
+                        <a href="javascript:void(0)" class="btn btn-danger" data-target="#modal_upload" data-toggle="modal"><i class="fa fa-upload"></i> Upload</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
@@ -32,7 +33,7 @@
             <div class="body">
                 <div class="table-responsive">
                     <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="background: #eee;">
+                        <thead style="background: #eee;text-transform: uppercase;">
                             <tr>
                                 <th>No</th>
                                 <th>Status</th>
@@ -57,7 +58,8 @@
                                 <th>Penyelesaian Perselisihan</th>
                                 <th class="text-center">Iuran Tabbaru</th>
                                 <th class="text-center">Ujrah Atas Pengelolaan Polis untuk Pengelola</th>
-                                <th>Nisab Hasil Investasi (Peserta)</th>
+                                <th>NISBAH HASIL INVESTASI (PESERTA)</th>
+                                <th>NISBAH HASIL INVESTASI (PEENGELOLA)</th>
                                 <th>Surplus Underwriting (Tabbaru)</th>
                                 <th>Surplus Underwriting (Peserta)</th>
                                 <th>Surplus Underwriting (Pengelola)</th>
@@ -66,7 +68,6 @@
                                 <th>Reasuradur</th>
                                 <th>Tipe</th>
                                 <th>Model</th>
-                                <th>Rate %</th>
                                 <th>RI Com %</th>
                                 <th>Ketentuan Uwnya Reas</th>
                                 <th>STNC</th>
@@ -104,8 +105,8 @@
                                 <th>Bank</th>
                                 <th>No Rekening</th>
                                 <th>Tujuan Pengiriman Surat</th>
-                                <th>MUC dicover Ajri</th>
-                                <th>Kabupate</th>
+                                <th>MCU dicover Ajri</th>
+                                <th>Kabupaten</th>
                                 <th>Kode Kabupaten</th>
                                 <th>Cabang Pemasaran</th>
                                 <th>Ket Diskon/HF di Memo</th>
@@ -203,7 +204,6 @@
                                     <td>{{isset($item->reasuradur->name) ? $item->reasuradur->name : '-'}}</td>
                                     <td>{{$item->tipe}}</td>
                                     <td>{{$item->model}}</td>
-                                    <td>{{$item->rate_persen}}</td>
                                     <td>{{$item->ri_com}}</td>
                                     <td>{{$item->ketentuan_uw_reas}}</td>
                                     <td>{{$item->stnc}}</td>
@@ -270,6 +270,7 @@
                                     <td>{{$item->uw_limit}}</td>
                                     <td>{{$item->margin_rate}}</td>
                                     <td>{{$item->ri_comm}}</td>
+                                    <td>{{$item->waiting_period}}</td>
                                     <td>{{$item->share_reinsurance}}</td>
                                     <td>{{$item->lost_ratio}}</td>
                                     <td>{{$item->profit_margin}}</td>
@@ -303,6 +304,10 @@
 
 <div wire:ignore.self class="modal fade" id="modal_add_rate" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('rate.upload')
+</div>
+
+<div wire:ignore.self class="modal fade" id="modal_upload" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('polis.upload')
 </div>
 
 @push('after-scripts')

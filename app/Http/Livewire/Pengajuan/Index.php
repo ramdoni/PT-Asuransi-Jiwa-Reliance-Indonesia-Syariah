@@ -50,19 +50,15 @@ class Index extends Component
 
         $activeSheet->setCellValue('B4', 'DEBIT NOTE NUMBER')
                     ->setCellValue('C4', "'".$data->dn_number)
-
                     ->setCellValue('B5', 'NOMOR POLIS')
                     ->setCellValue('C5', "'".$data->polis->no_polis)
-
                     ->setCellValue('B6', 'PEMEGANG POLIS')
                     ->setCellValue('C6', isset($data->polis->nama) ? $data->polis->nama : '-')
-
                     ->setCellValue('B7', 'PRODUK ASURANSI')
                     ->setCellValue('C7', isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-');
 
         
         if($status==1){
-            // $activeSheet->getStyle('A8:O8')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('c2d7f3');
             $activeSheet
                     ->setCellValue('A8', 'NO')
                     ->setCellValue('B8', 'KET')
@@ -141,9 +137,11 @@ class Index extends Component
         $num=9;
 
         if($status==1){
+            $k=0;
             foreach($data->kepesertaan->where('status_akseptasi',$status) as $k => $i){
+                $k++;
                 $activeSheet
-                    ->setCellValue('A'.$num,($k+1))
+                    ->setCellValue('A'.$num,$k)
                     ->setCellValue('B'.$num,$i->reason_reject)
                     ->setCellValue('C'.$num,$i->no_peserta)
                     ->setCellValue('D'.$num,$i->nama)
@@ -199,9 +197,11 @@ class Index extends Component
         }
 
         if($status==2){
+            $k=0;
             foreach($data->kepesertaan->where('status_akseptasi',$status) as $k => $i){
+                $k++;
                 $activeSheet
-                    ->setCellValue('A'.$num,($k+1))
+                    ->setCellValue('A'.$num,$k)
                     ->setCellValue('B'.$num,$i->reason_reject)
                     ->setCellValue('C'.$num,$i->nama)
                     ->setCellValue('D'.$num,$i->tanggal_lahir)
@@ -261,20 +261,30 @@ class Index extends Component
         }
 
         $num++;
+        $num++;
+        $num++;
         $activeSheet
             ->setCellValue('N'.$num,"Jakarta, ".date('d F Y'))
             ->setCellValue('N'.($num+4),"Underwriting Syariah");
+        
+        $activeSheet->getStyle("N".$num)->applyFromArray([
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ]
+            ]);
         $activeSheet->getStyle("N".($num+4))->applyFromArray([
                 'borders' => [
                     'bottom' => [
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                         'color' => ['argb' => '000000'],
                     ],
-                    'alignment' => [
-                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                    ]
+                    
                 ],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ]
             ]);
 
         // Rename worksheet
