@@ -82,7 +82,12 @@ class SinkronPeserta extends Command
                 $uw = $item['AK'];
 
                 $data = Kepesertaan::where('no_peserta',$nomor_peserta)->first();
-                if(!$data) $data = new Kepesertaan;
+                if($data) {
+                    $key++;
+                    echo "{$key} skipp...";
+                    continue;
+                }
+                // if(!$data) $data = new Kepesertaan;
 
                 $find_polis = Polis::where('no_polis',$nomor_polis)->first();
                 if($find_polis) $data->polis_id = $find_polis->id;
