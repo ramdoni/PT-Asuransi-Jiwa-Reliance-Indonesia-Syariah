@@ -56,12 +56,12 @@
                                 <th>Mulai Asuransi</th>
                                 <th>Akhir Asuransi</th>
                                 <th>MASA ASURANSI (BULAN)</th>
-                                <th>TOTAL MANFAAT ASURANSI</th>
-                                <th>KONTRIBUSI</th>
-                                <th>DANA TABBARU</th>
-                                <th>DANA UJRAH</th>
-                                <th>EXTRA KONTRIBUSI</th>
-                                <th>TOTAL KONTRIBUSI</th>
+                                <th class="text-right">TOTAL MANFAAT ASURANSI</th>
+                                <th class="text-right">KONTRIBUSI</th>
+                                <th class="text-right">DANA TABBARU</th>
+                                <th class="text-right">DANA UJRAH</th>
+                                <th class="text-right">EXTRA KONTRIBUSI</th>
+                                <th class="text-right">TOTAL KONTRIBUSI</th>
                                 <th>POT. LANGSUNG (%)</th>
                                 <th>JML POT LANGSUNG</th>
                                 <th>PPH</th>
@@ -105,13 +105,13 @@
                                     <td>{{$item->jenis_kelamin}}</td>
                                     <td>{{$item->tanggal_mulai?date('d-F-Y',strtotime($item->tanggal_mulai)):'-'}}</td>
                                     <td>{{$item->tanggal_akhir?date('d-F-Y',strtotime($item->tanggal_akhir)):'-'}}</td>
-                                    <td>{{$item->masa_bulan}}</td>
-                                    <td>{{format_idr($item->basic)}}</td>
-                                    <td>{{format_idr($item->kotribusi)}}</td>
-                                    <td>{{format_idr($item->dana_tabarru)}}</td>
-                                    <td>{{format_idr($item->dana_ujrah)}}</td>
-                                    <td>{{format_idr($item->extra_kontribusi)}}</td>
-                                    <td>{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
+                                    <td class="text-center">{{$item->masa_bulan}}</td>
+                                    <td class="text-right">{{format_idr($item->basic)}}</td>
+                                    <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                                    <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
+                                    <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
+                                    <td class="text-right">{{format_idr($item->extra_kontribusi)}}</td>
+                                    <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

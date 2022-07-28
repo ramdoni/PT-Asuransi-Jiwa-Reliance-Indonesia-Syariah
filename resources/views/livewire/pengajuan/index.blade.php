@@ -31,7 +31,7 @@
             </div>
             <div class="body">
                 <div class="table-responsive">
-                    <table class="table table-hover m-b-0 c_list table-nowrap">
+                    <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
                         <thead style="background: #eee;">
                             <tr>
                                 <th>No</th>
@@ -40,6 +40,7 @@
                                 <th class="text-right">Total DN</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
+                                <th>Nama Pemegang Polis</th>
                                 <th>Tanggal Pengajuan</th>
                                 <th>Tanggal Akseptasi</th>
                                 <th>Aging</th>
@@ -79,6 +80,7 @@
                                     <td class="text-right">{{format_idr($item->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</td>
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
+                                    <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a></td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
                                     <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
                                     <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
@@ -103,7 +105,6 @@
                                             <a href="{{route('pengajuan.edit',$item->id)}}" class="badge badge-info badge-active" ><i class="fa fa-arrow-right"></i> Proses</a>
                                         @endif
                                     </td>
-                                    <td></td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
@@ -118,3 +119,11 @@
         </div>
     </div>
 </div>
+@push('after-scripts')
+    <script>
+        $(document).ready(function() { 
+            var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
+            new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 
+        } );
+    </script>
+@endpush

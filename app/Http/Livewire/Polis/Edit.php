@@ -150,6 +150,21 @@ class Edit extends Component
         $this->refund_cut_loss = $this->data->refund_cut_loss;
     }
     
+    public function updated($propertyName)
+    {
+        if($propertyName =='iuran_tabbaru' and $this->iuran_tabbaru > 0) $this->ujrah_atas_pengelolaan = 100 - $this->iuran_tabbaru;
+
+        if($propertyName =='akhir'){
+            if(date('Y-m-d') > $this->akhir){
+                $this->status  = 'Mature';
+            }
+
+            if(date('Y-m-d') <= $this->akhir){
+                $this->status  = 'Inforce';
+            }
+        }
+    }
+
     public function submit_issued()
     {
         $this->data->status_approval = 1;

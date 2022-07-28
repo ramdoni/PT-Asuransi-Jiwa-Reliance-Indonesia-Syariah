@@ -91,26 +91,26 @@
                             
                             <div class="form-group">
                                 <label>Masa Leluasa (Grace Periode) *hari</label>
-                                <input type="number" class="form-control" wire:model="masa_leluasa" placeholder="Hari Kalender" />
+                                <input type="text" class="form-control" wire:model="masa_leluasa" placeholder="Hari Kalender" />
                                 @error('masa_leluasa')
                                     <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label>Kelengkapan Berkas Manfaat Asuransi</label>
-                                <input type="number" class="form-control" wire:model="kelengkapan_berkas" placeholder="Hari Kalender" />
+                                <input type="text" class="form-control" wire:model="kelengkapan_berkas" placeholder="Hari Kalender" />
                             </div>
                             <div class="form-group">
                                 <label>Kadaluarsa Klaim *hari</label>
-                                <input type="number" class="form-control" wire:model="kadaluarsa_klaim" placeholder="Hari Kalender" />
+                                <input type="text" class="form-control" wire:model="kadaluarsa_klaim" placeholder="Hari Kalender" />
                             </div>
                             <div class="form-group">
                                 <label>Pemulihan Kepesertaan Asuransi *hari</label>
-                                <input type="number" class="form-control" wire:model="pemulihan_kepesertaan" placeholder="Hari Kalender" />
+                                <input type="text" class="form-control" wire:model="pemulihan_kepesertaan" placeholder="Hari Kalender" />
                             </div>
                             <div class="form-group">
                                 <label>Penyelesaian Perselisihan *hari</label>
-                                <input type="number" class="form-control" wire:model="penyelesaian_perselisihan" placeholder="Hari Kalender" />
+                                <input type="text" class="form-control" wire:model="penyelesaian_perselisihan" placeholder="Hari Kalender" />
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">

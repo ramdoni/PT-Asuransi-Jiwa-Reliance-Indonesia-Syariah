@@ -55,7 +55,7 @@ class SinkronPeserta extends Command
                 $num++;
                 if($num<6) continue;
                 
-                $nomor_polis = $item['A'];
+                $nomor_polis = $item['B'];
                 $nomor_peserta = $item['G'];
                 $bank = $item['I'];
                 $no_ktp = $item['N'];

@@ -212,7 +212,7 @@
                                     <td>{{$item->no_perjanjian_reas}}</td>
                                     <td>{{$item->perkalian_biaya_penutupan}}</td>
                                     <td>{{$item->potong_langsung}}</td>
-                                    <td>{{$item->fee_base_brokerage}}</td>
+                                    <td>{{($item->fee_base_brokerage==0 || $item->fee_base_brokerage=="")?'-':$item->fee_base_brokerage}}</td>
                                     <td>{{$item->maintenance}}</td>
                                     <td>{{$item->admin_agency}}</td>
                                     <td>{{$item->agen_penutup}}</td>
