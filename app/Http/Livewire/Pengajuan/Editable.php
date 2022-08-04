@@ -18,8 +18,10 @@ class Editable extends Component
     {
         $field = $data['field'];
         $this->data = Kepesertaan::find($data['id']);
-        $this->value = $this->data->$field;
-        $this->field = $field;
+        if(isset($field)){
+            $this->value = $this->data->$field;
+            $this->field = $field;
+        }
     }
 
     public function save()

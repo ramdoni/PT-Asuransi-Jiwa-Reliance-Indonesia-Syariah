@@ -4,16 +4,30 @@ namespace App\Http\Livewire\Pengajuan;
 
 use Livewire\Component;
 use App\Models\Pengajuan;
+use App\Models\Kepesertaan;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 
 class Index extends Component
 {
+    public $selected;
     public function render()
     {
         $data = Pengajuan::with('polis')->orderBy('id','DESC');
         
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
+    }
+
+    public function set_id($id)
+    {
+        $this->selected = Pengajuan::find($id);
+    }
+
+    public function selected()
+    {
+        Kepesertaan::where('pengajuan_id',$this->selected->id)->delete();
+
+        $this->selected->delete();        
     }
 
     public function downloadExcel(Pengajuan $data,$status=1)

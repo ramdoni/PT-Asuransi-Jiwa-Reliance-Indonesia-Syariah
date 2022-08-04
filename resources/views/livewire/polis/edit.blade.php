@@ -213,7 +213,6 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            
                             <div class="form-group">
                                 <label>Fee Base / Brokerage (%)</label>
                                 <input type="text" class="form-control" wire:model="fee_base_brokerage" />
@@ -508,6 +507,8 @@
                                 <label>Margin Rate(min 10%)</label>
                                 <input type="text" class="form-control" wire:model="margin_rate" />
                             </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>RI Comm(10%-15%)</label>
                                 <input type="text" class="form-control" wire:model="ri_comm" />
@@ -540,8 +541,6 @@
                                 <label>Refund %</label>
                                 <input type="text" class="form-control" wire:model="refund" />
                             </div>
-                        </div>
-                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Refund to Pengalihan %</label>
                                 <input type="text" class="form-control" wire:model="refund_to_pengalihan" />
@@ -549,10 +548,6 @@
                             <div class="form-group">
                                 <label>Dana Tabbaru Reas %</label>
                                 <input type="text" class="form-control" wire:model="dana_tabbaru_reas" />
-                            </div>
-                            <div class="form-group">
-                                <label>Dana Ujroh Reas %</label>
-                                <input type="text" class="form-control" wire:model="dana_ujroh_reas" />
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
@@ -564,9 +559,25 @@
                                     <input type="text" class="form-control" wire:model="cut_loss" />
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Refund Cut Loss</label>
-                                <input type="text" class="form-control" wire:model="refund_cut_loss" />
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Refund Cut Loss</label>
+                                    <input type="text" class="form-control" wire:model="refund_cut_loss" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Dana Ujroh Reas %</label>
+                                    <input type="text" class="form-control" wire:model="dana_ujroh_reas" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Running Number Peserta</label>
+                                    <input type="text" class="form-control" wire:model="running_number_peserta" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Running Number DN</label>
+                                    <input type="text" class="form-control" wire:model="running_number_dn" />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Polis;
 use Livewire\Component;
 use App\Models\Polis;
 use App\Models\Provinsi;
-use App\Models\Rate;
 use App\Models\Produk;
 use App\Models\Reasuradur;
 
@@ -22,7 +21,7 @@ class Edit extends Component
     public $mcu_dicover_ajri,$kabupaten_id,$kode_kabupaten,$cabang_pemasaran,$ket_diskon,$sektor_keuangan,$sektor_ekonomi,$mitra_pengimbang,$kerjasama_pemasaran,$asuransi_mikro,$pic_marketing;
     public $dc_aaji,$dc_ojk,$office,$channel,$segment,$line_of_business,$source_of_business,$no_nota_penutupan,$no_perjanjian_kerjasama,$peninjauan_ulang,$pembayaran_klaim;
     public $retroaktif,$waiting_period,$rate_single_usia,$total_bp,$no_sb,$uw_limit,$margin_rate,$ri_comm,$share_reinsurance,$lost_ratio,$profit_margin,$contingency_margin,$gae,$business_source;
-    public $refund,$refund_to_pengalihan,$dana_tabbaru_reas,$dana_ujroh_reas,$stop_loss,$cut_loss,$refund_cut_loss;
+    public $refund,$refund_to_pengalihan,$dana_tabbaru_reas,$dana_ujroh_reas,$stop_loss,$cut_loss,$refund_cut_loss,$running_number_peserta,$running_number_dn;
     public $data;
     protected $listeners = ['set-id'=>'set_id'];
     public function render()
@@ -33,17 +32,13 @@ class Edit extends Component
     public function mount(Polis $id)
     {
         $this->data = $id;
-        
         $this->produks = Produk::get();
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
         $this->reasuradur = Reasuradur::get();
-
-        // $this->rates = Rate::get();
         $this->no_polis = $this->data->no_polis;
         $this->nama = $this->data->nama;
         $this->alamat = $this->data->alamat;
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
-        // $this->rates = Rate::get();
         $this->produks = Produk::get();
         $this->provinsi_id = $this->data->provinsi_id;
         $this->alamat = $this->data->alamat;
@@ -148,12 +143,13 @@ class Edit extends Component
         $this->stop_loss = $this->data->stop_loss;
         $this->cut_loss = $this->data->cut_loss;
         $this->refund_cut_loss = $this->data->refund_cut_loss;
+        $this->running_number_peserta = $this->data->running_number_peserta;
+        $this->running_number_dn = $this->data->running_number_dn;
     }
     
     public function updated($propertyName)
     {
         if($propertyName =='iuran_tabbaru' and $this->iuran_tabbaru > 0) $this->ujrah_atas_pengelolaan = 100 - $this->iuran_tabbaru;
-
         if($propertyName =='akhir'){
             if(date('Y-m-d') > $this->akhir){
                 $this->status  = 'Mature';
@@ -297,6 +293,8 @@ class Edit extends Component
         $this->data->stop_loss = $this->stop_loss;
         $this->data->cut_loss = $this->cut_loss;
         $this->data->refund_cut_loss = $this->refund_cut_loss;
+        $this->data->running_number_peserta = $this->running_number_peserta;
+        $this->data->running_number_dn = $this->running_number_dn;
         $this->data->save();  
 
         session()->flash('message-success',__('Polis berhasil disubmit'));

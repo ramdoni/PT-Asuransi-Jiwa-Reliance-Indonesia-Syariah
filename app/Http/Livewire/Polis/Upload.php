@@ -37,7 +37,7 @@ class Upload extends Component
             foreach($sheetData as $item){
                 $num++;
                 if($num<5) continue;
-                
+
                 $no_polis = $item[1];
                 $no_polis_sistem = $item[2];
                 $nama = $item[3];
@@ -127,15 +127,17 @@ class Upload extends Component
                 $office = $item[84];
                 $channel = $item[85];
                 $segment = $item[86];
+
                 $line_of_business = $item[87];
-                $source_of_business = $item[88];
-                $no_nota_penutupan = $item[89];
-                $no_perjanjian_kerjasama = $item[90];
-                $peninjauan_ulang = $item[91];
-                $pembayaran_klaim = $item[92];
-                $retroaktif = $item[93];
-                $waiting_period = $item[94];
-                $rate_single_usia = $item[95];
+                $source_of_business = $item[89];
+                $no_nota_penutupan = $item[90];
+                $no_perjanjian_kerjasama = $item[91];
+                $peninjauan_ulang = $item[92];
+                $pembayaran_klaim = $item[93];
+                $retroaktif = $item[94];
+                $waiting_period = $item[95];
+                $rate_single_usia = $item[96];
+                
                 $total_bp = $item[96];
                 $no_sb = $item[97];
                 $uw_limit = $item[98];
@@ -156,6 +158,21 @@ class Upload extends Component
                 $cut_loss = $item[113];
                 $refund_cut_loss = $item[114];
 
+                // find polis
+                $find_polis = Polis::where('no_polis',$no_polis)->first();
+                if($find_polis){
+                    $find_polis->line_of_business = $line_of_business;
+                    $find_polis->source_of_business = $source_of_business;
+                    $find_polis->no_nota_penutupan = $no_nota_penutupan;
+                    $find_polis->no_perjanjian_kerjasama = $no_perjanjian_kerjasama;
+                    $find_polis->peninjauan_ulang = $peninjauan_ulang;
+                    $find_polis->pembayaran_klaim = $pembayaran_klaim;
+                    $find_polis->retroaktif = $retroaktif;
+                    $find_polis->waiting_period = $waiting_period;
+                    $find_polis->save();
+                }
+
+                /*
                 $arr[$key]['no_polis'] = $no_polis;
                 $arr[$key]['nama'] = $nama;
                 $arr[$key]['alamat'] = $alamat;
@@ -261,11 +278,14 @@ class Upload extends Component
                 $arr[$key]['cut_loss'] = $cut_loss;
                 $arr[$key]['refund_cut_loss'] = $refund_cut_loss;
                 $arr[$key]['created_at'] = date('Y-m-d H:i:s');
+                
                 $arr[$key]['updated_at'] = date('Y-m-d H:i:s');
+                */
                 $key++;
+                
             }
 
-            Polis::insert($arr);
+            //Polis::insert($arr);
 
             $this->emit('modal','hide');
             $this->emit('reload-page');

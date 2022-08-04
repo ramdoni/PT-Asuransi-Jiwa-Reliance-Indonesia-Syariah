@@ -76,7 +76,8 @@ class Edit extends Component
     public function submit_head_syariah()
     {
         // generate DN Number
-        $dn_number = $this->data->polis->no_polis ."/". str_pad($this->data->id,4, '0', STR_PAD_LEFT)."AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
+        $running_number_dn = $this->data->polis->running_number_dn+1;
+        $dn_number = $this->data->polis->no_polis ."/". str_pad($running_number_dn,4, '0', STR_PAD_LEFT)."AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
         $this->data->dn_number = $dn_number;
         $no_surat = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/UWS-M/AJRI-US/'.numberToRomawi(date('m')).'/'.date('Y');
         $this->data->no_surat = $no_surat;
@@ -90,7 +91,8 @@ class Edit extends Component
         // generate no peserta
         $no_peserta_awal = '';
         $no_peserta_akhir = '';
-        $running_number = Kepesertaan::where(['polis_id'=>$this->data->polis_id,'status_akseptasi'=>1])->where('pengajuan_id','<>',$this->data->id)->get()->count();
+        $running_number = $this->data->polis->running_number_peserta;
+        // $running_number = Kepesertaan::where(['polis_id'=>$this->data->polis_id,'status_akseptasi'=>1])->where('pengajuan_id','<>',$this->data->id)->get()->count();
 
         $key=0;
         foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
@@ -106,6 +108,11 @@ class Edit extends Component
 
             $key++;
         }
+
+        // save running number
+        $this->data->polis->running_number_dn = $running_number_dn;
+        $this->data->polis->running_number_peserta = $running_number;
+        $this->data->polis->save();
         
         if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
         

@@ -262,8 +262,9 @@ class Insert extends Component
                 $data->ul = "X+N=75";
                 $data->uw = "X+N=75";
             }else{
-                $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
-
+                //$uw = UnderwritingLimit::where('min_amount','>=',$nilai_manfaat_asuransi)->where('max_amount','<=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
+                $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
+                
                 if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
                 if($uw){
                     $data->uw = $uw->keterangan;

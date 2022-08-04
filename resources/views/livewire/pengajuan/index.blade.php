@@ -38,6 +38,7 @@
                                 <th class="text-center">Status Approval</th>
                                 <th>Nomor DN</th>
                                 <th class="text-right">Total DN</th>
+                                <th>Status Pembayaran</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Nama Pemegang Polis</th>
@@ -48,6 +49,7 @@
                                 <th class="text-center">Total Diterima</th>
                                 <th class="text-center">Total Ditolak</th>
                                 <th>Account Manager</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,6 +80,18 @@
                                         @endif
                                     </td>
                                     <td class="text-right">{{format_idr($item->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</td>
+                                    <td>
+                                        @if($item->dn_number)
+                                            @if($item->status_invoice==0)
+                                                <span class="badge badge-warning">Unpaid</span>
+                                            @endif
+                                            @if($item->status_invoice==1)
+                                                <span class="badge badge-success">Paid</span>
+                                            @endif
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a></td>
@@ -105,6 +119,11 @@
                                             <a href="{{route('pengajuan.edit',$item->id)}}" class="badge badge-info badge-active" ><i class="fa fa-arrow-right"></i> Proses</a>
                                         @endif
                                     </td>
+                                    <td>
+                                        @if($item->dn_number =="")
+                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
@@ -117,6 +136,28 @@
                 {{ $data->links() }}
             </div>
         </div>
+    </div>
+    <div wire:ignore.self class="modal fade" id="modal_confirm_delete" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-info"></i> Confirm</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true close-btn">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <p>Hapus Pengajuan ?</p>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <button type="button" wire:loading.remove wire:target="delete" class="btn btn-info"><i class="fa fa-trash"></i> Hapus</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
     </div>
 </div>
 @push('after-scripts')
