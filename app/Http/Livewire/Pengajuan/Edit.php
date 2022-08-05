@@ -9,6 +9,7 @@ use App\Models\PengajuanHistory;
 use App\Models\Finance\Income;
 use App\Models\Finance\Polis;
 use App\Models\Finance\SyariahUnderwriting;
+use App\Models\Finance\Journal;
 
 class Edit extends Component
 {
@@ -51,6 +52,8 @@ class Edit extends Component
 
     public function submit_underwriting()
     {
+        \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Submit Head Underwriting");
+
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
         $this->data->total_approve = $this->kepesertaan_approve->count();
         $this->data->total_reject = $this->kepesertaan_reject->count();
@@ -63,6 +66,8 @@ class Edit extends Component
 
     public function submit_head_teknik()
     {
+        \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Submit Head Teknik");
+
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
         $this->data->total_approve = $this->kepesertaan_approve->count();
         $this->data->total_reject = $this->kepesertaan_reject->count();
@@ -75,6 +80,8 @@ class Edit extends Component
 
     public function submit_head_syariah()
     {
+        \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Submit Head Syariah");
+
         // generate DN Number
         $running_number_dn = $this->data->polis->running_number_dn+1;
         $dn_number = $this->data->polis->no_polis ."/". str_pad($running_number_dn,4, '0', STR_PAD_LEFT)."AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
@@ -231,6 +238,12 @@ class Edit extends Component
         $income->policy_id = $polis->id;
         $income->save();
 
+        $no_voucher = generate_no_voucer_journal("AP");
+
+        // insert journal
+        //Journal::insert(['coa_id'=>364,'no_voucher'=>$no_voucher,'date_journal'=>date('Y-m-d'),'debit'=>0,'transaction_id'=>$income->id,'transaction_table'=>'income']);
+
+
         $this->emit('message-success','Data berhasil di proses');
         $this->emit('reload-page');
     }
@@ -242,6 +255,8 @@ class Edit extends Component
 
     public function approve(Kepesertaan $data)
     {
+        \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Approve");
+        
         $data->status_akseptasi = 1;
         $data->save();
 
@@ -262,6 +277,9 @@ class Edit extends Component
         ],[
             'note_edit.required' => 'Note required'
         ]);
+
+        \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Reject Peserta");
+
         $this->selected->reason_reject = $this->note_edit;
         $this->selected->status_akseptasi = 2;
         $this->selected->save();
@@ -295,6 +313,8 @@ class Edit extends Component
         }
         $this->check_id = []; $this->check_all = 0;
 
+        \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Approve All");
+    
         $this->emit('message-success','Data berhasil di setujui');
         $this->emit('reload-page');
     }

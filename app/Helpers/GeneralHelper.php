@@ -301,7 +301,7 @@ function generate_no_voucher_konven_underwriting($coa_id)
 
 function generate_no_voucer_journal($type="AP"){
 
-    $count = \App\Models\Journal::count();
+    $count = \App\Models\Finance\Journal::count();
     
     return "{$type}-".str_pad($count,3, '0', STR_PAD_LEFT).'/'.date('m').'/'.date('Y');
 }
