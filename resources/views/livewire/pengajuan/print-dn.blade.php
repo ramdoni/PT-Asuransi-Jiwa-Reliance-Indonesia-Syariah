@@ -152,7 +152,7 @@
             <table width="100%">
                 <tr>
                     <td style="width: 50%">
-                        Jakarta, {{date('d F Y',,strtotime($data->head_syariah_submit))}}
+                        Jakarta, {{date('d F Y',strtotime($data->head_syariah_submit))}}
                     </td>
                     <td style="width: 50%">
                         <table>

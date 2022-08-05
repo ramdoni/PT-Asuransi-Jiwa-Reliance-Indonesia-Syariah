@@ -75,12 +75,9 @@
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}
-                                        @if($item->dn_number)
-                                            <a href="javascript:void(0)" title="Unpaid"> <i class="text-warning fa fa-info"></i></a>
-                                        @endif
                                     </td>
                                     <td class="text-right">{{format_idr($item->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</td>
-                                    <td>
+                                    <td class="text-danger">
                                         @if($item->dn_number)
                                             @if($item->status_invoice==0)
                                                 <span class="badge badge-warning">Unpaid</span>
@@ -102,7 +99,7 @@
                                     <td class="text-center">
                                         {{$item->total_approve}}
                                         @if($item->dn_number)
-                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
+                                            <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -118,9 +115,6 @@
                                         @endif
                                         @if($item->status==2 and \Auth::user()->user_access_id==4)
                                             <a href="{{route('pengajuan.edit',$item->id)}}" class="badge badge-info badge-active" ><i class="fa fa-arrow-right"></i> Proses</a>
-                                        @endif
-                                        @if($item->status==3)
-                                            <a href="javascript:void(0)" wire:click="$emit('set-id',{{$item->id}})" data-toggle="modal" data-target="#add_reas" class="badge badge-info badge-active"><i class="fa fa-plus"></i> Reasuransi</a>
                                         @endif
                                         @if($item->dn_number =="")
                                             <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>

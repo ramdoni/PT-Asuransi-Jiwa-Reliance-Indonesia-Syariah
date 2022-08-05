@@ -17,6 +17,7 @@
                                                 @if($data->dn_number)
                                                     <a href="{{route('pengajuan.print-dn',$data->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                 @endif
+                                                <!-- <a href="javascript:void(0)" wire:click="hitung"><i class="fa fa-refresh"></i></a> -->
                                             </td>
                                         </tr>
                                     @endif

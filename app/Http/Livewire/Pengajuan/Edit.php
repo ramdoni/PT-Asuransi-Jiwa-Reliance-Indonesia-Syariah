@@ -73,6 +73,29 @@ class Edit extends Component
         $this->emit('reload-page');
     }
 
+    public function hitung()
+    {
+
+
+        // foreach($this->data->kepesertaan as $data){   
+        //     if($data->ul=='GOA'){
+        //         if(isset($data->polis->waiting_period) and $data->polis->waiting_period !="")
+        //             $data->tanggal_stnc = date('Y-m-d',strtotime(" +{$data->polis->waiting_period} month", strtotime($data->polis->tanggal_akseptasi)));
+        //         else{
+        //             if(countDay($this->data->head_syariah_submit,$data->tanggal_mulai) > $data->polis->retroaktif){
+        //                 $data->tanggal_stnc = date('Y-m-d');
+        //             }elseif(countDay($this->data->head_syariah_submit,$data->tanggal_mulai) < $data->polis->retroaktif){
+        //                 $data->tanggal_stnc = null;
+        //             }
+        //         }
+        //     }
+            
+        //     if(in_array($data->ul,['NM','A','B','C'])) $data->tanggal_stnc = date('Y-m-d');
+
+        //     $data->save();
+        // }
+    }
+
     public function submit_head_syariah()
     {
         // generate DN Number
@@ -99,6 +122,21 @@ class Edit extends Component
             $running_number++;
             $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
             $peserta->no_peserta = $no_peserta;
+
+            if($peserta->ul=='GOA'){
+                if(isset($peserta->polis->waiting_period) and $peserta->polis->waiting_period !="")
+                    $peserta->tanggal_stnc = date('Y-m-d',strtotime(" +{$peserta->polis->waiting_period} month", strtotime($peserta->polis->tanggal_akseptasi)));
+                else{
+                    if(countDay($this->data->head_syariah_submit,$peserta->tanggal_mulai) > $peserta->polis->retroaktif){
+                        $peserta->tanggal_stnc = date('Y-m-d');
+                    }elseif(countDay($this->data->head_syariah_submit,$peserta->tanggal_mulai) < $peserta->polis->retroaktif){
+                        $peserta->tanggal_stnc = null;
+                    }
+                }
+            }
+            
+            if(in_array($peserta->ul,['NM','A','B','C'])) $peserta->tanggal_stnc = date('Y-m-d');
+
             $peserta->save();
 
             if($key==0)
@@ -212,7 +250,7 @@ class Edit extends Component
         if(!$polis){
             $polis = new Polis();
             $polis->no_polis = $this->data->polis->no_polis;
-            $polis->no_polis = $this->data->polis->pemegang_polis;
+            $polis->pemegang_polis = $this->data->polis->nama;
             $polis->alamat = $this->data->polis->alamat;
             $polis->save();
         }
@@ -229,7 +267,10 @@ class Edit extends Component
         $income->transaction_id = $this->data->id;
         $income->type = 2; // Syariah
         $income->policy_id = $polis->id;
+        if($this->data->tanggal_jatuh_tempo) $income->due_date = $this->data->tanggal_jatuh_tempo; 
         $income->save();
+
+
 
         $this->emit('message-success','Data berhasil di proses');
         $this->emit('reload-page');

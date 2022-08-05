@@ -65,49 +65,29 @@ class Index extends Component
         ]);;
 
         $activeSheet->setCellValue('B4', 'DEBIT NOTE NUMBER')
-                    ->setCellValue('C4', "'".$data->dn_number)
+                    ->setCellValue('C4', " : ".$data->dn_number)
                     ->setCellValue('B5', 'NOMOR POLIS')
-                    ->setCellValue('C5', "'".$data->polis->no_polis)
+                    ->setCellValue('C5', " : ".$data->polis->no_polis)
                     ->setCellValue('B6', 'PEMEGANG POLIS')
-                    ->setCellValue('C6', isset($data->polis->nama) ? $data->polis->nama : '-')
+                    ->setCellValue('C6', ' : '.(isset($data->polis->nama) ? $data->polis->nama : '-'))
                     ->setCellValue('B7', 'PRODUK ASURANSI')
-                    ->setCellValue('C7', isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-');
+                    ->setCellValue('C7', ' : '.(isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-'));
+
+        $activeSheet->getStyle("B4:B7")->applyFromArray([
+                'font' => [
+                    'bold' => true,
+                ],
+            ]);
+        $activeSheet->getStyle("C4:C7")->applyFromArray([
+                'font' => [
+                    'bold' => true,
+                ],
+            ]);
 
         if($status==1){
             $activeSheet
                     ->setCellValue('A8', 'NO')
-                    ->setCellValue('B8', 'KET')
-                    ->setCellValue('C8', 'NO PESERTA')
-                    ->setCellValue('D8', 'NAMA PESERTA')
-                    ->setCellValue('E8', 'TGL. LAHIR')
-                    ->setCellValue('F8', 'USIA')
-                    ->setCellValue('G8', 'MULAI ASURANSI')
-                    ->setCellValue('H8', 'AKHIR ASURANSI')
-                    ->setCellValue('I8', 'NILAI MANFAAT ASURANSI')
-                    ->setCellValue('J8', 'DANA TABBARU')
-                    ->setCellValue('K8', 'DANA UJRAH')
-                    ->setCellValue('L8', 'KONTRIBUSI')
-                    ->setCellValue('M8', 'TOTAL KONTRIBUSI')
-                    ->setCellValue('N8', 'TGL STNC')
-                    ->setCellValue('O8', 'UL');
-            $activeSheet->getStyle("A8:O8")->applyFromArray([
-                        'borders' => [
-                            'top' => [
-                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                                'color' => ['argb' => '000000'],
-                            ],
-                            'bottom' => [
-                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                                'color' => ['argb' => '000000'],
-                            ],
-                        ],
-                    ]);
-        }
-
-        if($status==2){
-            $activeSheet
-                    ->setCellValue('A8', 'NO')
-                    ->setCellValue('B8', 'KET')
+                    ->setCellValue('B8', 'NO PESERTA')
                     ->setCellValue('C8', 'NAMA PESERTA')
                     ->setCellValue('D8', 'TGL. LAHIR')
                     ->setCellValue('E8', 'USIA')
@@ -119,7 +99,48 @@ class Index extends Component
                     ->setCellValue('K8', 'KONTRIBUSI')
                     ->setCellValue('L8', 'TOTAL KONTRIBUSI')
                     ->setCellValue('M8', 'TGL STNC')
-                    ->setCellValue('N8', 'UL');
+                    ->setCellValue('N8', 'UL')
+                    ->setCellValue('O8', 'KET')
+                    ;
+
+            $activeSheet->getStyle("A8:O8")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                        ],
+                        'borders' => [
+                            'top' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                            'bottom' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                        ],
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+                        ],
+                    ]);
+        }
+
+        if($status==2){
+            $activeSheet
+                    ->setCellValue('A8', 'NO')
+                    ->setCellValue('B8', 'NAMA PESERTA')
+                    ->setCellValue('C8', 'TGL. LAHIR')
+                    ->setCellValue('D8', 'USIA')
+                    ->setCellValue('E8', 'MULAI ASURANSI')
+                    ->setCellValue('F8', 'AKHIR ASURANSI')
+                    ->setCellValue('G8', 'NILAI MANFAAT ASURANSI')
+                    ->setCellValue('H8', 'DANA TABBARU')
+                    ->setCellValue('I8', 'DANA UJRAH')
+                    ->setCellValue('J8', 'KONTRIBUSI')
+                    ->setCellValue('K8', 'TOTAL KONTRIBUSI')
+                    ->setCellValue('L8', 'TGL STNC')
+                    ->setCellValue('M8', 'UL')
+                    ->setCellValue('N8', 'KET')
+                    ;
             $activeSheet->getStyle("A8:N8")->applyFromArray([
                         'borders' => [
                             'top' => [
@@ -157,22 +178,23 @@ class Index extends Component
                 $k++;
                 $activeSheet
                     ->setCellValue('A'.$num,$k)
-                    ->setCellValue('B'.$num,$i->reason_reject)
-                    ->setCellValue('C'.$num,$i->no_peserta)
-                    ->setCellValue('D'.$num,$i->nama)
-                    ->setCellValue('E'.$num,$i->tanggal_lahir)
-                    ->setCellValue('F'.$num,$i->usia)
-                    ->setCellValue('G'.$num,$i->tanggal_mulai?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
-                    ->setCellValue('H'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
-                    ->setCellValue('I'.$num,$i->basic)
-                    ->setCellValue('J'.$num,$i->dana_tabarru)
-                    ->setCellValue('K'.$num,$i->dana_ujrah)
-                    ->setCellValue('L'.$num,$i->kontribusi)
-                    ->setCellValue('M'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
-                    ->setCellValue('N'.$num,$i->tanggal_stnc)
-                    ->setCellValue('O'.$num,$i->ul);
+                    ->setCellValue('B'.$num,$i->no_peserta)
+                    ->setCellValue('C'.$num,$i->nama)
+                    ->setCellValue('D'.$num,$i->tanggal_lahir)
+                    ->setCellValue('E'.$num,$i->usia)
+                    ->setCellValue('F'.$num,$i->tanggal_mulai?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('G'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('H'.$num,$i->basic)
+                    ->setCellValue('I'.$num,$i->dana_tabarru)
+                    ->setCellValue('J'.$num,$i->dana_ujrah)
+                    ->setCellValue('K'.$num,$i->kontribusi)
+                    ->setCellValue('L'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
+                    ->setCellValue('M'.$num,$i->tanggal_stnc)
+                    ->setCellValue('N'.$num,$i->ul)
+                    ->setCellValue('O'.$num,$i->reason_reject)
+                    ;
                 
-                $activeSheet->getStyle("I{$num}:M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("H{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
                 $activeSheet->getStyle("A{$num}:O{$num}")->applyFromArray([
                     'borders' => [
                         'top' => [
@@ -217,21 +239,22 @@ class Index extends Component
                 $k++;
                 $activeSheet
                     ->setCellValue('A'.$num,$k)
-                    ->setCellValue('B'.$num,$i->reason_reject)
-                    ->setCellValue('C'.$num,$i->nama)
-                    ->setCellValue('D'.$num,$i->tanggal_lahir)
-                    ->setCellValue('E'.$num,$i->usia)
-                    ->setCellValue('F'.$num,$i->tanggal_mulai?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
-                    ->setCellValue('G'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
-                    ->setCellValue('H'.$num,$i->basic)
-                    ->setCellValue('I'.$num,$i->dana_tabarru)
-                    ->setCellValue('J'.$num,$i->dana_ujrah)
-                    ->setCellValue('K'.$num,$i->kontribusi)
-                    ->setCellValue('L'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
-                    ->setCellValue('M'.$num,$i->tanggal_stnc)
-                    ->setCellValue('N'.$num,$i->ul);
+                    ->setCellValue('B'.$num,$i->nama)
+                    ->setCellValue('C'.$num,$i->tanggal_lahir)
+                    ->setCellValue('D'.$num,$i->usia)
+                    ->setCellValue('E'.$num,$i->tanggal_mulai?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('F'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('G'.$num,$i->basic)
+                    ->setCellValue('H'.$num,$i->dana_tabarru)
+                    ->setCellValue('I'.$num,$i->dana_ujrah)
+                    ->setCellValue('J'.$num,$i->kontribusi)
+                    ->setCellValue('K'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
+                    ->setCellValue('L'.$num,$i->tanggal_stnc)
+                    ->setCellValue('M'.$num,$i->ul)
+                    ->setCellValue('N'.$num,$i->reason_reject)
+                    ;
 
-                $activeSheet->getStyle("I{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("G{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
                 $activeSheet->getStyle("A{$num}:N{$num}")->applyFromArray([
                     'borders' => [
                         'top' => [
@@ -255,12 +278,12 @@ class Index extends Component
             $total_em = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_mortalita');
             $total_ek = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_kontribusi');
 
-            $activeSheet->setCellValue("H{$num}",$total_basic)
-                        ->setCellValue("I{$num}",$total_dana_tabarru)
-                        ->setCellValue("J{$num}",$total_dana_ujrah)
-                        ->setCellValue("K{$num}",$total_kontribusi)
-                        ->setCellValue("L{$num}",$total_kontribusi+$total_em+$total_ek);
-            $activeSheet->getStyle("H{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+            $activeSheet->setCellValue("G{$num}",$total_basic)
+                        ->setCellValue("H{$num}",$total_dana_tabarru)
+                        ->setCellValue("I{$num}",$total_dana_ujrah)
+                        ->setCellValue("J{$num}",$total_kontribusi)
+                        ->setCellValue("K{$num}",$total_kontribusi+$total_em+$total_ek);
+            $activeSheet->getStyle("G{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
             $activeSheet->getStyle("A{$num}:N{$num}")->applyFromArray([
                 'borders' => [
                     'top' => [

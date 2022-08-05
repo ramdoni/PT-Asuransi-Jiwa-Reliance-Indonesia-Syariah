@@ -568,6 +568,12 @@
                                     <input type="text" class="form-control" wire:model="running_number_dn" />
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Running Number Polis</label>
+                                    <input type="text" class="form-control" wire:model="running_number" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr />

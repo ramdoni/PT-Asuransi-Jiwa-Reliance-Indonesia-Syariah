@@ -197,6 +197,7 @@ class Insert extends Component
         $pengajuan->total_akseptasi = $this->total_pengajuan;
         $pengajuan->total_approve = 0;
         $pengajuan->total_reject = 0;
+        $pengajuan->account_manager_id = \Auth::user()->id;
         $pengajuan->save();
 
         foreach($this->kepesertaan as $item){
@@ -214,13 +215,7 @@ class Insert extends Component
 
     public function hitung()
     {
-        //$datas = Kepesertaan::where('pengajuan_id',$this->data->id)->orderBy('id','ASC')->get();
         foreach($this->kepesertaan as $data){
-            // generate no peserta
-            
-            //$no_peserta = $data->polis->produk->id ."-". date('ym').str_pad($data->id,4, '0', STR_PAD_LEFT).'-'.str_pad($data->polis_id,6, '0', STR_PAD_LEFT);
-            //$data->no_peserta = $no_peserta;
-
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
@@ -262,23 +257,12 @@ class Insert extends Component
                 $data->ul = "X+N=75";
                 $data->uw = "X+N=75";
             }else{
-                //$uw = UnderwritingLimit::where('min_amount','>=',$nilai_manfaat_asuransi)->where('max_amount','<=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
                 $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
                 
                 if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
                 if($uw){
                     $data->uw = $uw->keterangan;
                     $data->ul = $uw->keterangan;
-                }
-            }
-
-            if(isset($data->polis->waiting_period) and $data->polis->waiting_period !="")
-                $data->tanggal_stnc = date('Y-m-d',strtotime(" +{$data->polis->waiting_period} month", strtotime($data->polis->tanggal_akseptasi)));
-            else{
-                if(countDay($data->polis->tanggal_akseptasi,$data->tanggal_mulai) > $data->polis->retroaktif){
-                    $data->tanggal_stnc = date('Y-m-d');
-                }elseif(countDay($data->polis->tanggal_akseptasi,$data->tanggal_mulai) < $data->polis->retroaktif){
-                    $data->tanggal_stnc = null;
                 }
             }
 
