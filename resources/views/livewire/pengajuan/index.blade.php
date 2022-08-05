@@ -48,6 +48,7 @@
                                 <th class="text-center">Total Diterima</th>
                                 <th class="text-center">Total Ditolak</th>
                                 <th>Account Manager</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -97,12 +98,16 @@
                                             <a href="javascript:void()" wire:click="downloadExcel({{$item->id}},2)"><i class="fa fa-download"></i></a>
                                         @endif
                                     </td>
+                                    <td>{{isset($item->account_manager->name)?$item->account_manager->name:'-'}}</td>
                                     <td>
                                         @if($item->status==1 and \Auth::user()->user_access_id==3)
                                             <a href="{{route('pengajuan.edit',$item->id)}}" class="badge badge-info badge-active"><i class="fa fa-arrow-right"></i> Proses</a>
                                         @endif
                                         @if($item->status==2 and \Auth::user()->user_access_id==4)
                                             <a href="{{route('pengajuan.edit',$item->id)}}" class="badge badge-info badge-active" ><i class="fa fa-arrow-right"></i> Proses</a>
+                                        @endif
+                                        @if($item->status==3)
+                                            <a href="javascript:void(0)" wire:click="$emit('set-id',{{$item->id}})" data-toggle="modal" data-target="#add_reas" class="badge badge-info badge-active"><i class="fa fa-plus"></i> Reasuransi</a>
                                         @endif
                                     </td>
                                 </tr>
@@ -119,6 +124,11 @@
         </div>
     </div>
 </div>
+
+<div wire:ignore.self class="modal fade" id="add_reas" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('pengajuan.insert-reas')
+</div>
+
 @push('after-scripts')
     <script>
         $(document).ready(function() { 

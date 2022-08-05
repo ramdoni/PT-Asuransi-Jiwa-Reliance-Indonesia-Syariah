@@ -11,7 +11,7 @@ class Index extends Component
 {
     public function render()
     {
-        $data = Pengajuan::with('polis')->orderBy('id','DESC');
+        $data = Pengajuan::with(['polis','account_manager','kepesertaan'])->orderBy('id','DESC');
         
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
     }
@@ -57,7 +57,6 @@ class Index extends Component
                     ->setCellValue('B7', 'PRODUK ASURANSI')
                     ->setCellValue('C7', isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-');
 
-        
         if($status==1){
             $activeSheet
                     ->setCellValue('A8', 'NO')

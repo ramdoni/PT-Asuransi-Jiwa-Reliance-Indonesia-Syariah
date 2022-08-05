@@ -1,5 +1,5 @@
 @section('sub-title', 'Index')
-@section('title', 'Reas')
+@section('title', 'Reasuransi')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -21,7 +21,6 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <a href="javascript:void(0)" class="btn btn-danger" data-target="#modal_upload" data-toggle="modal"><i class="fa fa-upload"></i> Upload</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
@@ -37,48 +36,15 @@
                                 <th>No</th>
                                 <th>Nomor Polis</th>
                                 <th>Pemegang Polis</th>
-                                <th>Produk</th>
-                                <th>Berkas</th>
-                                <th>No Peserta</th>
-                                <th>Ket</th>
-                                <th>BPR /BANK/CAB</th>
-                                <th>No Closing</th>
-                                <th>No Akad Kredit</th>
-                                <th>TEMPAT INSTANSI BEKERJA/TERTANGGUNG BEKERJA</th>
-                                <th>PEKERJAAN JABATAN</th>
-                                <th>NO KTP</th>
-                                <th>Alamat</th>
-                                <th>No Handphone</th>
-                                <th>Nama Peserta</th>
-                                <th>Date of Birth</th>
-                                <th>Usia Masuk</th>
-                                <th>Gender</th>
-                                <th>Mulai Asuransi</th>
-                                <th>Akhir Asuransi</th>
-                                <th>MASA ASURANSI (BULAN)</th>
-                                <th class="text-right">TOTAL MANFAAT ASURANSI</th>
-                                <th class="text-right">KONTRIBUSI</th>
-                                <th class="text-right">DANA TABBARU</th>
-                                <th class="text-right">DANA UJRAH</th>
-                                <th class="text-right">EXTRA KONTRIBUSI</th>
-                                <th class="text-right">TOTAL KONTRIBUSI</th>
-                                <th>POT. LANGSUNG (%)</th>
-                                <th>JML POT LANGSUNG</th>
-                                <th>PPH</th>
-                                <th>PPN</th>
-                                <th>TOTAL KONTRIBUSI DIBAYAR</th>
-                                <th>KARTU PESERTA</th>
-                                <th>TGL STNC</th>
-                                <th>UW LIMIT</th>
-                                <th>RATE</th>
-                                <th>TOTAL DN</th>
-                                <th>NO REG</th>
-                                <th>NO DEBIT NOTE</th>
-                                <th>THN PROD</th>
-                                <th>PRODUKSI AKRUAL</th>
-                                <th>ISSUED/ACCEPT DATE</th>
-                                <th>STATUS POLIS</th>
-                                <th>STATUS DATE</th>
+                                <th>PESERTA</th>
+                                <th>TOTAL NILAI MANFAAT ASURANSI YG DIREASKAN</th>
+                                <th>NILAI MANFAAT ASURANSI OR</th>
+                                <th>NILAI MANFAAT ASURANSI REAS</th>
+                                <th>KONTRIBUSI AJRI YG DIREASKAN</th>
+                                <th>KONTRIBUSI REAS GROSS</th>
+                                <th>UJROH</th>
+                                <th>EM</th>
+                                <th>KONTRIBUSI REAS NETTO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,47 +54,6 @@
                                     <td>{{isset($item->polis->no_polis)?$item->polis->no_polis:'-'}}</td>
                                     <td>{{isset($item->polis->nama)?$item->polis->nama:'-'}}</td>
                                     <td>{{isset($item->polis->produk->nama)?$item->polis->produk->nama:'-'}}</td>
-                                    <td></td>
-                                    <td>{{$item->no_peserta}}</td>
-                                    <td>{{$item->ket}}</td>
-                                    <td>{{$item->bank}} / {{$item->cab}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{$item->no_ktp}}</td>
-                                    <td>{{$item->alamat}}</td>
-                                    <td>{{$item->no_telepon}}</td>
-                                    <td>{{$item->nama}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item->tanggal_lahir))}}</td>
-                                    <td>{{$item->usia}}</td>
-                                    <td>{{$item->jenis_kelamin}}</td>
-                                    <td>{{$item->tanggal_mulai?date('d-F-Y',strtotime($item->tanggal_mulai)):'-'}}</td>
-                                    <td>{{$item->tanggal_akhir?date('d-F-Y',strtotime($item->tanggal_akhir)):'-'}}</td>
-                                    <td class="text-center">{{$item->masa_bulan}}</td>
-                                    <td class="text-right">{{format_idr($item->basic)}}</td>
-                                    <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                    <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
-                                    <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
-                                    <td class="text-right">{{format_idr($item->extra_kontribusi)}}</td>
-                                    <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
