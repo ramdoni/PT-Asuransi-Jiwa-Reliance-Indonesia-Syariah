@@ -15,17 +15,28 @@
                                     <div class="from-group my-2">
                                         <input type="text" class="form-control" wire:model="filter_keyword" placeholder="Keyword" />
                                     </div>
+                                    <div class="from-group my-2">
+                                        <select class="form-control" wire:model="filter_status_polis">
+                                            <option value=""> -- Status Polis -- </option>
+                                            <option>Cancel</option>
+                                            <option>Change</option>
+                                            <option>Claim</option>
+                                            <option>Inforce</option>
+                                            <option>Maturity</option>
+                                            <option>Surrender</option>
+                                        </select>
+                                    </div>
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <a href="javascript:void(0)" class="btn btn-danger" data-target="#modal_upload" data-toggle="modal"><i class="fa fa-upload"></i> Upload</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
+                        <h6 class="text-success">Total Kontribusi : {{format_idr($total_kontribusi->sum('kontribusi'))}}</h6>
                     </div>
                 </div>
             </div>
@@ -38,18 +49,13 @@
                                 <th>Nomor Polis</th>
                                 <th>Pemegang Polis</th>
                                 <th>Produk</th>
-                                <th>Berkas</th>
                                 <th>No Peserta</th>
+                                <th>Nama Peserta</th>
                                 <th>Ket</th>
                                 <th>BPR /BANK/CAB</th>
-                                <th>No Closing</th>
-                                <th>No Akad Kredit</th>
-                                <th>TEMPAT INSTANSI BEKERJA/TERTANGGUNG BEKERJA</th>
-                                <th>PEKERJAAN JABATAN</th>
                                 <th>NO KTP</th>
                                 <th>Alamat</th>
                                 <th>No Handphone</th>
-                                <th>Nama Peserta</th>
                                 <th>Date of Birth</th>
                                 <th>Usia Masuk</th>
                                 <th>Gender</th>
@@ -79,27 +85,65 @@
                                 <th>ISSUED/ACCEPT DATE</th>
                                 <th>STATUS POLIS</th>
                                 <th>STATUS DATE</th>
+                                <th>STATUS</th>
+                                <th>REFUND</th>
+                                <th>KETERANGAN REFUND</th>
+                                <th>TGL EFEKTIF REFUND</th>
+                                <th>NO CN</th>
+                                <th>PAY DATE</th>
+                                <th>PRODUKSI CASH BASIS</th>
+                                <th>KONTRIBUSI NETTO U/ BIAYA PENUTUPAN</th>
+                                <th>Perkalian Biaya Penutupan</th>
+                                <th>% BP</th>
+                                <th>TOTAL BIAYA PENUTUPAN</th>
+                                <th>LINE OF BUSINESS</th>
+                                <th>KET. POLIS</th>
+                                <th>CHANNEL</th>
+                                <th>DISTRIBUTION CHANEL TO AAJI</th>
+                                <th>TIPE REAS</th>
+                                <th>MODEL REAS</th>
+                                <th>REASURADUR</th>
+                                <th>RATE REAS (%)</th>
+                                <th>RI COM (%)</th>
+                                <th>NILAI MANFAAT ASURANSI REAS</th>
+                                <th>TOTAL KONTRIBUSI REAS</th>
+                                <th>UJROH REAS</th>
+                                <th>NET KONTRIBUSI REAS</th>
+                                <th>UL REAS</th>
+                                <th>PROD REAS</th>
+                                <th>PRODUKSI AKRUAL REAS</th>
+                                <th>NO CREDIT NOTE PEMBAYARAN</th>
+                                <th>NO KODE</th>
+                                <th>PAY DATE REAS</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php($num = $data->firstItem())
                             @foreach ($data as $k => $item)
                                 <tr>
-                                    <td style="width: 50px;">{{ $k + 1 }}</td>
-                                    <td>{{isset($item->polis->no_polis)?$item->polis->no_polis:'-'}}</td>
-                                    <td>{{isset($item->polis->nama)?$item->polis->nama:'-'}}</td>
+                                    <td style="width: 50px;">{{ $num }}</td>
+                                    <td>
+                                        @if($item->polis->no_polis)
+                                            <a href="{{route('polis.edit',$item->polis_id)}}">{{$item->polis->no_polis}}</a>
+                                        @else
+                                        -
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($item->polis->nama)
+                                            <a href="{{route('polis.edit',$item->polis_id)}}">{{$item->polis->nama}}</a>
+                                        @else
+                                        -
+                                        @endif
+                                    </td>
                                     <td>{{isset($item->polis->produk->nama)?$item->polis->produk->nama:'-'}}</td>
-                                    <td></td>
                                     <td>{{$item->no_peserta}}</td>
-                                    <td>{{$item->ket}}</td>
+                                    <td>{{$item->nama}}</td>
+                                    <td>{{$item->keterangan}}</td>
                                     <td>{{$item->bank}} / {{$item->cab}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                     <td>{{$item->no_ktp}}</td>
                                     <td>{{$item->alamat}}</td>
                                     <td>{{$item->no_telepon}}</td>
-                                    <td>{{$item->nama}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_lahir))}}</td>
                                     <td>{{$item->usia}}</td>
                                     <td>{{$item->jenis_kelamin}}</td>
@@ -112,24 +156,55 @@
                                     <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
                                     <td class="text-right">{{format_idr($item->extra_kontribusi)}}</td>
                                     <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{$item->potong_langsung}}</td>
+                                    <td>{{format_idr($item->jumlah_potong_langsung)}}</td>
+                                    <td>{{$item->pph}}</td>
+                                    <td>{{$item->ppn}}</td>
+                                    <td>{{format_idr($item->total_kontribusi_dibayar)}}</td>
+                                    <td>{{$item->kartu_peserta}}</td>
+                                    <td>{{$item->tanggal_stnc ? date('d-F-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
+                                    <td>{{$item->uw}}</td>
+                                    <td>{{$item->rate}}</td>
+                                    <td>{{$item->total_dn}}</td>
+                                    <td>{{$item->no_reg}}</td>
+                                    <td>{{$item->no_debit_note}}</td>
+                                    <td>{{$item->tahun_produksi}}</td>
+                                    <td>{{$item->produksi_akrual}}</td>
+                                    <td>{{$item->issued_accepted_date}}</td>
+                                    <td>{{$item->status_polis}}</td>
+                                    <td>{{$item->status_date?date('d-F-Y',strtotime($item->status_date)):'-'}}</td>
+                                    <td>{{$item->status}}</td>
+                                    <td>{{format_idr($item->refund)}}</td>
+                                    <td>{{$item->refund_keterangan}}</td>
+                                    <td>{{$item->refund_date_efektif}}</td>
+                                    <td>{{$item->no_cn}}</td>
+                                    <td>{{$item->pay_date}}</td>
+                                    <td>{{$item->produksi_cash_basis}}</td>
+                                    <td>{{$item->kontribusi_netto_biaya_penutupan}}</td>
+                                    <td>{{$item->perkalian_biaya_penutupan}}</td>
+                                    <td>{{$item->bp}}</td>
+                                    <td>{{$item->total_biaya_penutupan}}</td>
+                                    <td>{{isset($item->polis->line_of_business) ? $item->polis->line_of_business : '-'}}</td>
+                                    <td>{{$item->ket_polis}}</td>
+                                    <td>{{isset($item->polis->channel) ? $item->polis->channel : '-'}}</td>
+                                    <td>{{$item->distribution_channel_to_aaji}}</td>
+                                    <td>{{$item->tipe_reas}}</td>
+                                    <td>{{$item->model_reas}}</td>
+                                    <td>{{isset($item->polis->reasuradur->name) ? $item->polis->reasuradur->name : '-'}}</td>
+                                    <td>{{$item->rate_reas}}</td>
+                                    <td>{{$item->ri_com}}</td>
+                                    <td>{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>
+                                    <td>{{format_idr($item->total_kontribusi_reas)}}</td>
+                                    <td>{{format_idr($item->ujroh_reas)}}</td>
+                                    <td>{{format_idr($item->net_kontribusi_reas)}}</td>
+                                    <td>{{$item->ul_reas}}</td>
+                                    <td>{{$item->prod_reas}}</td>
+                                    <td>{{$item->prod_akrual_reas}}</td>
+                                    <td>{{$item->no_cn_reas}}</td>
+                                    <td>{{$item->no_kode}}</td>
+                                    <td>{{$item->pay_date_reas}}</td>
                                 </tr>
+                                @php($num++)
                             @endforeach
                             @if($data->count()==0)
                                 <tr><td class="text-center" colspan="9"><i>empty</i></td></tr>
@@ -143,15 +218,19 @@
         </div>
     </div>
 </div>
-
 <div wire:ignore.self class="modal fade" id="modal_upload" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('peserta.upload')
 </div>
 @push('after-scripts')
     <script>
+        var data_table;
         $(document).ready(function() { 
-            var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
-            new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 
+            data_table = $('#data_table').DataTable( {"bInfo":false, "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
+            new $.fn.dataTable.FixedColumns( data_table, { leftColumns: 5 } ); 
         } );
+
+        Livewire.on('init-data', () => {
+           
+        });
     </script>
 @endpush

@@ -4,16 +4,34 @@ namespace App\Http\Livewire\Pengajuan;
 
 use Livewire\Component;
 use App\Models\Pengajuan;
+use App\Models\Kepesertaan;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 
 class Index extends Component
 {
+    public $selected;
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager','kepesertaan'])->orderBy('id','DESC');
         
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
+    }
+
+    public function set_id($id)
+    {
+        $this->selected = Pengajuan::find($id);
+    }
+
+    public function delete()
+    {
+        Kepesertaan::where('pengajuan_id',$this->selected->id)->delete();
+
+        $this->selected->delete();        
+
+        session()->flash('message-success',__('Pengajuan berhasil dihapus'));
+
+        return redirect()->route('pengajuan.index');
     }
 
     public function downloadExcel(Pengajuan $data,$status=1)
@@ -25,9 +43,7 @@ class Index extends Component
                                     ->setTitle("Office 2007 XLSX Product Database")
                                     ->setSubject("Daftar Peserta")
                                     // ->setDescription("Health Check")
-                                    ->setKeywords("office 2007 openxml php")
-                                    // ->setCategory("Health Check")
-                                    ;
+                                    ->setKeywords("office 2007 openxml php");
 
         $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';
         if($status==1) $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';

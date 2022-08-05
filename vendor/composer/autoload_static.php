@@ -671,6 +671,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Actions\\Fortify\\UpdateUserProfileInformation' => __DIR__ . '/../..' . '/app/Actions/Fortify/UpdateUserProfileInformation.php',
         'App\\Actions\\Jetstream\\DeleteUser' => __DIR__ . '/../..' . '/app/Actions/Jetstream/DeleteUser.php',
         'App\\Console\\Commands\\CheckAging' => __DIR__ . '/../..' . '/app/Console/Commands/CheckAging.php',
+        'App\\Console\\Commands\\PolisMature' => __DIR__ . '/../..' . '/app/Console/Commands/PolisMature.php',
         'App\\Console\\Commands\\SinkronPeserta' => __DIR__ . '/../..' . '/app/Console/Commands/SinkronPeserta.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',

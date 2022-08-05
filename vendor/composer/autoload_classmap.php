@@ -13,6 +13,7 @@ return array(
     'App\\Actions\\Fortify\\UpdateUserProfileInformation' => $baseDir . '/app/Actions/Fortify/UpdateUserProfileInformation.php',
     'App\\Actions\\Jetstream\\DeleteUser' => $baseDir . '/app/Actions/Jetstream/DeleteUser.php',
     'App\\Console\\Commands\\CheckAging' => $baseDir . '/app/Console/Commands/CheckAging.php',
+    'App\\Console\\Commands\\PolisMature' => $baseDir . '/app/Console/Commands/PolisMature.php',
     'App\\Console\\Commands\\SinkronPeserta' => $baseDir . '/app/Console/Commands/SinkronPeserta.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',

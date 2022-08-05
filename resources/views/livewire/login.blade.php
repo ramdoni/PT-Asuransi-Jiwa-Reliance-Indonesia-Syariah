@@ -35,7 +35,7 @@
                                 <span>{{__('Remember me')}}</span>
                             </label>								
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">{{ __('LOGIN') }}</button>
+                        <button type="submit" class="btn btn-info btn-lg btn-block">{{ __('LOGIN') }}</button>
                         {{-- <div class="bottom">
                             <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a href="#">{{ __('Forgot password?') }}</a></span>
                             <span>{{ __("Don't have an account?") }} <a href="#">{{ __('Register') }}</a></span>

@@ -31,10 +31,10 @@ class AddEm extends Component
 
     public function save()
     {
-        $this->validate([
-            'status'=> 'required',
-            'extra_mortalita_id' => 'required'
-        ]);
+        // $this->validate([
+        //     'status'=> 'required',
+        //     'extra_mortalita_id' => 'required'
+        // ]);
 
         // find reate
         $tahun = round($this->data->masa_bulan / 12);
@@ -42,8 +42,13 @@ class AddEm extends Component
         if($rate){
             $this->data->rate_em = $rate->rate;
             $this->data->extra_mortalita = $this->data->basic * $rate->rate / 1000;
+            $this->data->use_em = 1;
         }
-        $this->data->use_em = 1;
+        if($this->extra_mortalita_id=="" and $this->status==""){
+            $this->data->rate_em = null;
+            $this->data->extra_mortalita = 0;
+            $this->data->use_em = 0;
+        }
         $this->data->status_em = $this->status;
         $this->data->nomor_em = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/EM-UWS/AJRIUS/'.numberToRomawi(date('m')).'/'.date('Y');;
         $this->data->save();
@@ -63,7 +68,11 @@ class AddEm extends Component
         
         $data->dana_tabarru = ($data->kontribusi*$data->polis->iuran_tabbaru)/100; // persen ngambil dari daftarin polis
         $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
-        $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
+        
+        if($this->extra_mortalita_id=="" and $this->status=="")
+            $data->extra_mortalita = 0;
+        else
+            $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
         
         /**
          * 
@@ -87,7 +96,8 @@ class AddEm extends Component
             $data->ul = "X+N=75";
             $data->uw = "X+N=75";
         }else{
-            $uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
+            //$uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
+            $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
 
             if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw) {

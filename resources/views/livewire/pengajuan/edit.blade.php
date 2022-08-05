@@ -487,7 +487,7 @@
                     </div>
                     @if($data->kepesertaan->where('status_akseptasi',0)->count() > 0)
                         <div class="alert alert-danger alert-dismissible" role="alert">
-                            <i class="fa fa-times-circle"></i> Data Peserta akan bisa di proses, setelah semua peserta sudah di akseptasi
+                            <i class="fa fa-times-circle"></i> Silahkan melakukan akseptasi untuk semua data sebelum melanjutkan ke tahap berikutnya
                         </div>
                     @endif
                     <hr />

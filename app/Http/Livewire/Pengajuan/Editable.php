@@ -16,10 +16,14 @@ class Editable extends Component
 
     public function set_id($data)
     {
-        $field = $data['field'];
-        $this->data = Kepesertaan::find($data['id']);
-        $this->value = $this->data->$field;
-        $this->field = $field;
+        if(is_array($data)){
+            $field = isset($data['field']) ? $data['field'] : '';
+            $this->data = Kepesertaan::find($data['id']);
+            if(isset($field)){
+                $this->value = $this->data->$field;
+                $this->field = $field;
+            }
+        }
     }
 
     public function save()
