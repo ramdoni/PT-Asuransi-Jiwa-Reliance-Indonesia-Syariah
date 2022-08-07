@@ -76,7 +76,7 @@
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}
                                     </td>
-                                    <td class="text-right">{{format_idr($item->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</td>
+                                    <td class="text-right">{{format_idr($item->net_kontribusi)}}</td>
                                     <td class="text-danger">
                                         @if($item->dn_number)
                                             @if($item->status_invoice==0)

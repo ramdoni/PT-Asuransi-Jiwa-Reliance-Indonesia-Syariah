@@ -9,7 +9,7 @@ class Journal extends Model
 {
     use HasFactory;
 
-    protected $table = 'journal';
+    protected $table = 'journals';
 
     protected $connection = 'finance';
 }

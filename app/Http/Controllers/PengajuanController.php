@@ -19,7 +19,7 @@ class PengajuanController extends Controller
         $potongan_langsung = 0;
         if(isset($id->polis->potongan_langsung)) $potongan_langsung = ($kontribusi + $extra_kontribusi)*($id->polis->potong_langsung/100);
 
-        $total = $kontribusi;
+        $total = $kontribusi+$id->biaya_sertifikat+$id->pph+$id->ppn+$id->potongan_langsung;
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('livewire.pengajuan.print-dn',['extra_mortalita'=>$extra_mortalita,'total'=>$total,'data'=>$id,'head_teknik'=>$head_teknik,'kontribusi'=>$kontribusi,'extra_kontribusi'=>$extra_kontribusi,'potongan_langsung'=>$potongan_langsung]);

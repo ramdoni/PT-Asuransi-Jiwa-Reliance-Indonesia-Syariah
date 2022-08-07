@@ -91,6 +91,7 @@
                                             <th>BB</th>
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
+                                            <th>Masa Asuransi</th>
                                             <th class="text-right">Nilai Manfaat Asuransi</th>
                                             <th class="text-right">Dana Tabarru</th>
                                             <th class="text-right">Dana Ujrah</th>
@@ -159,6 +160,7 @@
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'berat_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->berat_badan?$item->berat_badan:'<i>.....</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
+                                                <td class="text-center">{{$item->masa_bulan}}</td>
                                                 <td class="text-right">{{format_idr($item->basic)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
@@ -193,7 +195,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="15" class="text-right">Total</th>
+                                            <th colspan="16" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('basic'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_tabarru'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_ujrah'))}}</th>
@@ -226,6 +228,7 @@
                                             <th>BB</th>
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
+                                            <th>Masa Asuransi</th>
                                             <th class="text-right">Nilai Manfaat Asuransi</th>
                                             <th class="text-right">Dana Tabarru</th>
                                             <th class="text-right">Dana Ujrah</th>
@@ -277,6 +280,7 @@
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'berat_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->berat_badan?$item->berat_badan:'<i>.....</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
+                                                <td class="text-center">{{$item->masa_bulan}}</td>
                                                 <td class="text-right">{{format_idr($item->basic)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
@@ -311,7 +315,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="15" class="text-right">Total</th>
+                                            <th colspan="16" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('basic'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))}}</th>
@@ -356,6 +360,7 @@
                                             <th>BB</th>
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
+                                            <th>Masa Asuransi</th>
                                             <th class="text-right">Nilai Manfaat Asuransi</th>
                                             <th class="text-right">Dana Tabarru</th>
                                             <th class="text-right">Dana Ujrah</th>
@@ -422,6 +427,7 @@
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'berat_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->berat_badan?$item->berat_badan:'<i>.....</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
+                                                <td class="text-center">{{$item->masa_bulan}}</td>
                                                 <td class="text-right">
                                                     {{format_idr($item->basic)}}
                                                 </td>
@@ -472,7 +478,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="15" class="text-right">Total</th>
+                                            <th colspan="16" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_tabarru'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_ujrah'))}}</th>

@@ -50,7 +50,6 @@ class Index extends Component
         if($status==2) $title = 'DAFTAR KEPESERTAAN TERTUNDA ASURANSI JIWA KUMPULAN SYARIAH';
         
         $activeSheet = $objPHPExcel->setActiveSheetIndex(0);
-        // $activeSheet->getStyle('A1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('689a3b');
         $activeSheet->setCellValue('A1', $title);
         $activeSheet->mergeCells("A1:O1");
         $activeSheet->getRowDimension('1')->setRowHeight(34);
@@ -60,7 +59,8 @@ class Index extends Component
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
             ],
             'font' => [
-                'size' => 16
+                'size' => 16,
+                'bold' => true,
             ]
         ]);;
 
@@ -100,8 +100,7 @@ class Index extends Component
                     ->setCellValue('L8', 'TOTAL KONTRIBUSI')
                     ->setCellValue('M8', 'TGL STNC')
                     ->setCellValue('N8', 'UL')
-                    ->setCellValue('O8', 'KET')
-                    ;
+                    ->setCellValue('O8', 'KET');
 
             $activeSheet->getStyle("A8:O8")->applyFromArray([
                         'font' => [
@@ -142,6 +141,9 @@ class Index extends Component
                     ->setCellValue('N8', 'KET')
                     ;
             $activeSheet->getStyle("A8:N8")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                        ],
                         'borders' => [
                             'top' => [
                                 'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -180,19 +182,18 @@ class Index extends Component
                     ->setCellValue('A'.$num,$k)
                     ->setCellValue('B'.$num,$i->no_peserta)
                     ->setCellValue('C'.$num,$i->nama)
-                    ->setCellValue('D'.$num,$i->tanggal_lahir)
+                    ->setCellValue('D'.$num,$i->tanggal_lahir?date('d-M-Y',strtotime($i->tanggal_lahir)) : '-')
                     ->setCellValue('E'.$num,$i->usia)
                     ->setCellValue('F'.$num,$i->tanggal_mulai?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
-                    ->setCellValue('G'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('G'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_akhir)) : '-')
                     ->setCellValue('H'.$num,$i->basic)
                     ->setCellValue('I'.$num,$i->dana_tabarru)
                     ->setCellValue('J'.$num,$i->dana_ujrah)
                     ->setCellValue('K'.$num,$i->kontribusi)
                     ->setCellValue('L'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
-                    ->setCellValue('M'.$num,$i->tanggal_stnc)
+                    ->setCellValue('M'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
                     ->setCellValue('N'.$num,$i->ul)
-                    ->setCellValue('O'.$num,$i->reason_reject)
-                    ;
+                    ->setCellValue('O'.$num,$i->reason_reject);
                 
                 $activeSheet->getStyle("H{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
                 $activeSheet->getStyle("A{$num}:O{$num}")->applyFromArray([
@@ -213,12 +214,14 @@ class Index extends Component
             $total_em = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_mortalita');
             $total_ek = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_kontribusi');
 
-            $activeSheet->setCellValue("I{$num}",$total_basic)
-                        ->setCellValue("J{$num}",$total_dana_tabarru)
-                        ->setCellValue("K{$num}",$total_dana_ujrah)
-                        ->setCellValue("L{$num}",$total_kontribusi)
-                        ->setCellValue("M{$num}",$total_kontribusi+$total_em+$total_ek);
-            $activeSheet->getStyle("I{$num}:M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+            $activeSheet
+                        ->setCellValue("B{$num}",'TOTAL')
+                        ->setCellValue("H{$num}",$total_basic)
+                        ->setCellValue("I{$num}",$total_dana_tabarru)
+                        ->setCellValue("J{$num}",$total_dana_ujrah)
+                        ->setCellValue("K{$num}",$total_kontribusi)
+                        ->setCellValue("L{$num}",$total_kontribusi+$total_em+$total_ek);
+            $activeSheet->getStyle("H{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
             $activeSheet->getStyle("A{$num}:O{$num}")->applyFromArray([
                 'borders' => [
                     'top' => [
@@ -230,26 +233,29 @@ class Index extends Component
                         'color' => ['argb' => '000000'],
                     ],
                 ],
+                'font' => [
+                    'bold' => true,
+                ],
             ]);
         }
 
         if($status==2){
             $k=0;
-            foreach($data->kepesertaan->where('status_akseptasi',$status) as $k => $i){
+            foreach($data->kepesertaan->where('status_akseptasi',$status) as $i){
                 $k++;
                 $activeSheet
                     ->setCellValue('A'.$num,$k)
                     ->setCellValue('B'.$num,$i->nama)
-                    ->setCellValue('C'.$num,$i->tanggal_lahir)
+                    ->setCellValue('C'.$num,$i->tanggal_lahir?date('d-M-Y',strtotime($i->tanggal_lahir)) : '-')
                     ->setCellValue('D'.$num,$i->usia)
                     ->setCellValue('E'.$num,$i->tanggal_mulai?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
-                    ->setCellValue('F'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('F'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_akhir)) : '-')
                     ->setCellValue('G'.$num,$i->basic)
                     ->setCellValue('H'.$num,$i->dana_tabarru)
                     ->setCellValue('I'.$num,$i->dana_ujrah)
                     ->setCellValue('J'.$num,$i->kontribusi)
                     ->setCellValue('K'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
-                    ->setCellValue('L'.$num,$i->tanggal_stnc)
+                    ->setCellValue('L'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
                     ->setCellValue('M'.$num,$i->ul)
                     ->setCellValue('N'.$num,$i->reason_reject)
                     ;
@@ -278,7 +284,9 @@ class Index extends Component
             $total_em = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_mortalita');
             $total_ek = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_kontribusi');
 
-            $activeSheet->setCellValue("G{$num}",$total_basic)
+            $activeSheet
+                        ->setCellValue("B{$num}",'TOTAL')
+                        ->setCellValue("G{$num}",$total_basic)
                         ->setCellValue("H{$num}",$total_dana_tabarru)
                         ->setCellValue("I{$num}",$total_dana_ujrah)
                         ->setCellValue("J{$num}",$total_kontribusi)
@@ -295,35 +303,68 @@ class Index extends Component
                         'color' => ['argb' => '000000'],
                     ],
                 ],
+                'font' => [
+                    'bold' => true,
+                ],
             ]);
         }
 
         $num++;
         $num++;
         $num++;
-        $activeSheet
-            ->setCellValue('N'.$num,"Jakarta, ".date('d F Y'))
-            ->setCellValue('N'.($num+4),"Underwriting Syariah");
-        
-        $activeSheet->getStyle("N".$num)->applyFromArray([
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                ]
-            ]);
-        $activeSheet->getStyle("N".($num+4))->applyFromArray([
-                'borders' => [
-                    'bottom' => [
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => ['argb' => '000000'],
+        if($status==1){
+            $activeSheet
+                ->setCellValue('N'.$num,"Jakarta, ".date('d F Y'))
+                ->setCellValue('N'.($num+4),"Underwriting Syariah");
+            
+            $activeSheet->getStyle("N".$num)->applyFromArray([
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
                     ],
+                ]);
+            $activeSheet->getStyle("N".($num+4))->applyFromArray([
+                    'borders' => [
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    ],
+                    'font'=>[
+                        'bold'=>true
+                    ]
+                ]);
+            }else{
+                $activeSheet
+                        ->setCellValue('K'.$num,"Jakarta, ".date('d F Y'))
+                        ->setCellValue('K'.($num+4),"Underwriting Syariah");
                     
-                ],
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                ]
-            ]);
+                    $activeSheet->getStyle("K".$num)->applyFromArray([
+                            'alignment' => [
+                                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                            ],
+                        ]);
+                    $activeSheet->getStyle("K".($num+4))->applyFromArray([
+                            'borders' => [
+                                'bottom' => [
+                                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                    'color' => ['argb' => '000000'],
+                                ],
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                            ],
+                            'font'=>[
+                                'bold'=>true
+                            ]
+                        ]);
+            }
 
         // Rename worksheet
         $activeSheet->setTitle('Pengajuan');

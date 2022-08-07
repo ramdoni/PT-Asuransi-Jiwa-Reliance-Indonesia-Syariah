@@ -78,39 +78,39 @@
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Extra Kontribusi</td>
-                    <td style="text-align: right;">{{ format_idr($extra_kontribusi)}}</td>
+                    <td style="text-align: right;">{{ $extra_kontribusi ? format_idr($extra_kontribusi) : '-'}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Extra Mortalita</td>
-                    <td style="text-align: right;">{{ format_idr($extra_kontribusi)}}</td>
+                    <td style="text-align: right;">{{ $extra_mortalita ? format_idr($extra_mortalita) : '-'}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">{{isset($data->polis->ket_diskon) ? $data->polis->ket_diskon : ''}} {{isset($data->polis->potong_langsung) ? $data->polis->potong_langsung.'%' : ''}}</td>
-                    <td style="text-align: right;">{{format_idr($potongan_langsung)}}</td>
+                    <td style="padding-left: 20px">{{isset($data->polis->ket_diskon) ? $data->polis->ket_diskon : ''}} {{isset($data->potong_langsung_persen) ? $data->potong_langsung_persen.'%' : ''}}</td>
+                    <td style="text-align: right;">{{$data->potong_langsung ? format_idr($data->potong_langsung) : '-'}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">PPN {{isset($data->polis->ppn) ? $data->polis->ppn : ''}}%</td>
+                    <td style="padding-left: 20px">PPN {{isset($data->ppn_persen) ? $data->ppn_persen : '0'}}%</td>
                     <td style="text-align: right;">
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">PPh {{isset($data->polis->pph) ? $data->polis->pph : ''}}%</td>
+                    <td style="padding-left: 20px">PPh {{isset($data->pph_persen) ? $data->pph_persen : '0'}}%</td>
                     <td style="text-align: right;"></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Biaya Polis dan Materai</td>
-                    <td style="text-align: right;"></td>
+                    <td style="text-align: right;">{{$data->biaya_polis_materai?$data->biaya_polis_materai : '-'}}</td>
                 </tr>
                 <tr>
-                    <td style="padding-left: 20px">Biaya Sertifikat/Kartu @ Rp0</td>
-                    <td style="text-align: right;"></td>
+                    <td style="padding-left: 20px">Biaya Sertifikat/Kartu</td>
+                    <td style="text-align: right;">{{$data->biaya_sertifikat?$data->biaya_sertifikat : '-'}}</td>
                 </tr>
                 <tr>
                     <th>Total Kontribusi Dibayar</th>
-                    <td style="text-align: right;"><b>{{format_idr($total)}}</b></td>
+                    <td style="text-align: right;"><b>{{format_idr($data->net_kontribusi)}}</b></td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($total)}}</td>
+                    <td colspan="2">Terbilang : {{terbilang($data->net_kontribusi)}}</td>
                 </tr>
                 <tr>
                     <td colspan="2">Masa Tenggang Pembayaran sampai dengan : {{$data->tanggal_jatuh_tempo ? date('d F Y',strtotime($data->tanggal_jatuh_tempo)) : ''}}</td>
@@ -213,12 +213,12 @@
                 <tr>
                     <td style="padding-left: 33px;">Total Nilai Manfaat Asuransi</td>
                     <td> : Rp</td>
-                    <td style="text-align:right;">{{ format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('basic')) }}</td>
+                    <td style="text-align:right;">{{ format_idr($data->nilai_manfaat) }}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 33px;">Total Kontribusi</td>
                     <td> : Rp </td>
-                    <td style="text-align:right;">{{ format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi')) }}</td>
+                    <td style="text-align:right;">{{ format_idr($data->net_kontribusi) }}</td>
                 </tr>
             </table>
             <p style="padding-left: 20px;"><strong>2. Daftar Kepesertaan Tertunda Asuransi Jiwa Kumpulan Syariah</strong></p>

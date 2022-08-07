@@ -24,6 +24,7 @@ class Insert extends Component
     public $dc_aaji,$dc_ojk,$office,$channel,$segment,$line_of_business,$source_of_business,$no_nota_penutupan,$no_perjanjian_kerjasama,$peninjauan_ulang,$pembayaran_klaim;
     public $retroaktif,$waiting_period,$rate_single_usia,$total_bp,$no_sb,$uw_limit,$margin_rate,$ri_comm,$share_reinsurance,$lost_ratio,$profit_margin,$contingency_margin,$gae,$business_source;
     public $refund,$refund_to_pengalihan,$dana_tabbaru_reas,$dana_ujroh_reas,$stop_loss,$cut_loss,$refund_cut_loss,$running_number,$running_number_peserta,$running_number_dn;
+    public $running_no_surat,$biaya_polis_materai,$biaya_sertifikat;
     use WithFileUploads;
 
     public function render()
@@ -181,6 +182,11 @@ class Insert extends Component
         $data->running_number = $this->running_number;
         $data->running_number_peserta = $this->running_number_peserta;
         $data->running_number_dn = $this->running_number_dn;
+        
+        $data->running_no_surat = $this->running_no_surat;
+        $data->biaya_polis_materai = $this->biaya_polis_materai;
+        $data->biaya_sertifikat = $this->biaya_sertifikat;
+
         $data->save(); 
 
         if($this->ketentuan_uw_reas){
