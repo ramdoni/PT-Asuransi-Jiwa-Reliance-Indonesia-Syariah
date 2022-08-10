@@ -37,25 +37,23 @@ class Insert extends Component
         // $this->rates = Rate::get();
         $this->produks = Produk::get();
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
-        $this->no_polis = date('ym').str_pad(Polis::count()+1,6, '0', STR_PAD_LEFT);
+        // $this->no_polis = date('ym').str_pad(Polis::count()+1,6, '0', STR_PAD_LEFT);
         $this->running_number = Polis::count()+1;
         $this->reasuradur = Reasuradur::get();
     }
 
     public function updated($propertyName)
     {
-        if($this->produk_id)  $this->no_polis = $this->produk_id.date('ym').str_pad(Polis::where('produk_id',$this->produk_id)->count()+1,6, '0', STR_PAD_LEFT);
+        if($this->produk_id) {
+            $produk = Produk::where('produk_id',$this->produk_id)->first();
+            $this->no_polis = $produk->kode.date('ym').str_pad($produk->running_number+1,6, '0', STR_PAD_LEFT);
+        }
         if($propertyName =='iuran_tabbaru' and $this->iuran_tabbaru > 0) 
         $this->ujrah_atas_pengelolaan = 100 - $this->iuran_tabbaru;
 
         if($propertyName =='akhir'){
-            if(date('Y-m-d') > $this->akhir){
-                $this->status  = 'Mature';
-            }
-
-            if(date('Y-m-d') <= $this->akhir){
-                $this->status  = 'Inforce';
-            }
+            if(date('Y-m-d') > $this->akhir) $this->status  = 'Mature';
+            if(date('Y-m-d') <= $this->akhir) $this->status  = 'Inforce';
         }
     }
 
@@ -182,12 +180,15 @@ class Insert extends Component
         $data->running_number = $this->running_number;
         $data->running_number_peserta = $this->running_number_peserta;
         $data->running_number_dn = $this->running_number_dn;
-        
         $data->running_no_surat = $this->running_no_surat;
         $data->biaya_polis_materai = $this->biaya_polis_materai;
         $data->biaya_sertifikat = $this->biaya_sertifikat;
-
         $data->save(); 
+
+        // update running number produk
+        $produk = Produk::where('id',$this->produk_id)->first();
+        $produk->running_number = $produk->running_number+1;
+        $produk->save();
 
         if($this->ketentuan_uw_reas){
             $doc = 'ketentuan_uw_reas.'.$this->ketentuan_uw_reas->extension();

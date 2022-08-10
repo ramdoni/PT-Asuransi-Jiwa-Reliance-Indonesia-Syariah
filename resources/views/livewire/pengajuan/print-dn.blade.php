@@ -86,20 +86,19 @@
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">{{isset($data->polis->ket_diskon) ? $data->polis->ket_diskon : ''}} {{isset($data->potong_langsung_persen) ? $data->potong_langsung_persen.'%' : ''}}</td>
-                    <td style="text-align: right;">{{$data->potong_langsung ? format_idr($data->potong_langsung) : '-'}}</td>
+                    <td style="text-align: right;">{{$data->potong_langsung ? '-'. format_idr($data->potong_langsung) : '-'}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">PPN {{isset($data->ppn_persen) ? $data->ppn_persen : '0'}}%</td>
-                    <td style="text-align: right;">
-                    </td>
+                    <td style="text-align: right;">{{isset($data->ppn) ? $data->ppn : '-'}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">PPh {{isset($data->pph_persen) ? $data->pph_persen : '0'}}%</td>
-                    <td style="text-align: right;"></td>
+                    <td style="text-align: right;">{{isset($data->pph) ? '-'. $data->pph : '-'}} </td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Biaya Polis dan Materai</td>
-                    <td style="text-align: right;">{{$data->biaya_polis_materai?$data->biaya_polis_materai : '-'}}</td>
+                    <td style="text-align: right;">{{$data->biaya_polis_materai?$data->biaya_polis_materai : '-'}} </td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Biaya Sertifikat/Kartu</td>
@@ -110,7 +109,7 @@
                     <td style="text-align: right;"><b>{{format_idr($data->net_kontribusi)}}</b></td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($data->net_kontribusi)}}</td>
+                    <td colspan="2">Terbilang : {{terbilang($data->net_kontribusi)}} Rupiah</td>
                 </tr>
                 <tr>
                     <td colspan="2">Masa Tenggang Pembayaran sampai dengan : {{$data->tanggal_jatuh_tempo ? date('d F Y',strtotime($data->tanggal_jatuh_tempo)) : ''}}</td>

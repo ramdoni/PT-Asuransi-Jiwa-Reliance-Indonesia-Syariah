@@ -35,19 +35,23 @@
                         <thead style="background: #eee;">
                             <tr>
                                 <th>No</th>
+                                <th>Kode Produk</th>
                                 <th>Singkatan Produk</th>
                                 <th>Nama Produk</th>
                                 <th>Klasifikasi</th>
+                                <th>Running Number</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $k => $item)
                                 <tr>
-                                    <td style="width: 50px;">{{ $k + 1 }}</td>
+                                    <td style="width: 50px;">{{$k+1}}</td>
+                                    <td>{{$item->kode}}</td>
                                     <td><a href="javascript:void(0)" wire:click="$emit('set-id',{{$item->id}})" data-toggle="modal" data-target="#modal_edit">{{$item->singkatan}}</a></td>
                                     <td>{{$item->nama}}</td>
                                     <td>{{$item->klasifikasi}}</td>
+                                    <td>{{$item->running_number}}</td>
                                     <td><a href="javascript:void(0)" class="text-danger" wire:click="delete({{$item->id}})"><i class="fa fa-trash"></i></a></td>
                                 </tr>
                             @endforeach

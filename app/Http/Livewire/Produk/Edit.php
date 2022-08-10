@@ -8,7 +8,7 @@ use App\Models\Produk;
 class Edit extends Component
 {
     protected $listeners = ['set-id'=>'set_id'];
-    public $data,$singkatan,$nama,$klasifikasi,$kode;
+    public $data,$singkatan,$nama,$klasifikasi,$kode,$running_number;
 
     public function render()
     {
@@ -22,6 +22,7 @@ class Edit extends Component
         $this->nama = $id->nama;
         $this->klasifikasi = $id->klasifikasi;
         $this->kode = $id->kode;
+        $this->running_number = $id->running_number;
     }
     public function save()
     {
@@ -30,6 +31,7 @@ class Edit extends Component
             'nama'=>'required',
             'kode' => 'required',
             'klasifikasi'=>'required',
+            'running_number'=>'required'
         ]);
 
         $data = $this->data;;
@@ -37,6 +39,7 @@ class Edit extends Component
         $data->nama = $this->nama;
         $data->kode = $this->kode;
         $data->klasifikasi = $this->klasifikasi;
+        $data->running_number = $this->running_number;
         $data->save();
         
         $this->emit('modal','hide');

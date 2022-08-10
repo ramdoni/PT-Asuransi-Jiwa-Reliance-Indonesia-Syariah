@@ -91,7 +91,6 @@ class Insert extends Component
             }
         }
 
-
         if($propertyName=='check_all' and $this->check_all==1){
             foreach($this->kepesertaan as $k => $item){
                 $this->check_id[$k] = $item->id;
@@ -227,6 +226,17 @@ class Insert extends Component
             else{
                 // find rate
                 $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$data->polis_id])->first();
+                $data->rate = $rate ? $rate->rate : 0;
+                $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
+            }
+
+            if($data->masa_bulan /12 >15)$data->keterangan = 'max. 15 th';
+            // find rate
+            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
+            if(!$rate || $rate->rate ==0 || $rate->rate ==""){
+                $data->rate = 0;
+                $data->kontribusi = 0;
+            }else{
                 $data->rate = $rate ? $rate->rate : 0;
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }

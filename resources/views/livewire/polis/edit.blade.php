@@ -584,6 +584,20 @@
                                     <label>Running Number Polis</label>
                                     <input type="text" class="form-control" wire:model="running_number" />
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label>Running Number Surat</label>
+                                    <input type="text" class="form-control" wire:model="running_no_surat" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Biaya Polis Materai</label>
+                                    <input type="text" class="form-control" wire:model="biaya_polis_materai" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Biaya Sertifikat</label>
+                                    <input type="text" class="form-control" wire:model="biaya_sertifikat" />
+                                </div>
                             </div>
                         </div>
                     </div>

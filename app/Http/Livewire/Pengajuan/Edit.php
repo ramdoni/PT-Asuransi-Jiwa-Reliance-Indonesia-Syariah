@@ -6,6 +6,8 @@ use App\Models\Pengajuan;
 use App\Models\Kepesertaan;
 use Livewire\Component;
 use App\Models\PengajuanHistory;
+use App\Models\Rate;
+use App\Models\UnderwritingLimit;
 use App\Models\Finance\Income;
 use App\Models\Finance\Polis;
 use App\Models\Finance\SyariahUnderwriting;
@@ -80,63 +82,36 @@ class Edit extends Component
 
     public function hitung()
     {
-        // foreach($this->data->kepesertaan as $data){   
-        //     if($data->ul=='GOA'){
-        //         if(isset($data->polis->waiting_period) and $data->polis->waiting_period !="")
-        //             $data->tanggal_stnc = date('Y-m-d',strtotime(" +{$data->polis->waiting_period} month", strtotime($data->polis->tanggal_akseptasi)));
-        //         else{
-        //             if(countDay($this->data->head_syariah_submit,$data->tanggal_mulai) > $data->polis->retroaktif){
-        //                 $data->tanggal_stnc = date('Y-m-d');
-        //             }elseif(countDay($this->data->head_syariah_submit,$data->tanggal_mulai) < $data->polis->retroaktif){
-        //                 $data->tanggal_stnc = null;
-        //             }
-        //         }
-        //     }
-            
-        //     if(in_array($data->ul,['NM','A','B','C'])) $data->tanggal_stnc = date('Y-m-d');
+        $key=0;
+        $running_number = 1024;
+        foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
+            $running_number++;
+            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
+            $peserta->no_peserta = $no_peserta;
 
-        //     $data->save();
-        // }
+            $peserta->save();
 
-        $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
-        \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
-        \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
-        \DB::raw("SUM(kontribusi) as total_kontribusi"),
-        \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
-        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita")
-        )->where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->first();
+            $key++;
+        }
 
-        $nilai_manfaat = $select->total_nilai_manfaat;
-        $dana_tabbaru = $select->total_dana_tabbaru;
-        $dana_ujrah = $select->total_dana_ujrah;
-        $kontribusi = $select->total_kontribusi;
-        $ektra_kontribusi = $select->total_extract_kontribusi;
-        $extra_mortalita = $select->total_extra_mortalita;
-        $total_kontribusi = $extra_mortalita+$kontribusi+$ektra_kontribusi;
-        $net_kontribusi = $total_kontribusi;
-
-        // insert journal
-        $no_voucher = generate_no_voucer_journal("AP");
-        // Kontribusi Tabarru 
-        Journal::insert(['coa_id'=> 384,'no_voucher'=>$no_voucher,'date_journal'=>date('Y-m-d'),'kredit'=>$dana_tabbaru,'debit'=>0,'transaction_id'=>5786,'transaction_table'=>'income','saldo'=>$dana_tabbaru]);
-        // Kontribusi Ujrah
-        Journal::insert(['coa_id'=> 383,'no_voucher'=>$no_voucher,'date_journal'=>date('Y-m-d'),'kredit'=>$dana_ujrah,'debit'=>0,'transaction_id'=>5786,'transaction_table'=>'income','saldo'=>$dana_ujrah]);
-        // Tagihan Kontribusi
-        Journal::insert(['coa_id'=> 382,'no_voucher'=>$no_voucher,'date_journal'=>date('Y-m-d'),'kredit'=>0,'debit'=>$kontribusi,'transaction_id'=>5786,'transaction_table'=>'income','saldo'=>$kontribusi]);
-        // Tagihan Kontribusi Ujrah
-        Journal::insert(['coa_id'=> 381,'no_voucher'=>$no_voucher,'date_journal'=>date('Y-m-d'),'kredit'=>0,'debit'=>$dana_ujrah,'transaction_id'=>5786,'transaction_table'=>'income','saldo'=>$dana_ujrah]);
+        $this->emit('message-success','Data berhasil dikalkukasi');
+        $this->emit('reload-page');
     }
 
     public function submit_head_syariah()
     {
         \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Submit Head Syariah");
-
         // generate DN Number
         $running_number_dn = $this->data->polis->running_number_dn+1;
-        $dn_number = $this->data->polis->no_polis ."/". str_pad($running_number_dn,4, '0', STR_PAD_LEFT)."AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
+        $dn_number = $this->data->polis->no_polis ."/". str_pad($running_number_dn,4, '0', STR_PAD_LEFT)."/AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
         $this->data->dn_number = $dn_number;
-        $no_surat = str_pad($this->data->id,6, '0', STR_PAD_LEFT).'/UWS-M/AJRI-US/'.numberToRomawi(date('m')).'/'.date('Y');
-        $this->data->no_surat = $no_surat;
+
+        $running_no_surat = get_setting('running_surat')+1;
+        
+        $this->data->no_surat = str_pad($running_no_surat,6, '0', STR_PAD_LEFT).'/UWS-M/AJRI-US/'.numberToRomawi(date('m')).'/'.date('Y');
+
+        update_setting('running_surat',$running_no_surat);
+
         $this->data->status = 3;
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
         $this->data->total_approve = $this->kepesertaan_approve->count();
@@ -152,7 +127,7 @@ class Edit extends Component
         $key=0;
         foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
             $running_number++;
-            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
+            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,3, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
             $peserta->no_peserta = $no_peserta;
 
             if($peserta->ul=='GOA'){
@@ -180,14 +155,13 @@ class Edit extends Component
         }
 
         // save running number
+        $this->data->no_peserta_awal = $no_peserta_awal;
+        $this->data->no_peserta_akhir = $no_peserta_akhir;
         $this->data->polis->running_number_dn = $running_number_dn;
         $this->data->polis->running_number_peserta = $running_number;
-        $this->data->polis->save();
         
         if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
         
-        $this->data->no_peserta_awal = $no_peserta_awal;
-        $this->data->no_peserta_akhir = $no_peserta_akhir;
         $this->data->save();
 
         $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
@@ -236,8 +210,8 @@ class Edit extends Component
          * jika pengajuan baru pertama kali ada biaya polis dan materia 100.000
          * */ 
         if($running_number==0){
-            $this->data->biaya_polis_materai = 100000;
-            $this->data->biaya_sertifikat = 100000;
+            $this->data->biaya_polis_materai = $this->data->polis->biaya_polis_materai;
+            $this->data->biaya_sertifikat = $this->data->polis->biaya_sertifikat;
         }
 
         $this->data->save();

@@ -8,7 +8,7 @@
                     <div class="col-md-1">
                         <div class="pl-3 pt-2 form-group mb-0" x-data="{open_dropdown:false}" @click.away="open_dropdown = false">
                             <a href="javascript:void(0)" x-on:click="open_dropdown = ! open_dropdown" class="dropdown-toggle">
-                                    Filter <i class="fa fa-search-plus"></i>
+                                Filter <i class="fa fa-search-plus"></i>
                             </a>
                             <div class="dropdown-menu show-form-filter" x-show="open_dropdown">
                                 <form class="p-2">
@@ -105,7 +105,7 @@
                                     <td class="text-center">
                                         {{$item->total_reject}}
                                         @if($item->dn_number)
-                                            <a href="javascript:void()" wire:click="downloadExcel({{$item->id}},2)"><i class="fa fa-download"></i></a>
+                                            <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},2)"><i class="fa fa-download"></i></a>
                                         @endif
                                     </td>
                                     <td>{{isset($item->account_manager->name)?$item->account_manager->name:'-'}}</td>
@@ -160,11 +160,6 @@
   
     </div>
 </div>
-
-<div wire:ignore.self class="modal fade" id="add_reas" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @livewire('pengajuan.insert-reas')
-</div>
-
 @push('after-scripts')
     <script>
         $(document).ready(function() { 

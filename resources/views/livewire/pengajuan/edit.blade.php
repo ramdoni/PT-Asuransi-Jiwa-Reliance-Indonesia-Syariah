@@ -17,13 +17,18 @@
                                                 @if($data->dn_number)
                                                     <a href="{{route('pengajuan.print-dn',$data->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                 @endif
-                                                <!-- <a href="javascript:void(0)" wire:click="hitung"><i class="fa fa-refresh"></i></a> -->
                                             </td>
                                         </tr>
                                     @endif
                                     <tr>
                                         <td><strong>No Pengajuan</strong></td>
-                                        <td>: {{$no_pengajuan}}</td>
+                                        <td>: {{$no_pengajuan}} 
+                                            <a href="javascript:void(0)" wire:loading.remove wire:target="hitung" wire:click="hitung"><i class="fa fa-refresh"></i></a>
+                                            <span wire:loading wire:target="hitung">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span>
+                                            </span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>No Polis</strong></td>
@@ -478,7 +483,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="16" class="text-right">Total</th>
+                                            <th colspan="17" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_tabarru'))}}</th>
                                             <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_ujrah'))}}</th>

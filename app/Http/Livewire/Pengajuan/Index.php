@@ -13,7 +13,8 @@ class Index extends Component
     public $selected;
     public function render()
     {
-        $data = Pengajuan::with(['polis','account_manager','kepesertaan'])->orderBy('id','DESC');
+        $data = Pengajuan::with(['polis','account_manager','kepesertaan'])
+                ->orderBy('id','DESC');
         
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
     }

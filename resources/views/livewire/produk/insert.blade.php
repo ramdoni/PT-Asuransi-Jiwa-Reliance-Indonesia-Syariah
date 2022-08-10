@@ -49,6 +49,15 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Running Number</label>
+                            <input type="number" class="form-control" wire:model="running_number" />
+                            @error('running_number')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

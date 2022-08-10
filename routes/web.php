@@ -47,7 +47,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('peserta/print-ek/{id}',[App\Http\Controllers\PesertaController::class,'printEk'])->name('peserta.print-ek');
     Route::get('pengajuan/print-dn/{id}',[App\Http\Controllers\PengajuanController::class,'printDN'])->name('pengajuan.print-dn');
     Route::get('pengajuan/download-report/{id}',[App\Http\Controllers\PengajuanController::class,'downloadReport'])->name('pengajuan.download-report');
+    Route::get('peserta',App\Http\Livewire\Peserta\Index::class)->name('peserta.index');
 });
+
 
 // Administrator
 Route::group(['middleware' => ['auth','access:1']], function(){    
@@ -59,7 +61,6 @@ Route::group(['middleware' => ['auth','access:1']], function(){
     Route::get('users/edit/{id}',App\Http\Livewire\User\Edit::class)->name('users.edit');
     Route::post('users/autologin/{id}',[App\Http\Livewire\User\Index::class,'autologin'])->name('users.autologin');
     Route::get('log-activity',App\Http\Livewire\LogActivity\Index::class)->name('log-activity');
-    Route::get('peserta',App\Http\Livewire\Peserta\Index::class)->name('peserta.index');
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('reas',App\Http\Livewire\Reas\Index::class)->name('reas.index');
 });
