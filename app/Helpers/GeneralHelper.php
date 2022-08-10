@@ -321,11 +321,11 @@ function generate_no_voucher($coa_id="",$count="")
 
     return '';
 }
-function format_idr($number)
+function format_idr($number,$decimal=0)
 {
     if(empty($number)) return 0;
-    $number = (int) $number;
-    return number_format($number,0,0,'.');
+    // $number = (int) $number;
+    return number_format($number,$decimal);
 }
 function get_setting($key)
 {

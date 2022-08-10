@@ -43,7 +43,6 @@ class Index extends Component
                                     ->setLastModifiedBy("Stalavista System")
                                     ->setTitle("Office 2007 XLSX Product Database")
                                     ->setSubject("Daftar Peserta")
-                                    // ->setDescription("Health Check")
                                     ->setKeywords("office 2007 openxml php");
 
         $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';
@@ -98,12 +97,14 @@ class Index extends Component
                     ->setCellValue('I8', 'DANA TABBARU')
                     ->setCellValue('J8', 'DANA UJRAH')
                     ->setCellValue('K8', 'KONTRIBUSI')
-                    ->setCellValue('L8', 'TOTAL KONTRIBUSI')
-                    ->setCellValue('M8', 'TGL STNC')
-                    ->setCellValue('N8', 'UL')
-                    ->setCellValue('O8', 'KET');
+                    ->setCellValue('L8', 'EXTRA MORTALITA')
+                    ->setCellValue('M8', 'EXTRA KONTRIBUSI')
+                    ->setCellValue('N8', 'TOTAL KONTRIBUSI')
+                    ->setCellValue('O8', 'TGL STNC')
+                    ->setCellValue('P8', 'UL')
+                    ->setCellValue('Q8', 'KET');
 
-            $activeSheet->getStyle("A8:O8")->applyFromArray([
+            $activeSheet->getStyle("A8:Q8")->applyFromArray([
                         'font' => [
                             'bold' => true,
                         ],
@@ -136,12 +137,14 @@ class Index extends Component
                     ->setCellValue('H8', 'DANA TABBARU')
                     ->setCellValue('I8', 'DANA UJRAH')
                     ->setCellValue('J8', 'KONTRIBUSI')
-                    ->setCellValue('K8', 'TOTAL KONTRIBUSI')
-                    ->setCellValue('L8', 'TGL STNC')
-                    ->setCellValue('M8', 'UL')
-                    ->setCellValue('N8', 'KET')
+                    ->setCellValue('K8', 'EXTRA MORTALITA')
+                    ->setCellValue('L8', 'EXTRA KONTRIBUSI')
+                    ->setCellValue('M8', 'TOTAL KONTRIBUSI')
+                    ->setCellValue('N8', 'TGL STNC')
+                    ->setCellValue('O8', 'UL')
+                    ->setCellValue('P8', 'KET')
                     ;
-            $activeSheet->getStyle("A8:N8")->applyFromArray([
+            $activeSheet->getStyle("A8:P8")->applyFromArray([
                         'font' => [
                             'bold' => true,
                         ],
@@ -173,6 +176,8 @@ class Index extends Component
         $activeSheet->getColumnDimension('M')->setAutoSize(true);
         $activeSheet->getColumnDimension('N')->setAutoSize(true);
         $activeSheet->getColumnDimension('O')->setAutoSize(true);
+        $activeSheet->getColumnDimension('P')->setAutoSize(true);
+        $activeSheet->getColumnDimension('Q')->setAutoSize(true);
         $num=9;
 
         if($status==1){
@@ -191,13 +196,15 @@ class Index extends Component
                     ->setCellValue('I'.$num,$i->dana_tabarru)
                     ->setCellValue('J'.$num,$i->dana_ujrah)
                     ->setCellValue('K'.$num,$i->kontribusi)
-                    ->setCellValue('L'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
-                    ->setCellValue('M'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
-                    ->setCellValue('N'.$num,$i->ul)
-                    ->setCellValue('O'.$num,$i->reason_reject);
+                    ->setCellValue('L'.$num,$i->extra_mortalita)
+                    ->setCellValue('M'.$num,$i->extra_kontribusi)
+                    ->setCellValue('N'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
+                    ->setCellValue('O'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
+                    ->setCellValue('P'.$num,$i->ul)
+                    ->setCellValue('Q'.$num,$i->reason_reject);
                 
-                $activeSheet->getStyle("H{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-                $activeSheet->getStyle("A{$num}:O{$num}")->applyFromArray([
+                $activeSheet->getStyle("H{$num}:N{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("A{$num}:Q{$num}")->applyFromArray([
                     'borders' => [
                         'top' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -221,9 +228,11 @@ class Index extends Component
                         ->setCellValue("I{$num}",$total_dana_tabarru)
                         ->setCellValue("J{$num}",$total_dana_ujrah)
                         ->setCellValue("K{$num}",$total_kontribusi)
-                        ->setCellValue("L{$num}",$total_kontribusi+$total_em+$total_ek);
-            $activeSheet->getStyle("H{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-            $activeSheet->getStyle("A{$num}:O{$num}")->applyFromArray([
+                        ->setCellValue("L{$num}",$total_em)
+                        ->setCellValue("M{$num}",$total_ek)
+                        ->setCellValue("N{$num}",$total_kontribusi+$total_em+$total_ek);
+            $activeSheet->getStyle("H{$num}:N{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+            $activeSheet->getStyle("A{$num}:Q{$num}")->applyFromArray([
                 'borders' => [
                     'top' => [
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -255,14 +264,16 @@ class Index extends Component
                     ->setCellValue('H'.$num,$i->dana_tabarru)
                     ->setCellValue('I'.$num,$i->dana_ujrah)
                     ->setCellValue('J'.$num,$i->kontribusi)
-                    ->setCellValue('K'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
-                    ->setCellValue('L'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
-                    ->setCellValue('M'.$num,$i->ul)
-                    ->setCellValue('N'.$num,$i->reason_reject)
+                    ->setCellValue('K'.$num,$i->extra_mortalita)
+                    ->setCellValue('L'.$num,$i->extra_kontribusi)
+                    ->setCellValue('M'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
+                    ->setCellValue('N'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
+                    ->setCellValue('O'.$num,$i->ul)
+                    ->setCellValue('P'.$num,$i->reason_reject)
                     ;
 
-                $activeSheet->getStyle("G{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-                $activeSheet->getStyle("A{$num}:N{$num}")->applyFromArray([
+                $activeSheet->getStyle("G{$num}:M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("A{$num}:P{$num}")->applyFromArray([
                     'borders' => [
                         'top' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -291,9 +302,11 @@ class Index extends Component
                         ->setCellValue("H{$num}",$total_dana_tabarru)
                         ->setCellValue("I{$num}",$total_dana_ujrah)
                         ->setCellValue("J{$num}",$total_kontribusi)
-                        ->setCellValue("K{$num}",$total_kontribusi+$total_em+$total_ek);
-            $activeSheet->getStyle("G{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-            $activeSheet->getStyle("A{$num}:N{$num}")->applyFromArray([
+                        ->setCellValue("K{$num}",$total_em)
+                        ->setCellValue("L{$num}",$total_ek)
+                        ->setCellValue("M{$num}",$total_kontribusi+$total_em+$total_ek);
+            $activeSheet->getStyle("G{$num}:M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+            $activeSheet->getStyle("A{$num}:P{$num}")->applyFromArray([
                 'borders' => [
                     'top' => [
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,

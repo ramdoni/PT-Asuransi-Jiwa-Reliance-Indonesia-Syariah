@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('pengajuan/print-dn/{id}',[App\Http\Controllers\PengajuanController::class,'printDN'])->name('pengajuan.print-dn');
     Route::get('pengajuan/download-report/{id}',[App\Http\Controllers\PengajuanController::class,'downloadReport'])->name('pengajuan.download-report');
     Route::get('peserta',App\Http\Livewire\Peserta\Index::class)->name('peserta.index');
+    Route::get('daily-activity',App\Http\Livewire\DailyActivity\Index::class)->name('daily-activity.index');
 });
 
 

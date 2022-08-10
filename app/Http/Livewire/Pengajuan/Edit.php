@@ -82,17 +82,67 @@ class Edit extends Component
 
     public function hitung()
     {
-        $key=0;
-        $running_number = 1024;
-        foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
-            $running_number++;
-            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
-            $peserta->no_peserta = $no_peserta;
+        // foreach($this->data->kepesertaan as $data){
+        //     $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia) : '0';
+        //     $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
+        //     $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi);
 
-            $peserta->save();
+        //     $nilai_manfaat_asuransi = $data->basic;
 
-            $key++;
-        }
+        //     if($data->masa_bulan /12 >15)
+        //         $data->kontribusi_keterangan = 'max. 15 th';
+        //     else{
+        //         // find rate
+        //         $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
+        //         $data->rate = $rate ? $rate->rate : 0;
+        //         $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
+        //     }
+
+        //     if($data->masa_bulan /12 >15)$data->keterangan = 'max. 15 th';
+        //     // find rate
+        //     $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
+        //     if(!$rate || $rate->rate ==0 || $rate->rate ==""){
+        //         $data->rate = 0;
+        //         $data->kontribusi = 0;
+        //     }else{
+        //         $data->rate = $rate ? $rate->rate : 0;
+        //         $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
+        //     }
+            
+        //     $data->dana_tabarru = ($data->kontribusi*$data->polis->iuran_tabbaru)/100; // persen ngambil dari daftarin polis
+        //     $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
+        //     $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
+            
+        
+        //     // if($data->usia + ($data->masa_bulan/12) > 75){
+        //     //     $data->ul = "X+N=75";
+        //     //     $data->uw = "X+N=75";
+        //     // }else{
+
+        //         $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->first();
+                
+        //         if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->orderBy('max_amount','ASC')->first();
+        //         if($uw){
+        //             $data->uw = $uw->keterangan;
+        //             $data->ul = $uw->keterangan;
+        //         }
+        //     // }
+
+        //     $data->is_hitung = 1;
+        //     $data->save();
+        // }
+
+        // $key=0;
+        // $running_number = 823;
+        // foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
+        //     $running_number++;
+        //     $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
+        //     $peserta->no_peserta = $no_peserta;
+
+        //     $peserta->save();
+
+        //     $key++;
+        // }
 
         $this->emit('message-success','Data berhasil dikalkukasi');
         $this->emit('reload-page');
@@ -120,14 +170,12 @@ class Edit extends Component
         $this->data->save();
 
         // generate no peserta
-        $no_peserta_awal = '';
-        $no_peserta_akhir = '';
         $running_number = $this->data->polis->running_number_peserta;
     
         $key=0;
         foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
             $running_number++;
-            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,3, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
+            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
             $peserta->no_peserta = $no_peserta;
 
             if($peserta->ul=='GOA'){
@@ -146,19 +194,19 @@ class Edit extends Component
 
             $peserta->save();
 
-            if($key==0)
-                $no_peserta_awal = $no_peserta;
-            else
-                $no_peserta_akhir = $no_peserta;
-
             $key++;
         }
+        
+        $get_peserta_awal =  Kepesertaan::where('pengajuan_id',$this->data->id)->orderBy('no_peserta','ASC')->first();
+        if($get_peserta_awal) $this->data->no_peserta_awal = $get_peserta_awal->no_peserta;
 
+        $no_peserta_akhir =  Kepesertaan::where('pengajuan_id',$this->data->id)->orderBy('no_peserta','DESC')->first();
+        if($no_peserta_akhir) $this->data->no_peserta_akhir = $no_peserta_akhir->no_peserta;
+        
         // save running number
-        $this->data->no_peserta_awal = $no_peserta_awal;
-        $this->data->no_peserta_akhir = $no_peserta_akhir;
         $this->data->polis->running_number_dn = $running_number_dn;
         $this->data->polis->running_number_peserta = $running_number;
+        $this->data->polis->save();
         
         if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
         
@@ -194,7 +242,7 @@ class Edit extends Component
          */
         if($this->data->polis->pph){
             $this->data->pph_persen =  $this->data->polis->pph;
-            $this->data->pph = $net_kontribusi*($this->data->polis->pph/100);
+            $this->data->pph = $kontribusi*($this->data->polis->pph/100);
         }
 
          /**
@@ -202,7 +250,7 @@ class Edit extends Component
          */
         if($this->data->polis->ppn){
             $this->data->ppn_persen =  $this->data->polis->ppn;
-            $this->data->ppn = $net_kontribusi*($this->data->polis->ppn/100);
+            $this->data->ppn = $kontribusi*($this->data->polis->ppn/100);
         }
 
         /**
@@ -213,6 +261,12 @@ class Edit extends Component
             $this->data->biaya_polis_materai = $this->data->polis->biaya_polis_materai;
             $this->data->biaya_sertifikat = $this->data->polis->biaya_sertifikat;
         }
+
+        if($this->data->polis->potong_langsung){
+            $this->data->potong_langsung_persen = $this->data->polis->potong_langsung;
+            $this->data->potong_langsung = $kontribusi*($this->data->polis->potong_langsung/100);
+        }
+
 
         $this->data->save();
 

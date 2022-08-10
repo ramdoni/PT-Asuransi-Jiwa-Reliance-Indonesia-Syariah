@@ -701,6 +701,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Http\\Livewire\\Pengajuan\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/Index.php',
         'App\\Http\\Livewire\\Pengajuan\\Insert' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/Insert.php',
         'App\\Http\\Livewire\\Pengajuan\\InsertReas' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/InsertReas.php',
+        'App\\Http\\Livewire\\Pengajuan\\SelectFile' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/SelectFile.php',
         'App\\Http\\Livewire\\Peserta\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/Peserta/Index.php',
         'App\\Http\\Livewire\\Peserta\\Upload' => __DIR__ . '/../..' . '/app/Http/Livewire/Peserta/Upload.php',
         'App\\Http\\Livewire\\Polis\\AddEm' => __DIR__ . '/../..' . '/app/Http/Livewire/Polis/AddEm.php',

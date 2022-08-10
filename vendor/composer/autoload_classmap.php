@@ -43,6 +43,7 @@ return array(
     'App\\Http\\Livewire\\Pengajuan\\Index' => $baseDir . '/app/Http/Livewire/Pengajuan/Index.php',
     'App\\Http\\Livewire\\Pengajuan\\Insert' => $baseDir . '/app/Http/Livewire/Pengajuan/Insert.php',
     'App\\Http\\Livewire\\Pengajuan\\InsertReas' => $baseDir . '/app/Http/Livewire/Pengajuan/InsertReas.php',
+    'App\\Http\\Livewire\\Pengajuan\\SelectFile' => $baseDir . '/app/Http/Livewire/Pengajuan/SelectFile.php',
     'App\\Http\\Livewire\\Peserta\\Index' => $baseDir . '/app/Http/Livewire/Peserta/Index.php',
     'App\\Http\\Livewire\\Peserta\\Upload' => $baseDir . '/app/Http/Livewire/Peserta/Upload.php',
     'App\\Http\\Livewire\\Polis\\AddEm' => $baseDir . '/app/Http/Livewire/Polis/AddEm.php',

@@ -14,21 +14,21 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="form-group">
+                            <div class="form-group" wire:ignore>
                                 <label>No Polis</label>
-                                <select class="form-control" wire:model="polis_id">
+                                <select class="form-control" id="polis_id" wire:model="polis_id">
                                     <option value=""> -- Select Polis -- </option>
                                     @foreach($polis as $item)
                                         <option value="{{$item->id}}">{{$item->no_polis}} / {{$item->nama}}</option>
                                     @endforeach
                                 </select>
-                                @if($message_error)
-                                    <span class="text-danger">{{$message_error}}</span>
-                                @endif
                                 @error('polis_id')
                                     <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                 @enderror
                             </div>
+                            @if($message_error)
+                                <span class="text-danger">{{$message_error}}</span>
+                            @endif
                         </div>
                         <span wire:loading wire:target="polis_id">
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -346,3 +346,23 @@
 <div wire:ignore.self class="modal fade" id="modal_add_em" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-em')
 </div>
+
+@push('after-scripts')
+<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
+<script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
+<style>
+    .select2-container .select2-selection--single {height:36px;padding-left:10px;}
+    .select2-container .select2-selection--single .select2-selection__rendered{padding-top:3px;}
+    .select2-container--default .select2-selection--single .select2-selection__arrow{top:4px;right:10px;}
+    .select2-container {width: 100% !important;}
+</style>
+<script>
+    select__2 = $('#polis_id').select2();
+    $('#polis_id').on('change', function (e) {
+        var data = $(this).select2("val");
+        @this.set('polis_id', data);
+    });
+    var selected__ = $('#polis_id').find(':selected').val();
+    if(selected__ !="") select__2.val(selected__);
+</script>
+@endpush

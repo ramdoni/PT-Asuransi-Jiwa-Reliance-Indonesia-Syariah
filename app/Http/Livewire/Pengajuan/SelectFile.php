@@ -47,9 +47,7 @@ class SelectFile extends Component
             if($item[1]=="" || $item[10]=="") continue;
             
             $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
-
             $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->first();
-            
             $data = new Kepesertaan();
             
             if($check){
