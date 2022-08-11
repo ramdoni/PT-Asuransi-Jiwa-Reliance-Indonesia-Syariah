@@ -109,6 +109,7 @@ function hitung_umur($tanggal_lahir,$pembulatan=1){
     $tahun = $today->diff($birthDate)->y;
 
     if($pembulatan==1 and $today->diff($birthDate)->m > 6) $tahun++; // Nears
+    if($pembulatan==1 and $today->diff($birthDate)->m == 6 and $today->diff($birthDate)->d>0) $tahun++; // Nears
     if($pembulatan==2 and $today->diff($birthDate)->m > 12) $tahun++; // Actual
     
     return $tahun;

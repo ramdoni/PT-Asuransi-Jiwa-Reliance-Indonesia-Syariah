@@ -250,7 +250,7 @@
                                         @php($index_approve = 0)
                                         @foreach($data->kepesertaan->where('status_akseptasi',1) as $k => $item)
                                             @php($index_approve++)
-                                            <tr>
+                                            <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_approve}}</td>
                                                 <td>
                                                     {{-- Underwriting --}}
@@ -277,7 +277,13 @@
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>.....</i>'!!}</a></td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_telepon'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_telepon?$item->no_telepon:'<i>.....</i>'!!}</a></td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'jenis_kelamin'})" data-toggle="modal" data-target="#modal_editable">{!!$item->jenis_kelamin?$item->jenis_kelamin:'<i>.....</i>'!!}</a></td>
-                                                <td>{{$item->no_peserta}}</td>
+                                                <td>
+                                                    @if($item->is_double==1)
+                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{$item->no_peserta}}</a>
+                                                    @else
+                                                        {{$item->no_peserta}}
+                                                    @endif
+                                                </td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'nama'})" data-toggle="modal" data-target="#modal_editable">{!!$item->nama?$item->nama:'<i>.....</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
@@ -286,7 +292,9 @@
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->masa_bulan}}</td>
-                                                <td class="text-right">{{format_idr($item->basic)}}</td>
+                                                <td class="text-right">
+                                                    {{format_idr($item->basic)}}
+                                                </td>
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
                                                 <td class="text-right">{{format_idr($item->kontribusi)}}</td>
@@ -382,7 +390,7 @@
                                         @php($index_reject = 0)
                                         @foreach($data->kepesertaan->whereIn('status_akseptasi',[2,3]) as $k => $item)
                                             @php($index_reject++)
-                                            <tr>
+                                            <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_reject}}</td>
                                                 <td class="text-center">
                                                     @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
@@ -566,6 +574,10 @@
         </div>
     </div>
 </div>
+<div wire:ignore.self class="modal fade" id="modal_show_double" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('pengajuan.show-double')
+</div>
+
 <div wire:ignore.self class="modal fade" id="modal_add_extra_kontribusi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-extra-kontribusi')
 </div>

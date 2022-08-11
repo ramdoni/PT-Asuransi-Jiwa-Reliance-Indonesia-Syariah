@@ -131,7 +131,7 @@ class Insert extends Component
             
             $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
 
-            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->first();
+            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir,'status_polis'=>'Inforce'])->first();
             
             $data = new Kepesertaan();
             
@@ -161,9 +161,6 @@ class Insert extends Component
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
-            
-            // if($this->masa_asuransi==2) $data->masa_bulan = $data->masa_bulan + 1;
-            
             $data->kontribusi = 0;
             $data->is_temp = 1;
             $data->save();
@@ -219,7 +216,13 @@ class Insert extends Component
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
 
-            $nilai_manfaat_asuransi = $data->basic;
+            if($data->is_double){
+                $sum =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
+                $data->akumulasi_ganda = $sum+$data->basic;;
+                $data->save();
+                $nilai_manfaat_asuransi = $sum;
+            }else
+                $nilai_manfaat_asuransi = $data->basic;
 
             if($data->masa_bulan /12 >15)
                 $data->kontribusi_keterangan = 'max. 15 th';
