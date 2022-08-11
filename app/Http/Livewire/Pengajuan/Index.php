@@ -196,14 +196,20 @@ class Index extends Component
                     ->setCellValue('I'.$num,$i->dana_tabarru)
                     ->setCellValue('J'.$num,$i->dana_ujrah)
                     ->setCellValue('K'.$num,$i->kontribusi)
-                    ->setCellValue('L'.$num,$i->extra_mortalita)
-                    ->setCellValue('M'.$num,$i->extra_kontribusi)
+                    ->setCellValue('L'.$num,$i->extra_mortalita?$i->extra_mortalita:'-')
+                    ->setCellValue('M'.$num,$i->extra_kontribusi?$i->extra_kontribusi:'-')
                     ->setCellValue('N'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
                     ->setCellValue('O'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
                     ->setCellValue('P'.$num,$i->ul)
                     ->setCellValue('Q'.$num,$i->reason_reject);
                 
-                $activeSheet->getStyle("H{$num}:N{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                    $activeSheet->getStyle("H{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                    
+                    if($i->extra_mortalita) $activeSheet->getStyle("L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                    if($i->extra_kontribusi) $activeSheet->getStyle("M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+                    $activeSheet->getStyle("N{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
                 $activeSheet->getStyle("A{$num}:Q{$num}")->applyFromArray([
                     'borders' => [
                         'top' => [
@@ -264,15 +270,19 @@ class Index extends Component
                     ->setCellValue('H'.$num,$i->dana_tabarru)
                     ->setCellValue('I'.$num,$i->dana_ujrah)
                     ->setCellValue('J'.$num,$i->kontribusi)
-                    ->setCellValue('K'.$num,$i->extra_mortalita)
-                    ->setCellValue('L'.$num,$i->extra_kontribusi)
+                    ->setCellValue('K'.$num,$i->extra_mortalita?$i->extra_mortalita:'-')
+                    ->setCellValue('L'.$num,$i->extra_kontribusi?$i->extra_kontribusi:'-')
                     ->setCellValue('M'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
                     ->setCellValue('N'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
                     ->setCellValue('O'.$num,$i->ul)
-                    ->setCellValue('P'.$num,$i->reason_reject)
-                    ;
+                    ->setCellValue('P'.$num,$i->reason_reject);
 
-                $activeSheet->getStyle("G{$num}:M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                if($i->extra_mortalita) $activeSheet->getStyle("K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                if($i->extra_kontribusi) $activeSheet->getStyle("L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+                $activeSheet->getStyle("G{$num}:J{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
                 $activeSheet->getStyle("A{$num}:P{$num}")->applyFromArray([
                     'borders' => [
                         'top' => [

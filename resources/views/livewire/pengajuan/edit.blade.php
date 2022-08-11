@@ -55,6 +55,21 @@
                                             @endif
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <th>Perhitungan Usia</th>
+                                        <td>
+                                            @if($data->perhitungan_usia==1)
+                                                Nears Birthday
+                                            @endif
+                                            @if($data->perhitungan_usia==2)
+                                                Actual Birthday
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Masa Asuransi</th>
+                                        <td>{{$data->masa_asuransi==1?'Day to Day':'Day to Day -1'}}</td>
+                                    </tr>
                                 </thead>
                             </table>
                         </div>
@@ -67,8 +82,14 @@
                     <div class="tab-content px-0">
                         <div class="tab-pane {{$tab_active=='tab_postpone' ? 'active show' : ''}}" id="kepesertaan_postpone">
                             <div class="table-responsive"> 
+                                @php($nilai_manfaat = $data->kepesertaan->where('status_akseptasi',0)->sum('basic'))
+                                @php($dana_tabbaru = $data->kepesertaan->where('status_akseptasi',0)->sum('dana_tabarru'))
+                                @php($dana_ujrah = $data->kepesertaan->where('status_akseptasi',0)->sum('dana_ujrah'))
+                                @php($kontribusi = $data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi'))
+                                @php($extra_mortalita = $data->kepesertaan->where('status_akseptasi',0)->sum('extra_mortalita'))
+                                @php($extra_kontribusi = $data->kepesertaan->where('status_akseptasi',0)->sum('extra_kontribusi'))
                                 <table class="table table-hover m-b-0 c_list table-nowrap" id="table_postpone">
-                                    <thead style="background: #eee;text-transform: uppercase;">
+                                    <thead style="text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
                                             <th class="text-center">
@@ -97,13 +118,13 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
-                                            <th class="text-right">Nilai Manfaat Asuransi</th>
-                                            <th class="text-right">Dana Tabarru</th>
-                                            <th class="text-right">Dana Ujrah</th>
-                                            <th class="text-right">Kontribusi</th>
-                                            <th class="text-right">Extra Mortality</th>
-                                            <th class="text-right">Extra Kontribusi</th>
-                                            <th class="text-right">Total Kontribusi</th>
+                                            <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat)}}</span></th>
+                                            <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru)}}</span></th>
+                                            <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah)}}</span></th>
+                                            <th class="text-right">Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi)}}</span></th>
+                                            <th class="text-right">Extra Mortality<br /><span class="sub_total">{{format_idr($extra_mortalita)}}</span></th>
+                                            <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi)}}</span></th>
+                                            <th class="text-right">Total Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi+$extra_kontribusi+$extra_mortalita)}}</span></th>
                                             <th>Tgl Stnc</th>
                                             <th>UL</th>
                                             <th>Ket</th>
@@ -201,13 +222,13 @@
                                     <tfoot style="background: #eee;">
                                         <tr>
                                             <th colspan="16" class="text-right">Total</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('basic'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_tabarru'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('dana_ujrah'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('extra_mortalita'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('extra_kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi')+$data->kepesertaan->where('status_akseptasi',0)->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',0)->sum('extra_kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($nilai_manfaat)}}</th>
+                                            <th class="text-right">{{format_idr($dana_tabbaru)}}</th>
+                                            <th class="text-right">{{format_idr($dana_ujrah)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi)}}</th>
+                                            <th class="text-right">{{format_idr($extra_mortalita)}}</th>
+                                            <th class="text-right">{{format_idr($extra_kontribusi)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi+$extra_mortalita+$extra_kontribusi)}}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -215,8 +236,14 @@
                         </div>
                         <div class="tab-pane {{$tab_active=='tab_approve' ? 'active show' : ''}}" id="kepesertaan_approve">
                             <div class="table-responsive"> 
+                                @php($nilai_manfaat_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('basic'))
+                                @php($dana_tabbaru_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))
+                                @php($dana_ujrah_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))
+                                @php($kontribusi_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))
+                                @php($extra_mortalita_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita'))
+                                @php($extra_kontribusi_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))
                                 <table class="table table-hover m-b-0 c_list table-nowrap" id="table_approve">
-                                    <thead style="background: #eee;text-transform: uppercase;">
+                                    <thead style="text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
                                             <th></th>
@@ -234,13 +261,13 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
-                                            <th class="text-right">Nilai Manfaat Asuransi</th>
-                                            <th class="text-right">Dana Tabarru</th>
-                                            <th class="text-right">Dana Ujrah</th>
-                                            <th class="text-right">Kontribusi</th>
-                                            <th class="text-right">Extra Mortality</th>
-                                            <th class="text-right">Extra Kontribusi</th>
-                                            <th class="text-right">Total Kontribusi</th>
+                                            <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat_approve)}}</span></th>
+                                            <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru_approve)}}</span></th>
+                                            <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah_approve)}}</span></th>
+                                            <th class="text-right">Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_approve)}}</span></th>
+                                            <th class="text-right">Extra Mortality<br /><span class="sub_total">{{format_idr($extra_mortalita_approve)}}</span></th>
+                                            <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi_approve)}}</span></th>
+                                            <th class="text-right">Total Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_approve+$extra_kontribusi_approve+$extra_mortalita_approve)}}</span></th>
                                             <th>Tgl Stnc</th>
                                             <th>UL</th>
                                             <th>Ket</th>
@@ -321,13 +348,13 @@
                                     <tfoot style="background: #eee;">
                                         <tr>
                                             <th colspan="16" class="text-right">Total</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('basic'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi')+$data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita')+$data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))}}</th>
+                                            <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
+                                            <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th>
+                                            <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi_approve)}}</th>
+                                            <th class="text-right">{{format_idr($extra_mortalita_approve)}}</th>
+                                            <th class="text-right">{{format_idr($extra_kontribusi_approve)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi_approve+$extra_mortalita_approve+$extra_kontribusi_approve)}}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -335,8 +362,14 @@
                         </div>
                         <div class="tab-pane {{$tab_active=='tab_reject' ? 'active show' : ''}}" id="kepesertaan_reject" >
                             <div class="table-responsive"> 
+                                @php($nilai_manfaat_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('basic'))
+                                @php($dana_tabbaru_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('dana_tabarru'))
+                                @php($dana_ujrah_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('dana_ujrah'))
+                                @php($kontribusi_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('kontribusi'))
+                                @php($extra_mortalita_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('extra_mortalita'))
+                                @php($extra_kontribusi_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('extra_kontribusi'))
                                 <table class="table table-hover m-b-0 c_list table-nowrap" id="table_reject">
-                                    <thead style="background: #eee;text-transform: uppercase;">
+                                    <thead style="text-transform: uppercase;">
                                         <tr>
                                             <th>No</th>
                                             <th class="text-center">
@@ -366,13 +399,13 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
-                                            <th class="text-right">Nilai Manfaat Asuransi</th>
-                                            <th class="text-right">Dana Tabarru</th>
-                                            <th class="text-right">Dana Ujrah</th>
-                                            <th class="text-right">Kontribusi</th>
-                                            <th class="text-right">Extra Mortality</th>
-                                            <th class="text-right">Extra Kontribusi</th>
-                                            <th class="text-right">Total Kontribusi</th>
+                                            <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat_approve)}}</span></th>
+                                            <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru_approve)}}</span></th>
+                                            <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah_approve)}}</span></th>
+                                            <th class="text-right">Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_approve)}}</span></th>
+                                            <th class="text-right">Extra Mortality<br /><span class="sub_total">{{format_idr($extra_mortalita_approve)}}</span></th>
+                                            <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi_approve)}}</span></th>
+                                            <th class="text-right">Total Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_approve+$extra_kontribusi_approve+$extra_mortalita_approve)}}</span></th>
                                             <th>Tgl Stnc</th>
                                             <th>UL</th>
                                             <th>Ket</th>
@@ -483,14 +516,14 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="17" class="text-right">Total</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_tabarru'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('dana_ujrah'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
-                                            <th class="text-right">{{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('kontribusi')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_mortalita')+$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('extra_kontribusi'))}}</th>
+                                            <th colspan="16" class="text-right">Total</th>
+                                            <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
+                                            <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th>
+                                            <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi_approve)}}</th>
+                                            <th class="text-right">{{format_idr($extra_mortalita_approve)}}</th>
+                                            <th class="text-right">{{format_idr($extra_kontribusi_approve)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi_approve+$extra_mortalita_approve+$extra_kontribusi_approve)}}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
