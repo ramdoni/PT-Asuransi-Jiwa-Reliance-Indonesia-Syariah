@@ -100,16 +100,25 @@ function hitung_masa_bulan($start,$end,$masa_asuransi=1){
     
 }
 
-function hitung_umur($tanggal_lahir,$pembulatan=1){
+function hitung_umur($tanggal_lahir,$pembulatan=1,$today=''){
     $birthDate = new \DateTime($tanggal_lahir);
-	$today = new \DateTime("today");
+    
+    if($today)
+	    $today = new \DateTime($today);
+    else
+	    $today = new \DateTime("today");
+
 	if ($birthDate > $today) { 
 	    return 0;
     }
     $tahun = $today->diff($birthDate)->y;
 
-    if($pembulatan==1 and $today->diff($birthDate)->m > 6) $tahun++; // Nears
-    if($pembulatan==1 and $today->diff($birthDate)->m == 6 and $today->diff($birthDate)->d>0) $tahun++; // Nears
+    if($pembulatan==1) {
+        if($today->diff($birthDate)->m > 6)
+            $tahun++;
+        elseif($today->diff($birthDate)->m == 6 and $today->diff($birthDate)->d>0)
+            $tahun++;
+    }
     if($pembulatan==2 and $today->diff($birthDate)->m > 12) $tahun++; // Actual
     
     return $tahun;

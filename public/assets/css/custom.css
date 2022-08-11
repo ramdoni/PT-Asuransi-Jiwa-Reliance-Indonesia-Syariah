@@ -74,3 +74,12 @@
     display: block;
     width: 250px;
 }
+table#table_postpone thead,
+table#table_approve thead,
+table#table_reject thead{
+    background:#c9eba775
+}
+table#table_postpone thead tr th,
+table#table_approve thead tr th
+{color:#689a37 !important}
+table thead .sub_total {color: orange;font-size: 13px}
