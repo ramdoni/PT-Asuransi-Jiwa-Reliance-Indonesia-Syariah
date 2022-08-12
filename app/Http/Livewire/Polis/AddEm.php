@@ -55,7 +55,16 @@ class AddEm extends Component
 
         // mulai hitung ulang
         $data = $this->data;
-        $nilai_manfaat_asuransi = $data->basic;
+
+        if($data->is_double){
+            $sum =  Kepesertaan::where(['polis_id'=>$data->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
+            $data->akumulasi_ganda = $sum+$data->basic;;
+            $data->save();
+            $nilai_manfaat_asuransi = $sum;
+        }else
+            $nilai_manfaat_asuransi = $data->basic;
+
+        // $nilai_manfaat_asuransi = $data->basic;
 
         // if($data->masa_bulan /12 >15)
         //     $data->kontribusi_keterangan = 'max. 15 th';

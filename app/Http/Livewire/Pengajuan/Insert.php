@@ -20,7 +20,7 @@ class Insert extends Component
     public function render()
     {
         if($this->polis_id){
-            $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>0])->get()->count();
+            $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get()->count();
             $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
             $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->get()->count();
         }
@@ -131,7 +131,9 @@ class Insert extends Component
             
             $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
 
-            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir,'status_polis'=>'Inforce'])->first();
+            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->where(function($table){
+                $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
+            })->first();
             
             $data = new Kepesertaan();
             
@@ -199,6 +201,7 @@ class Insert extends Component
         foreach($this->kepesertaan as $item){
             $item->pengajuan_id = $pengajuan->id;
             $item->is_temp = 0;
+            $item->status_polis = 'Akseptasi';
             $item->save();
         }
 
@@ -248,38 +251,13 @@ class Insert extends Component
             $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
             $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
             
-            /**
-             * 
-             * @var : kontribusi
-             * @param : = IF((AF9/12)>15;"max. 15 th";ROUNDDOWN(R9*AJ9/1000;0))
-             * 
-             * @var : Masa Bulan
-             * @param : AF9 = IF(L9="";"";AO9*12+(AP9+IF(AQ9>0;1;0)))
-             *  
-             * @param : R9 = Nilai manfaat asuransi
-             * @param : N9 = Usia
-             * @param : AJ9 = VLOOKUP(N9;rate;AF9+1;0)
-             */
-
-            /**  
-             * @param : UW
-             * @param : =IF(N9+(AF9/12)>75;"X+N=75";VLOOKUP(R9;uw_limit;VLOOKUP(N9;lookup;4;TRUE);TRUE)) 
-             * 
-             */
-            // if($data->usia + ($data->masa_bulan/12) > 75){
-            //     $data->ul = "X+N=75";
-            //     $data->uw = "X+N=75";
-            // }else{
-
-                $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
-                
-                if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
-                if($uw){
-                    $data->uw = $uw->keterangan;
-                    $data->ul = $uw->keterangan;
-                }
-            // }
-
+            $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
+            
+            if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
+            if($uw){
+                $data->uw = $uw->keterangan;
+                $data->ul = $uw->keterangan;
+            }
             $data->is_hitung = 1;
             $data->save();
         }

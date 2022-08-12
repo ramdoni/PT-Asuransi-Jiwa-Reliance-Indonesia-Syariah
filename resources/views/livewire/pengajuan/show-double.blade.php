@@ -17,6 +17,7 @@
                             <th>No KTP</th>
                             <th>No Telepon</th>
                             <th>Gender</th>
+                            <th>No Peserta</th>
                             <th>Nama Peserta</th>
                             <th>Tgl. Lahir</th>
                             <th>Usia</th>
@@ -46,13 +47,7 @@
                                 <td>{{$item->no_ktp}}</td>
                                 <td>{{$item->no_telepon}}</td>
                                 <td>{{$item->jenis_kelamin}}</td>
-                                <td>
-                                    @if($item->is_double==1)
-                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="set_id({{$item->id}})">{{$item->no_peserta}}</a>
-                                    @else
-                                        {{$item->no_peserta}}
-                                    @endif
-                                </td>
+                                <td>{{$item->no_peserta}}</td>
                                 <td>{{$item->nama}}</td>
                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                 <td class="text-center">{{$item->usia}}</td>
@@ -65,7 +60,7 @@
                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
                                 <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                <td class="text-right">{format_idr($item->extra_mortalita)}}</td>
+                                <td class="text-right">{{format_idr($item->extra_mortalita)}}</td>
                                 <td class="text-right">{{format_idr($item->extra_kontribusi)}}</td>
                                 <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
                                 <td>{{$item->tanggal_stnc ? date('d-M-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
@@ -74,11 +69,35 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    @if($data)
+                        @php($nilai_manfaat_approve = $data->sum('basic'))
+                        @php($dana_tabbaru_approve = $data->sum('dana_tabarru'))
+                        @php($dana_ujrah_approve = $data->sum('dana_ujrah'))
+                        @php($kontribusi_approve = $data->sum('kontribusi'))
+                        @php($extra_mortalita_approve = $data->sum('extra_mortalita'))
+                        @php($extra_kontribusi_approve = $data->sum('extra_kontribusi'))
+                        <tfoot style="background: #eee;">
+                            <tr>
+                                <th colspan="15" class="text-right">Total</th>
+                                <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
+                                <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th>
+                                <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th>
+                                <th class="text-right">{{format_idr($kontribusi_approve)}}</th>
+                                <th class="text-right">{{format_idr($extra_mortalita_approve)}}</th>
+                                <th class="text-right">{{format_idr($extra_kontribusi_approve)}}</th>
+                                <th class="text-right">{{format_idr($kontribusi_approve+$extra_mortalita_approve+$extra_kontribusi_approve)}}</th>
+                            </tr>
+                        </tfoot>
+                    @endif
                 </table>
             </div>
         </div>
         <div class="modal-footer">
-            <a href="javascript:void(0)"data-dismiss="modal" aria-label="Close" class="btn btn-secondary">Close</a>
+            <span wire:loading>
+                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                <span class="sr-only">{{ __('Loading...') }}</span>
+            </span>
+            <a href="javascript:void(0)" wire:loading.remove data-dismiss="modal" aria-label="Close" class="btn btn-secondary">Close</a>
         </div>
     </div>
 </div>

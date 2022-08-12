@@ -16,6 +16,8 @@ class ShowDouble extends Component
 
     public function set_id(Kepesertaan $data)
     {
-        $this->data = Kepesertaan::where(['tanggal_lahir'=>$data->tanggal_lahir,'nama'=>$data->nama,'status_polis'=>'Inforce'])->get();
+        $this->data = Kepesertaan::where(['tanggal_lahir'=>$data->tanggal_lahir,'nama'=>$data->nama])->where(function($table){
+            $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
+        })->get();
     }
 }

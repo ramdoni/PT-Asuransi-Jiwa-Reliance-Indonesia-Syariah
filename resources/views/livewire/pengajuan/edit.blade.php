@@ -55,9 +55,16 @@
                                             @endif
                                         </td>
                                     </tr>
+                                    
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table">
+                                <thead>
                                     <tr>
                                         <th>Perhitungan Usia</th>
-                                        <td>
+                                        <td> :
                                             @if($data->perhitungan_usia==1)
                                                 Nears Birthday
                                             @endif
@@ -68,7 +75,10 @@
                                     </tr>
                                     <tr>
                                         <th>Masa Asuransi</th>
-                                        <td>{{$data->masa_asuransi==1?'Day to Day':'Day to Day -1'}}</td>
+                                        <td> : {{$data->masa_asuransi==1?'Day to Day':'Day to Day -1'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">&nbsp;</td>
                                     </tr>
                                 </thead>
                             </table>
@@ -134,7 +144,7 @@
                                         @php($index_proses = 0)
                                         @foreach($data->kepesertaan->where('status_akseptasi',0) as $k => $item)
                                             @php($index_proses++)
-                                            <tr>
+                                            <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_proses}}</td>
                                                 <td class="text-center">
                                                     @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
@@ -187,7 +197,13 @@
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->masa_bulan}}</td>
-                                                <td class="text-right">{{format_idr($item->basic)}}</td>
+                                                <td class="text-right">
+                                                    @if($item->is_double==1 || $item->akumulasi_ganda)
+                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>
+                                                    @else
+                                                        {{format_idr($item->basic)}}
+                                                    @endif
+                                                </td>
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
                                                 <td class="text-right">{{format_idr($item->kontribusi)}}</td>
@@ -304,13 +320,7 @@
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>.....</i>'!!}</a></td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_telepon'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_telepon?$item->no_telepon:'<i>.....</i>'!!}</a></td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'jenis_kelamin'})" data-toggle="modal" data-target="#modal_editable">{!!$item->jenis_kelamin?$item->jenis_kelamin:'<i>.....</i>'!!}</a></td>
-                                                <td>
-                                                    @if($item->is_double==1)
-                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{$item->no_peserta}}</a>
-                                                    @else
-                                                        {{$item->no_peserta}}
-                                                    @endif
-                                                </td>
+                                                <td>{{$item->no_peserta}}</td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'nama'})" data-toggle="modal" data-target="#modal_editable">{!!$item->nama?$item->nama:'<i>.....</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
@@ -320,7 +330,11 @@
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->masa_bulan}}</td>
                                                 <td class="text-right">
-                                                    {{format_idr($item->basic)}}
+                                                    @if($item->is_double==1 || $item->akumulasi_ganda)
+                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>
+                                                    @else
+                                                        {{format_idr($item->basic)}}
+                                                    @endif
                                                 </td>
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
@@ -475,7 +489,11 @@
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->masa_bulan}}</td>
                                                 <td class="text-right">
-                                                    {{format_idr($item->basic)}}
+                                                    @if($item->is_double==1 || $item->akumulasi_ganda)
+                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>
+                                                    @else
+                                                        {{format_idr($item->basic)}}
+                                                    @endif
                                                 </td>
                                                 <td class="text-right">
                                                     {{format_idr($item->dana_tabarru)}}
