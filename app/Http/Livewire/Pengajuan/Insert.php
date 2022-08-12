@@ -14,17 +14,9 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
-    public $total_double=0,$total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '';
-    protected $listeners = ['reload-page'=>'$refresh'];
-    public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
+    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '';
     public function render()
     {
-        if($this->polis_id){
-            $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get()->count();
-            $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
-            $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->get()->count();
-        }
-
         return view('livewire.pengajuan.insert');
     }
 
@@ -82,6 +74,7 @@ class Insert extends Component
     public function updated($propertyName)
     {
         if($propertyName=='polis_id'){
+            $this->emit('set_polis_id',$this->polis_id);
             $find_polis = Polis::find($this->polis_id);
             if($find_polis){
                 if($find_polis->rate_->count()==0 || $find_polis->uw_limit_->count()==0)
@@ -121,6 +114,7 @@ class Insert extends Component
         $total_double = 0;
         $total_success = 0;
         Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->delete();
+        $insert = [];
         foreach($sheetData as $key => $item){
             if($key<=1) continue;
             /**
@@ -129,50 +123,73 @@ class Insert extends Component
              */
             if($item[1]=="" || $item[10]=="") continue;
             
-            $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
+            // $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
 
-            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->where(function($table){
-                $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
-            })->first();
+            // $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->where(function($table){
+            //     $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
+            // })->first();
             
-            $data = new Kepesertaan();
+            // $data = new Kepesertaan();
             
-            if($check){
-                $data->is_double = 1;
-                $data->parent_id = $check->id;
-                $total_double++;
-            }
+            // if($check){
+            //     $data->is_double = 1;
+            //     $data->parent_id = $check->id;
+            //     $total_double++;
+            // }
 
-            $data->polis_id = $this->polis_id;
-            $data->nama = $item[1];
-            $data->no_ktp = $item[2];
-            $data->alamat = $item[3];
-            $data->no_telepon = $item[4];
-            $data->pekerjaan = $item[5];
-            $data->bank = $item[6];
-            $data->cab = $item[7];
-            $data->no_closing = $item[8];
-            $data->no_akad_kredit = $item[9];
-            if($item[10]) $data->tanggal_lahir = $tanggal_lahir;
-            $data->jenis_kelamin = $item[11];
-            if($item[12]) $data->tanggal_mulai = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
-            if($item[13]) $data->tanggal_akhir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
-            $data->basic = $item[14];
-            $data->tinggi_badan = $item[15];
-            $data->berat_badan = $item[16];
-            $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia,$data->tanggal_mulai) : '0';
-            $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
-            $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
-            $data->kontribusi = 0;
-            $data->is_temp = 1;
-            $data->save();
+            // $data->polis_id = $this->polis_id;
+            // $data->nama = $item[1];
+            // $data->no_ktp = $item[2];
+            // $data->alamat = $item[3];
+            // $data->no_telepon = $item[4];
+            // $data->pekerjaan = $item[5];
+            // $data->bank = $item[6];
+            // $data->cab = $item[7];
+            // $data->no_closing = $item[8];
+            // $data->no_akad_kredit = $item[9];
+            // if($item[10]) $data->tanggal_lahir = $tanggal_lahir;
+            // $data->jenis_kelamin = $item[11];
+            // if($item[12]) $data->tanggal_mulai = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
+            // if($item[13]) $data->tanggal_akhir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
+            // $data->basic = $item[14];
+            // $data->tinggi_badan = $item[15];
+            // $data->berat_badan = $item[16];
+            // $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia,$data->tanggal_mulai) : '0';
+            // $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
+            // $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
+            // $data->kontribusi = 0;
+            // $data->is_temp = 1;
+            // $data->save();
 
+            $insert[$total_data]['polis_id'] = $this->polis_id;
+            $insert[$total_data]['nama'] = $item[1];
+            $insert[$total_data]['no_ktp'] = $item[2];
+            $insert[$total_data]['alamat'] = $item[3];
+            $insert[$total_data]['no_telepon'] = $item[4];
+            $insert[$total_data]['pekerjaan'] = $item[5];
+            $insert[$total_data]['bank'] = $item[6];
+            $insert[$total_data]['cab'] = $item[7];
+            $insert[$total_data]['no_closing'] = $item[8];
+            $insert[$total_data]['no_akad_kredit'] = $item[9];
+            $insert[$total_data]['tanggal_lahir'] = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
+            $insert[$total_data]['jenis_kelamin'] = $item[11];
+            if($item[12]) $insert[$total_data]['tanggal_mulai'] = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
+            if($item[13]) $insert[$total_data]['tanggal_akhir'] = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
+            $insert[$total_data]['basic'] = $item[14];
+            $insert[$total_data]['tinggi_badan'] = $item[15];
+            $insert[$total_data]['berat_badan'] = $item[16];
+            $insert[$total_data]['kontribusi'] = 0;
+            $insert[$total_data]['is_temp'] = 1;
+            $insert[$total_data]['is_double'] = 2;
             $total_data++;
         }
 
-        $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
-        $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->get()->count();
+        if(count($insert)>0)  Kepesertaan::insert($insert);
 
+        // $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
+        // $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->count();
+        
+        $this->emit('reload-page');
         $this->emit('attach-file');
     }
 
@@ -214,30 +231,27 @@ class Insert extends Component
 
     public function hitung()
     {
-        foreach($this->kepesertaan as $data){
+        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get() as $data){
+            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
+                $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
+            })->sum('basic');
+
+            if($check>0){
+                $data->is_double = 1;
+                $data->parent_id = $check->id;
+                $data->akumulasi_ganda = $check+$data->basic;;
+            }else $data->is_double=0;
+
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
 
-            if($data->is_double){
-                $sum =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
-                $data->akumulasi_ganda = $sum+$data->basic;;
-                $data->save();
-                $nilai_manfaat_asuransi = $sum;
-            }else
-                $nilai_manfaat_asuransi = $data->basic;
+            $nilai_manfaat_asuransi = $data->basic;
 
-            if($data->masa_bulan /12 >15)
-                $data->kontribusi_keterangan = 'max. 15 th';
-            else{
-                // find rate
-                $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
-                $data->rate = $rate ? $rate->rate : 0;
-                $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
-            }
-
-            if($data->masa_bulan /12 >15)$data->keterangan = 'max. 15 th';
-            // find rate
+            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
+            $data->rate = $rate ? $rate->rate : 0;
+            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
+            
             $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
             if(!$rate || $rate->rate ==0 || $rate->rate ==""){
                 $data->rate = 0;

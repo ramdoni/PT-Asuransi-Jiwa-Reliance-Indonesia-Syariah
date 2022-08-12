@@ -10,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 
 class Index extends Component
 {
-    public $selected;
+    public $selected,$check_id=[],$is_pengajuan_reas=false;
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager','kepesertaan'])

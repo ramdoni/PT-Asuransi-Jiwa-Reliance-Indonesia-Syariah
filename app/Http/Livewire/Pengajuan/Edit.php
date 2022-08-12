@@ -19,11 +19,18 @@ class Edit extends Component
     public $check_all=0,$check_id=[],$check_arr,$selected,$status_reject=2,$note,$tab_active='tab_postpone';
     protected $listeners = ['reload-page'=>'$refresh'];
     public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
+    public $show_peserta = 1;
     public function render()
     {
-        $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->get();
-        $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->get();
-        $this->kepesertaan_reject = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->get();
+        $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->where(function($table){
+            if($this->show_peserta==2) $table->where('is_double',1);   
+        })->get();
+        $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->where(function($table){
+            if($this->show_peserta==2) $table->where('is_double',1);   
+        })->get();
+        $this->kepesertaan_reject = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->where(function($table){
+            if($this->show_peserta==2) $table->where('is_double',1);   
+        })->get();
 
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
         $this->data->total_approve = $this->kepesertaan_approve->count();

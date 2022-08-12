@@ -80,6 +80,15 @@
                                     <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
+                                    <tr>
+                                        <td>Tampilkan Peserta</td>
+                                        <td>
+                                            <select class="form-control" wire:model="show_peserta">
+                                                <option value="1">Semua Peserta</option>
+                                                <option value="2">Peserta Ganda</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                 </thead>
                             </table>
                         </div>
@@ -142,7 +151,7 @@
                                     </thead>
                                     <tbody>
                                         @php($index_proses = 0)
-                                        @foreach($data->kepesertaan->where('status_akseptasi',0) as $k => $item)
+                                        @foreach($kepesertaan_proses as $k => $item)
                                             @php($index_proses++)
                                             <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_proses}}</td>

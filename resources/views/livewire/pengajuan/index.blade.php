@@ -22,6 +22,14 @@
                     </div>
                     <div class="col-md-9">
                         <a href="{{route('pengajuan.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
+                        @if($is_pengajuan_reas==false)
+                            <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',true)" class="btn btn-warning"><i class="fa fa-plus"></i> Pengajuan Reas</a>
+                        @else
+                            <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',false)" class="btn btn-danger"><i class="fa fa-close"></i> Cancel</a>
+                            @if(count($check_id)>0)
+                                <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_submit_reas" class="btn btn-success"><i class="fa fa-check"></i> ({{count($check_id)}}) Submit</a>
+                            @endif
+                        @endif
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
@@ -40,6 +48,7 @@
                                 <th class="text-right">Total DN</th>
                                 <th>Status Pembayaran</th>
                                 <th>No Pengajuan</th>
+                                <th>No Pengajuan Reas</th>
                                 <th>No Polis</th>
                                 <th>Nama Pemegang Polis</th>
                                 <th>Tanggal Pengajuan</th>
@@ -55,7 +64,7 @@
                         <tbody>
                             @foreach ($data as $k => $item)
                                 <tr>
-                                    <td style="width: 50px;">{{ $k + 1 }}</td>
+                                    <td style="width: 50px;">{{$k+1}}</td>
                                     <td class="text-center">
                                         @if($item->status==0)
                                             <span class="badge badge-warning">Underwriting</span>
@@ -72,6 +81,9 @@
                                     </td>
                                     <td>
                                         @if($item->dn_number)
+                                            @if($is_pengajuan_reas)
+                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" /> 
+                                            @endif
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}
@@ -90,6 +102,7 @@
                                         @endif
                                     </td>
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
+                                    <td></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a></td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
@@ -159,6 +172,11 @@
         </div>
   
     </div>
+</div>
+
+
+<div class="modal fade" id="modal_submit_reas" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('pengajuan.submit-reas')
 </div>
 @push('after-scripts')
     <script>
