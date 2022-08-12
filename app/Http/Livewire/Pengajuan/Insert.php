@@ -190,11 +190,11 @@ class Insert extends Component
         $pengajuan->masa_asuransi = $this->masa_asuransi;
         $pengajuan->perhitungan_usia = $this->perhitungan_usia;
         $pengajuan->polis_id = $this->polis_id;
-        $pengajuan->no_pengajuan = $this->no_pengajuan;
         $pengajuan->status = 0;
         $pengajuan->total_akseptasi = $this->total_pengajuan;
         $pengajuan->total_approve = 0;
         $pengajuan->total_reject = 0;
+        $pengajuan->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
         $pengajuan->account_manager_id = \Auth::user()->id;
         $pengajuan->save();
 
@@ -220,12 +220,12 @@ class Insert extends Component
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
 
             if($data->is_double){
-                $sum =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
-                $data->akumulasi_ganda = $sum+$data->basic;;
+                $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
+                $data->akumulasi_ganda = $sum+$data->basic;
                 $data->save();
-                $nilai_manfaat_asuransi = $sum;
-            }else
-                $nilai_manfaat_asuransi = $data->basic;
+            }
+            
+            $nilai_manfaat_asuransi = $data->basic;
 
             if($data->masa_bulan /12 >15)
                 $data->kontribusi_keterangan = 'max. 15 th';
@@ -251,7 +251,10 @@ class Insert extends Component
             $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
             $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
             
-            $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
+            if($data->akumulasi_ganda)
+                $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
+            else
+                $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
             
             if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw){
