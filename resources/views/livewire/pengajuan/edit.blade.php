@@ -78,6 +78,19 @@
                                         <td> : {{$data->masa_asuransi==1?'Day to Day':'Day to Day -1'}}</td>
                                     </tr>
                                     <tr>
+                                        <th>Tampilkan Peserta</th>
+                                        <td>
+                                            <select class="form-control" wire:loading.remove wire:target="show_peserta" wire:model="show_peserta">
+                                                <option value="1">Semua Peserta</option>
+                                                <option value="2">Peserta Ganda</option>
+                                            </select>
+                                            <span wire:loading wire:target="show_peserta">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
                                     <tr>
@@ -137,6 +150,7 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
+                                            <th class="text-center">Rate</th>
                                             <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat)}}</span></th>
                                             <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru)}}</span></th>
                                             <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah)}}</span></th>
@@ -206,9 +220,10 @@
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->masa_bulan}}</td>
+                                                <td class="text-center">{{$item->rate}}</td>
                                                 <td class="text-right">
                                                     @if($item->is_double==1 || $item->akumulasi_ganda)
-                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>
+                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->basic)}}</a>
                                                     @else
                                                         {{format_idr($item->basic)}}
                                                     @endif
@@ -286,6 +301,7 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
+                                            <th class="text-center">Rate</th>
                                             <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat_approve)}}</span></th>
                                             <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru_approve)}}</span></th>
                                             <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah_approve)}}</span></th>
@@ -300,7 +316,7 @@
                                     </thead>
                                     <tbody>
                                         @php($index_approve = 0)
-                                        @foreach($data->kepesertaan->where('status_akseptasi',1) as $k => $item)
+                                        @foreach($kepesertaan_approve as $k => $item)
                                             @php($index_approve++)
                                             <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_approve}}</td>
@@ -338,6 +354,7 @@
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->masa_bulan}}</td>
+                                                <td class="text-center">{{$item->rate}}</td>
                                                 <td class="text-right">
                                                     @if($item->is_double==1 || $item->akumulasi_ganda)
                                                         <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>
@@ -430,6 +447,7 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
+                                            <td class="text-center">{{$item->masa_bulan}}</td>
                                             <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat_approve)}}</span></th>
                                             <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru_approve)}}</span></th>
                                             <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah_approve)}}</span></th>
@@ -444,7 +462,7 @@
                                     </thead>
                                     <tbody>
                                         @php($index_reject = 0)
-                                        @foreach($data->kepesertaan->whereIn('status_akseptasi',[2,3]) as $k => $item)
+                                        @foreach($kepesertaan_reject as $k => $item)
                                             @php($index_reject++)
                                             <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_reject}}</td>
@@ -497,6 +515,7 @@
                                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->masa_bulan}}</td>
+                                                <td class="text-center">{{$item->rate}}</td>
                                                 <td class="text-right">
                                                     @if($item->is_double==1 || $item->akumulasi_ganda)
                                                         <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>

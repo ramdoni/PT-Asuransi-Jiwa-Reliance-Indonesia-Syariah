@@ -25,11 +25,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/color_skins.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}?v={{ date('YmdHis') }}">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}" />
     <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}" defer></script>
     <script src="{{ asset('assets/vendor/datatables/FixedColumns-4.1.0/js/dataTables.fixedColumns.min.js') }}" defer></script>
-
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    
     @stack('after-styles')
     @if (trim($__env->yieldContent('page-styles')))
         @yield('page-styles')
@@ -137,6 +138,18 @@
             $('html, body').animate({
                 scrollTop: $("#wrapper").offset().top
             }, 0);
+        });
+
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('61e7a83b5c1a48939522', {
+        cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('pengajuan');
+            channel.bind('generate', function(data) {
+            Livewire.emit('set_calculate',false);
+            Livewire.emit('message-success',data.message);
         });
     </script>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

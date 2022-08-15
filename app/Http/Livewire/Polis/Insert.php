@@ -34,10 +34,8 @@ class Insert extends Component
 
     public function mount()
     {
-        // $this->rates = Rate::get();
         $this->produks = Produk::get();
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
-        // $this->no_polis = date('ym').str_pad(Polis::count()+1,6, '0', STR_PAD_LEFT);
         $this->running_number = Polis::count()+1;
         $this->reasuradur = Reasuradur::get();
     }
@@ -45,7 +43,7 @@ class Insert extends Component
     public function updated($propertyName)
     {
         if($this->produk_id) {
-            $produk = Produk::where('produk_id',$this->produk_id)->first();
+            $produk = Produk::where('id',$this->produk_id)->first();
             $this->no_polis = $produk->kode.date('ym').str_pad($produk->running_number+1,6, '0', STR_PAD_LEFT);
         }
         if($propertyName =='iuran_tabbaru' and $this->iuran_tabbaru > 0) 

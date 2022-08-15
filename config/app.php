@@ -176,7 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
-
+        Mavinoo\Batch\BatchServiceProvider::class,
     ],
 
     /*
@@ -229,7 +229,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'LogActivity' => App\Helpers\LogActivity::class,
-        'Otp' => App\Helpers\OtpHelper::class
+        'Otp' => App\Helpers\OtpHelper::class,
+        'Batch' => Mavinoo\Batch\BatchFacade::class
     ],
 
 ];

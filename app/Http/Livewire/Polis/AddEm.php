@@ -31,11 +31,6 @@ class AddEm extends Component
 
     public function save()
     {
-        // $this->validate([
-        //     'status'=> 'required',
-        //     'extra_mortalita_id' => 'required'
-        // ]);
-
         // find reate
         $tahun = round($this->data->masa_bulan / 12);
         $rate = ExtraMortalitaRate::where(['extra_mortalita_id'=>$this->extra_mortalita_id,'usia'=>$this->data->usia,'tahun'=>$tahun])->first();
@@ -57,24 +52,16 @@ class AddEm extends Component
         $data = $this->data;
 
         if($data->is_double){
-            $sum =  Kepesertaan::where(['polis_id'=>$data->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
+            $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
             $data->akumulasi_ganda = $sum+$data->basic;;
             $data->save();
-            $nilai_manfaat_asuransi = $sum;
-        }else
-            $nilai_manfaat_asuransi = $data->basic;
+        }
 
-        // $nilai_manfaat_asuransi = $data->basic;
+        $nilai_manfaat_asuransi = $data->basic;
 
-        // if($data->masa_bulan /12 >15)
-        //     $data->kontribusi_keterangan = 'max. 15 th';
-        // else{
-            // find rate
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$data->polis_id])->first();
-            $data->rate = $rate ? $rate->rate : 0;
-            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
-        // }
-        
+        $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$data->polis_id])->first();
+        $data->rate = $rate ? $rate->rate : 0;
+        $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
         $data->dana_tabarru = ($data->kontribusi*$data->polis->iuran_tabbaru)/100; // persen ngambil dari daftarin polis
         $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
         
@@ -83,50 +70,17 @@ class AddEm extends Component
         else
             $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
         
-        /**
-         * 
-         * @var : kontribusi
-         * @param : = IF((AF9/12)>15;"max. 15 th";ROUNDDOWN(R9*AJ9/1000;0))
-         * 
-         * @var : Masa Bulan
-         * @param : AF9 = IF(L9="";"";AO9*12+(AP9+IF(AQ9>0;1;0)))
-         *  
-         * @param : R9 = Nilai manfaat asuransi
-         * @param : N9 = Usia
-         * @param : AJ9 = VLOOKUP(N9;rate;AF9+1;0)
-         */
-
-        /**  
-         * @param : UW
-         * @param : =IF(N9+(AF9/12)>75;"X+N=75";VLOOKUP(R9;uw_limit;VLOOKUP(N9;lookup;4;TRUE);TRUE)) 
-         * 
-         */
-        // if($data->usia + ($data->masa_bulan/12) > 75){
-        //     $data->ul = "X+N=75";
-        //     $data->uw = "X+N=75";
-        // }else{
-            //$uw = UnderwritingLimit::where('max_amount','<=',$nilai_manfaat_asuransi)->where('min_amount','>=',$nilai_manfaat_asuransi)->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
+        if($data->akumulasi_ganda)
+            $uw = UnderwritingLimit::whereRaw("{$data->s} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
+        else
             $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->first();
 
-            if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
-            if($uw) {
-                $data->uw = $uw->keterangan;
-                $data->ul = $uw->keterangan;
-            }
-        // }
-
-        // if(isset($data->polis->waiting_period) and $data->polis->waiting_period !="")
-        //     $data->tanggal_stnc = date('Y-m-d',strtotime(" +{$data->polis->waiting_period} month", strtotime($data->polis->tanggal_akseptasi)));
-        // else{
-        //     if(countDay($data->polis->tanggal_akseptasi,$data->tanggal_mulai) > $data->polis->retroaktif){
-        //         $data->tanggal_stnc = date('Y-m-d');
-        //     }elseif(countDay($data->polis->tanggal_akseptasi,$data->tanggal_mulai) < $data->polis->retroaktif){
-        //         $data->tanggal_stnc = null;
-        //     }
-        // }
-        $data->is_hitung = 1;
+        if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$data->polis_id])->orderBy('max_amount','ASC')->first();
+        if($uw) {
+            $data->uw = $uw->keterangan;
+            $data->ul = $uw->keterangan;
+        }
         $data->save();
-
 
         $this->emit('modal','hide');
         $this->emit('reload-page');

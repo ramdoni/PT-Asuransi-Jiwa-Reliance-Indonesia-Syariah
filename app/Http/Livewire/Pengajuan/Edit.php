@@ -95,25 +95,16 @@ class Edit extends Component
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi);
 
             if($data->is_double){
-                $sum =  Kepesertaan::where(['polis_id'=>$this->data->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
-                $data->akumulasi_ganda = $sum+$data->basic;;
-                $data->save();
-                $nilai_manfaat_asuransi = $sum;
-            }else
-                $nilai_manfaat_asuransi = $data->basic;
-
-            // $nilai_manfaat_asuransi = $data->basic;
-
-            if($data->masa_bulan /12 >15)
-                $data->kontribusi_keterangan = 'max. 15 th';
-            else{
-                // find rate
-                $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
-                $data->rate = $rate ? $rate->rate : 0;
-                $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
+                $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
+                $data->akumulasi_ganda = $sum+$data->basic;    
             }
+            $nilai_manfaat_asuransi = $data->basic;
 
-            if($data->masa_bulan /12 >15)$data->keterangan = 'max. 15 th';
+            // find rate
+            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
+            $data->rate = $rate ? $rate->rate : 0;
+            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000; 
+
             // find rate
             $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
             if(!$rate || $rate->rate ==0 || $rate->rate ==""){
@@ -128,22 +119,16 @@ class Edit extends Component
             $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
             $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
             
-        
-            // if($data->usia + ($data->masa_bulan/12) > 75){
-            //     $data->ul = "X+N=75";
-            //     $data->uw = "X+N=75";
-            // }else{
-
+            if($data->akumulasi_ganda)
+                $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->first();
+            else
                 $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->first();
-                
-                if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->orderBy('max_amount','ASC')->first();
-                if($uw){
-                    $data->uw = $uw->keterangan;
-                    $data->ul = $uw->keterangan;
-                }
-            // }
-
-            $data->is_hitung = 1;
+            
+            if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->orderBy('max_amount','ASC')->first();
+            if($uw){
+                $data->uw = $uw->keterangan;
+                $data->ul = $uw->keterangan;
+            }
             $data->save();
         }
 

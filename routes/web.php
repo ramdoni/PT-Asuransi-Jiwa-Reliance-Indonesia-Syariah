@@ -16,6 +16,7 @@ date_default_timezone_set("Asia/Bangkok");
 */
 Route::get('/', Home::class)->name('home')->middleware('auth');
 Route::get('login', App\Http\Livewire\Login::class)->name('login');
+
 // All login
 Route::group(['middleware' => ['auth']], function(){    
     Route::get('profile',App\Http\Livewire\Profile::class)->name('profile');

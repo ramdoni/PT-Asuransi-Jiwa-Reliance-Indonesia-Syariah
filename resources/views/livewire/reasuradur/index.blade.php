@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <div class="body">
+            <div class="body pt-0">
                 <div class="table-responsive">
                     <table class="table table-hover m-b-0 c_list">
                         <thead style="background: #eee;">

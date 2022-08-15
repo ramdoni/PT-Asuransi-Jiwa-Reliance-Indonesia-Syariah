@@ -1,44 +1,41 @@
 <?php
 
-namespace App\Http\Livewire\Pengajuan;
+namespace App\Jobs;
 
-use Livewire\Component;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use App\Models\Kepesertaan;
 use App\Models\Polis;
 use App\Models\Rate;
 use App\Models\UnderwritingLimit;
+use App\Events\RequestPengajuan;
 
-class InsertRow extends Component
+class PengajuanCalculate implements ShouldQueue
 {
-    protected $listeners = ['reload-row'=>'$refresh','set_polis_id'=>'set_polis_id','hitung'=>'hitung'];
-    public $polis_id,$total_pengajuan,$perhitungan_usia=1,$masa_asuransi=1;
-    public $total_double=0;
-    public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
-    public function render()
-    {
-        $kepesertaan = [];
-        if($this->polis_id){
-            $kepesertaan = Kepesertaan::with(['parent'])->where(['polis_id'=>$this->polis_id,'is_temp'=>1]);
-            $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->count();
-
-            $total_pengajuan = clone $kepesertaan;
-            $this->total_pengajuan = $total_pengajuan->count();
-        }
-
-        return view('livewire.pengajuan.insert-row')->with(['kepesertaan'=>$kepesertaan ? $kepesertaan->get() : []]);
-    }
-
-    public function mount($polis_id)
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    public $polis_id,$perhitungan_usia=1,$masa_asuransi=1;
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($polis_id,$perhitungan_usia,$masa_asuransi)
     {
         $this->polis_id = $polis_id;
+        $this->perhitungan_usia = $perhitungan_usia;
+        $this->masa_asuransi = $masa_asuransi;
     }
 
-    public function set_polis_id($polis_id)
-    {
-        $this->polis_id = $polis_id;
-    }
-
-    public function hitung()
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
     {
         $polis = Polis::find($this->polis_id);
         $iuran_tabbaru = $polis->iuran_tabbaru;
@@ -68,16 +65,10 @@ class InsertRow extends Component
                 $data->rate = 0;
                 $data->kontribusi = 0;
             }else{
-                // $data->rate = $rate ? $rate->rate : 0;
-                // $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
                 $update[$key]['rate'] = $rate ? $rate->rate : 0;
                 $update[$key]['kontribusi'] = $nilai_manfaat_asuransi * $data->rate/1000;
 
             }
-            
-            // $data->dana_tabarru = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
-            // $data->dana_ujrah = ($data->kontribusi*$ujrah)/100; 
-            // $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
             
             $update[$key]['dana_tabarru'] = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
             $update[$key]['dana_ujrah'] = ($data->kontribusi*$ujrah)/100; 
@@ -92,19 +83,15 @@ class InsertRow extends Component
             if($uw){
                 $update[$key]['uw'] = $uw->keterangan;
                 $update[$key]['ul'] = $uw->keterangan;
-                // $data->uw = $uw->keterangan;
-                // $data->ul = $uw->keterangan;
             }
-            // $data->is_hitung = 1;
-            // $data->save();
             
             $update[$key]['is_hitung'] = 1;
             $key++;
+            // echo "{$key}. Calculate Nama : ".$data->nama ."\n";
         }
 
         \Batch::update(new Kepesertaan,$update,'id');
 
-        $this->emit('message-success','Data berhasil dikalkukasi');
-        $this->emit('reload-row');
+        event(new RequestPengajuan('Data berhasil dikalkukasi'));
     }
 }

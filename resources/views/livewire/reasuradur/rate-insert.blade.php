@@ -15,9 +15,15 @@
                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label>Rate</label>
-                    <input type="file" class="form-control" />
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Rate</label>
+                        <input type="file" class="form-control" wire:model="rate" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>UW Limit</label>
+                        <input type="file" class="form-control" wire:model="uw_limit" />
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

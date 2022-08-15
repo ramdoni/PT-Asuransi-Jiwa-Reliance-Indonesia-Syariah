@@ -57,7 +57,7 @@
                                 <th class="text-center">Total Akseptasi</th>
                                 <th class="text-center">Total Diterima</th>
                                 <th class="text-center">Total Ditolak</th>
-                                <th>Account Manager</th>
+                                <th>User Uploader</th>
                                 <th></th>
                             </tr>
                         </thead>

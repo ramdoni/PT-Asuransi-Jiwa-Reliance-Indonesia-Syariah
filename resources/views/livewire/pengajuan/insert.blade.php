@@ -74,7 +74,9 @@
                                     <br />
                                     @if($file)
                                         <a href="javascript:void(0)" wire:loading.remove wire:target="clear_file,save,hitung" wire:click="clear_file" class="text-danger mt-5"><i class="fa fa-times"></i> Clear</a>
-                                        <a href="javascript:void(0)" wire:loading.remove wire:target="hitung" wire:click="hitung" class="btn btn-warning mx-2"><i class="fa fa-refresh"></i> Cek Double & Hitung</a>
+                                        @if($is_calculate==false)
+                                            <a href="javascript:void(0)" wire:loading.remove wire:click="calculate" class="btn btn-warning mx-2"><i class="fa fa-refresh"></i> Cek Double & Hitung</a>
+                                        @endif
                                         @if($total_pengajuan >0)
                                             <button wire:loading.remove wire:target="save,file,hitung" type="submit" class="btn btn-info"><i class="fa fa-check-circle"></i> Upload Pengajuan</button>
                                         @endif
@@ -83,10 +85,12 @@
                                         <a href="javascript:void(0)" wire:click="keepAll" wire:model="modelKeepAll" class="btn btn-success"><i class="fa fa-check-circle"></i> Keep All</a>
                                         <a href="javascript:void(0)" wire:click="deleteAll" class="btn btn-danger"><i class="fa fa-trash"></i> Delete All</a>
                                     @endif
-                                    <span wire:loading wire:target="hitung">
-                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                        <span class="sr-only">{{ __('Loading...') }}</span> Sedang Menghitung...
-                                    </span>
+                                    @if($is_calculate)
+                                        <span>
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span> Sedang Menghitung...
+                                        </span>
+                                    @endif
                                     <span wire:loading wire:target="clear_file,save,polis_id,masa_asuransi,keepAll,deleteAll">
                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                         <span class="sr-only">{{ __('Loading...') }}</span>
@@ -95,35 +99,35 @@
                             </div>
                         @endif
                     </div>
-                    @livewire('pengajuan.insert-row',['polis_id'=>$polis_id])
+                    @livewire('pengajuan.insert-row',['polis_id'=>$polis_id],key(1))
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <div wire:ignore.self class="modal fade" id="modal_add_extra_kontribusi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-extra-kontribusi')
 </div>
 <div wire:ignore.self class="modal fade" id="modal_add_em" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-em')
 </div>
-
 @push('after-scripts')
-<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
-<script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
-<style>
-    .select2-container .select2-selection--single {height:36px;padding-left:10px;}
-    .select2-container .select2-selection--single .select2-selection__rendered{padding-top:3px;}
-    .select2-container--default .select2-selection--single .select2-selection__arrow{top:4px;right:10px;}
-    .select2-container {width: 100% !important;}
-</style>
-<script>
-    select__2 = $('#polis_id').select2();
-    $('#polis_id').on('change', function (e) {
-        var data = $(this).select2("val");
-        @this.set('polis_id', data);
-    });
-    var selected__ = $('#polis_id').find(':selected').val();
-    if(selected__ !="") select__2.val(selected__);
-</script>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
+    <script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
+    <style>
+        .select2-container .select2-selection--single {height:36px;padding-left:10px;}
+        .select2-container .select2-selection--single .select2-selection__rendered{padding-top:3px;}
+        .select2-container--default .select2-selection--single .select2-selection__arrow{top:4px;right:10px;}
+        .select2-container {width: 100% !important;}
+    </style>
+    <script>
+        select__2 = $('#polis_id').select2();
+        $('#polis_id').on('change', function (e) {
+            var data = $(this).select2("val");
+            @this.set('polis_id', data);
+        });
+        var selected__ = $('#polis_id').find(':selected').val();
+        if(selected__ !="") select__2.val(selected__);
+    </script>
 @endpush

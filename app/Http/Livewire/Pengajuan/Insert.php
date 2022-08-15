@@ -9,12 +9,14 @@ use App\Models\Kepesertaan;
 use App\Models\Rate;
 use App\Models\UnderwritingLimit;
 use Livewire\WithFileUploads;
+use App\Jobs\PengajuanCalculate;
 
 class Insert extends Component
 {
     use WithFileUploads;
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
-    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '';
+    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '',$is_calculate=false;
+    protected $listeners = ['set_calculate'=>'set_calculate'];
     public function render()
     {
         return view('livewire.pengajuan.insert');
@@ -24,6 +26,17 @@ class Insert extends Component
     {
         $this->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
         $this->polis = Polis::get();
+    }
+
+    public function set_calculate($condition=false)
+    {
+        $this->is_calculate = $condition;
+        $this->emit('reload-row');
+    }
+    public function calculate()
+    {
+        $this->is_calculate = true;
+        PengajuanCalculate::dispatch($this->polis_id,$this->perhitungan_usia,$this->masa_asuransi);
     }
 
     public function clear_file()
@@ -96,7 +109,7 @@ class Insert extends Component
 
         if($propertyName=='file') $this->temp_upload();
 
-        $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>0])->get()->count();
+        // $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>0])->get()->count();
     }
 
     public function temp_upload()
@@ -122,45 +135,6 @@ class Insert extends Component
              * Nama, Tanggal lahir
              */
             if($item[1]=="" || $item[10]=="") continue;
-            
-            // $tanggal_lahir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
-
-            // $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$item[1],'tanggal_lahir'=>$tanggal_lahir])->where(function($table){
-            //     $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
-            // })->first();
-            
-            // $data = new Kepesertaan();
-            
-            // if($check){
-            //     $data->is_double = 1;
-            //     $data->parent_id = $check->id;
-            //     $total_double++;
-            // }
-
-            // $data->polis_id = $this->polis_id;
-            // $data->nama = $item[1];
-            // $data->no_ktp = $item[2];
-            // $data->alamat = $item[3];
-            // $data->no_telepon = $item[4];
-            // $data->pekerjaan = $item[5];
-            // $data->bank = $item[6];
-            // $data->cab = $item[7];
-            // $data->no_closing = $item[8];
-            // $data->no_akad_kredit = $item[9];
-            // if($item[10]) $data->tanggal_lahir = $tanggal_lahir;
-            // $data->jenis_kelamin = $item[11];
-            // if($item[12]) $data->tanggal_mulai = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
-            // if($item[13]) $data->tanggal_akhir = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
-            // $data->basic = $item[14];
-            // $data->tinggi_badan = $item[15];
-            // $data->berat_badan = $item[16];
-            // $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia,$data->tanggal_mulai) : '0';
-            // $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
-            // $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
-            // $data->kontribusi = 0;
-            // $data->is_temp = 1;
-            // $data->save();
-
             $insert[$total_data]['polis_id'] = $this->polis_id;
             $insert[$total_data]['nama'] = $item[1];
             $insert[$total_data]['no_ktp'] = $item[2];
@@ -184,12 +158,11 @@ class Insert extends Component
             $total_data++;
         }
 
-        if(count($insert)>0)  Kepesertaan::insert($insert);
-
-        // $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
-        // $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->count();
+        if(count($insert)>0)  {
+            Kepesertaan::insert($insert);
+        }
         
-        $this->emit('reload-page');
+        $this->emit('reload-row');
         $this->emit('attach-file');
     }
 
@@ -207,11 +180,11 @@ class Insert extends Component
         $pengajuan->masa_asuransi = $this->masa_asuransi;
         $pengajuan->perhitungan_usia = $this->perhitungan_usia;
         $pengajuan->polis_id = $this->polis_id;
-        $pengajuan->no_pengajuan = $this->no_pengajuan;
         $pengajuan->status = 0;
         $pengajuan->total_akseptasi = $this->total_pengajuan;
         $pengajuan->total_approve = 0;
         $pengajuan->total_reject = 0;
+        $pengajuan->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
         $pengajuan->account_manager_id = \Auth::user()->id;
         $pengajuan->save();
 
@@ -231,7 +204,11 @@ class Insert extends Component
 
     public function hitung()
     {
+        $polis = Polis::find($this->polis_id);
+        $iuran_tabbaru = $polis->iuran_tabbaru;
+        $ujrah = $polis->ujrah_atas_pengelolaan;
         foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get() as $data){
+
             $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
                 $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
             })->sum('basic');
@@ -245,8 +222,14 @@ class Insert extends Component
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
-
             $nilai_manfaat_asuransi = $data->basic;
+
+            
+            // find rate
+            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
+            $data->rate = $rate ? $rate->rate : 0;
+            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
+        
 
             $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
             $data->rate = $rate ? $rate->rate : 0;
@@ -261,11 +244,14 @@ class Insert extends Component
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }
             
-            $data->dana_tabarru = ($data->kontribusi*$data->polis->iuran_tabbaru)/100; // persen ngambil dari daftarin polis
-            $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
+            $data->dana_tabarru = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
+            $data->dana_ujrah = ($data->kontribusi*$ujrah)/100; 
             $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
             
-            $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
+            if($data->akumulasi_ganda)
+                $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
+            else
+                $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
             
             if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw){
@@ -277,6 +263,6 @@ class Insert extends Component
         }
 
         $this->emit('message-success','Data berhasil dikalkukasi');
-        $this->emit('reload-page');
+        $this->emit('reload-row');
     }
 }
