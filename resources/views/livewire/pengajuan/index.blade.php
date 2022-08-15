@@ -110,7 +110,7 @@
                                     <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
                                     <td class="text-center">{{$item->akseptasi_count}}</td>
                                     <td class="text-center">
-                                        {{$item->approve_count}}
+                                        {{$item->diterima_count}}
                                         @if($item->dn_number)
                                             <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
                                         @endif
