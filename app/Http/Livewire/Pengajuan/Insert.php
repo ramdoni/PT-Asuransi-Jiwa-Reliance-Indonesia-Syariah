@@ -227,14 +227,14 @@ class Insert extends Component
             
             $nilai_manfaat_asuransi = $data->basic;
 
-            if($data->masa_bulan /12 >15)
-                $data->kontribusi_keterangan = 'max. 15 th';
-            else{
+            // if($data->masa_bulan /12 >15)
+            //     $data->kontribusi_keterangan = 'max. 15 th';
+            // else{
                 // find rate
                 $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
                 $data->rate = $rate ? $rate->rate : 0;
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
-            }
+            // }
 
             if($data->masa_bulan /12 >15)$data->keterangan = 'max. 15 th';
             // find rate

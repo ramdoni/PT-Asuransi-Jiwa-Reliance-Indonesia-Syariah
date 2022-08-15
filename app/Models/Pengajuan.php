@@ -27,4 +27,19 @@ class Pengajuan extends Model
     {
         return $this->hasMany(Kepesertaan::class,'pengajuan_id','id');
     }
+
+    public function akseptasi()
+    {
+        return $this->hasMany(Kepesertaan::class,'pengajuan_id','id')->where('status_akseptasi',0);
+    }
+
+    public function diterima()
+    {
+        return $this->hasMany(Kepesertaan::class,'pengajuan_id','id')->where('status_akseptasi',1);
+    }
+
+    public function ditolak()
+    {
+        return $this->hasMany(Kepesertaan::class,'pengajuan_id','id')->where('status_akseptasi',2);
+    }
 }

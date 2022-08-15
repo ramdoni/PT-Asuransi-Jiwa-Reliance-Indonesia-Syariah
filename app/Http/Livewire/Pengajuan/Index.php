@@ -14,6 +14,9 @@ class Index extends Component
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager','kepesertaan'])
+                ->withCount('akseptasi')
+                ->withCount('diterima')
+                ->withCount('ditolak')
                 ->orderBy('id','DESC');
         
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
