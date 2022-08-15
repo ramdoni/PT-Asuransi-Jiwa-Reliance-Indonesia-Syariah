@@ -108,15 +108,15 @@
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
                                     <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
                                     <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
-                                    <td class="text-center">{{$item->total_akseptasi}}</td>
+                                    <td class="text-center">{{$item->akseptasi_count}}</td>
                                     <td class="text-center">
-                                        {{$item->total_approve}}
+                                        {{$item->approve_count}}
                                         @if($item->dn_number)
                                             <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        {{$item->total_reject}}
+                                        {{$item->ditolak_count}}
                                         @if($item->dn_number)
                                             <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},2)"><i class="fa fa-download"></i></a>
                                         @endif

@@ -111,6 +111,8 @@ return array(
     'App\\Models\\Provinsi' => $baseDir . '/app/Models/Provinsi.php',
     'App\\Models\\Rate' => $baseDir . '/app/Models/Rate.php',
     'App\\Models\\Reasuradur' => $baseDir . '/app/Models/Reasuradur.php',
+    'App\\Models\\ReasuradurRateRates' => $baseDir . '/app/Models/ReasuradurRateRates.php',
+    'App\\Models\\ReasuradurRateUw' => $baseDir . '/app/Models/ReasuradurRateUw.php',
     'App\\Models\\Reasuransi' => $baseDir . '/app/Models/Reasuransi.php',
     'App\\Models\\Settings' => $baseDir . '/app/Models/Settings.php',
     'App\\Models\\UnderwritingLimit' => $baseDir . '/app/Models/UnderwritingLimit.php',

@@ -224,13 +224,6 @@ class Insert extends Component
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
             $nilai_manfaat_asuransi = $data->basic;
 
-            
-            // find rate
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
-            $data->rate = $rate ? $rate->rate : 0;
-            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
-        
-
             $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
             $data->rate = $rate ? $rate->rate : 0;
             $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;

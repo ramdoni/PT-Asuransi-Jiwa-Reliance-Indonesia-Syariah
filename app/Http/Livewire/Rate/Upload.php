@@ -48,9 +48,6 @@ class Upload extends Component
         $sheetData = $data_->getActiveSheet()->toArray();
 
         if(count($sheetData) > 0){
-            $countLimit = 1;
-            $total_failed = 0;
-            $total_success = 0;
             $insert = [];
             $num = 0;
 
@@ -61,14 +58,6 @@ class Upload extends Component
                 
                 for($i=1;$i<=300;$i++){
                     if(!isset($item[$i])) continue;
-                    // $data = Rate::where(['tahun'=>$item[0],'bulan'=>$i,'polis_id'=>$this->polis_id])->first();
-                    // if(!$data) $data = new Rate();
-                    // $data->polis_id = $this->polis_id;
-                    // $data->tahun = $item[0];
-                    // $data->rate = $item[$i];
-                    // $data->bulan = $i;
-                    // $data->save(); 
-
                     $insert[$num]['polis_id'] = $this->polis_id;
                     $insert[$num]['tahun'] = $item[0];
                     $insert[$num]['rate'] = $item[$i];

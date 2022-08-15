@@ -17,10 +17,11 @@
                     <thead style="background: #eee;">
                         <tr>
                             <th>No</th>
-                            <th>Reas</th>
                             <th>Name</th>
+                            <th>OR</th>
+                            <th>Reas</th>
                             <th>Rate</th>
-                            <th>UL</th>
+                            <th>UW Limit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,6 +29,8 @@
                             <tr>
                                 <td>{{$k+1}}</td>
                                 <td>{{$item->name}}</td>
+                                <td>{{format_idr($item->or,2)}}</td>
+                                <td>{{format_idr($item->reas,2)}}</td>
                                 <td></td>
                                 <td></td>
                             </tr>

@@ -786,6 +786,8 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Models\\Provinsi' => __DIR__ . '/../..' . '/app/Models/Provinsi.php',
         'App\\Models\\Rate' => __DIR__ . '/../..' . '/app/Models/Rate.php',
         'App\\Models\\Reasuradur' => __DIR__ . '/../..' . '/app/Models/Reasuradur.php',
+        'App\\Models\\ReasuradurRateRates' => __DIR__ . '/../..' . '/app/Models/ReasuradurRateRates.php',
+        'App\\Models\\ReasuradurRateUw' => __DIR__ . '/../..' . '/app/Models/ReasuradurRateUw.php',
         'App\\Models\\Reasuransi' => __DIR__ . '/../..' . '/app/Models/Reasuransi.php',
         'App\\Models\\Settings' => __DIR__ . '/../..' . '/app/Models/Settings.php',
         'App\\Models\\UnderwritingLimit' => __DIR__ . '/../..' . '/app/Models/UnderwritingLimit.php',
