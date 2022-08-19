@@ -78,7 +78,7 @@
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Extra Kontribusi</td>
-                    <td style="text-align: right;">{{ $data->extra_kontribusi ? format_idr($data->extra_kontribusi,2) : '-'}}</td>
+                    <td style="text-align: right;">{{ $extra_kontribusi ? format_idr($extra_kontribusi,2) : '-'}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Extra Mortalita</td>
@@ -106,10 +106,10 @@
                 </tr>
                 <tr>
                     <th>Total Kontribusi Dibayar</th>
-                    <td style="text-align: right;"><b>{{format_idr($data->net_kontribusi,2)}}</b></td>
+                    <td style="text-align: right;"><b>{{format_idr($total,2)}}</b></td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($data->net_kontribusi)}} Rupiah</td>
+                    <td colspan="2">Terbilang : {{terbilang($total)}} Rupiah</td>
                 </tr>
                 <tr>
                     <td colspan="2">Masa Tenggang Pembayaran sampai dengan : {{$data->tanggal_jatuh_tempo ? date('d F Y',strtotime($data->tanggal_jatuh_tempo)) : ''}}</td>

@@ -227,23 +227,28 @@ class Edit extends Component
         $kontribusi = $select->total_kontribusi;
         $ektra_kontribusi = $select->total_extract_kontribusi;
         $extra_mortalita = $select->total_extra_mortalita;
-        $total_kontribusi = $extra_mortalita+$kontribusi+$ektra_kontribusi;
-        $net_kontribusi = $total_kontribusi;
-
+        
         $this->data->nilai_manfaat = $nilai_manfaat;
         $this->data->dana_tabbaru = $dana_tabbaru;
         $this->data->dana_ujrah = $dana_ujrah;
         $this->data->kontribusi = $kontribusi;
         $this->data->extra_kontribusi = $ektra_kontribusi;
         $this->data->extra_mortalita = $extra_mortalita;
-        $this->data->net_kontribusi = $net_kontribusi;
-            
+        
+        if($this->data->polis->potong_langsung){
+            $this->data->potong_langsung_persen = $this->data->polis->potong_langsung;
+            $this->data->potong_langsung = $kontribusi*($this->data->polis->potong_langsung/100);
+        }
+        
         /**
          * Hitung PPH
          */
         if($this->data->polis->pph){
             $this->data->pph_persen =  $this->data->polis->pph;
-            $this->data->pph = $kontribusi*($this->data->polis->pph/100);
+            if($this->data->potong_langsung)
+                $this->data->pph = (($this->data->polis->pph/100) * $this->data->potong_langsung);
+            else
+                $this->data->pph = $kontribusi*($this->data->polis->pph/100);
         }
 
          /**
@@ -263,11 +268,8 @@ class Edit extends Component
             $this->data->biaya_sertifikat = $this->data->polis->biaya_sertifikat;
         }
 
-        if($this->data->polis->potong_langsung){
-            $this->data->potong_langsung_persen = $this->data->polis->potong_langsung;
-            $this->data->potong_langsung = $kontribusi*($this->data->polis->potong_langsung/100);
-        }
-
+        $total = $kontribusi+$ektra_kontribusi+$extra_mortalita+$this->data->biaya_sertifikat+$this->data->pph+$this->data->ppn-$this->data->potong_langsung;
+        $this->data->net_kontribusi = $total;
 
         $this->data->save();
 

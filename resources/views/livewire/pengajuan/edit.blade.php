@@ -438,7 +438,7 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
-                                            <td class="text-center">{{$item->masa_bulan}}</td>
+                                            <td class="text-center">Rate</td>
                                             <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat_approve)}}</span></th>
                                             <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru_approve)}}</span></th>
                                             <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah_approve)}}</span></th>
