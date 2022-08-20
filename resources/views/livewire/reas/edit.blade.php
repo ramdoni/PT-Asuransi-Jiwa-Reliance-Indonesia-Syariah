@@ -1,5 +1,5 @@
 @section('sub-title', $no_pengajuan)
-@section('title', 'Pengajuan')
+@section('title', 'Reasuransi')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -51,12 +51,41 @@
                                             @endif
                                         </td>
                                     </tr>
-                                    
+                                    <tr>
+                                        <th>Reasuradur</th>
+                                        <td> : {{$data->reasuradur->name ? $data->reasuradur->name : '-'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <a href="javascript:void(0)" class="btn btn-info"><i class="fa fa-reload"></i> Hitung</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">&nbsp;</td>
+                                    </tr>
                                 </thead>
                             </table>
                         </div>
                         <div class="col-md-6">
-                            
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Rate & UW Limit</th>
+                                        <td> : {{isset($data->rate_uw->nama) ? $data->rate_uw->nama : '-'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>OR</th>
+                                        <td> : {{$data->or}}%</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Reas</th>
+                                        <td>: {{$data->reas}}%</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">&nbsp;</td>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                     <div class="table-responsive"> 
@@ -80,9 +109,9 @@
                                                 <span class="sr-only">{{ __('Loading...') }}</span>
                                             </span>
                                             <a href="javascript:void(0)" wire:click="approveAll" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima Semua</a>
-                                            <!-- <a href="javascript:void(0)" wire:click="rejectAll" class="badge badge-danger badge-active"><i class="fa fa-trash"></i> Ditolak Semua</a> -->
                                         @endif
                                     </th>
+                                    <th>No Pengajuan</th>
                                     <th>Nama Bank</th>
                                     <th>KC/KP</th>
                                     <th>No KTP</th>
@@ -153,6 +182,7 @@
                                                 </div>
                                             @endif
                                         </td>
+                                        <td><a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
                                         <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'bank'})" data-toggle="modal" data-target="#modal_editable">{!!$item->bank?$item->bank:'<i>.....</i>'!!}</a></td>
                                         <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'cab'})" data-toggle="modal" data-target="#modal_editable">{!!$item->cab?$item->cab:'<i>.....</i>'!!}</a></td>
                                         <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>.....</i>'!!}</a></td>
@@ -219,7 +249,7 @@
                             </tfoot>
                         </table>
                     </div>
-                        
+                    {{$kepesertaan->links()}}
                     <hr />
                     <div class="form-group">
                         <a href="javascript:void(0)" class="mr-2" onclick="history.back()"><i class="fa fa-arrow-left"></i> Kembali</a>

@@ -3,13 +3,13 @@
 namespace App\Http\Livewire\Reas;
 
 use Livewire\Component;
-use App\Models\Reasuransi;
+use App\Models\Reas;
 
 class Index extends Component
 {
     public function render()
     {
-        $data  = Reasuransi::orderBy('id','DESC');
+        $data  = Reas::withCount('kepesertaan')->orderBy('id','DESC');
 
         return view('livewire.reas.index')->with(['data'=>$data->paginate(100)]);
     }

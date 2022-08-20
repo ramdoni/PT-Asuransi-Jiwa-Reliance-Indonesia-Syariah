@@ -33,27 +33,27 @@
                     <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
                         <thead style="background: #eee;text-transform: uppercase;">
                             <tr>
-                                <th>No</th>
-                                <th>Nomor Polis</th>
-                                <th>Pemegang Polis</th>
-                                <th>PESERTA</th>
-                                <th>TOTAL NILAI MANFAAT ASURANSI YG DIREASKAN</th>
-                                <th>NILAI MANFAAT ASURANSI OR</th>
-                                <th>NILAI MANFAAT ASURANSI REAS</th>
-                                <th>KONTRIBUSI AJRI YG DIREASKAN</th>
-                                <th>KONTRIBUSI REAS GROSS</th>
-                                <th>UJROH</th>
-                                <th>EM</th>
-                                <th>KONTRIBUSI REAS NETTO</th>
+                                <th>NO</th>
+                                <th>STATUS</th>
+                                <th>NO PENGAJUAN</th>
+                                <th>REASURADUR</th>
+                                <th>RATE & UW Limit</th>
+                                <th>OR</th>
+                                <th>REAS</th>
+                                <th class="text-center">TOTAL PESERTA</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $k => $item)
                                 <tr>
                                     <td style="width: 50px;">{{ $k + 1 }}</td>
-                                    <td>{{isset($item->polis->no_polis)?$item->polis->no_polis:'-'}}</td>
-                                    <td>{{isset($item->polis->nama)?$item->polis->nama:'-'}}</td>
-                                    <td>{{isset($item->polis->produk->nama)?$item->polis->produk->nama:'-'}}</td>
+                                    <td></td>
+                                    <td><a href="{{route('reas.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
+                                    <td>{{isset($item->reasuradur->name) ? $item->reasuradur->name :'-'}}</td>
+                                    <td>{{isset($item->rate_uw->nama) ? $item->rate_uw->nama :'-'}}</td>
+                                    <td>{{$item->or}}%</td>
+                                    <td>{{$item->reas}}%</td>
+                                    <td class="text-center">{{$item->kepesertaan_count}}</td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
@@ -75,8 +75,8 @@
 @push('after-scripts')
     <script>
         $(document).ready(function() { 
-            var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
-            new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 
+            // var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
+            // new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 
         } );
     </script>
 @endpush

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Polis;
+use App\Models\Pengajuan;
 
 class Kepesertaan extends Model
 {
@@ -20,5 +21,10 @@ class Kepesertaan extends Model
     public function polis()
     {
         return $this->hasOne(Polis::class,'id','polis_id');
+    }
+
+    public function pengajuan()
+    {
+        return $this->hasOne(Pengajuan::class,'id','pengajuan_id');
     }
 }
