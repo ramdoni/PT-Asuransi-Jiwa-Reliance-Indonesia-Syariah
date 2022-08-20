@@ -32,6 +32,7 @@ class Insert extends Component
     {
         $this->is_calculate = $condition;
         $this->emit('reload-row');
+        $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->count();
     }
     public function calculate()
     {
@@ -71,8 +72,6 @@ class Insert extends Component
     public function delete(Kepesertaan $data)
     {
         $data->delete();
-        $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
-
         $this->emit('reload-page');        
     }
 
@@ -108,8 +107,6 @@ class Insert extends Component
         if($propertyName=='polis_id') Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->delete();
 
         if($propertyName=='file') $this->temp_upload();
-
-        // $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>0])->get()->count();
     }
 
     public function temp_upload()

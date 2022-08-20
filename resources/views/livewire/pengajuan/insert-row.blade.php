@@ -38,9 +38,10 @@
             </tr>
         </thead>
         <tbody>
+            @php($num=$kepesertaan->firstItem())
             @foreach($kepesertaan as $k => $item)
                 <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
-                    <td>{{$k+1}}</td>
+                    <td>{{$num}}@php($num++)</td>
                     <td class="text-center"></td>
                     <td class="text-center">
                         @if($item->is_double==2)
@@ -120,6 +121,17 @@
                     <td>{{$item->ul}}</td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="22">
+                    <div wire:loading>
+                        <span>
+                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                            <span class="sr-only">{{ __('Loading...') }}</span>
+                        </span>
+                        load data...
+                    </div>
+                </td>
+            </tr>
         </tbody>
         <tfoot style="background: #eee;">
             <tr>
@@ -134,6 +146,8 @@
             </tr>
         </tfoot>
     </table>
+    <br />
+    {{$kepesertaan ? $kepesertaan->links() : ''}}
 </div>
 @push('after-scripts')
     <script>

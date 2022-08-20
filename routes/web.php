@@ -52,7 +52,6 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('daily-activity',App\Http\Livewire\DailyActivity\Index::class)->name('daily-activity.index');
 });
 
-
 // Administrator
 Route::group(['middleware' => ['auth','access:1']], function(){    
     Route::get('setting',App\Http\Livewire\Setting::class)->name('setting');
@@ -65,4 +64,5 @@ Route::group(['middleware' => ['auth','access:1']], function(){
     Route::get('log-activity',App\Http\Livewire\LogActivity\Index::class)->name('log-activity');
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('reas',App\Http\Livewire\Reas\Index::class)->name('reas.index');
+    Route::get('reas/edit/{id}',App\Http\Livewire\Reas\Edit::class)->name('reas.edit');
 });

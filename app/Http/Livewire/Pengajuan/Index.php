@@ -27,6 +27,12 @@ class Index extends Component
         $this->selected = Pengajuan::find($id);
     }
 
+    public function submit_reas()
+    {
+        $this->emit('set_pengajuan',$this->check_id);
+        $this->emit('modal_submit_reas');
+    }
+
     public function delete()
     {
         Kepesertaan::where('pengajuan_id',$this->selected->id)->delete();

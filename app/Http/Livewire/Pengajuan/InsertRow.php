@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Kepesertaan;
 use App\Models\Polis;
 use App\Models\Rate;
+use Livewire\WithPagination;
 use App\Models\UnderwritingLimit;
 
 class InsertRow extends Component
@@ -14,6 +15,8 @@ class InsertRow extends Component
     public $polis_id,$total_pengajuan,$perhitungan_usia=1,$masa_asuransi=1;
     public $total_double=0;
     public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     public function render()
     {
         $kepesertaan = [];
@@ -25,7 +28,7 @@ class InsertRow extends Component
             $this->total_pengajuan = $total_pengajuan->count();
         }
 
-        return view('livewire.pengajuan.insert-row')->with(['kepesertaan'=>$kepesertaan ? $kepesertaan->get() : []]);
+        return view('livewire.pengajuan.insert-row')->with(['kepesertaan'=>$kepesertaan ? $kepesertaan->paginate(1000) : []]);
     }
 
     public function mount($polis_id)

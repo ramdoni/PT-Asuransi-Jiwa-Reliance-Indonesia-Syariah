@@ -27,7 +27,7 @@
                         @else
                             <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',false)" class="btn btn-danger"><i class="fa fa-close"></i> Cancel</a>
                             @if(count($check_id)>0)
-                                <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_submit_reas" class="btn btn-success"><i class="fa fa-check"></i> ({{count($check_id)}}) Submit</a>
+                                <a href="javascript:void(0)" wire:click="submit_reas" class="btn btn-success"><i class="fa fa-check"></i> ({{count($check_id)}}) Submit</a>
                             @endif
                         @endif
                         <span wire:loading>
@@ -51,6 +51,7 @@
                                 <th>No Pengajuan Reas</th>
                                 <th>No Polis</th>
                                 <th>Nama Pemegang Polis</th>
+                                <th>Tanggal Pembayaran</th>
                                 <th>Tanggal Pengajuan</th>
                                 <th>Tanggal Akseptasi</th>
                                 <th>Aging</th>
@@ -81,7 +82,7 @@
                                     </td>
                                     <td>
                                         @if($item->dn_number)
-                                            @if($is_pengajuan_reas)
+                                            @if($is_pengajuan_reas and $item->reas_id=="")
                                                 <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" /> 
                                             @endif
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
@@ -105,6 +106,7 @@
                                     <td></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a></td>
+                                    <td>{{$item->payment_date ? date('d-F-Y',strtotime($item->payment_date)) : '-'}}</td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
                                     <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
                                     <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
@@ -141,7 +143,7 @@
                         </tbody>
                     </table>
                 </div>
-                <br />
+                <br /> 
                 {{ $data->links() }}
             </div>
         </div>
@@ -170,16 +172,16 @@
                 </div>
             </div>
         </div>
-  
     </div>
 </div>
-
-
 <div class="modal fade" id="modal_submit_reas" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('pengajuan.submit-reas')
 </div>
 @push('after-scripts')
     <script>
+        Livewire.on('modal_submit_reas',()=>{
+            $("#modal_submit_reas").modal('show');
+        });
         $(document).ready(function() { 
             var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
             new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 

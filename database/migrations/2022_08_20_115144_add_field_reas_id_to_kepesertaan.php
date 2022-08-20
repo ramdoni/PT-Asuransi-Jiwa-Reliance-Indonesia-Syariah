@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldReasuradurIdToReasuradurRate extends Migration
+class AddFieldReasIdToKepesertaan extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddFieldReasuradurIdToReasuradurRate extends Migration
      */
     public function up()
     {
-        Schema::table('reasuradur_rate', function (Blueprint $table) {
-            $table->integer('reasuradur_id')->nullable();
+        Schema::table('kepesertaan', function (Blueprint $table) {
+            $table->integer('reas_id')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddFieldReasuradurIdToReasuradurRate extends Migration
      */
     public function down()
     {
-        Schema::table('reasuradur_rate', function (Blueprint $table) {
+        Schema::table('kepesertaan', function (Blueprint $table) {
             //
         });
     }

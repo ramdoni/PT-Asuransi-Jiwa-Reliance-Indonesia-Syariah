@@ -94,7 +94,7 @@
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
                                     <tr>
-                                        <td>Tampilkan Peserta</td>
+                                        <th>Tampilkan Peserta</th>
                                         <td>
                                             <select class="form-control" wire:model="show_peserta">
                                                 <option value="1">Semua Peserta</option>

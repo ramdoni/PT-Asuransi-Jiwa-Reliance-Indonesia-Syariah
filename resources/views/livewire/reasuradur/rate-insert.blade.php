@@ -47,25 +47,13 @@
                         @enderror
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label>Rate</label>
-                        <input type="file" class="form-control" wire:model="rate" />
-                        @error('rate')
-                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>UW Limit</label>
-                        <input type="file" class="form-control" wire:model="uw_limit" />
-                        @error('uw_limit')
-                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                        @enderror
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
+                <div wire:loading>
+                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    <span class="sr-only">{{ __('Loading...') }}</span>
+                </div>
+                <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-save"></i> Simpan</button>
             </div>
         </form>
     </div>
