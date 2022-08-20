@@ -38,7 +38,7 @@
             </tr>
         </thead>
         <tbody>
-            @php($num=$kepesertaan->firstItem())
+            @php($num=$kepesertaan ? $kepesertaan->firstItem() : '')
             @foreach($kepesertaan as $k => $item)
                 <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                     <td>{{$num}}@php($num++)</td>
@@ -147,7 +147,7 @@
         </tfoot>
     </table>
     <br />
-    {{$kepesertaan ? $kepesertaan->links() : ''}}
+    {{ $kepesertaan ? $kepesertaan->links() : ''}}
 </div>
 @push('after-scripts')
     <script>

@@ -22,7 +22,7 @@
         "mavinoo/laravel-batch": "^2.3",
         "phpoffice/phpspreadsheet": "^1.23",
         "predis/predis": "^2.0",
-        "pusher/pusher-php-server": "^7.0"
+        "pusher/pusher-php-server": "^4.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

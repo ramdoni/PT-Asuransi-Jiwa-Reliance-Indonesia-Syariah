@@ -122,6 +122,13 @@
         .select2-container {width: 100% !important;}
     </style>
     <script>
+
+        var channel = pusher.subscribe('pengajuan');
+        channel.bind('generate', function(data) {
+            Livewire.emit('set_calculate',false);
+            show_toast(data.message,'top-center');
+        });
+
         select__2 = $('#polis_id').select2();
         $('#polis_id').on('change', function (e) {
             var data = $(this).select2("val");

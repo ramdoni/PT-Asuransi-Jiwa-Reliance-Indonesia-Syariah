@@ -18,6 +18,15 @@ class PengajuanCalculate implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     public $polis_id,$perhitungan_usia=1,$masa_asuransi=1;
+
+     /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 1120;
+
+
     /**
      * Create a new job instance.
      *
@@ -43,6 +52,8 @@ class PengajuanCalculate implements ShouldQueue
         $key=0;
         $update  =[];
         foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get() as $data){
+            echo "{$key}. Calculate Nama : ".$data->nama ."\n";
+
             $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
                 $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
             })->sum('basic');
@@ -50,12 +61,12 @@ class PengajuanCalculate implements ShouldQueue
             $update[$key]['id'] = $data->id;
             if($check>0){
                 $update[$key]['is_double'] = 1;
-                $update[$key]['akumulasi_ganda'] =$check+$data->basic;
+                $update[$key]['akumulasi_ganda'] = $check+$data->basic;
             }else $update[$key]['is_double']=0;
 
             $nilai_manfaat_asuransi = $data->basic;
 
-            $update[$key]['usia'] =  $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
+            $update[$key]['usia'] =  $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia,$data->tanggal_mulai) : '0';
             $update[$key]['masa'] = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $update[$key]['masa_bulan'] =  hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
 
@@ -67,7 +78,6 @@ class PengajuanCalculate implements ShouldQueue
             }else{
                 $update[$key]['rate'] = $rate ? $rate->rate : 0;
                 $update[$key]['kontribusi'] = $nilai_manfaat_asuransi * $data->rate/1000;
-
             }
             
             $update[$key]['dana_tabarru'] = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
@@ -87,7 +97,6 @@ class PengajuanCalculate implements ShouldQueue
             
             $update[$key]['is_hitung'] = 1;
             $key++;
-            // echo "{$key}. Calculate Nama : ".$data->nama ."\n";
         }
 
         \Batch::update(new Kepesertaan,$update,'id');

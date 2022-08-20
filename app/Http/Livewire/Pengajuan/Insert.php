@@ -85,6 +85,8 @@ class Insert extends Component
 
     public function updated($propertyName)
     {
+        $this->is_calculate = false;
+
         if($propertyName=='polis_id'){
             $this->emit('set_polis_id',$this->polis_id);
             $find_polis = Polis::find($this->polis_id);
@@ -192,68 +194,8 @@ class Insert extends Component
             $item->save();
         }
 
-        $this->hitung();
-
         session()->flash('message-success',__('Pengajuan berhasil diupload, silahkan menunggu persetujuan'));
 
         return redirect()->route('pengajuan.index');
-    }
-
-    public function hitung()
-    {
-        $polis = Polis::find($this->polis_id);
-        $iuran_tabbaru = $polis->iuran_tabbaru;
-        $ujrah = $polis->ujrah_atas_pengelolaan;
-        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get() as $data){
-
-            $check =  Kepesertaan::where(['polis_id'=>$this->polis_id,'nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
-                $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
-            })->sum('basic');
-
-            if($check>0){
-                $data->is_double = 1;
-                $data->parent_id = $check->id;
-                $data->akumulasi_ganda = $check+$data->basic;;
-            }else $data->is_double=0;
-
-            $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia) : '0';
-
-            $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
-            $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
-            $nilai_manfaat_asuransi = $data->basic;
-
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
-            $data->rate = $rate ? $rate->rate : 0;
-            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
-            
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
-            if(!$rate || $rate->rate ==0 || $rate->rate ==""){
-                $data->rate = 0;
-                $data->kontribusi = 0;
-            }else{
-                $data->rate = $rate ? $rate->rate : 0;
-                $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
-            }
-            
-            $data->dana_tabarru = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
-            $data->dana_ujrah = ($data->kontribusi*$ujrah)/100; 
-            $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
-            
-            if($data->akumulasi_ganda)
-                $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
-            else
-                $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
-            
-            if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
-            if($uw){
-                $data->uw = $uw->keterangan;
-                $data->ul = $uw->keterangan;
-            }
-            $data->is_hitung = 1;
-            $data->save();
-        }
-
-        $this->emit('message-success','Data berhasil dikalkukasi');
-        $this->emit('reload-row');
     }
 }

@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/jvectormap/jquery-jvectormap-2.0.3.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/morrisjs/morris.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/toastr/toastr.min.css') }}"/>
 
     <!-- Custom Css -->
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
@@ -108,22 +109,27 @@
     <script src="{{ asset('assets/bundles/morrisscripts.bundle.js') }}"></script><!-- Morris Plugin Js -->
     <script src="{{ asset('assets/bundles/jvectormap.bundle.js') }}"></script> <!-- JVectorMap Plugin Js -->
     <script src="{{ asset('assets/bundles/knob.bundle.js') }}"></script>
+    <script src="{{ asset('assets/vendor/toastr/toastr.js') }}"></script>
     <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
     @livewireScripts
+    <script>
+        // Pusher.logToConsole = true;
+        var pusher = new Pusher('61e7a83b5c1a48939522', {
+            cluster: 'ap1'
+        });
+    </script>
     @stack('after-scripts')
     @if (trim($__env->yieldContent('page-script')))
         <script>
             @yield('page-script')
-
         </script>
     @endif
     <script>
         Livewire.on('modal', (act) => {
             if(act=='hide') 
                 $('.modal').modal('hide');
-            else{
+            else
                 $(act).modal('show');
-            }
         });
         Livewire.on('message-success', (msg) => {
             $('.alert-success').show();
@@ -140,16 +146,18 @@
             }, 0);
         });
 
-        Pusher.logToConsole = true;
+        function show_toast(message,positon)
+        {
+            // toastr.options.timeOut = "false";
+            toastr.options.closeButton = true;
+            toastr['info'](message, '', {
+                positionClass: 'toast-'+positon
+            }); 
+        }
 
-        var pusher = new Pusher('61e7a83b5c1a48939522', {
-        cluster: 'ap1'
-        });
-
-        var channel = pusher.subscribe('pengajuan');
-            channel.bind('generate', function(data) {
-            Livewire.emit('set_calculate',false);
-            Livewire.emit('message-success',data.message);
+        var channel_notifikasi = pusher.subscribe('notifikasi');
+        channel_notifikasi.bind('info', function(data) {
+            show_toast(data.message,'top-center');
         });
     </script>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
