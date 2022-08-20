@@ -16,13 +16,11 @@ class PengajuanController extends Controller
         $kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('kontribusi');
         $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
         $extra_mortalita = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita');
-        $potongan_langsung = 0;
-        if(isset($id->polis->potongan_langsung)) $potongan_langsung = ($kontribusi + $extra_kontribusi)*($id->polis->potong_langsung/100);
 
-        $total = $kontribusi+$id->biaya_sertifikat+$id->pph+$id->ppn+$id->potongan_langsung;
+        $total = $kontribusi+$extra_kontribusi+$extra_mortalita+$id->biaya_sertifikat+$id->pph+$id->ppn-$id->potong_langsung;
 
         $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadView('livewire.pengajuan.print-dn',['extra_mortalita'=>$extra_mortalita,'total'=>$total,'data'=>$id,'head_teknik'=>$head_teknik,'kontribusi'=>$kontribusi,'extra_kontribusi'=>$extra_kontribusi,'potongan_langsung'=>$potongan_langsung]);
+        $pdf->loadView('livewire.pengajuan.print-dn',['extra_mortalita'=>$extra_mortalita,'total'=>$total,'data'=>$id,'head_teknik'=>$head_teknik,'kontribusi'=>$kontribusi,'extra_kontribusi'=>$extra_kontribusi,'potongan_langsung'=>$id->potongan_langsung]);
 
         return $pdf->stream();
     }

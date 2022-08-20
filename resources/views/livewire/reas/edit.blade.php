@@ -31,10 +31,6 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>No Polis</strong></td>
-                                        <td>:  {{isset($data->polis->no_polis) ? $data->polis->no_polis .' / '.$data->polis->nama  : '-'}}</td>
-                                    </tr>
-                                    <tr>
                                         <td><strong>Tanggal Pengajuan</strong></td>
                                         <td> : {{date('d F Y',strtotime($data->created_at))}}</td>
                                     </tr>
@@ -60,41 +56,7 @@
                             </table>
                         </div>
                         <div class="col-md-6">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Perhitungan Usia</th>
-                                        <td> :
-                                            @if($data->perhitungan_usia==1)
-                                                Nears Birthday
-                                            @endif
-                                            @if($data->perhitungan_usia==2)
-                                                Actual Birthday
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Masa Asuransi</th>
-                                        <td> : {{$data->masa_asuransi==1?'Day to Day':'Day to Day -1'}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tampilkan Peserta</th>
-                                        <td>
-                                            <select class="form-control" wire:loading.remove wire:target="show_peserta" wire:model="show_peserta">
-                                                <option value="1">Semua Peserta</option>
-                                                <option value="2">Peserta Ganda</option>
-                                            </select>
-                                            <span wire:loading wire:target="show_peserta">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">&nbsp;</td>
-                                    </tr>
-                                </thead>
-                            </table>
+                            
                         </div>
                     </div>
                     <div class="table-responsive"> 

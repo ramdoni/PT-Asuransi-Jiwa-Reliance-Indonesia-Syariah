@@ -14,11 +14,11 @@ function terbilang($nilai) {
     } else if ($nilai < 100) {
         $temp = terbilang($nilai/10)." Puluh". terbilang($nilai % 10);
     } else if ($nilai < 200) {
-        $temp = " seratus" . terbilang($nilai - 100);
+        $temp = " Seratus" . terbilang($nilai - 100);
     } else if ($nilai < 1000) {
         $temp = terbilang($nilai/100) . " Ratus" . terbilang($nilai % 100);
     } else if ($nilai < 2000) {
-        $temp = " seribu" . terbilang($nilai - 1000);
+        $temp = " Seribu" . terbilang($nilai - 1000);
     } else if ($nilai < 1000000) {
         $temp = terbilang($nilai/1000) . " Ribu" . terbilang($nilai % 1000);
     } else if ($nilai < 1000000000) {
