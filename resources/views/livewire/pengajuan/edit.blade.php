@@ -93,15 +93,6 @@
                                     <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
-                                    <tr>
-                                        <th>Tampilkan Peserta</th>
-                                        <td>
-                                            <select class="form-control" wire:model="show_peserta">
-                                                <option value="1">Semua Peserta</option>
-                                                <option value="2">Peserta Ganda</option>
-                                            </select>
-                                        </td>
-                                    </tr>
                                 </thead>
                             </table>
                         </div>
@@ -261,7 +252,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="16" class="text-right">Total</th>
+                                            <th colspan="17" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($nilai_manfaat)}}</th>
                                             <th class="text-right">{{format_idr($dana_tabbaru)}}</th>
                                             <th class="text-right">{{format_idr($dana_ujrah)}}</th>
@@ -395,7 +386,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="16" class="text-right">Total</th>
+                                            <th colspan="17" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
                                             <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th>
                                             <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th>
@@ -447,14 +438,14 @@
                                             <th>Mulai Asuransi</th>
                                             <th>Akhir Asuransi</th>
                                             <th>Masa Asuransi</th>
-                                            <td class="text-center">Rate</td>
-                                            <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat_approve)}}</span></th>
-                                            <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru_approve)}}</span></th>
-                                            <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah_approve)}}</span></th>
-                                            <th class="text-right">Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_approve)}}</span></th>
-                                            <th class="text-right">Extra Mortality<br /><span class="sub_total">{{format_idr($extra_mortalita_approve)}}</span></th>
-                                            <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi_approve)}}</span></th>
-                                            <th class="text-right">Total Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_approve+$extra_kontribusi_approve+$extra_mortalita_approve)}}</span></th>
+                                            <th class="text-center">Rate</th>
+                                            <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat_reject)}}</span></th>
+                                            <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru_reject)}}</span></th>
+                                            <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah_reject)}}</span></th>
+                                            <th class="text-right">Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_reject)}}</span></th>
+                                            <th class="text-right">Extra Mortality<br /><span class="sub_total">{{format_idr($extra_mortalita_reject)}}</span></th>
+                                            <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi_reject)}}</span></th>
+                                            <th class="text-right">Total Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi_reject+$extra_kontribusi_reject+$extra_mortalita_reject)}}</span></th>
                                             <th>Tgl Stnc</th>
                                             <th>UL</th>
                                             <th>Ket</th>
@@ -570,14 +561,14 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="16" class="text-right">Total</th>
-                                            <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
-                                            <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th>
-                                            <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th>
-                                            <th class="text-right">{{format_idr($kontribusi_approve)}}</th>
-                                            <th class="text-right">{{format_idr($extra_mortalita_approve)}}</th>
-                                            <th class="text-right">{{format_idr($extra_kontribusi_approve)}}</th>
-                                            <th class="text-right">{{format_idr($kontribusi_approve+$extra_mortalita_approve+$extra_kontribusi_approve)}}</th>
+                                            <th colspan="18" class="text-right">Total</th>
+                                            <th class="text-right">{{format_idr($nilai_manfaat_reject)}}</th>
+                                            <th class="text-right">{{format_idr($dana_tabbaru_reject)}}</th>
+                                            <th class="text-right">{{format_idr($dana_ujrah_reject)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi_reject)}}</th>
+                                            <th class="text-right">{{format_idr($extra_mortalita_reject)}}</th>
+                                            <th class="text-right">{{format_idr($extra_kontribusi_reject)}}</th>
+                                            <th class="text-right">{{format_idr($kontribusi_reject+$extra_mortalita_reject+$extra_kontribusi_reject)}}</th>
                                         </tr>
                                     </tfoot>
                                 </table>
