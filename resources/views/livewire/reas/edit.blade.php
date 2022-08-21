@@ -23,11 +23,11 @@
                                     <tr>
                                         <td><strong>No Pengajuan</strong></td>
                                         <td>: {{$no_pengajuan}} 
-                                            <a href="javascript:void(0)" wire:loading.remove wire:target="hitung" wire:click="hitung"><i class="fa fa-refresh"></i></a>
+                                            {{-- <a href="javascript:void(0)" wire:loading.remove wire:target="hitung" wire:click="hitung"><i class="fa fa-refresh"></i></a>
                                             <span wire:loading wire:target="hitung">
                                                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                 <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
+                                            </span> --}}
                                         </td>
                                     </tr>
                                     <tr>
@@ -56,20 +56,6 @@
                                         <td> : {{$data->reasuradur->name ? $data->reasuradur->name : '-'}}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2">
-                                            <a href="javascript:void(0)" class="btn btn-info"><i class="fa fa-reload"></i> Hitung</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">&nbsp;</td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <div class="col-md-6">
-                            <table class="table">
-                                <thead>
-                                    <tr>
                                         <th>Rate & UW Limit</th>
                                         <td> : {{isset($data->rate_uw->nama) ? $data->rate_uw->nama : '-'}}</td>
                                     </tr>
@@ -87,14 +73,49 @@
                                 </thead>
                             </table>
                         </div>
+                        <div class="col-md-6">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Uang Asuransi Total</th>
+                                        <td> : </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Uang Asuransi Reas</th>
+                                        <td> : </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Kontribusi Gross</th>
+                                        <td> : </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ujroh</th>
+                                        <td> : </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Kontribusi Netto</th>
+                                        <td> : </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <a href="javascript:void(0)" wire:click="hitung" wire:loading.remove wire:target="hitung" class="badge badge-warning badge-active"><i class="fa fa-reload"></i> Hitung Reas</a>
+                                            <span wire:loading wire:target="hitung">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                     <div class="table-responsive"> 
-                        @php($nilai_manfaat = $data->kepesertaan->where('status_akseptasi',0)->sum('basic'))
-                        @php($dana_tabbaru = $data->kepesertaan->where('status_akseptasi',0)->sum('dana_tabarru'))
-                        @php($dana_ujrah = $data->kepesertaan->where('status_akseptasi',0)->sum('dana_ujrah'))
-                        @php($kontribusi = $data->kepesertaan->where('status_akseptasi',0)->sum('kontribusi'))
-                        @php($extra_mortalita = $data->kepesertaan->where('status_akseptasi',0)->sum('extra_mortalita'))
-                        @php($extra_kontribusi = $data->kepesertaan->where('status_akseptasi',0)->sum('extra_kontribusi'))
+                        @php($nilai_manfaat = $data->kepesertaan->where('status_akseptasi',1)->sum('basic'))
+                        @php($dana_tabbaru = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))
+                        @php($dana_ujrah = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))
+                        @php($kontribusi = $data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))
+                        @php($extra_mortalita = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita'))
+                        @php($extra_kontribusi = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))
                         <table class="table table-hover m-b-0 c_list table-nowrap" id="table_postpone">
                             <thead style="text-transform: uppercase;">
                                 <tr>
@@ -124,10 +145,17 @@
                                     <th>Jangka Waktu Asuransi</th>
                                     <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi)}}</span></th>
                                     <th class="text-right">Extra Risk<br /><span class="sub_total"></span></th>
-                                    <th class="text-right">Total Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi+$extra_kontribusi+$extra_mortalita)}}</span></th>
-                                    <th>Tgl Stnc</th>
-                                    <th>UL</th>
-                                    <th>Ket</th>
+                                    <th class="text-right">Manfaat Asuransi<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                                    <th class="text-right">Manfaat Asuransi Reas<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                                    <th class="text-right">Manfaat Asuransi Ajri<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                                    <th>Manfaat</th>
+                                    <th>Type Reas</th>
+                                    <th class="text-right">Kontribusi Reas<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                                    <th class="text-right">Ujroh<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                                    <th class="text-right">Kontribusi Netto<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                                    <th>Akseptasi</th>
+                                    <th class="text-right">Kontribusi AJRI<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                                    <th>UW Limit</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -178,50 +206,26 @@
                                         <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
                                         <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                                         <td>{{$item->no_peserta}}</td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'bank'})" data-toggle="modal" data-target="#modal_editable">{!!$item->bank?$item->bank:'<i>.....</i>'!!}</a></td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'cab'})" data-toggle="modal" data-target="#modal_editable">{!!$item->cab?$item->cab:'<i>.....</i>'!!}</a></td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>.....</i>'!!}</a></td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_telepon'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_telepon?$item->no_telepon:'<i>.....</i>'!!}</a></td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'jenis_kelamin'})" data-toggle="modal" data-target="#modal_editable">{!!$item->jenis_kelamin?$item->jenis_kelamin:'<i>.....</i>'!!}</a></td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'nama'})" data-toggle="modal" data-target="#modal_editable">{!!$item->nama?$item->nama:'<i>.....</i>'!!}</a></td>
-                                        <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
-                                        <td class="text-center">{{$item->usia}}</td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'tinggi_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->tinggi_badan?$item->tinggi_badan:'<i>.....</i>'!!}</a></td>
-                                        <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'berat_badan'})" data-toggle="modal" data-target="#modal_editable">{!!$item->berat_badan?$item->berat_badan:'<i>.....</i>'!!}</a></td>
-                                        <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
-                                        <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
-                                        <td class="text-center">{{$item->masa_bulan}}</td>
-                                        <td class="text-center">{{$item->rate}}</td>
-                                        <td class="text-right">
-                                            @if($item->is_double==1 || $item->akumulasi_ganda)
-                                                <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->basic)}}</a>
-                                            @else
-                                                {{format_idr($item->basic)}}
-                                            @endif
-                                        </td>
-                                        <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
-                                        <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
-                                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                        <td class="text-right">
-                                            @if($item->use_em==0)
-                                                <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
-                                            @else
-                                                <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><span class="text-right">{{format_idr($item->extra_mortalita)}}</span></a>
-                                                <a href="{{route('peserta.print-em',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
-                                            @endif
-                                        </td>
-                                        <td class="text-right">
-                                            @if($item->extra_kontribusi)
-                                                <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
-                                                <a href="{{route('peserta.print-ek',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
-                                            @else
-                                                <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi"><i class="fa fa-plus"></i></a>
-                                            @endif
-                                        </td>
-                                        <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
-                                        <td>{{$item->tanggal_stnc ? date('d-M-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
-                                        <td>{{$item->ul}}</td>
-                                        <td>{{$item->keterangan}}</td>
+                                        <td>{{$item->nama}}</td>
+                                        <td class="text-center">{{$item->jenis_kelamin}}</td>
+                                        <td>{{date('d-m-Y',strtotime($item->tanggal_lahir))}}</td>
+                                        <td class="text-center">{{$item->umur}}</td>
+                                        <td>{{date('d-m-Y',strtotime($item->tanggal_mulai))}}</td>
+                                        <td>{{date('d-m-Y',strtotime($item->tanggal_akhir))}}</td>    
+                                        <td class="text-center">{{$item->masa_bulan}}</td>                                   
+                                        <td class="text-right"></td>                                   
+                                        <td class="text-right"></td>                                   
+                                        <td class="text-right">{{format_idr($item->basic)}}</td>
+                                        <td class="text-right">{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>        
+                                        <td class="text-right">{{format_idr($item->reas_manfaat_asuransi_ajri)}}</td>                         
+                                        <td class="text-right">{{$item->reas_manfaat}}</td>                         
+                                        <td class="text-right">{{$item->reas_type}}</td>     
+                                        <td>{{format_idr($item->total_kontribusi_reas)}}</td>                         
+                                        <td>{{format_idr($item->ujroh_reas)}}</td>                         
+                                        <td>{{format_idr($item->net_kontribusi_reas)}}</td>    
+                                        <td class="text-center">{{$item->ul_reas}}</td>    
+                                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>                     
+                                        <td class="text-center">{{$item->ul}}</td>                     
                                     </tr>
                                 @endforeach
                                 @if($data->kepesertaan->count()==0)

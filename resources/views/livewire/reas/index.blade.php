@@ -34,7 +34,7 @@
                         <thead style="background: #eee;text-transform: uppercase;">
                             <tr>
                                 <th>NO</th>
-                                <th>STATUS</th>
+                                <th class="text-center">STATUS</th>
                                 <th>NO PENGAJUAN</th>
                                 <th>REASURADUR</th>
                                 <th>RATE & UW Limit</th>
@@ -47,7 +47,20 @@
                             @foreach ($data as $k => $item)
                                 <tr>
                                     <td style="width: 50px;">{{ $k + 1 }}</td>
-                                    <td></td>
+                                    <td class="text-center">
+                                        @if($item->status==0)
+                                            <span class="badge badge-warning">Underwriting</span>
+                                        @endif
+                                        @if($item->status==1)
+                                            <span class="badge badge-info">Head Teknik</span>
+                                        @endif
+                                        @if($item->status==2)
+                                            <span class="badge badge-danger">Head Syariah</span>
+                                        @endif
+                                        @if($item->status==3)
+                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
+                                        @endif
+                                    </td>
                                     <td><a href="{{route('reas.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td>{{isset($item->reasuradur->name) ? $item->reasuradur->name :'-'}}</td>
                                     <td>{{isset($item->rate_uw->nama) ? $item->rate_uw->nama :'-'}}</td>
