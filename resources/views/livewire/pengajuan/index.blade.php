@@ -79,6 +79,9 @@
                                         @if($item->status==3)
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif
+                                        @if($item->status==4)
+                                            <span class="badge badge-default badge-active"><i class="fa fa-upload"></i> Migrasi</span>
+                                        @endif
                                     </td>
                                     <td>
                                         @if($item->dn_number)
@@ -89,7 +92,7 @@
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}
                                     </td>
-                                    <td class="text-right">{{format_idr($item->net_kontribusi)}}</td>
+                                    <td class="text-right">{{$item->net_kontribusi ? format_idr($item->net_kontribusi) : format_idr($item->diterima_sum_total_kontribusi_dibayar)}}</td>
                                     <td class="text-danger">
                                         @if($item->dn_number)
                                             @if($item->status_invoice==0)
@@ -106,11 +109,11 @@
                                     <td></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a></td>
-                                    <td>{{$item->payment_date ? date('d-F-Y',strtotime($item->payment_date)) : '-'}}</td>
-                                    <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
+                                    <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item->created_at))}}</td>
                                     <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
                                     <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
-                                    <td class="text-center">{{$item->akseptasi_count}}</td>
+                                    <td class="text-center">{{$item->total_akseptasi}}</td>
                                     <td class="text-center">
                                         {{$item->diterima_count}}
                                         @if($item->dn_number)

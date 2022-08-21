@@ -15,7 +15,7 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
-    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '',$is_calculate=false;
+    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '',$is_calculate=false,$transaction_id;
     protected $listeners = ['set_calculate'=>'set_calculate'];
     public function render()
     {
@@ -24,6 +24,7 @@ class Insert extends Component
 
     public function mount()
     {
+        $this->transaction_id = date('dmyHis');
         $this->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
         $this->polis = Polis::get();
     }
@@ -37,7 +38,7 @@ class Insert extends Component
     public function calculate()
     {
         $this->is_calculate = true;
-        PengajuanCalculate::dispatch($this->polis_id,$this->perhitungan_usia,$this->masa_asuransi);
+        PengajuanCalculate::dispatch($this->polis_id,$this->perhitungan_usia,$this->masa_asuransi,$this->transaction_id);
     }
 
     public function clear_file()

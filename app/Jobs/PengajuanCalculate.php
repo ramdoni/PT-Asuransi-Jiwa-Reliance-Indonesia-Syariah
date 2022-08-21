@@ -17,7 +17,7 @@ use App\Events\RequestPengajuan;
 class PengajuanCalculate implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public $polis_id,$perhitungan_usia=1,$masa_asuransi=1;
+    public $polis_id,$perhitungan_usia=1,$masa_asuransi=1,$transaction_id;
 
      /**
      * The number of seconds the job can run before timing out.
@@ -32,11 +32,12 @@ class PengajuanCalculate implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($polis_id,$perhitungan_usia,$masa_asuransi)
+    public function __construct($polis_id,$perhitungan_usia,$masa_asuransi,$transaction_id)
     {
         $this->polis_id = $polis_id;
         $this->perhitungan_usia = $perhitungan_usia;
         $this->masa_asuransi = $masa_asuransi;
+        $this->transaction_id = $transaction_id;
     }
 
     /**
@@ -101,6 +102,6 @@ class PengajuanCalculate implements ShouldQueue
 
         \Batch::update(new Kepesertaan,$update,'id');
 
-        event(new RequestPengajuan('Data berhasil dikalkukasi'));
+        event(new RequestPengajuan('Data berhasil dikalkukasi',$polis->id,$this->transaction_id));
     }
 }

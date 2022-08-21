@@ -112,26 +112,18 @@
                                         @endif
                                     </th>
                                     <th>No Pengajuan</th>
-                                    <th>Nama Bank</th>
-                                    <th>KC/KP</th>
-                                    <th>No KTP</th>
-                                    <th>No Telepon</th>
-                                    <th>Gender</th>
+                                    <th>No Polis</th>
+                                    <th>Nama Pemegang Polis</th>
+                                    <th>No Peserta</th>
                                     <th>Nama Peserta</th>
+                                    <th>Gender</th>
                                     <th>Tgl. Lahir</th>
                                     <th>Usia</th>
-                                    <th>TB</th>
-                                    <th>BB</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
-                                    <th>Masa Asuransi</th>
-                                    <th class="text-center">Rate</th>
-                                    <th class="text-right">Nilai Manfaat Asuransi<br /><span class="sub_total">{{format_idr($nilai_manfaat)}}</span></th>
-                                    <th class="text-right">Dana Tabarru<br /><span class="sub_total">{{format_idr($dana_tabbaru)}}</span></th>
-                                    <th class="text-right">Dana Ujrah<br /><span class="sub_total">{{format_idr($dana_ujrah)}}</span></th>
-                                    <th class="text-right">Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi)}}</span></th>
-                                    <th class="text-right">Extra Mortality<br /><span class="sub_total">{{format_idr($extra_mortalita)}}</span></th>
+                                    <th>Jangka Waktu Asuransi</th>
                                     <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi)}}</span></th>
+                                    <th class="text-right">Extra Risk<br /><span class="sub_total"></span></th>
                                     <th class="text-right">Total Kontribusi<br /><span class="sub_total">{{format_idr($kontribusi+$extra_kontribusi+$extra_mortalita)}}</span></th>
                                     <th>Tgl Stnc</th>
                                     <th>UL</th>
@@ -183,6 +175,9 @@
                                             @endif
                                         </td>
                                         <td><a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
+                                        <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
+                                        <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
+                                        <td>{{$item->no_peserta}}</td>
                                         <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'bank'})" data-toggle="modal" data-target="#modal_editable">{!!$item->bank?$item->bank:'<i>.....</i>'!!}</a></td>
                                         <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'cab'})" data-toggle="modal" data-target="#modal_editable">{!!$item->cab?$item->cab:'<i>.....</i>'!!}</a></td>
                                         <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>.....</i>'!!}</a></td>

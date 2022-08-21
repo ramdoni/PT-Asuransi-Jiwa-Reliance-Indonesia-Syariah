@@ -113,7 +113,7 @@
     <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
     @livewireScripts
     <script>
-        // Pusher.logToConsole = true;
+        Pusher.logToConsole = true;
         var pusher = new Pusher('61e7a83b5c1a48939522', {
             cluster: 'ap1'
         });

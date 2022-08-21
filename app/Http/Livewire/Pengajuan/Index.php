@@ -7,16 +7,18 @@ use App\Models\Pengajuan;
 use App\Models\Kepesertaan;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     public $selected,$check_id=[],$is_pengajuan_reas=false;
     public function render()
     {
-        $data = Pengajuan::with(['polis','account_manager','kepesertaan'])
-                ->withCount('akseptasi')
-                ->withCount('diterima')
-                ->withCount('ditolak')
+        $data = Pengajuan::with(['polis','account_manager'])
+                ->withCount(['akseptasi','diterima','ditolak'])
+                ->withSum('diterima','total_kontribusi_dibayar')
                 ->orderBy('id','DESC');
         
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
@@ -44,8 +46,9 @@ class Index extends Component
         return redirect()->route('pengajuan.index');
     }
 
-    public function downloadExcel(Pengajuan $data,$status=1)
+    public function downloadExcel( $data,$status=1)
     {
+        $data = Pengajuan::find($data);
         $objPHPExcel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("PMT System")

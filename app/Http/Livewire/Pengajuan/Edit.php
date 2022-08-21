@@ -308,7 +308,7 @@ class Edit extends Component
             'dana_ujrah' => $dana_ujrah,
             'kontribusi' => $kontribusi,
             'ektra_kontribusi' => $ektra_kontribusi,
-            'total_kontribusi' => $total_kontribusi,
+            'total_kontribusi' => $kontribusi,
             // $data->pot_langsung = $pot_langsung;
             // $data->jumlah_diskon = $jumlah_diskon;
             // $data->status_potongan = $status_potongan;
@@ -321,7 +321,7 @@ class Edit extends Component
             // $data->biaya_polis = $biaya_polis;
             // $data->biaya_sertifikat = $biaya_sertifikat;
             // $data->extpst = $extpst;
-            'net_kontribusi' => $net_kontribusi,
+            'net_kontribusi' => $total,
             // $data->terbilang = $terbilang;
             // if($tgl_update_database) $data->tgl_update_database = date('Y-m-d',($tgl_update_database));
             'tgl_update_sistem' => date('Y-m-d'),
@@ -358,7 +358,7 @@ class Edit extends Component
         $income->user_id = \Auth::user()->id;
         $income->reference_no = $this->data->dn_number;
         $income->reference_date = date('Y-m-d');
-        $income->nominal = $total_kontribusi;
+        $income->nominal = $total;
         $income->client = $this->data->polis->no_polis .'/'. $this->data->polis->nama;
         $income->reference_type = 'Premium Receivable';
         $income->transaction_table = 'syariah_underwriting';
@@ -367,7 +367,6 @@ class Edit extends Component
         $income->policy_id = $polis->id;
         if($this->data->tanggal_jatuh_tempo) $income->due_date = $this->data->tanggal_jatuh_tempo; 
         $income->save();
-
 
         $this->emit('message-success','Data berhasil di proses');
         $this->emit('reload-page');

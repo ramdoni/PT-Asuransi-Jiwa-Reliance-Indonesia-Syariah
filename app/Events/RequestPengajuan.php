@@ -14,15 +14,17 @@ class RequestPengajuan implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+    public $message,$polis_id,$transaction_id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($message,$polis_id,$transaction_id)
     {
-        $this->message = $data;
+        $this->message = $message;
+        $this->polis_id = $polis_id;
+        $this->transaction_id = $transaction_id;
     }
 
     /**

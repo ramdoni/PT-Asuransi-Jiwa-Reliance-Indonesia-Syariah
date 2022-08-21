@@ -126,7 +126,10 @@
         var channel = pusher.subscribe('pengajuan');
         channel.bind('generate', function(data) {
             Livewire.emit('set_calculate',false);
-            show_toast(data.message,'top-center');
+            console.log(data);
+            if(data.transaction_id=={{$transaction_id}}){
+                show_toast(data.message,'top-center');
+            }
         });
 
         select__2 = $('#polis_id').select2();
