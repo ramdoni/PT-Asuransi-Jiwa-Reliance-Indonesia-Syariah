@@ -15,6 +15,23 @@
                                     <div class="from-group my-2">
                                         <input type="text" class="form-control" wire:model="filter_keyword" placeholder="Keyword" />
                                     </div>
+                                    <div class="from-group my-2">
+                                        <select class="form-control" wire:model="filter_status_invoice">
+                                            <option value=""> -- Status Pembayaran -- </option>
+                                            <option value="0"> Unpaid</option>
+                                            <option value="1"> Paid</option>
+                                        </select>
+                                    </div>
+                                    <div class="from-group my-2">
+                                        <select class="form-control" wire:model="filter_status">
+                                            <option value=""> -- Status -- </option>
+                                            <option value="0"> Underwriting</option>
+                                            <option value="1"> Head Teknik</option>
+                                            <option value="2"> Head Syariah</option>
+                                            <option value="3"> Selesai</option>
+                                            <option value="4"> Migrasi</option>
+                                        </select>
+                                    </div>
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>
                             </div>
@@ -80,11 +97,11 @@
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif
                                         @if($item->status==4)
-                                            <span class="badge badge-default badge-active"><i class="fa fa-upload"></i> Migrasi</span>
+                                            <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->dn_number)
+                                        @if($item->status==3)
                                             @if($is_pengajuan_reas and $item->reas_id=="")
                                                 <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" /> 
                                             @endif
@@ -92,8 +109,8 @@
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}
                                     </td>
-                                    <td class="text-right">{{$item->net_kontribusi ? format_idr($item->net_kontribusi) : format_idr($item->diterima_sum_total_kontribusi_dibayar)}}</td>
-                                    <td class="text-danger">
+                                    <td class="text-right">{{format_idr($item->net_kontribusi)}}</td>
+                                    <td class="text-danger text-center">
                                         @if($item->dn_number)
                                             @if($item->status_invoice==0)
                                                 <span class="badge badge-warning">Unpaid</span>
@@ -106,7 +123,11 @@
                                         @endif
                                     </td>
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
-                                    <td></td>
+                                    <td>
+                                        @if(isset($item->reas->no_pengajuan))
+                                            <a href="{{route('reas.edit',$item->id)}}">{{$item->reas->no_pengajuan}}</a>
+                                        @endif
+                                    </td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a></td>
                                     <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>

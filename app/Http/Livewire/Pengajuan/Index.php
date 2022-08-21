@@ -14,14 +14,29 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $selected,$check_id=[],$is_pengajuan_reas=false;
+    public $filter_keyword,$filter_status_invoice,$filter_status;
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager'])
                 ->withCount(['akseptasi','diterima','ditolak'])
                 ->withSum('diterima','total_kontribusi_dibayar')
                 ->orderBy('id','DESC');
+
+        if($this->filter_keyword) $data->where(function($table){
+            foreach(\Illuminate\Support\Facades\Schema::getColumnListing('pengajuan') as $column){
+                $table->orWhere($column,'LIKE',"%{$this->filter_keyword}%");
+            }
+        });
+        if($this->filter_status_invoice) $data->where('status_invoice',$this->filter_status_invoice);
+        if($this->filter_status) $data->where('status',$this->filter_status);
         
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
+    }
+
+
+    public function clear_filter()
+    {
+        $this->reset(['filter_status_invoice','filter_keyword']);
     }
 
     public function set_id($id)

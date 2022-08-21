@@ -45,22 +45,30 @@ class CalculatePengajuan extends Command
     public function handle()
     {
         ini_set('memory_limit', '-1');
-        foreach(Kepesertaan::whereNull('pengajuan_id')->groupBy('no_debit_note')->get() as $k => $item){
-            echo "{$k} => No Debit Note : {$item->no_debit_note}\n";
-            $pengajuan = Pengajuan::where('dn_number',$item->no_debit_note)->first();
-            if($item->no_debit_note=='MANUAL' || $item->no_debit_note =="") continue;
-            if($pengajuan) continue;
+        foreach(Pengajuan::where('status',4)->get() as $k => $item){
+            // $item->net_kontribusi = Kepesertaan::where('pengajuan_id',$item->id)->sum('total_kontribusi_dibayar');
 
-            $pengajuan = new Pengajuan;
-            $pengajuan->dn_number = $item->no_debit_note;
-            $pengajuan->no_pengajuan = date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
-            $pengajuan->status=4;
-            $pengajuan->polis_id = $item->polis_id;
-            $pengajuan->payment_date = $item->pay_date;
-            $pengajuan->save();
-
-            Kepesertaan::where('no_debit_note',$item->no_debit_note)->update(['status_akseptasi'=>1,'pengajuan_id'=>$pengajuan->id]);
+            echo "{$k} => No Pengajuan : {$item->no_pengajuan} => ". format_idr($item->net_kontribusi) ."\n";
+            if($item->payment_date) $item->status_invoice = 1;
+            $item->save();
         }
+
+        // foreach(Kepesertaan::whereNull('pengajuan_id')->groupBy('no_debit_note')->get() as $k => $item){
+        //     echo "{$k} => No Debit Note : {$item->no_debit_note}\n";
+        //     $pengajuan = Pengajuan::where('dn_number',$item->no_debit_note)->first();
+        //     if($item->no_debit_note=='MANUAL' || $item->no_debit_note =="") continue;
+        //     if($pengajuan) continue;
+
+        //     $pengajuan = new Pengajuan;
+        //     $pengajuan->dn_number = $item->no_debit_note;
+        //     $pengajuan->no_pengajuan = date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
+        //     $pengajuan->status=4;
+        //     $pengajuan->polis_id = $item->polis_id;
+        //     $pengajuan->payment_date = $item->pay_date;
+        //     $pengajuan->save();
+
+        //     Kepesertaan::where('no_debit_note',$item->no_debit_note)->update(['status_akseptasi'=>1,'pengajuan_id'=>$pengajuan->id]);
+        // }
 
 
         // $polis = Polis::find($this->polis_id);

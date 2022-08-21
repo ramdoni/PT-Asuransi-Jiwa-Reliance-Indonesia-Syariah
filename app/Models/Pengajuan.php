@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Polis;
 use App\Models\Kepesertaan;
+use App\Models\Reas;
 
 class Pengajuan extends Model
 {
@@ -41,5 +42,10 @@ class Pengajuan extends Model
     public function ditolak()
     {
         return $this->hasMany(Kepesertaan::class,'pengajuan_id','id')->where('status_akseptasi',2);
+    }
+
+    public function reas()
+    {
+        return $this->belongsTo(Reas::class,'reas_id','id');
     }
 }
