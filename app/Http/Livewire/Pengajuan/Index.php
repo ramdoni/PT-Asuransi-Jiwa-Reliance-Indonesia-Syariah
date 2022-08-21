@@ -20,7 +20,7 @@ class Index extends Component
         $data = Pengajuan::with(['polis','account_manager'])
                 ->withCount(['akseptasi','diterima','ditolak'])
                 ->withSum('diterima','total_kontribusi_dibayar')
-                ->orderBy('id','DESC');
+                ->orderBy('created_at','DESC');
 
         if($this->filter_keyword) $data->where(function($table){
             foreach(\Illuminate\Support\Facades\Schema::getColumnListing('pengajuan') as $column){
