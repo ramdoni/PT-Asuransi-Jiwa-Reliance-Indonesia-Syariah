@@ -45,11 +45,13 @@ class CalculatePengajuan extends Command
     public function handle()
     {
         ini_set('memory_limit', '-1');
-        foreach(Pengajuan::where('status',4)->get() as $k => $item){
+        foreach(Pengajuan::where('status',4)->with('kepesertaan')->get() as $k => $item){
             // $item->net_kontribusi = Kepesertaan::where('pengajuan_id',$item->id)->sum('total_kontribusi_dibayar');
 
             echo "{$k} => No Pengajuan : {$item->no_pengajuan} => ". format_idr($item->net_kontribusi) ."\n";
-            if($item->payment_date) $item->status_invoice = 1;
+            // if($item->payment_date) $item->status_invoice = 1;
+            $peserta = $item->kepesertaan->first();
+            $item->created_at = $peserta->tanggal_mulai;
             $item->save();
         }
 
