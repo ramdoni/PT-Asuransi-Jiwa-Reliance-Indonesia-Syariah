@@ -192,7 +192,7 @@ class Edit extends Component
             }
             
             if(in_array($peserta->ul,['NM','A','B','C'])) $peserta->tanggal_stnc = date('Y-m-d');
-
+            
             $peserta->save();
 
             $key++;
@@ -309,15 +309,15 @@ class Edit extends Component
             'kontribusi' => $kontribusi,
             'ektra_kontribusi' => $ektra_kontribusi,
             'total_kontribusi' => $kontribusi,
-            // $data->pot_langsung = $pot_langsung;
-            // $data->jumlah_diskon = $jumlah_diskon;
+            'pot_langsung' => $this->data->potong_langsung_persen,
+            'jumlah_diskon' => $this->data->potong_langsung,
             // $data->status_potongan = $status_potongan;
             // $data->handling_fee = $handling_fee;
             // $data->jumlah_fee = $jumlah_fee;
-            // $data->pph = $pph;
-            // $data->jumlah_pph = $jumlah_pph;
-            // $data->ppn = $ppn;
-            // $data->jumlah_ppn = $jumlah_ppn;
+            'pph' => $this->data->pph_persen,
+            'jumlah_pph' => $this->data->pph,
+            'ppn' => $this->data->ppn_persen,
+            'jumlah_ppn' => $this->data->ppn,
             // $data->biaya_polis = $biaya_polis;
             // $data->biaya_sertifikat = $biaya_sertifikat;
             // $data->extpst = $extpst;

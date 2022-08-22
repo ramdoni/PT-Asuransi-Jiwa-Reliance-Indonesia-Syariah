@@ -31,7 +31,7 @@
             <div class="body">
                 <div class="table-responsive">
                     <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="background: #eee;text-transform: uppercase;">
+                        <thead style="background: #eee;text-transform: uppercase;vertical-align:middle">
                             <tr>
                                 <th>NO</th>
                                 <th>STATUS</th>
