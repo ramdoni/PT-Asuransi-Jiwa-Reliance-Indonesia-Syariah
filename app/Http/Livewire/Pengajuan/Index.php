@@ -18,8 +18,8 @@ class Index extends Component
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager'])
-                ->withCount(['akseptasi','diterima','ditolak'])
-                ->withSum('diterima','total_kontribusi_dibayar')
+                // ->withCount(['akseptasi','diterima','ditolak'])
+                // ->withSum('diterima','total_kontribusi_dibayar')
                 ->orderBy('created_at','DESC');
 
         if($this->filter_keyword) $data->where(function($table){

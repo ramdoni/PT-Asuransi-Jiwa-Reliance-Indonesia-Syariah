@@ -57,7 +57,7 @@
             <div class="body">
                 <div class="table-responsive">
                     <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="background: #eee;">
+                        <thead style="background: #eee;vertical-align:middle">
                             <tr>
                                 <th>No</th>
                                 <th class="text-center">Status Approval</th>
@@ -136,13 +136,13 @@
                                     <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
                                     <td class="text-center">{{$item->total_akseptasi}}</td>
                                     <td class="text-center">
-                                        {{$item->diterima_count}}
+                                        {{$item->total_approve}}
                                         @if($item->dn_number)
                                             <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        {{$item->ditolak_count}}
+                                        {{$item->total_reject}}
                                         @if($item->dn_number)
                                             <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},2)"><i class="fa fa-download"></i></a>
                                         @endif

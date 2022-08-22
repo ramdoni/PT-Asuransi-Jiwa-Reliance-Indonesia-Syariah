@@ -45,13 +45,76 @@ class CalculatePengajuan extends Command
     public function handle()
     {
         ini_set('memory_limit', '-1');
-        foreach(Pengajuan::where('status',4)->with('kepesertaan')->get() as $k => $item){
+        foreach(Pengajuan::withCount(['akseptasi','diterima','ditolak'])
+            ->withSum('diterima','total_kontribusi_dibayar')->where('status',3)->get() as $k => $item){
             // $item->net_kontribusi = Kepesertaan::where('pengajuan_id',$item->id)->sum('total_kontribusi_dibayar');
 
             echo "{$k} => No Pengajuan : {$item->no_pengajuan} => ". format_idr($item->net_kontribusi) ."\n";
             // if($item->payment_date) $item->status_invoice = 1;
-            $peserta = $item->kepesertaan->first();
-            $item->created_at = $peserta->tanggal_mulai;
+            // $peserta = $item->kepesertaan->first();
+            // $item->created_at = $peserta->tanggal_mulai;
+            // $item->total_akseptasi = $item->akseptasi_count;
+            // $item->total_approve = $item->diterima_count;
+            // $item->total_reject = $item->ditolak_count;
+            // $item->net_kontribusi = $item->diterima_sum_total_kontribusi_dibayar;
+
+            $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
+                        \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
+                        \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
+                        \DB::raw("SUM(kontribusi) as total_kontribusi"),
+                        \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
+                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita")
+                        )->where(['pengajuan_id'=>$item->id,'status_akseptasi'=>1])->first();
+
+            $nilai_manfaat = $select->total_nilai_manfaat;
+            $dana_tabbaru = $select->total_dana_tabbaru;
+            $dana_ujrah = $select->total_dana_ujrah;
+            $kontribusi = $select->total_kontribusi;
+            $ektra_kontribusi = $select->total_extract_kontribusi;
+            $extra_mortalita = $select->total_extra_mortalita;
+
+            $item->nilai_manfaat = $nilai_manfaat;
+            $item->dana_tabbaru = $dana_tabbaru;
+            $item->dana_ujrah = $dana_ujrah;
+            $item->kontribusi = $kontribusi;
+            $item->extra_kontribusi = $ektra_kontribusi;
+            $item->extra_mortalita = $extra_mortalita;
+
+            if($item->polis->potong_langsung){
+                $item->potong_langsung_persen = $item->polis->potong_langsung;
+                $item->potong_langsung = $kontribusi*($item->polis->potong_langsung/100);
+            }
+
+            /**
+            * Hitung PPH
+            */
+            if($item->polis->pph){
+                $item->pph_persen =  $item->polis->pph;
+                if($item->potong_langsung)
+                    $item->pph = (($item->polis->pph/100) * $item->potong_langsung);
+                else
+                    $item->pph = $kontribusi*($item->polis->pph/100);
+            }
+
+            /**
+            * Hitung PPN
+            */
+            if($item->polis->ppn){
+                $item->ppn_persen =  $item->polis->ppn;
+                $item->ppn = $kontribusi*($item->polis->ppn/100);
+            }
+
+            /**
+            * Biaya Polis dan Materai
+            * jika pengajuan baru pertama kali ada biaya polis dan materia 100.000
+            * */ 
+            // if($running_number==0){
+            //     $item->biaya_polis_materai = $item->polis->biaya_polis_materai;
+            //     $item->biaya_sertifikat = $item->polis->biaya_sertifikat;
+            // }
+
+            $total = $kontribusi+$ektra_kontribusi+$extra_mortalita+$item->biaya_sertifikat+$item->pph+$item->ppn-$item->potong_langsung;
+            $item->net_kontribusi = $total;
             $item->save();
         }
 
