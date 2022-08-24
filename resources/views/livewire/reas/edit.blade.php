@@ -77,24 +77,28 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>Uang Asuransi Total</th>
-                                        <td> : </td>
+                                        <th>Jumlah Peserta</th>
+                                        <td> : {{format_idr($data->jumlah_peserta)}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Uang Asuransi Ajri</th>
+                                        <td> : {{format_idr($data->manfaat_asuransi_ajri)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Uang Asuransi Reas</th>
-                                        <td> : </td>
+                                        <td> : {{format_idr($data->manfaat_asuransi_reas)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Kontribusi Gross</th>
-                                        <td> : </td>
+                                        <td> : {{format_idr($data->kontribusi)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Ujroh</th>
-                                        <td> : </td>
+                                        <td> : {{format_idr($data->ujroh)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Kontribusi Netto</th>
-                                        <td> : </td>
+                                        <td> : {{format_idr($data->kontribusi_netto)}}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">
@@ -110,13 +114,7 @@
                         </div>
                     </div>
                     <div class="table-responsive"> 
-                        @php($nilai_manfaat = $data->kepesertaan->where('status_akseptasi',1)->sum('basic'))
-                        @php($dana_tabbaru = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))
-                        @php($dana_ujrah = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))
-                        @php($kontribusi = $data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))
-                        @php($extra_mortalita = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita'))
-                        @php($extra_kontribusi = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))
-                        <table class="table table-hover m-b-0 c_list table-nowrap" id="table_postpone">
+                        <table class="table table-hover m-b-0 c_list table-nowrap vertical-align-middle" id="table_postpone">
                             <thead style="text-transform: uppercase;">
                                 <tr>
                                     <th>No</th>
@@ -143,7 +141,7 @@
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
                                     <th>Jangka Waktu Asuransi</th>
-                                    <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($extra_kontribusi)}}</span></th>
+                                    <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($data->extra_kontribusi)}}</span></th>
                                     <th class="text-right">Extra Risk<br /><span class="sub_total"></span></th>
                                     <th class="text-right">Manfaat Asuransi<br /><span class="sub_total">{{format_idr(0)}}</span></th>
                                     <th class="text-right">Manfaat Asuransi Reas<br /><span class="sub_total">{{format_idr(0)}}</span></th>
@@ -209,12 +207,12 @@
                                         <td>{{$item->nama}}</td>
                                         <td class="text-center">{{$item->jenis_kelamin}}</td>
                                         <td>{{date('d-m-Y',strtotime($item->tanggal_lahir))}}</td>
-                                        <td class="text-center">{{$item->umur}}</td>
+                                        <td class="text-center">{{$item->usia}}</td>
                                         <td>{{date('d-m-Y',strtotime($item->tanggal_mulai))}}</td>
                                         <td>{{date('d-m-Y',strtotime($item->tanggal_akhir))}}</td>    
                                         <td class="text-center">{{$item->masa_bulan}}</td>                                   
-                                        <td class="text-right"></td>                                   
-                                        <td class="text-right"></td>                                   
+                                        <td class="text-right">{{$item->reas_manfaat}}</td>                                   
+                                        <td class="text-right">{{$item->reas_type}}</td>                                   
                                         <td class="text-right">{{format_idr($item->basic)}}</td>
                                         <td class="text-right">{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>        
                                         <td class="text-right">{{format_idr($item->reas_manfaat_asuransi_ajri)}}</td>                         
@@ -237,13 +235,7 @@
                             <tfoot style="background: #eee;">
                                 <tr>
                                     <th colspan="16" class="text-right">Total</th>
-                                    <th class="text-right">{{format_idr($nilai_manfaat)}}</th>
-                                    <th class="text-right">{{format_idr($dana_tabbaru)}}</th>
-                                    <th class="text-right">{{format_idr($dana_ujrah)}}</th>
-                                    <th class="text-right">{{format_idr($kontribusi)}}</th>
-                                    <th class="text-right">{{format_idr($extra_mortalita)}}</th>
-                                    <th class="text-right">{{format_idr($extra_kontribusi)}}</th>
-                                    <th class="text-right">{{format_idr($kontribusi+$extra_mortalita+$extra_kontribusi)}}</th>
+                                
                                 </tr>
                             </tfoot>
                         </table>

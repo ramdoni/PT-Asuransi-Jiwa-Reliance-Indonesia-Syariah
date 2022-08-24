@@ -1,3 +1,4 @@
+.vertical-align-middle tr th,.vertical-align-middle tr td {vertical-align:middle}
 .theme-blue .page-loader-wrapper{
     background:#fefefe;
 }

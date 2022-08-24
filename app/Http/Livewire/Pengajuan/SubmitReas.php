@@ -61,7 +61,7 @@ class SubmitReas extends Component
             $item->reas_id = $data->id;
             $item->save();
 
-            Kepesertaan::where('pengajuan_id',$item->id)->update(['reas_id'=>$data->id]);
+            Kepesertaan::where('pengajuan_id',$item->id)->update(['reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
 
         session()->flash('message-success',__('Pengajuan Reas berhasil disubmit'));

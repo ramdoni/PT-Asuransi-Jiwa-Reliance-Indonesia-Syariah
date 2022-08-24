@@ -52,15 +52,16 @@
                             <label>Manfaat</label>
                             <select class="form-control" wire:model="manfaat">
                                 <option value=""> -- Pilih -- </option>
-                                <option>Menurun</option>
-                                <option>Tetap</option>
+                                <option> MENURUN </option>
+                                <option> TETAP </option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Type Reas</label>
                             <select class="form-control" wire:model="type_reas">
                                 <option value=""> -- Pilih -- </option>
-                                <option> Treaty </option>
+                                <option> TREATY </option>
+                                <option> FAKULTATIF </option>
                             </select>
                         </div>
                     </div>

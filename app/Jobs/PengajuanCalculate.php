@@ -52,16 +52,20 @@ class PengajuanCalculate implements ShouldQueue
         $ujrah = $polis->ujrah_atas_pengelolaan;
         $key=0;
         $update  =[];
-        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get() as $data){
+        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])
+                        ->with(['double_peserta','rate'])->withCount('double_peserta')->get() as $data){
+            
             echo "{$key}. Calculate Nama : ".$data->nama ."\n";
 
-            $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
-                $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
-            })->sum('basic');
-
+            // $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
+            //     $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
+            // })->sum('basic');
             $update[$key]['id'] = $data->id;
-            if($check>0){
+            if($data->double_peserta_count>=1 and $data->double_peserta->tanggal_lahir==$data->tanggal_lahir){
                 $update[$key]['is_double'] = 1;
+                $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
+                    $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
+                })->sum('basic');
                 $update[$key]['akumulasi_ganda'] = $check+$data->basic;
             }else $update[$key]['is_double']=0;
 
@@ -72,7 +76,8 @@ class PengajuanCalculate implements ShouldQueue
             $update[$key]['masa_bulan'] =  hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
 
             // find rate
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
+            // $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
+            $rate = $data->rate->where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan]);
             if(!$rate || $rate->rate ==0 || $rate->rate ==""){
                 $data->rate = 0;
                 $data->kontribusi = 0;
