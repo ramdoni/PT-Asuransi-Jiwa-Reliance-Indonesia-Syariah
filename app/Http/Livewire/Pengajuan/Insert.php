@@ -26,7 +26,7 @@ class Insert extends Component
     {
         $this->transaction_id = date('dmyHis');
         $this->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
-        $this->polis = Polis::get();
+        $this->polis = Polis::where('status_approval',1)->get();
     }
 
     public function set_calculate($condition=false)
@@ -181,14 +181,14 @@ class Insert extends Component
         $pengajuan->perhitungan_usia = $this->perhitungan_usia;
         $pengajuan->polis_id = $this->polis_id;
         $pengajuan->status = 0;
-        $pengajuan->total_akseptasi = $this->total_pengajuan;
+        $pengajuan->total_akseptasi = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->count();;
         $pengajuan->total_approve = 0;
         $pengajuan->total_reject = 0;
         $pengajuan->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
         $pengajuan->account_manager_id = \Auth::user()->id;
         $pengajuan->save();
 
-        foreach($this->kepesertaan as $item){
+        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get() as $item){
             $item->pengajuan_id = $pengajuan->id;
             $item->is_temp = 0;
             $item->status_polis = 'Akseptasi';

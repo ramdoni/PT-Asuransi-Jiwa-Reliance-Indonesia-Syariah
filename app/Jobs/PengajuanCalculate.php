@@ -24,8 +24,7 @@ class PengajuanCalculate implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 1120;
-
+    public $timeout = 0;
 
     /**
      * Create a new job instance.
@@ -47,27 +46,34 @@ class PengajuanCalculate implements ShouldQueue
      */
     public function handle()
     {
+        ini_set('memory_limit', '-1');
         $polis = Polis::find($this->polis_id);
         $iuran_tabbaru = $polis->iuran_tabbaru;
         $ujrah = $polis->ujrah_atas_pengelolaan;
+        echo "Polis : {$polis->nama}\n\n";
         $key=0;
         $update  =[];
-        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])
-                        ->with(['double_peserta','rate'])->withCount('double_peserta')->get() as $data){
+        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->with(['double_peserta','rate_'])->get() as $data){
             
             echo "{$key}. Calculate Nama : ".$data->nama ."\n";
 
             // $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
             //     $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
             // })->sum('basic');
-            $update[$key]['id'] = $data->id;
-            if($data->double_peserta_count>=1 and $data->double_peserta->tanggal_lahir==$data->tanggal_lahir){
+
+            // $update[$key]['id'] = $data->id;
+            if($data->double_peserta->where('tanggal_lahir',$data->tanggal_lahir)->count() > 0){
                 $update[$key]['is_double'] = 1;
+                $data->is_double = 1;
                 $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
                     $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
                 })->sum('basic');
+                $data->akumulasi_ganda = $check+$data->basic;
                 $update[$key]['akumulasi_ganda'] = $check+$data->basic;
-            }else $update[$key]['is_double']=0;
+            }else{
+                $data->is_double = 0;
+                $update[$key]['is_double']=0;
+            }
 
             $nilai_manfaat_asuransi = $data->basic;
 
@@ -75,20 +81,29 @@ class PengajuanCalculate implements ShouldQueue
             $update[$key]['masa'] = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $update[$key]['masa_bulan'] =  hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
 
+            $data->usia =  $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia,$data->tanggal_mulai) : '0';
+            $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
+            $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
             // find rate
             // $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
-            $rate = $data->rate->where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan]);
+            $rate = $data->rate_()->where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan])->first();
             if(!$rate || $rate->rate ==0 || $rate->rate ==""){
                 $data->rate = 0;
                 $data->kontribusi = 0;
             }else{
                 $update[$key]['rate'] = $rate ? $rate->rate : 0;
                 $update[$key]['kontribusi'] = $nilai_manfaat_asuransi * $data->rate/1000;
+                $data->rate =  $rate ? $rate->rate : 0;
+                $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }
             
             $update[$key]['dana_tabarru'] = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
             $update[$key]['dana_ujrah'] = ($data->kontribusi*$ujrah)/100; 
             $update[$key]['extra_mortalita'] = $data->rate_em*$nilai_manfaat_asuransi/1000;
+
+            $data->dana_tabarru =  ($data->kontribusi*$iuran_tabbaru)/100; 
+            $data->dana_ujrah = ($data->kontribusi*$ujrah)/100; 
+            $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
             
             if($data->akumulasi_ganda)
                 $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
@@ -99,13 +114,18 @@ class PengajuanCalculate implements ShouldQueue
             if($uw){
                 $update[$key]['uw'] = $uw->keterangan;
                 $update[$key]['ul'] = $uw->keterangan;
+                $data->uw = $uw->keterangan;
+                $data->ul = $uw->keterangan;
             }
             
             $update[$key]['is_hitung'] = 1;
+            $data->is_hitung = 1;
+            $data->save();
+            // Kepesertaan::find($data->id)->update($update);
             $key++;
         }
 
-        \Batch::update(new Kepesertaan,$update,'id');
+        // \Batch::update(new Kepesertaan,$update,'id');
 
         event(new RequestPengajuan('Data berhasil dikalkukasi',$polis->id,$this->transaction_id));
     }

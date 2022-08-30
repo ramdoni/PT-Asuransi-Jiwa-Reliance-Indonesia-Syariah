@@ -45,9 +45,27 @@ class RateRates extends Component
                 $insert[$num]['created_at'] = date('Y-m-d H:i:s');
                 $insert[$num]['updated_at'] = date('Y-m-d H:i:s');
                 $num++;
+                if($num==1000){ // insert maksimal per 1000
+                    ReasuradurRateRates::insert($insert);
+                    $num=0;
+                    $insert = [];
+                }
             }
         }
 
+        /**
+         * // it's the same instance.
+         * https://laracasts.com/discuss/channels/laravel/too-many-placeholders
+            DB::connection()->getPdo() === (new App\Models\Call)->getConnection()->getPdo(); // true
+
+            // set TRUE;
+            DB::connection()->getPdo()->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+
+            App\Models\Call::insert($data);
+
+            // set FALSE
+            DB::connection()->getPdo()->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+         */
         ReasuradurRateRates::insert($insert);
 
         $this->emit('modal','hide');

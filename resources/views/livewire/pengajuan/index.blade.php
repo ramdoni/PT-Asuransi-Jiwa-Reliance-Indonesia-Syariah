@@ -125,7 +125,7 @@
                                     <td><a href="{{route('pengajuan.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td>
                                         @if(isset($item->reas->no_pengajuan))
-                                            <a href="{{route('reas.edit',$item->id)}}">{{$item->reas->no_pengajuan}}</a>
+                                            <a href="{{route('reas.edit',$item->reas_id)}}" target="_blank">{{$item->reas->no_pengajuan}}</a>
                                         @endif
                                     </td>
                                     <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>

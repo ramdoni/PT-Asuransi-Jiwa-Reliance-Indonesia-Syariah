@@ -24,9 +24,9 @@ class Kepesertaan extends Model
         return $this->hasOne(Polis::class,'id','polis_id');
     }
 
-    public function rate()
+    public function rate_()
     {
-        return $this->hasOne(Rate::class,'polis_id','polis_id');
+        return $this->hasMany(Rate::class,'polis_id','polis_id');
     }
 
     public function pengajuan()

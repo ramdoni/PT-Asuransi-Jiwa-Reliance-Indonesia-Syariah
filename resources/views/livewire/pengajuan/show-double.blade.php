@@ -12,6 +12,7 @@
                     <thead style="background: #eee;text-transform: uppercase;">
                         <tr>
                             <th>No</th>
+                            <th>No Pengajuan</th>
                             <th>Nama Bank</th>
                             <th>KC/KP</th>
                             <th>No KTP</th>
@@ -43,6 +44,11 @@
                             @php($kontribusi = $item->basic * $item->rate/1000)
                             <tr>
                                 <td>{{$k+1}}</td>
+                                <td>
+                                    @if(isset($item->pengajuan->no_pengajuan))
+                                        <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{$item->pengajuan->no_pengajuan}}</a>
+                                    @endif
+                                </td>
                                 <td>{{$item->bank}}</td>
                                 <td>{{$item->cab}}</td>
                                 <td>{{$item->no_ktp}}</td>

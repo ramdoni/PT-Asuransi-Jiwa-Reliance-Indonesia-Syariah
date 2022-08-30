@@ -8,7 +8,7 @@ use App\Models\Kepesertaan;
 class ShowDouble extends Component
 {
     public $data=[];
-    protected $listeners = ['set_id'=>'set_id'];
+    protected $listeners = ['set_id'=>'set_id','modal_show_double'=>'set_id'];
     public function render()
     {
         return view('livewire.pengajuan.show-double');
@@ -20,4 +20,5 @@ class ShowDouble extends Component
             $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
         })->get();
     }
+
 }

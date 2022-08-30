@@ -149,13 +149,3 @@
     <br />
     {{ $kepesertaan ? $kepesertaan->links() : ''}}
 </div>
-@push('after-scripts')
-    <script>
-         Livewire.on('modal_show_double', (msg) => {
-            $('#modal_show_double').show();
-        });
-    </script>
-@endpush
-<div wire:ignore.self class="modal fade" id="modal_show_double" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @livewire('pengajuan.show-double')
-</div>

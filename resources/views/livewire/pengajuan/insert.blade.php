@@ -75,7 +75,7 @@
                                     @if($file)
                                         <a href="javascript:void(0)" wire:loading.remove wire:target="clear_file,save,hitung" wire:click="clear_file" class="text-danger mt-5"><i class="fa fa-times"></i> Clear</a>
                                         @if($is_calculate==false)
-                                            <a href="javascript:void(0)" wire:loading.remove wire:click="calculate" class="btn btn-warning mx-2"><i class="fa fa-refresh"></i> Cek Double & Hitung</a>
+                                            <a href="javascript:void(0)" wire:loading.remove wire:click="calculate" class="btn btn-warning mx-2"><i class="fa fa-refresh"></i> Hitung</a>
                                         @endif
                                         @if($total_pengajuan >0)
                                             <button wire:loading.remove wire:target="save,file,hitung" type="submit" class="btn btn-info"><i class="fa fa-check-circle"></i> Upload Pengajuan</button>
@@ -112,6 +112,9 @@
 <div wire:ignore.self class="modal fade" id="modal_add_em" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-em')
 </div>
+<div wire:ignore.self class="modal fade" id="modal_show_double" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('pengajuan.show-double')
+</div>
 @push('after-scripts')
     <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
     <script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
@@ -122,7 +125,6 @@
         .select2-container {width: 100% !important;}
     </style>
     <script>
-
         var channel = pusher.subscribe('pengajuan');
         channel.bind('generate', function(data) {
             Livewire.emit('set_calculate',false);
@@ -139,5 +141,8 @@
         });
         var selected__ = $('#polis_id').find(':selected').val();
         if(selected__ !="") select__2.val(selected__);
+         Livewire.on('modal_show_double', (msg) => {
+            $('#modal_show_double').modal('show');
+        });
     </script>
 @endpush

@@ -83,6 +83,6 @@
 <div wire:ignore.self class="modal fade" id="modal_uw_limit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reasuradur.uw-limit')
 </div>
-<div wire:ignore.self class="modal fade" id="modal_add_rate" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="modal_rate_insert" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reasuradur.rate-insert')
 </div>
