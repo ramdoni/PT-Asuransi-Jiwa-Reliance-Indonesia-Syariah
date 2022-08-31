@@ -142,7 +142,6 @@
                                     <th>Akhir Asuransi</th>
                                     <th>Jangka Waktu Asuransi</th>
                                     <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($data->extra_kontribusi)}}</span></th>
-                                    <th class="text-right">Extra Risk<br /><span class="sub_total"></span></th>
                                     <th class="text-right">Manfaat Asuransi<br /><span class="sub_total">{{format_idr(0)}}</span></th>
                                     <th class="text-right">Manfaat Asuransi Reas<br /><span class="sub_total">{{format_idr(0)}}</span></th>
                                     <th class="text-right">Manfaat Asuransi Ajri<br /><span class="sub_total">{{format_idr(0)}}</span></th>
@@ -210,9 +209,8 @@
                                         <td class="text-center">{{$item->usia}}</td>
                                         <td>{{date('d-m-Y',strtotime($item->tanggal_mulai))}}</td>
                                         <td>{{date('d-m-Y',strtotime($item->tanggal_akhir))}}</td>    
-                                        <td class="text-center">{{$item->masa_bulan}}</td>                                   
-                                        <td class="text-right">{{$item->reas_manfaat}}</td>                                   
-                                        <td class="text-right">{{$item->reas_type}}</td>                                   
+                                        <td class="text-center">{{$item->masa_bulan}}</td>        
+                                        <td class="text-right">{{format_idr($item->extra_kontribusi)}}</td>                                           
                                         <td class="text-right">{{format_idr($item->basic)}}</td>
                                         <td class="text-right">{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>        
                                         <td class="text-right">{{format_idr($item->reas_manfaat_asuransi_ajri)}}</td>                         
