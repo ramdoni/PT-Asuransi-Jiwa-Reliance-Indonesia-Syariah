@@ -74,11 +74,11 @@
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Kontribusi</td>
-                    <td style="text-align: right;">{{ format_idr($kontribusi,2)}}</td>
+                    <td style="text-align: right;">{{ format_idr($kontribusi)}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Extra Kontribusi</td>
-                    <td style="text-align: right;">{{ $extra_kontribusi ? format_idr($extra_kontribusi,2) : '-'}}</td>
+                    <td style="text-align: right;">{{ $extra_kontribusi ? format_idr($extra_kontribusi) : '-'}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Extra Mortalita</td>
@@ -86,27 +86,27 @@
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">{{isset($data->polis->ket_diskon) ? $data->polis->ket_diskon : ''}} {{isset($data->potong_langsung_persen) ? $data->potong_langsung_persen.'%' : ''}}</td>
-                    <td style="text-align: right;">{{$data->potong_langsung ? '-'. format_idr($data->potong_langsung,2) : '-'}}</td>
+                    <td style="text-align: right;">{{$data->potong_langsung ? '-'. format_idr($data->potong_langsung) : '-'}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">PPN {{isset($data->ppn_persen) ? $data->ppn_persen : '0'}}%</td>
-                    <td style="text-align: right;">{{isset($data->ppn) ? format_idr($data->ppn,2) : '-'}}</td>
+                    <td style="text-align: right;">{{isset($data->ppn) ? '-'.format_idr($data->ppn) : '-'}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">PPh {{isset($data->pph_persen) ? $data->pph_persen : '0'}}%</td>
-                    <td style="text-align: right;">{{isset($data->pph) ? format_idr($data->pph,2) : '-'}} </td>
+                    <td style="text-align: right;">{{isset($data->pph) ? format_idr($data->pph) : '-'}} </td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Biaya Polis dan Materai</td>
-                    <td style="text-align: right;">{{$data->biaya_polis_materai?format_idr($data->biaya_polis_materai,2) : '-'}} </td>
+                    <td style="text-align: right;">{{$data->biaya_polis_materai?format_idr($data->biaya_polis_materai) : '-'}} </td>
                 </tr>
                 <tr>
                     <td style="padding-left: 20px">Biaya Sertifikat/Kartu</td>
-                    <td style="text-align: right;">{{$data->biaya_sertifikat?format_idr($data->biaya_sertifikat,2) : '-'}}</td>
+                    <td style="text-align: right;">{{$data->biaya_sertifikat?format_idr($data->biaya_sertifikat) : '-'}}</td>
                 </tr>
                 <tr>
                     <th>Total Kontribusi Dibayar</th>
-                    <td style="text-align: right;"><b>{{format_idr($total,2)}}</b></td>
+                    <td style="text-align: right;"><b>{{format_idr(floor($total))}}</b></td>
                 </tr>
                 <tr>
                     <td colspan="2">Terbilang : {{terbilang($total)}} Rupiah</td>
@@ -217,7 +217,7 @@
                 <tr>
                     <td style="padding-left: 33px;">Total Kontribusi</td>
                     <td> : Rp </td>
-                    <td style="text-align:right;">{{ format_idr($data->net_kontribusi) }}</td>
+                    <td style="text-align:right;">{{ format_idr($total_gross) }}</td>
                 </tr>
             </table>
             <p style="padding-left: 20px;"><strong>2. Daftar Kepesertaan Tertunda Asuransi Jiwa Kumpulan Syariah</strong></p>
@@ -225,12 +225,12 @@
                 <tr>
                     <td style="width:40%;padding-left: 35px;">Total Peserta</td>
                     <td style="width: 50px;"> : </td>
-                    <td style="text-align: right"> {{$data->kepesertaan->whereIn('status_akseptasi',[2,3])->count()}}</td>
+                    <td style="text-align: right"> {{$data->kepesertaan->whereIn('status_akseptasi',[2,3])->count()==0?'-':$data->kepesertaan->whereIn('status_akseptasi',[2,3])->count()}}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 35px;">Total Nilai Manfaat Asuransi</td>
                     <td> : Rp </td>
-                    <td style="text-align: right"> {{format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</td>
+                    <td style="text-align: right"> {{$data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic')==0?'-':format_idr($data->kepesertaan->whereIn('status_akseptasi',[2,3])->sum('basic'))}}</td>
                 </tr>
             </table>
             <br/>

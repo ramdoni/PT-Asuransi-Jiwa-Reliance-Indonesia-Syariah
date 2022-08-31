@@ -93,7 +93,7 @@ class Edit extends Component
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi);
-
+        
             if($data->is_double){
                 $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
                 $data->akumulasi_ganda = $sum+$data->basic;    
@@ -131,6 +131,36 @@ class Edit extends Component
             }
             $data->save();
         }
+
+        /**
+         * 
+             mstnc
+            tanggal akseptasi - tanggal mulai > retroaktif dihitung today
+            tanggal akseptasi - tanggal mulai  < retroaktif value 0
+
+            jika ada waiting periode
+            - tanggal akseptasi + waiting period
+
+            jika ada waiting period dan retroaktif maka yg dipakai waiting period
+         */
+
+        // foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
+        //     if($peserta->ul=='GOA'){
+        //         if(isset($peserta->polis->waiting_period) and $peserta->polis->waiting_period !="")
+        //             $peserta->tanggal_stnc = date('Y-m-d',strtotime(" +{$peserta->polis->waiting_period} month", strtotime($this->data->head_syariah_submit)));
+        //         else{
+        //             if(countDay($this->data->head_syariah_submit,$peserta->tanggal_mulai) > $peserta->polis->retroaktif){
+        //                 $peserta->tanggal_stnc = $this->data->head_syariah_submit;
+        //             }elseif(countDay($this->data->head_syariah_submit,$peserta->tanggal_mulai) < $peserta->polis->retroaktif){
+        //                 $peserta->tanggal_stnc = null;
+        //             }
+        //         }
+        //     }
+            
+        //     if(in_array($peserta->ul,['NM','A','B','C'])) $peserta->tanggal_stnc = $this->data->head_syariah_submit;
+            
+        //     $peserta->save();
+        // }
 
         // $key=0;
         // $running_number = 823;
@@ -181,7 +211,7 @@ class Edit extends Component
 
             if($peserta->ul=='GOA'){
                 if(isset($peserta->polis->waiting_period) and $peserta->polis->waiting_period !="")
-                    $peserta->tanggal_stnc = date('Y-m-d',strtotime(" +{$peserta->polis->waiting_period} month", strtotime($peserta->polis->tanggal_akseptasi)));
+                    $peserta->tanggal_stnc = date('Y-m-d',strtotime(" +{$peserta->polis->waiting_period} month", strtotime($this->data->head_syariah_submit)));
                 else{
                     if(countDay($this->data->head_syariah_submit,$peserta->tanggal_mulai) > $peserta->polis->retroaktif){
                         $peserta->tanggal_stnc = date('Y-m-d');
@@ -256,7 +286,10 @@ class Edit extends Component
          */
         if($this->data->polis->ppn){
             $this->data->ppn_persen =  $this->data->polis->ppn;
-            $this->data->ppn = $kontribusi*($this->data->polis->ppn/100);
+            if($this->data->potong_langsung)
+                $this->data->ppn = (($this->data->polis->ppn/100) * $this->data->potong_langsung);
+            else
+                $this->data->ppn = $kontribusi*($this->data->polis->ppn/100);
         }
 
         /**
@@ -268,7 +301,7 @@ class Edit extends Component
             $this->data->biaya_sertifikat = $this->data->polis->biaya_sertifikat;
         }
 
-        $total = $kontribusi+$ektra_kontribusi+$extra_mortalita+$this->data->biaya_sertifikat+$this->data->pph+$this->data->ppn-$this->data->potong_langsung;
+        $total = $kontribusi+$ektra_kontribusi+$extra_mortalita+$this->data->biaya_sertifikat+$this->data->biaya_polis_materai+$this->data->pph-($this->data->ppn+$this->data->potong_langsung);
         $this->data->net_kontribusi = $total;
 
         $this->data->save();
