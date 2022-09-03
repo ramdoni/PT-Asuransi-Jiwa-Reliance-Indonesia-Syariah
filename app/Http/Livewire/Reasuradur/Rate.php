@@ -9,7 +9,7 @@ use App\Models\ReasuradurRateRates;
 
 class Rate extends Component
 {
-    protected $listeners = ['reload-page'=>'$refresh'];
+    protected $listeners = ['reload-rate'=>'$refresh'];
     public function render()
     {
         $data = ReasuradurRate::withCount('rate')

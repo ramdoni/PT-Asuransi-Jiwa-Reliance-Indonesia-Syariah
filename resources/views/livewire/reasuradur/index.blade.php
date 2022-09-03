@@ -1,7 +1,7 @@
 @section('sub-title', 'Index')
 @section('title', 'Reasuradur')
 <div class="clearfix row">
-    <div class="col-lg-6">
+    <div class="col-lg-5">
         <div class="card">
             <div class="header pb-0">
                 <div class="row">
@@ -43,7 +43,7 @@
                             @foreach ($data as $k => $item)
                                 <tr>
                                     <td style="width: 50px;">{{ $k + 1 }}</td>
-                                    <td><a href="javascript:void(0)" wire:click="$emit('set-id',{{$item->id}})" data-toggle="modal" data-target="#modal_edit">{{$item->name}}</a></td>
+                                    <td><a href="javascript:void(0)" wire:click="$emit('edit',{{$item->id}})" data-toggle="modal" data-target="#modal_edit">{{$item->name}}</a></td>
                                     <td></td>
                                 </tr>
                             @endforeach
@@ -59,5 +59,5 @@
     @livewire('reasuradur.insert')
 </div>
 <div wire:ignore.self class="modal fade" id="modal_edit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @livewire('rate.edit')
+    @livewire('reasuradur.edit')
 </div>

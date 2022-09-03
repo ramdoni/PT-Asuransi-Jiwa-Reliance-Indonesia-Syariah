@@ -1,4 +1,4 @@
-<div class="col-lg-6">
+<div class="col-lg-7">
     <div class="card">
         <div class="header pb-0">
             <div class="row">
@@ -31,7 +31,7 @@
                             <tr>
                                 <td>{{$k+1}}</td>
                                 <td>{{isset($item->reasuradur->name) ? $item->reasuradur->name : '-'}}</td>
-                                <td>{{$item->nama}}</td>
+                                <td><a href="javascript:void(0)" wire:click="$emit('edit-rate',{{$item->id}})">{{$item->nama}}</a></td>
                                 <td>{{format_idr($item->or,2)}}</td>
                                 <td>{{format_idr($item->reas,2)}}</td>
                                 <td class="text-center">
@@ -75,6 +75,9 @@
         Livewire.on('show_rate_uw',()=>{
             $("#modal_uw_limit").modal('show');
         });
+        Livewire.on('edit-rate',(id)=>{
+            $("#modal_edit_rate").modal('show');
+        });
     </script>
 @endpush
 <div wire:ignore.self class="modal fade" id="modal_rate_rates" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -85,4 +88,7 @@
 </div>
 <div wire:ignore.self class="modal fade" id="modal_rate_insert" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reasuradur.rate-insert')
+</div>
+<div wire:ignore.self class="modal fade" id="modal_edit_rate" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('reasuradur.edit-rate')
 </div>
