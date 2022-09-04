@@ -113,7 +113,7 @@
                         <li class="nav-item"><a class="nav-link {{$tab_active=='tab_skip' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_skip')" data-toggle="tab" href="#kepesertaan_skip">{{ __('Skip') }} <span class="badge badge-danger"></span></a></li>
                     </ul>
                     <div class="tab-content px-0">
-                        <div class="tab-pane {{$tab_active=='tab_draft' ? 'active show' : ''}}" id="kepesertaan_postpone">
+                        <div class="tab-pane {{$tab_active=='tab_draft' ? 'active show' : ''}}" id="kepesertaan_draft">
                             @livewire('reas.draft',['data'=>$data->id])
                         </div>
                         <div class="tab-pane {{$tab_active=='tab_kalkulasi' ? 'active show' : ''}}" id="kepesertaan_kalkulasi">

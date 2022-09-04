@@ -41,6 +41,9 @@
                                 <th>OR</th>
                                 <th>REAS</th>
                                 <th class="text-center">TOTAL PESERTA</th>
+                                <th class="text-right">UANG ASURANSI AJRI</th>
+                                <th class="text-right">UANG ASURANSI REAS</th>
+                                <th class="text-right">KONTRIBUSI GROSS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,6 +70,9 @@
                                     <td>{{$item->or}}%</td>
                                     <td>{{$item->reas}}%</td>
                                     <td class="text-center">{{$item->kepesertaan_count}}</td>
+                                    <td class="text-right">{{format_idr($item->manfaat_asuransi_ajri)}}</td>
+                                    <td class="text-right">{{format_idr($item->manfaat_asuransi_reas)}}</td>
+                                    <td class="text-right">{{format_idr($item->kontribusi)}}</td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)

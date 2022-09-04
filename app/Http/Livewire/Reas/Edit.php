@@ -33,4 +33,34 @@ class Edit extends Component
     {
         ReasCalculate::dispatch($this->data->id);
     }
+
+    public function submit_underwriting()
+    {
+        $this->data->status = 1;
+        $this->data->save();
+
+        session()->flash('message-success',__('Pengajuan berhasil submit'));
+
+        return redirect()->route('reas.edit',$this->data->id);
+    }
+
+    public function submit_head_teknik()
+    {
+        $this->data->status = 2;
+        $this->data->save();
+
+        session()->flash('message-success',__('Pengajuan berhasil submit'));
+
+        return redirect()->route('reas.edit',$this->data->id);
+    }
+
+    public function submit_head_syariah()
+    {
+        $this->data->status = 3;
+        $this->data->save();
+
+        session()->flash('message-success',__('Pengajuan berhasil submit'));
+
+        return redirect()->route('reas.edit',$this->data->id);
+    }
 }

@@ -38,4 +38,9 @@ class Kepesertaan extends Model
     {
         return $this->hasMany(Kepesertaan::class,'nama','nama')->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
     }
+
+    public function reas()
+    {
+        return $this->hasOne(Reas::class,'id','reas_id');
+    }
 }

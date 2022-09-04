@@ -5,9 +5,6 @@
                 <tr>
                     <th>No</th>
                     <th class="text-center">Status</th>
-                    <th class="text-center">
-                        <label>Check All <br /><input type="checkbox" wire:model="check_all" value="1" /></label>
-                    </th>
                     <th>
                         @if(count($check_id)>0)
                             <span wire:loading wire:target="approveAll,rejectAll">
@@ -57,17 +54,6 @@
                             @endif
                             @if($item->status_reas==2)
                                 <span class="badge badge-danger">Skip</span>
-                            @endif
-                        </td>
-                        <td class="text-center">
-                            @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
-                                <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
-                            @endif
-                            @if($data->status==1 and \Auth::user()->user_access_id==3)
-                                <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
-                            @endif
-                            @if($data->status==2 and\Auth::user()->user_access_id==4)
-                                <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                             @endif
                         </td>
                         <td>
