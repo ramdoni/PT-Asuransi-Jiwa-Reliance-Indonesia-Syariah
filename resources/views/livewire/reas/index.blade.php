@@ -73,6 +73,9 @@
                                     <td class="text-right">{{format_idr($item->manfaat_asuransi_ajri)}}</td>
                                     <td class="text-right">{{format_idr($item->manfaat_asuransi_reas)}}</td>
                                     <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                    </td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
