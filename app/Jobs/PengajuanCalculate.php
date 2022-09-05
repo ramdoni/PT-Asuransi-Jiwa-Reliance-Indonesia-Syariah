@@ -56,7 +56,6 @@ class PengajuanCalculate implements ShouldQueue
         foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->with(['double_peserta','rate_'])->get() as $data){
             
             echo "{$key}. Calculate Nama : ".$data->nama ."\n";
-
             // $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
             //     $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
             // })->sum('basic');
@@ -124,9 +123,7 @@ class PengajuanCalculate implements ShouldQueue
             // Kepesertaan::find($data->id)->update($update);
             $key++;
         }
-
         // \Batch::update(new Kepesertaan,$update,'id');
-
         event(new RequestPengajuan('Data berhasil dikalkukasi',$polis->id,$this->transaction_id));
     }
 }

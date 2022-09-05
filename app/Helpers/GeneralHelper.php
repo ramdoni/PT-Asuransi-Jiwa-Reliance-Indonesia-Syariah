@@ -80,14 +80,13 @@ function hitung_masa($start,$end){
 }
 
 function hitung_masa_bulan($start,$end,$masa_asuransi=1){
-
     $birthDate = new \DateTime($start);
 	$today = new \DateTime($end);
 	if ($birthDate > $today) { 
 	    return 0;
     }
 
-    $today->modify('-1 day');
+    // $today->modify('-1 day');
 
     if($masa_asuransi==2) $today->modify('+1 day');
 
@@ -96,13 +95,12 @@ function hitung_masa_bulan($start,$end,$masa_asuransi=1){
     $bulan = $today->diff($birthDate)->m;
     if($tahun>0) $bulan += $tahun*12;
     
-    $hari = $today->diff($birthDate)->d;
-    
+    $hari = $today->diff($birthDate)->days;
+
     if($hari >0)
         return $bulan + 1;
     else
         return $bulan;
-    
 }
 
 function hitung_umur($tanggal_lahir,$pembulatan=1,$today=''){

@@ -469,7 +469,7 @@
                                 <input type="number" class="form-control" wire:model="retroaktif" placeholder="Hari" />
                             </div>
                             <div class="form-group">
-                                <label>Waiting Period</label>
+                                <label>Waiting Period (Bulan)</label>
                                 <input type="number" class="form-control" wire:model="waiting_period" placeholder="Bulan" />
                             </div>
                             <div class="form-group">
