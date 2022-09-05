@@ -32,7 +32,7 @@
                                         <td><strong>Status</strong></td>
                                         <td>
                                             @if($data->status==0)
-                                                <span class="badge badge-warning">Underwriting</span>
+                                                <span class="badge badge-warning">Reasuransi</span>
                                             @endif
                                             @if($data->status==1)
                                                 <span class="badge badge-info">Head Teknik</span>
@@ -147,15 +147,22 @@
         </div>
     </div>
 </div>
-
 <div wire:ignore.self class="modal fade" id="modal_add_extra_kontribusi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reas.add-extra-kontribusi')
 </div>
-
 @push('after-scripts')
     <script>
          Livewire.on('add-extra-kontribusi', (id) => {
             $('#modal_add_extra_kontribusi').modal('show');
+        });
+
+        var channel = pusher.subscribe('reas');
+        channel.bind('generate_reas', function(data) {
+            Livewire.emit('set_calculate_reas',false);
+            console.log(data);
+            if(data.transaction_id=={{$data->id}}){
+                show_toast(data.message,'top-center');
+            }
         });
     </script>
 @endpush

@@ -44,6 +44,7 @@
                                 <th class="text-right">UANG ASURANSI AJRI</th>
                                 <th class="text-right">UANG ASURANSI REAS</th>
                                 <th class="text-right">KONTRIBUSI GROSS</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,7 +53,7 @@
                                     <td style="width: 50px;">{{ $k + 1 }}</td>
                                     <td class="text-center">
                                         @if($item->status==0)
-                                            <span class="badge badge-warning">Underwriting</span>
+                                            <span class="badge badge-warning">Reasuransi</span>
                                         @endif
                                         @if($item->status==1)
                                             <span class="badge badge-info">Head Teknik</span>

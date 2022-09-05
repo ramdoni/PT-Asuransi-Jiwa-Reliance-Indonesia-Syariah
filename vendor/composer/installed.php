@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '6408a9c33023953ab23d6b03d7b65e499451f53f',
+        'reference' => 'c6d3d9a42abebd787b33853614b5a6ff531fd34f',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -526,7 +526,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '6408a9c33023953ab23d6b03d7b65e499451f53f',
+            'reference' => 'c6d3d9a42abebd787b33853614b5a6ff531fd34f',
             'dev_requirement' => false,
         ),
         'laravel/sanctum' => array(
@@ -1038,12 +1038,12 @@
             'dev_requirement' => false,
         ),
         'pusher/pusher-php-server' => array(
-            'pretty_version' => 'v4.1.5',
-            'version' => '4.1.5.0',
+            'pretty_version' => '6.1.0',
+            'version' => '6.1.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../pusher/pusher-php-server',
             'aliases' => array(),
-            'reference' => '251f22602320c1b1aff84798fe74f3f7ee0504a9',
+            'reference' => '8673f60458ceedb9531fad7a5747eb49de619a8a',
             'dev_requirement' => false,
         ),
         'ralouphie/getallheaders' => array(

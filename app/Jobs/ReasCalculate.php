@@ -12,6 +12,7 @@ use App\Models\Kepesertaan;
 use App\Models\Reas;
 use App\Models\ReasuradurRateUw;
 use App\Models\ReasuradurRateRates;
+use App\Events\RequestReas;
 
 class ReasCalculate implements ShouldQueue
 {
@@ -88,5 +89,8 @@ class ReasCalculate implements ShouldQueue
         $this->data->ujroh = Kepesertaan::where('reas_id',$this->data->id)->sum('ujroh_reas');
         $this->data->kontribusi_netto = Kepesertaan::where('reas_id',$this->data->id)->sum('net_kontribusi_reas');
         $this->data->save();
+
+        event(new RequestReas('Data berhasil dikalkukasi',$this->data->id));
+        echo "Running Event \n\n";
     }
 }

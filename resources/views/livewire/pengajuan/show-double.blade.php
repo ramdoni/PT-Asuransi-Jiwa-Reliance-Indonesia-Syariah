@@ -93,7 +93,7 @@
                         @php($extra_kontribusi_approve = $data->sum('extra_kontribusi'))
                         <tfoot style="background: #eee;">
                             <tr>
-                                <th colspan="15" class="text-right">Akumulasi</th>
+                                <th colspan="16" class="text-right">Akumulasi</th>
                                 <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
                                 <!-- <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th> -->
                                 <!-- <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th> -->
