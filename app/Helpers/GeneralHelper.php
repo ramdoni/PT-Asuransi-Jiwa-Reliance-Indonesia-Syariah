@@ -95,7 +95,7 @@ function hitung_masa_bulan($start,$end,$masa_asuransi=1){
     $bulan = $today->diff($birthDate)->m;
     if($tahun>0) $bulan += $tahun*12;
     
-    $hari = $today->diff($birthDate)->days;
+    $hari = $today->diff($birthDate)->d;
 
     if($hari >0)
         return $bulan + 1;
