@@ -93,11 +93,7 @@ class Edit extends Component
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi);
-            if($data->id==230114){
-                // dd($data->tanggal_mulai);
-                dd(hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi));
-            }
-            /*
+           
             if($data->is_double){
                 $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
                 $data->akumulasi_ganda = $sum+$data->basic;    
@@ -134,7 +130,6 @@ class Edit extends Component
                 $data->ul = $uw->keterangan;
             }
             $data->save();
-            */
         }
         
         /**
