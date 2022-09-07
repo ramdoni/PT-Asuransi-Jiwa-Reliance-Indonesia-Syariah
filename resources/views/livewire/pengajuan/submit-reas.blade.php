@@ -39,13 +39,17 @@
                             </select>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-4 form-group">
                                 <label>OR</label>
                                 <input type="text" class="form-control" wire:model="or" readonly />
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-4 form-group">
                                 <label>Reas</label>
                                 <input type="text" class="form-control" wire:model="reas" readonly />
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>RI COM</label>
+                                <input type="text" class="form-control" wire:model="ri_com" readonly />
                             </div>
                         </div>
                         <div class="form-group">

@@ -62,6 +62,10 @@
                                         <td>: {{$data->reas}}%</td>
                                     </tr>
                                     <tr>
+                                        <th>RI COM</th>
+                                        <td>: {{$data->ri_com}}%</td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
                                 </thead>
@@ -96,7 +100,7 @@
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                            <a href="javascript:void(0)" wire:click="hitung" wire:loading.remove wire:target="hitung" class="badge badge-warning badge-active"><i class="fa fa-reload"></i> Hitung Reas</a>
+                                            <a href="javascript:void(0)" wire:click="hitung" wire:loading.remove wire:target="hitung" class="btn btn-warning"><i class="fa fa-refresh"></i> Hitung Reas</a>
                                             <span wire:loading wire:target="hitung">
                                                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                 <span class="sr-only">{{ __('Loading...') }}</span>

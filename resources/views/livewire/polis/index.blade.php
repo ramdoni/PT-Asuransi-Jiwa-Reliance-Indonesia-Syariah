@@ -297,7 +297,6 @@
         </div>
     </div>
 </div>
-
 <div wire:ignore.self class="modal fade" id="modal_add_uw_limit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.underwriting-limit')
 </div>

@@ -47,6 +47,12 @@
                         @enderror
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>RI COM (%)</label>
+                        <input type="number"  class="form-control" wire:model="ri_com" />
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <div wire:loading>

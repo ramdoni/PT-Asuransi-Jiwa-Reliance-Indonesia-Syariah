@@ -33,7 +33,7 @@ class Edit extends Component
 
     public function hitung()
     {
-        // $this->is_calculate = true;
+        $this->is_calculate = true;
         /*
         ini_set('memory_limit', '-1');
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1])->get();

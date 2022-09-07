@@ -12,7 +12,7 @@ use App\Models\Kepesertaan;
 class SubmitReas extends Component
 {
     public $pengajuan = [];
-    public $reasuradur_id,$reasuradur=[],$rate=[],$or,$reas,$reasuradur_rate_id,$manfaat,$type_reas;
+    public $reasuradur_id,$reasuradur=[],$rate=[],$or,$reas,$ri_com,$reasuradur_rate_id,$manfaat,$type_reas;
     protected $listeners = ['set_pengajuan'=>'set_pengajuan'];
     public function render()
     {
@@ -36,6 +36,7 @@ class SubmitReas extends Component
             $find = ReasuradurRate::find($this->reasuradur_rate_id);
             $this->or = $find->or;
             $this->reas = $find->reas;
+            $this->ri_com = $find->ri_com;
         }
     }
 
@@ -53,6 +54,7 @@ class SubmitReas extends Component
         $data->reasuradur_rate_id = $this->reasuradur_rate_id;
         $data->or = $this->or;
         $data->reas = $this->reas;
+        $data->ri_com = $this->ri_com;
         $data->manfaat  = $this->manfaat;
         $data->type_reas = $this->type_reas;
         $data->save();
@@ -61,7 +63,7 @@ class SubmitReas extends Component
             $item->reas_id = $data->id;
             $item->save();
 
-            Kepesertaan::where('pengajuan_id',$item->id)->update(['reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
+            Kepesertaan::where(['pengajuan_id'=>$item->id,'status_akseptasi'=>1])->update(['reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
 
         session()->flash('message-success',__('Pengajuan Reas berhasil disubmit'));
