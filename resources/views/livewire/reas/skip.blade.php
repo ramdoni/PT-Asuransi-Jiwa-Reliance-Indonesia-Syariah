@@ -4,16 +4,6 @@
             <thead style="text-transform: uppercase;">
                 <tr>
                     <th>No</th>
-                    <th class="text-center">Status</th>
-                    <th>
-                        @if(count($check_id)>0)
-                            <span wire:loading wire:target="approveAll,rejectAll">
-                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                <span class="sr-only">{{ __('Loading...') }}</span>
-                            </span>
-                            <a href="javascript:void(0)" wire:click="approveAll" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima Semua</a>
-                        @endif
-                    </th>
                     <th>No Pengajuan</th>
                     <th>No Polis</th>
                     <th>Nama Pemegang Polis</th>
@@ -45,41 +35,6 @@
                     @php($index_proses++)
                     <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                         <td>{{$index_proses}}</td>
-                        <td>
-                            @if($item->status_reas==0)
-                                <span class="badge badge-warning">Draft</span>
-                            @endif
-                            @if($item->status_reas==1)
-                                <span class="badge badge-success">Calculate</span>
-                            @endif
-                            @if($item->status_reas==2)
-                                <span class="badge badge-danger">Skip</span>
-                            @endif
-                        </td>
-                        <td>
-                            <span wire:loading wire:target="approve({{$item->id}})">
-                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                <span class="sr-only">{{ __('Loading...') }}</span>
-                            </span>
-                            {{-- Underwriting --}}
-                            @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
-                                <div wire:loading.remove wire:target="approve({{$item->id}})">
-                                    <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
-                                </div>
-                            @endif
-                            {{-- Head Teknik --}}
-                            @if($data->status==1 and \Auth::user()->user_access_id==3)
-                                <div wire:loading.remove wire:target="approve({{$item->id}})">
-                                    <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
-                                </div>
-                            @endif
-                            {{-- Head Syariah --}}
-                            @if($data->status==2 and \Auth::user()->user_access_id==4)
-                                <div wire:loading.remove wire:target="approve({{$item->id}})">
-                                    <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
-                                </div>
-                            @endif
-                        </td>
                         <td><a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
                         <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
                         <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>

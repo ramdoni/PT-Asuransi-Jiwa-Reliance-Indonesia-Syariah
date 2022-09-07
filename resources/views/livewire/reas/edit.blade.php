@@ -112,9 +112,9 @@
                         </div>
                     </div>
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_draft' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_draft')" data-toggle="tab" href="#kepesertaan_draft">{{ __('Draft') }} <span class="badge badge-danger"></span></a></li>
-                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_kalkulasi' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_kalkulasi')" data-toggle="tab" href="#kepesertaan_kalkulasi">{{ __('Reas') }}  <span class="badge badge-danger"></span></a></li>
-                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_skip' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_skip')" data-toggle="tab" href="#kepesertaan_skip">{{ __('OR') }} <span class="badge badge-danger"></span></a></li>
+                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_draft' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_draft')" data-toggle="tab" href="#kepesertaan_draft">{{ __('Draft') }} <span class="badge badge-warning">{{$count_draft}}</span></a></li>
+                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_kalkulasi' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_kalkulasi')" data-toggle="tab" href="#kepesertaan_kalkulasi">{{ __('Reas') }} <span class="badge badge-success">{{$count_reas}}</span></a></li>
+                        <li class="nav-item"><a class="nav-link {{$tab_active=='tab_skip' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_skip')" data-toggle="tab" href="#kepesertaan_skip">{{ __('OR') }} <span class="badge badge-danger">{{$count_or}}</span></a></li>
                     </ul>
                     <div class="tab-content px-0">
                         <div class="tab-pane {{$tab_active=='tab_draft' ? 'active show' : ''}}" id="kepesertaan_draft">

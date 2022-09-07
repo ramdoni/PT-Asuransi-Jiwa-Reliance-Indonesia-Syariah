@@ -20,9 +20,16 @@ class Edit extends Component
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1]);
         
+        $draft = clone $kepesertaan;
+        $reas = clone $kepesertaan;
+        $or = clone $kepesertaan;
+
         if($this->filter_status) $kepesertaan->where('status_reas',$this->filter_status);
 
-        return view('livewire.reas.edit')->with(['kepesertaan'=>$kepesertaan->paginate(100)]);
+        return view('livewire.reas.edit')->with(['kepesertaan'=>$kepesertaan->paginate(100),
+                                                    'count_draft'=>$draft->where('status_reas',0)->count(),
+                                                    'count_reas'=>$reas->where('status_reas',1)->count(),
+                                                    'count_or'=>$or->where('status_reas',2)->count()]);
     }
 
     public function mount(Reas $id)

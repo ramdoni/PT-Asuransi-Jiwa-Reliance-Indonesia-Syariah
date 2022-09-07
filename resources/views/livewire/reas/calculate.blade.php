@@ -4,7 +4,6 @@
             <thead style="text-transform: uppercase;">
                 <tr>
                     <th>No</th>
-                    <th class="text-center">Status</th>
                     <th>No Pengajuan</th>
                     <th>No Polis</th>
                     <th>Nama Pemegang Polis</th>
@@ -36,17 +35,6 @@
                     @php($index_proses++)
                     <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                         <td>{{$index_proses}}</td>
-                        <td>
-                            @if($item->status_reas==0)
-                                <span class="badge badge-warning">Draft</span>
-                            @endif
-                            @if($item->status_reas==1)
-                                <span class="badge badge-success">Calculate</span>
-                            @endif
-                            @if($item->status_reas==2)
-                                <span class="badge badge-danger">Skip</span>
-                            @endif
-                        </td>
                         <td><a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
                         <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
                         <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
