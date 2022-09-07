@@ -93,7 +93,7 @@
                                     <tr>
                                         <th>UL/UW</th>
                                         <td>
-                                            <select class="form-control" wire:model="filter_ul">
+                                            <select wire:loading.remove wire:target="filter_ul" class="form-control" wire:model="filter_ul">
                                                 <option value=""> -- Pilih -- </option>
                                                 <option>A</option>
                                                 <option>B</option>
@@ -102,6 +102,10 @@
                                                 <option>NM</option>
                                                 <option>GOA</option>
                                             </select>
+                                            <span wire:loading wire:target="filter_ul">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span>
+                                            </span>
                                         </td>
                                     </tr>
                                     <tr>

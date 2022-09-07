@@ -44,6 +44,11 @@
     <body>
         <div class="container">
             <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
             <hr style="border-bottom:1px solid #000;border-top:3px solid #000;height:2px;border-right:0;border-left:0;" />
             <h1 style="text-align:center">DEBIT NOTE</h1>
             <hr style="border-bottom:3px solid #000;border-top:1px solid #000;height:2px;border-right:0;border-left:0;" />
@@ -143,6 +148,11 @@
                 <small style="font-size:10px;">Catatan: Harap pembayaran kontribusi mencantumkan nomor Debit Note.</small>
             </p>
             <div style="page-break-after: always;"></div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
             <br />
             <br />
             <br />
