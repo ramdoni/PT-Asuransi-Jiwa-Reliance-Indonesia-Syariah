@@ -91,6 +91,20 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <th>UL/UW</th>
+                                        <td>
+                                            <select class="form-control" wire:model="filter_ul">
+                                                <option value=""> -- Pilih -- </option>
+                                                <option>A</option>
+                                                <option>B</option>
+                                                <option>C</option>
+                                                <option>E</option>
+                                                <option>NM</option>
+                                                <option>GOA</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
                                 </thead>
