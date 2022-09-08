@@ -77,7 +77,7 @@ class ReasCalculate implements ShouldQueue
             // kontribusi reas
             $rate = ReasuradurRateRates::where(['tahun'=>$item->usia,'bulan'=>$item->masa_bulan,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
             if($rate){
-                $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/100;
+                $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/1000;
             }
             if($item->total_kontribusi_reas<=0) $item->status = 2; // tidak direaskan karna distribusinya 0
 
