@@ -79,7 +79,6 @@ class ReasCalculate implements ShouldQueue
             if($rate){
                 $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/1000;
             }
-            if($item->total_kontribusi_reas<=0) $item->status = 2; // tidak direaskan karna distribusinya 0
 
             if($ri_com) $item->ujroh_reas = ($item->total_kontribusi_reas * $ri_com) / 100; 
             
@@ -89,7 +88,12 @@ class ReasCalculate implements ShouldQueue
             if($uw) $item->ul_reas = $uw->keterangan;
             
             $item->net_kontribusi_reas = $item->total_kontribusi_reas + $item->reas_extra_kontribusi - $item->ujroh_reas;
-            $item->status_reas = 1;
+            
+            if($item->total_kontribusi_reas<=0) 
+                $item->status_reas = 2; // tidak direaskan karna distribusinya 0
+            else
+                $item->status_reas = 1;
+                
             $item->save();
             echo "Net Kontribusi : {$item->net_kontribusi_reas}";
         }

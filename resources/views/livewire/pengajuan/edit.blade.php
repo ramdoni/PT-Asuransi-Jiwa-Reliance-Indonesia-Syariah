@@ -366,7 +366,7 @@
                                                 <td class="text-center">{{$item->rate}}</td>
                                                 <td class="text-right">
                                                     @if($item->is_double==1 || $item->akumulasi_ganda)
-                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>
+                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->basic)}}</a>
                                                     @else
                                                         {{format_idr($item->basic)}}
                                                     @endif
@@ -527,7 +527,7 @@
                                                 <td class="text-center">{{$item->rate}}</td>
                                                 <td class="text-right">
                                                     @if($item->is_double==1 || $item->akumulasi_ganda)
-                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->akumulasi_ganda)}}</a>
+                                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_show_double" wire:click="$emit('set_id',{{$item->id}})">{{format_idr($item->basic)}}</a>
                                                     @else
                                                         {{format_idr($item->basic)}}
                                                     @endif

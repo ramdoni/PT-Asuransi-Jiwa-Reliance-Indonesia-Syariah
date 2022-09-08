@@ -163,9 +163,9 @@
         var channel = pusher.subscribe('reas');
         channel.bind('generate_reas', function(data) {
             Livewire.emit('set_calculate_reas',false);
-            console.log(data);
             if(data.transaction_id=={{$data->id}}){
                 show_toast(data.message,'top-center');
+                location.reload();
             }
         });
     </script>
