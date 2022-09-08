@@ -15,17 +15,17 @@
                     <th>Mulai Asuransi</th>
                     <th>Akhir Asuransi</th>
                     <th>Jangka Waktu Asuransi</th>
-                    <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr(0)}}</span></th>
-                    <th class="text-right">Manfaat Asuransi<br /><span class="sub_total">{{format_idr(0)}}</span></th>
-                    <th class="text-right">Manfaat Asuransi Reas<br /><span class="sub_total">{{format_idr(0)}}</span></th>
-                    <th class="text-right">Manfaat Asuransi Ajri<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                    <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($kepesertaan->sum('reas_extra_kontribusi'))}}</span></th>
+                    <th class="text-right">Manfaat Asuransi<br /><span class="sub_total">{{format_idr($kepesertaan->sum('basic'))}}</span></th>
+                    <th class="text-right">Manfaat Asuransi Reas<br /><span class="sub_total">{{format_idr($kepesertaan->sum('nilai_manfaat_asuransi_reas'))}}</span></th>
+                    <th class="text-right">Manfaat Asuransi Ajri<br /><span class="sub_total">{{format_idr($kepesertaan->sum('reas_manfaat_asuransi_ajri'))}}</span></th>
                     <th>Manfaat</th>
                     <th>Type Reas</th>
-                    <th class="text-right">Kontribusi Reas<br /><span class="sub_total">{{format_idr(0)}}</span></th>
-                    <th class="text-right">Ujroh<br /><span class="sub_total">{{format_idr(0)}}</span></th>
-                    <th class="text-right">Kontribusi Netto<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                    <th class="text-right">Kontribusi Reas<br /><span class="sub_total">{{format_idr($kepesertaan->sum('total_kontribusi_reas'))}}</span></th>
+                    <th class="text-right">Ujroh<br /><span class="sub_total">{{format_idr($kepesertaan->sum('ujroh_reas'))}}</span></th>
+                    <th class="text-right">Kontribusi Netto<br /><span class="sub_total">{{format_idr($kepesertaan->sum('net_kontribusi_reas'))}}</span></th>
                     <th>Akseptasi</th>
-                    <th class="text-right">Kontribusi AJRI<br /><span class="sub_total">{{format_idr(0)}}</span></th>
+                    <th class="text-right">Kontribusi AJRI<br /><span class="sub_total">{{format_idr($kepesertaan->sum('kontribusi'))}}</span></th>
                     <th>UW Limit</th>
                 </tr>
             </thead>
