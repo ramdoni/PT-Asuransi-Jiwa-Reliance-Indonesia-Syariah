@@ -84,5 +84,4 @@
             </tfoot>
         </table>
     </div>
-    {{$kepesertaan->links()}}
 </div>

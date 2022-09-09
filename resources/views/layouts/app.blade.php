@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/datatables.min.css') }}" />
     <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}" defer></script>
     <script src="{{ asset('assets/vendor/datatables/FixedColumns-4.1.0/js/dataTables.fixedColumns.min.js') }}" defer></script>
-    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
     
     @stack('after-styles')
@@ -111,6 +110,7 @@
     <script src="{{ asset('assets/bundles/knob.bundle.js') }}"></script>
     <script src="{{ asset('assets/vendor/toastr/toastr.js') }}"></script>
     <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     @livewireScripts
     <script>
         Pusher.logToConsole = true;

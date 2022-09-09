@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'c6d3d9a42abebd787b33853614b5a6ff531fd34f',
+        'reference' => '425572b4ff6583ecf8c77d94a33473fec5f655dc',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -86,12 +86,12 @@
             'dev_requirement' => false,
         ),
         'doctrine/dbal' => array(
-            'pretty_version' => '3.3.7',
-            'version' => '3.3.7.0',
+            'pretty_version' => '3.3.8',
+            'version' => '3.3.8.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/dbal',
             'aliases' => array(),
-            'reference' => '9f79d4650430b582f4598fe0954ef4d52fbc0a8a',
+            'reference' => 'f873a820227bc352d023791775a01f078a30dfe1',
             'dev_requirement' => false,
         ),
         'doctrine/deprecations' => array(
@@ -526,7 +526,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'c6d3d9a42abebd787b33853614b5a6ff531fd34f',
+            'reference' => '425572b4ff6583ecf8c77d94a33473fec5f655dc',
             'dev_requirement' => false,
         ),
         'laravel/sanctum' => array(

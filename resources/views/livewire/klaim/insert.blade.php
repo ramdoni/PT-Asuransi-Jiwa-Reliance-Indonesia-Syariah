@@ -105,7 +105,6 @@
         </div>
     </div>
 </div>
-
 <div wire:ignore.self class="modal fade" id="modal_add_extra_kontribusi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.add-extra-kontribusi')
 </div>
@@ -133,7 +132,6 @@
                 show_toast(data.message,'top-center');
             }
         });
-
         select__2 = $('#polis_id').select2();
         $('#polis_id').on('change', function (e) {
             var data = $(this).select2("val");

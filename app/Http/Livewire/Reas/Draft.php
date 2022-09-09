@@ -14,9 +14,9 @@ class Draft extends Component
     public $check_id=[],$data,$extra_kontribusi;
     public function render()
     {
-        $kepesertaan = Kepesertaan::where('reas_id',$this->data->id)->where(['status_reas'=>0,'status_akseptasi'=>1]);
+        $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where('reas_id',$this->data->id)->where(['status_reas'=>0,'status_akseptasi'=>1]);
 
-        return view('livewire.reas.draft')->with(['kepesertaan'=>$kepesertaan->paginate(100)]);
+        return view('livewire.reas.draft')->with(['kepesertaan'=>$kepesertaan->get()]);
     }   
 
     public function mount(Reas $data)
