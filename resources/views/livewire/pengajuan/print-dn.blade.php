@@ -111,7 +111,7 @@
                 </tr>
                 <tr>
                     <th>Total Kontribusi Dibayar</th>
-                    <td style="text-align: right;"><b>{{format_idr(floor($total))}}</b></td>
+                    <td style="text-align: right;"><b>{{format_idr($total)}}</b></td>
                 </tr>
                 <tr>
                     <td colspan="2">Terbilang : {{terbilang($total)}} Rupiah</td>

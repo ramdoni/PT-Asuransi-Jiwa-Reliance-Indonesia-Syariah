@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <a href="{{route('pengajuan.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
+                        <a href="{{route('klaim.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
