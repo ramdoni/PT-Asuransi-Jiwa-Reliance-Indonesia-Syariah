@@ -15,13 +15,14 @@
                     <th>Mulai Asuransi</th>
                     <th>Akhir Asuransi</th>
                     <th>Jangka Waktu Asuransi</th>
-                    <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($kepesertaan->sum('reas_extra_kontribusi'))}}</span></th>
                     <th class="text-right">Manfaat Asuransi<br /><span class="sub_total">{{format_idr($kepesertaan->sum('basic'))}}</span></th>
                     <th class="text-right">Manfaat Asuransi Reas<br /><span class="sub_total">{{format_idr($kepesertaan->sum('nilai_manfaat_asuransi_reas'))}}</span></th>
                     <th class="text-right">Manfaat Asuransi Ajri<br /><span class="sub_total">{{format_idr($kepesertaan->sum('reas_manfaat_asuransi_ajri'))}}</span></th>
                     <th>Manfaat</th>
                     <th>Type Reas</th>
+                    <th>Rate</th>
                     <th class="text-right">Kontribusi Reas<br /><span class="sub_total">{{format_idr($kepesertaan->sum('total_kontribusi_reas'))}}</span></th>
+                    <th class="text-right">Extra Kontribusi<br /><span class="sub_total">{{format_idr($kepesertaan->sum('reas_extra_kontribusi'))}}</span></th>
                     <th class="text-right">Ujroh<br /><span class="sub_total">{{format_idr($kepesertaan->sum('ujroh_reas'))}}</span></th>
                     <th class="text-right">Kontribusi Netto<br /><span class="sub_total">{{format_idr($kepesertaan->sum('net_kontribusi_reas'))}}</span></th>
                     <th>Akseptasi</th>
@@ -45,7 +46,14 @@
                         <td class="text-center">{{$item->usia}}</td>
                         <td>{{date('d-m-Y',strtotime($item->tanggal_mulai))}}</td>
                         <td>{{date('d-m-Y',strtotime($item->tanggal_akhir))}}</td>    
-                        <td class="text-center">{{$item->masa_bulan}}</td>        
+                        <td class="text-center">{{$item->masa_bulan}}</td>                                               
+                        <td class="text-right">{{format_idr($item->basic)}}</td>
+                        <td class="text-right">{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>        
+                        <td class="text-right">{{format_idr($item->reas_manfaat_asuransi_ajri)}}</td>                         
+                        <td class="text-right">{{$item->reas_manfaat}}</td>                         
+                        <td class="text-right">{{$item->reas_type}}</td>     
+                        <td class="text-right">{{$item->rate_reas}}</td>
+                        <td class="text-right">{{format_idr($item->total_kontribusi_reas)}}</td>        
                         <td class="text-right">
                             <a href="javascript:void(0)" wire:click="$emit('add-extra-kontribusi',{{$item->id}})">
                                 @if($item->reas_extra_kontribusi==0)
@@ -54,13 +62,7 @@
                                     {{format_idr($item->reas_extra_kontribusi)}}
                                 @endif
                             </a>
-                        </td>                                           
-                        <td class="text-right">{{format_idr($item->basic)}}</td>
-                        <td class="text-right">{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>        
-                        <td class="text-right">{{format_idr($item->reas_manfaat_asuransi_ajri)}}</td>                         
-                        <td class="text-right">{{$item->reas_manfaat}}</td>                         
-                        <td class="text-right">{{$item->reas_type}}</td>     
-                        <td class="text-right">{{format_idr($item->total_kontribusi_reas)}}</td>                         
+                        </td>                   
                         <td class="text-right">{{format_idr($item->ujroh_reas)}}</td>                         
                         <td class="text-right">{{format_idr($item->net_kontribusi_reas)}}</td>    
                         <td class="text-center">{{$item->ul_reas}}</td>    
