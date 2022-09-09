@@ -37,8 +37,12 @@
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
                     </div>
-                    <div class="col-md-12">
-                        
+                    <div class="col-md-6">
+                        <table class="table">
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </table>
                     </div>
                 </form>
             </div>
