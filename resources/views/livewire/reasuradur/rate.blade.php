@@ -21,6 +21,7 @@
                             <th>Name</th>
                             <th>OR</th>
                             <th>Reas</th>
+                            <th>RI COM</th>
                             <th>Rate</th>
                             <th>UW Limit</th>
                             <th></th>
@@ -34,6 +35,7 @@
                                 <td><a href="javascript:void(0)" wire:click="$emit('edit-rate',{{$item->id}})">{{$item->nama}}</a></td>
                                 <td>{{format_idr($item->or,2)}}</td>
                                 <td>{{format_idr($item->reas,2)}}</td>
+                                <td>{{$item->ri_com}}</td>
                                 <td class="text-center">
                                     <a href="javascript:void(0)" wire:click="set_rates({{$item->id}})">
                                         @if($item->rate_count)

@@ -7,6 +7,7 @@ use App\Models\Kepesertaan;
 use Livewire\Component;
 use App\Models\PengajuanHistory;
 use App\Models\Rate;
+use App\Models\Polis as ModelPolis;
 use App\Models\UnderwritingLimit;
 use App\Models\Finance\Income;
 use App\Models\Finance\Polis;
@@ -238,9 +239,11 @@ class Edit extends Component
         if($no_peserta_akhir) $this->data->no_peserta_akhir = $no_peserta_akhir->no_peserta;
         
         // save running number
-        $this->data->polis->running_number_dn = $running_number_dn;
-        $this->data->polis->running_number_peserta = $running_number;
-        $this->data->polis->save();
+        ModelPolis::find('id',$this->data->polis->id)->update(
+            [
+                'running_number_dn' => $running_number_dn,
+                'running_number_peserta' => $running_number
+            ]);
         
         if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
         

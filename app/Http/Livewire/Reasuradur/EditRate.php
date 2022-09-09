@@ -8,7 +8,7 @@ use App\Models\ReasuradurRate;
 class EditRate extends Component
 {
     public $data;
-    public $reasuradur_id,$nama,$or,$reas;
+    public $reasuradur_id,$nama,$or,$reas,$ri_com;
     protected $listeners = ['edit-rate'=>'edit'];
     public function render()
     {
@@ -27,6 +27,7 @@ class EditRate extends Component
         $this->nama =  $data->nama;
         $this->or =  $data->or;
         $this->reas =  $data->reas;
+        $this->ri_com =  $data->ri_com;
     }
 
     public function save()
@@ -35,6 +36,7 @@ class EditRate extends Component
         $this->data->reasuradur_id = $this->reasuradur_id;
         $this->data->or = $this->or;
         $this->data->reas = $this->reas;
+        $this->data->ri_com = $this->ri_com;
         $this->data->save();
 
         $this->emit('modal','hide');
