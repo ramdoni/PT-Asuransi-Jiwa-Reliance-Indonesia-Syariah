@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Reas;
 use Livewire\Component;
 use App\Models\Reas;
 use App\Models\Kepesertaan;
+use App\Models\Pengajuan;
 
 class Index extends Component
 {
@@ -19,6 +20,8 @@ class Index extends Component
     {
         Kepesertaan::where('reas_id',$id->id)->update(['reas_id'=>null,'status_reas'=>null]);
         
+        Pengajuan::where('reas_id',$id->id)->update(['reas_id'=>null]);
+
         $id->delete();
 
         session()->flash('message-success',__('Data berhasil dihapus'));

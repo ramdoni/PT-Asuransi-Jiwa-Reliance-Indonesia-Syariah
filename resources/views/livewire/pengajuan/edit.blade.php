@@ -95,12 +95,9 @@
                                         <td>
                                             <select wire:loading.remove wire:target="filter_ul" class="form-control" wire:model="filter_ul">
                                                 <option value=""> -- Pilih -- </option>
-                                                <option>A</option>
-                                                <option>B</option>
-                                                <option>C</option>
-                                                <option>E</option>
-                                                <option>NM</option>
-                                                <option>GOA</option>
+                                                @foreach($filter_ul_arr as $item)
+                                                    <option>{{$item->ul}}</option>
+                                                @endforeach
                                             </select>
                                             <span wire:loading wire:target="filter_ul">
                                                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
