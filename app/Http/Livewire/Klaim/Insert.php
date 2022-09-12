@@ -25,7 +25,10 @@ class Insert extends Component
     {
         $this->kepesertaan = [];$this->peserta = [];
 
-        if($this->polis_id) $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'status_akseptasi'=>1])->whereNull('klaim_id')->get();
+        if($this->polis_id) {
+            $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'status_akseptasi'=>1])->whereNull('klaim_id')->get();
+            $this->emit('reload-kepesertaan');
+        }
         if($this->kepesertaan_id) $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
     }
 

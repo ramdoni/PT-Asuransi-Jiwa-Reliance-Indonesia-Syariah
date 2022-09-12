@@ -34,6 +34,7 @@ class UwLimit extends Component
         $sheetDataUwLimit = $xlsx->getActiveSheet()->toArray();
         
         if(count($sheetDataUwLimit) > 0){
+            ReasuradurRateUw::where('reasuradur_rate_id',$this->reasuradur_rate_id)->delete();
             $data_header = [];
             foreach($sheetDataUwLimit as $key => $item){
                 if($key==1){

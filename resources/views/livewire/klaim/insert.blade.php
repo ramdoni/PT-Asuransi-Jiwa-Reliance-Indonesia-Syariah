@@ -222,6 +222,16 @@
         .select2-container {width: 100% !important;}
     </style>
     <script>
+        Livewire.on('reload-kepesertaan',()=>{
+            select_2_peserta = $('#kepesertaan_id').select2();
+            $('#kepesertaan_id').on('change', function (e) {
+                var data = $(this).select2("val");
+                @this.set('kepesertaan_id', data);
+            });
+
+            var selected_kepesertaan = $('#kepesertaan_id').find(':selected').val();
+            if(selected_kepesertaan !="") select_2_peserta.val(selected_kepesertaan);
+        });
         select__2 = $('#polis_id').select2();
         $('#polis_id').on('change', function (e) {
             var data = $(this).select2("val");

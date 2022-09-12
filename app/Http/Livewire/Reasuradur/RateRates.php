@@ -34,6 +34,7 @@ class RateRates extends Component
         $sheetDataRate = $xlsx->getActiveSheet()->toArray();
         $num=0;
         $insert = [];
+        ReasuradurRateRates::where('reasuradur_rate_id',$this->reasuradur_rate_id)->delete();
         foreach($sheetDataRate as $key => $item){
             if($key<=1) continue;
             for($i=1;$i<=300;$i++){
