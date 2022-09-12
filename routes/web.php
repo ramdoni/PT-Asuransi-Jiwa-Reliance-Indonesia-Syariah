@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('reas/edit/{id}',App\Http\Livewire\Reas\Edit::class)->name('reas.edit');
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('klaim/insert',App\Http\Livewire\Klaim\Insert::class)->name('klaim.insert');
+    Route::get('klaim/edit/{id}',App\Http\Livewire\Klaim\Edit::class)->name('klaim.edit');
 });
 
 // Administrator

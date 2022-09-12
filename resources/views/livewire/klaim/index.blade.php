@@ -53,13 +53,17 @@
                             <tr>
                                 <th>No</th>
                                 <th class="text-center">Status Approval</th>
-                                <th>Nomor CN</th>
+                                <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Pemegang Polis</th>
                                 <th>No Peserta</th>
                                 <th>Nama Peserta</th>
-                                <th>Masa Asusransi</th>
+                                <th>Masa Asuransi</th>
                                 <th>Tanggal Klaim</th>
+                                <th>Tanggal Meninggal</th>
+                                <th>Nilai Klaim</th>
+                                <th>Jenis Klaim</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,7 +87,23 @@
                                             <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
                                         @endif
                                     </td>
-                                    
+                                    <td><a href="{{route('klaim.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
+                                    <td>
+                                        <a href="{{route('polis.edit',$item->polis_id)}}">
+                                            {{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}
+                                        </a>
+                                    </td>
+                                    <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
+                                    <td>{{isset($item->kepesertaan->no_peserta) ? $item->kepesertaan->no_peserta : '-'}}</td>
+                                    <td>{{isset($item->kepesertaan->nama) ? $item->kepesertaan->nama : '-'}}</td>
+                                    <td class="text-center">{{isset($item->kepesertaan->masa_bulan) ? $item->kepesertaan->masa_bulan : '-'}}</td>
+                                    <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
+                                    <td>{{date('d-F-Y',strtotime($item->tanggal_meninggal))}}</td>
+                                    <td>{{format_idr($item->nilai_klaim)}}</td>
+                                    <td>{{$item->jenis_klaim}}</td>
+                                    <td>
+                                        <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                    </td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)

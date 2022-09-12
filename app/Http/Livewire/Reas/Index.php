@@ -17,7 +17,7 @@ class Index extends Component
 
     public function delete(Reas $id)
     {
-        Kepesertaan::where('reas_id',$id->id)->update(['reas_id'=>null]);
+        Kepesertaan::where('reas_id',$id->id)->update(['reas_id'=>null,'status_reas'=>null]);
         
         $id->delete();
 

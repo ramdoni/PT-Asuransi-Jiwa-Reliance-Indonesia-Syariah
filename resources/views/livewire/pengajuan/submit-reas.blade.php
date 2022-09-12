@@ -22,6 +22,9 @@
                             <option value="{{$item->id}}">{{$item->name}}</option>
                         @endforeach
                     </select>
+                    @error('reasuradur_rate_id')
+                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                    @enderror
                 </div>
                 <span wire:loading wire:target="reasuradur_id">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -37,11 +40,17 @@
                                     <option value="{{$item->id}}">{{$item->nama}} - OR ({{$item->or}}%) - Reas ({{$item->reas}}%)</option>
                                 @endforeach
                             </select>
+                            @error('reasuradur_rate_id')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>OR</label>
                                 <input type="text" class="form-control" wire:model="or" readonly />
+                                @error('or')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>Reas</label>
@@ -59,6 +68,9 @@
                                 <option> MENURUN </option>
                                 <option> TETAP </option>
                             </select>
+                            @error('manfaat')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label>Type Reas</label>
@@ -67,6 +79,9 @@
                                 <option> TREATY </option>
                                 <option> FAKULTATIF </option>
                             </select>
+                            @error('type_reas')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
                         </div>
                     </div>
                 @endif

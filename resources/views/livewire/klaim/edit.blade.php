@@ -1,79 +1,12 @@
 @section('sub-title','Pengajuan')
-@section('title', 'Klaim')
+@section('title', 'Klaim : '. $data->no_pengajuan)
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
             <div class="body">
                 <form wire:submit.prevent="save">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <div class="form-group" wire:ignore>
-                                        <label>No Polis</label>
-                                        <select class="form-control" id="polis_id" wire:model="polis_id">
-                                            <option value=""> -- Select Polis -- </option>
-                                            @foreach($polis as $item)
-                                                <option value="{{$item->id}}">{{$item->no_polis}} / {{$item->nama}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('polis_id')
-                                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Peserta</label>
-                                    <select class="form-control" id="kepesertaan_id" wire:model="kepesertaan_id">
-                                        <option value=""> -- Select Peserta -- </option>
-                                        @foreach($kepesertaan as $item)
-                                            <option value="{{$item->id}}">{{$item->no_peserta}} / {{$item->nama}}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('kepesertaan_id')
-                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label>Tanggal Meninggal</label>
-                                    <input type="date" class="form-control" wire:model="tanggal_meninggal" />
-                                    @error('tanggal_meninggal')
-                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Nilai Klaim</label>
-                                    <input type="number" class="form-control" wire:model="nilai_klaim" />
-                                    @error('nilai_klaim')
-                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Jenis Klaim</label>
-                                    <input type="text" class="form-control" wire:model="jenis_klaim" />
-                                    @error('jenis_klaim')
-                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Tempat & Sebab Klaim</label>
-                                <textarea class="form-control" wire:model="tempat_dan_sebab"></textarea>
-                                @error('tempat_dan_sebab')
-                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <span wire:loading>
-                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                    <span class="sr-only">{{ __('Loading...') }}</span>
-                                </span>
-                                <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-check-circle"></i> Submit Pengajuan</button>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <h6><i class="fa fa-circle text-info"></i> Data Peserta</h6>
                             <table class="table ml-2">
                                 <tr>
@@ -82,7 +15,7 @@
                                 </tr>
                                 <tr>
                                     <td>Pemegang Polis</td>
-                                    <td> :  {{isset($peserta->polis->nama)?$peserta->polis->nama : '-'}}</td>
+                                    <td style="white-space: break-spaces"> :  {{isset($peserta->polis->nama)?$peserta->polis->nama : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Produk As</td>
@@ -122,12 +55,34 @@
                                     <td>Uang Asuransi</td>
                                     <td>{{isset($peserta->basic) ? format_idr($peserta->basic) : '-'}}</td>
                                 </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>
+                                        @if($data->status==0)
+                                            <span class="badge badge-warning">Underwriting</span>
+                                        @endif
+                                        @if($data->status==1)
+                                            <span class="badge badge-info">Head Teknik</span>
+                                        @endif
+                                        @if($data->status==2)
+                                            <span class="badge badge-danger">Head Syariah</span>
+                                        @endif
+                                        @if($data->status==3)
+                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
+                                        @endif
+                                        @if($data->status==4)
+                                            <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
+                                        @endif
+                                    </td>
+                                </tr>
                             </table>
+                        </div>
+                        <div class="col-md-4">
                             <h6><i class="fa fa-circle text-info"></i> Data Pembayaran</h6>
                             <table class="table ml-2">
                                 <tr>
                                     <td style="width:30%">Nomor DN</td>
-                                    <td style="width:70%"> : 
+                                    <td style="width:70%;white-space: break-spaces"> : 
                                         @if(isset($peserta->pengajuan->no_pengajuan))
                                             {{$peserta->pengajuan->dn_number}}
                                         @elseif(isset($peserta->no_debit_note))
@@ -170,6 +125,8 @@
                                     <td> : </td>
                                 </tr>
                             </table>
+                        </div>
+                        <div class="col-md-4">  
                             <h6><i class="fa fa-circle text-info"></i> Ketentuan Asuransi</h6>
                             <table class="table ml-2">
                                 <tr>
@@ -207,6 +164,78 @@
                             </table>
                         </div>
                     </div>
+                    <hr />
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#tab_data_klaim">{{ __('Data Klaim') }} </a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab_persetujuan_klaim">{{ __('Persetujuan Klaim') }} </a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab_dokumen_pendukung">{{ __('Dokumen Pendukung') }} </a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab_analisa_klaim">{{ __('Analisa Klaim') }} </a></li>
+                    </ul>
+                    <div class="tab-content px-0">
+                        <div class="tab-pane active show" id="tab_data_klaim">
+                            <div class="row">
+                                <div class="col-md-4">  
+                                    <table class="table ml-2">
+                                        <tr>
+                                            <td>Tanggal Meninggal</td>
+                                            <td> : {{date('d-F-Y',strtotime($data->tanggal_meninggal))}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Usia Polis</td>
+                                            <td> : {{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nilai Klaim</td>
+                                            <td> : {{format_idr($data->nilai_klaim)}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jenis Klaim</td>
+                                            <td> : {{$data->jenis_klaim}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-4">  
+                                    <table class="table ml-2">
+                                        <tr>
+                                            <td>Tempat & Sebab Klaim</td>
+                                            <td> : {{$data->tempat_dan_sebab}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal Pengajuan</td>
+                                            <td> : {{date('d-F-Y',strtotime($data->created_at))}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal Dok Lengkap</td>
+                                            <td> : {{$data->tanggal_dok_lengkap ? date('d-F-Y',strtotime($data->tanggal_dok_lengkap)) : '-'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal Proses</td>
+                                            <td> : {{$data->tanggal_proses ? date('d-F-Y',strtotime($data->tanggal_proses)) : '-'}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_persetujuan_klaim">
+                            @livewire('klaim.persetujuan-klaim',['id'=>$data->id],key(1))
+                        </div>
+                        <div class="tab-pane" id="tab_dokumen_pendukung">
+                            @livewire('klaim.dokumen-pendukung',['id'=>$data->id],key(2))
+                        </div>
+                        <div class="tab-pane" id="tab_analisa_klaim">
+                            @livewire('klaim.analisa-klaim',['id'=>$data->id],key(3))
+                        </div>
+                    </div>
+                    <hr />
+                    {{-- @if($data->status==0 and (\Auth::user()->user_access_id==2 || \Auth::user()->user_access_id==1))
+                        <button type="button" wire:loading.remove wire:target="submit_underwriting" wire:click="submit_underwriting" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                    @endif
+                    @if($data->status==1 and \Auth::user()->user_access_id==3)
+                        <button type="button" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                    @endif
+                    @if($data->status==2 and \Auth::user()->user_access_id==4)
+                        <button type="button" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah" class="btn btn-info"><i class="fa fa-arrow-right"></i> Submit Pengajuan</button>
+                    @endif --}}
                 </form>
             </div>
         </div>

@@ -51,7 +51,9 @@
                                     </tr>
                                     <tr>
                                         <th>Rate & UW Limit</th>
-                                        <td> : {{isset($data->rate_uw->nama) ? $data->rate_uw->nama : '-'}}</td>
+                                        <td> : {{isset($data->rate_uw->nama) ? $data->rate_uw->nama : '-'}}
+                                            <a href="javascript:void(0)" class="badge badge-info badge-active" wire:click="$emit('edit-rate',{{$data->reasuradur_rate_id}})" data-toggle="modal" data-target="#modal_edit_rate"><i class="fa fa-edit"></i> edit</a>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>OR</th>
@@ -152,6 +154,9 @@
             </div>
         </div>
     </div>
+</div>
+<div wire:ignore.self class="modal fade" id="modal_edit_rate" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('reasuradur.edit-rate')
 </div>
 <div wire:ignore.self class="modal fade" id="modal_add_extra_kontribusi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reas.add-extra-kontribusi')

@@ -34,6 +34,7 @@
                             <li><a href="{{ route('polis.index') }}" class="text-info">Pemegang Polis</a></li>
                             <li><a href="{{ route('pengajuan.index') }}" class="text-info icon-menu px-1">Pengajuan</a></li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
+                            <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
                         @endif
                         @if (\Auth::user()->user_access_id == 3)
@@ -41,6 +42,7 @@
                             <li><a href="{{ route('polis.index') }}" class="text-info px-1 icon-menu" class="text-info icon-menu px-1"> Pemegang Polis </a></li>
                             <li><a href="{{ route('pengajuan.index') }}" class="text-info icon-menu px-1">Pengajuan</a></li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
+                            <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
                         @endif
                         @if (\Auth::user()->user_access_id == 4)
