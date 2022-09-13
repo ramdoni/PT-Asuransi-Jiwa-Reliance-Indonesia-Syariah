@@ -240,7 +240,7 @@ class Edit extends Component
         if($no_peserta_akhir) $this->data->no_peserta_akhir = $no_peserta_akhir->no_peserta;
         
         // save running number
-        ModelPolis::find('id',$this->data->polis->id)->update(
+        ModelPolis::where('id',$this->data->polis->id)->update(
             [
                 'running_number_dn' => $running_number_dn,
                 'running_number_peserta' => $running_number

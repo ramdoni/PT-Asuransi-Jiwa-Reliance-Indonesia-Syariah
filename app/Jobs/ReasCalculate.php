@@ -92,7 +92,10 @@ class ReasCalculate implements ShouldQueue
                 $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/1000;
             }
 
-            if($ri_com) $item->ujroh_reas = ($item->total_kontribusi_reas * $ri_com) / 100; 
+            if($ri_com) 
+                $item->ujroh_reas = ($item->total_kontribusi_reas * $ri_com) / 100; 
+            else
+                $item->ujroh_reas = 0;
             
             // ul
             $uw = ReasuradurRateUw::whereRaw("{$manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$item->usia,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
