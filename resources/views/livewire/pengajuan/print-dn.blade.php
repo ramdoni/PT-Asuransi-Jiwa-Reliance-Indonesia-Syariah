@@ -222,7 +222,7 @@
                 <tr>
                     <td style="padding-left: 33px;">Total Nilai Manfaat Asuransi</td>
                     <td> : Rp</td>
-                    <td style="text-align:right;">{{ format_idr($data->nilai_manfaat) }}</td>
+                    <td style="text-align:right;">{{ format_idr($nilai_manfaat) }}</td>
                 </tr>
                 <tr>
                     <td style="padding-left: 33px;">Total Kontribusi</td>
