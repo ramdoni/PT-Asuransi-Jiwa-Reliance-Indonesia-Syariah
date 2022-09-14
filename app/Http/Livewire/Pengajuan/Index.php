@@ -14,7 +14,8 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $selected,$check_id=[],$is_pengajuan_reas=false;
-    public $filter_keyword,$filter_status_invoice,$filter_status;
+    public $filter_keyword,$filter_status_invoice,$filter_status,$start_tanggal_pengajuan,$end_tanggal_pengajuan,$start_tanggal_pembayaran,$end_tanggal_pembayaran;
+    public $start_tanggal_akseptasi,$end_tanggal_akseptasi;
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager'])
@@ -29,8 +30,30 @@ class Index extends Component
         });
         if($this->filter_status_invoice) $data->where('status_invoice',$this->filter_status_invoice);
         if($this->filter_status) $data->where('status',$this->filter_status);
+        if($this->start_tanggal_pengajuan and $this->end_tanggal_pengajuan){
+            if($this->start_tanggal_pengajuan == $this->end_tanggal_pengajuan)
+                $data->whereDate('created_at',$this->start_tanggal_pengajuan);
+            else
+                $data->whereBetween('created_at',[$this->start_tanggal_pengajuan,$this->end_tanggal_pengajuan]);
+        }
+
+        if($this->start_tanggal_pembayaran and $this->end_tanggal_pembayaran){
+            if($this->start_tanggal_pembayaran == $this->end_tanggal_pembayaran)
+                $data->whereDate('payment_date',$this->start_tanggal_pembayaran);
+            else
+                $data->whereBetween('payment_date',[$this->start_tanggal_pembayaran,$this->end_tanggal_pembayaran]);
+        }
+
+        if($this->start_tanggal_akseptasi and $this->end_tanggal_akseptasi){
+            if($this->start_tanggal_akseptasi == $this->end_tanggal_akseptasi)
+                $data->whereDate('head_syariah_submit',$this->start_tanggal_akseptasi);
+            else
+                $data->whereBetween('head_syariah_submit',[$this->start_tanggal_akseptasi,$this->end_tanggal_akseptasi]);
+        }
         
-        return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100)]);
+        $total_dn = clone $data;
+
+        return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100),'total_dn'=>$total_dn->sum('net_kontribusi')]);
     }
 
 

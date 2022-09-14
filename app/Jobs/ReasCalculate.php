@@ -70,6 +70,7 @@ class ReasCalculate implements ShouldQueue
         echo "\n\nOR : {$or}\n";
         echo "AJRI : {$ajri}\n";
         echo "RI COM :{$ri_com}\n\n";
+        
         foreach($kepesertaan as $k => $item){
             $manfaat_asuransi = $item->basic;
             
@@ -108,7 +109,9 @@ class ReasCalculate implements ShouldQueue
                 $item->status_reas = 2; // tidak direaskan karna distribusinya 0
             else
                 $item->status_reas = 1;
-                
+
+            $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days")); 
+            $item->kadaluarsa_reas_hari =  $item->polis->kadaluarsa_reas; 
             $item->save();
             echo "Net Kontribusi : {$item->net_kontribusi_reas}";
         }

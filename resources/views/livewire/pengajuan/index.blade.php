@@ -32,6 +32,18 @@
                                             <option value="4"> Migrasi</option>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <small>Tanggal Pengajuan</small>
+                                        <input type="text" class="form-control tanggal_pengajuan" />
+                                    </div>
+                                    <div class="form-group">
+                                        <small>Tanggal Pembayaran</small>
+                                        <input type="text" class="form-control tanggal_pembayaran" />
+                                    </div>
+                                    <div class="form-group">
+                                        <small>Tanggal Akseptasi</small>
+                                        <input type="text" class="form-control tanggal_akseptasi" />
+                                    </div>
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>
                             </div>
@@ -62,7 +74,9 @@
                                 <th>No</th>
                                 <th class="text-center">Status Approval</th>
                                 <th>Nomor DN</th>
-                                <th class="text-right">Total DN</th>
+                                <th class="text-right">Total DN<br/>
+                                    <span class="text-info">{{format_idr($total_dn)}}</span>
+                                </th>
                                 <th>Status Pembayaran</th>
                                 <th>No Pengajuan</th>
                                 <th>No Pengajuan Reas</th>
@@ -202,6 +216,9 @@
     @livewire('pengajuan.submit-reas')
 </div>
 @push('after-scripts')
+    <script type="text/javascript" src="{{ asset('assets/vendor/daterange/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/vendor/daterange/daterangepicker.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterange/daterangepicker.css') }}" />
     <script>
         Livewire.on('modal_submit_reas',()=>{
             $("#modal_submit_reas").modal('show');
@@ -210,5 +227,42 @@
             var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
             new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 
         } );
+
+        $('.tanggal_pengajuan').daterangepicker({
+            opens: 'left',
+            locale: {
+                cancelLabel: 'Clear'
+            },
+            autoUpdateInput: false,
+        }, function(start, end, label) {
+            @this.set("start_tanggal_pengajuan", start.format('YYYY-MM-DD'));
+            @this.set("end_tanggal_pengajuan", end.format('YYYY-MM-DD'));
+            $('.tanggal_pengajuan').val(start.format('DD/MM/YYYY') + '-' + end.format('DD/MM/YYYY'));
+        });
+
+        $('.tanggal_pembayaran').daterangepicker({
+            opens: 'left',
+            locale: {
+                cancelLabel: 'Clear'
+            },
+            autoUpdateInput: false,
+        }, function(start, end, label) {
+            @this.set("start_tanggal_pembayaran", start.format('YYYY-MM-DD'));
+            @this.set("end_tanggal_pembayaran", end.format('YYYY-MM-DD'));
+            $('.tanggal_pembayaran').val(start.format('DD/MM/YYYY') + '-' + end.format('DD/MM/YYYY'));
+        });
+
+        $('.tanggal_akseptasi').daterangepicker({
+            opens: 'left',
+            locale: {
+                cancelLabel: 'Clear'
+            },
+            autoUpdateInput: false,
+        }, function(start, end, label) {
+            @this.set("start_tanggal_akseptasi", start.format('YYYY-MM-DD'));
+            @this.set("end_tanggal_akseptasi", end.format('YYYY-MM-DD'));
+            $('.tanggal_akseptasi').val(start.format('DD/MM/YYYY') + '-' + end.format('DD/MM/YYYY'));
+        });
+        
     </script>
 @endpush

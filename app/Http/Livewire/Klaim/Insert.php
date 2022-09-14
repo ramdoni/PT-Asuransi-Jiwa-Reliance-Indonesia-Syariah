@@ -10,6 +10,7 @@ use App\Models\Kepesertaan;
 class Insert extends Component
 {
     public $kepesertaan=[],$peserta,$no_pengajuan,$polis,$polis_id,$transaction_id,$kepesertaan_id,$tanggal_meninggal,$nilai_klaim,$jenis_klaim,$tempat_dan_sebab;
+    public $kadaluarsa_klaim_hari,$kadaluarsa_klaim_tanggal;
     public function render()
     {
         return view('livewire.klaim.insert');
@@ -29,7 +30,11 @@ class Insert extends Component
             $this->kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'status_akseptasi'=>1])->whereNull('klaim_id')->get();
             $this->emit('reload-kepesertaan');
         }
-        if($this->kepesertaan_id) $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
+        if($this->kepesertaan_id) {
+            $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
+            $this->kadaluarsa_klaim_hari = $this->peserta->polis->kadaluarsa_klaim;
+            $this->kadaluarsa_klaim_tanggal = $this->peserta->polis->kadaluarsa_klaim ? date('Y-m-d',strtotime("+{$this->peserta->polis->kadaluarsa_klaim} days")) : '';
+        }
     }
 
     public function save()
@@ -51,6 +56,8 @@ class Insert extends Component
         $data->nilai_klaim = $this->nilai_klaim;
         $data->jenis_klaim = $this->jenis_klaim;
         $data->tempat_dan_sebab = $this->tempat_dan_sebab;
+        $data->kadaluarsa_klaim_hari = $this->kadaluarsa_klaim_hari;
+        $data->kadaluarsa_klaim_tanggal = $this->kadaluarsa_klaim_tanggal;
         $data->save();
 
         $this->peserta->klaim_id = $data->id;

@@ -122,7 +122,7 @@
                                 </tr>
                                 <tr>
                                     <td>Kadaluarsa Reas</td>
-                                    <td> : </td>
+                                    <td> : {{isset($peserta->kadaluarsa_reas_hari) ? $peserta->kadaluarsa_reas_hari .' Hari Kalender' : '-'}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -163,7 +163,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>
-                                    <td> : </td>
+                                    <td> : {{isset($peserta->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($peserta->kadaluarsa_reas_tanggal)) : '-'}}</td>
                                 </tr>
                             </table>
                         </div>

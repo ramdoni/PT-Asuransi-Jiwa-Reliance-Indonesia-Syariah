@@ -119,13 +119,8 @@ function hitung_umur($tanggal_lahir,$pembulatan=1,$today=''){
     }
     if($pembulatan==2 and $today->diff($birthDate)->m > 12) $tahun++; // Actual
     
-    if($pembulatan==3) {
-        
-        return $today->diff($birthDate)->y .' Tahun '. $today->diff($birthDate)->m .' Bulan '. $today->diff($birthDate)->d.' Hari';
-
-
-
-    }
+    if($pembulatan==3) return $today->diff($birthDate)->y .' Tahun '. $today->diff($birthDate)->m .' Bulan '. $today->diff($birthDate)->d.' Hari';
+    if($pembulatan==4) return $today->diff($birthDate)->days;
 
     return $tahun;
 }

@@ -167,7 +167,7 @@
                                 </tr>
                                 <tr>
                                     <td>Kadaluarsa Reas</td>
-                                    <td> : </td>
+                                    <td> : {{isset($peserta->kadaluarsa_reas_hari) ? $peserta->kadaluarsa_reas_hari .' Hari Kalender' : '-'}}</td>
                                 </tr>
                             </table>
                             <h6><i class="fa fa-circle text-info"></i> Ketentuan Asuransi</h6>
@@ -178,15 +178,15 @@
                                 </tr>
                                 <tr>
                                     <td>Retroaktif/Waiting Periode</td>
-                                    <td> : {{isset($peserta->polis->retroaktif) ? $peserta->polis->retroaktif .' Hargi Kalender' : '-' }}</td>
+                                    <td> : {{isset($peserta->polis->retroaktif) ? $peserta->polis->retroaktif .' Hari Kalender' : '-' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Kadaluwarsa Klaim</td>
-                                    <td> : </td>
+                                    <td> : {{$kadaluarsa_klaim_hari}} Hari Kalender</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl Kadaluwarsa Klaim</td>
-                                    <td> : </td>
+                                    <td> : {{date('d-M-Y',strtotime($kadaluarsa_klaim_tanggal))}}</td>
                                 </tr>
                                 <tr>
                                     <td>Share Reas</td>
@@ -206,7 +206,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>
-                                    <td> : </td>
+                                    <td> : {{isset($peserta->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($peserta->kadaluarsa_reas_tanggal)) : '-'}}</td>
                                 </tr>
                             </table>
                         </div>

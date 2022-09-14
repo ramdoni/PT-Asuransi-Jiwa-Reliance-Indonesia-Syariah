@@ -51,7 +51,7 @@ class Edit extends Component
         $this->status = $this->data->status;
         $this->masa_leluasa = $this->data->masa_leluasa;
         $this->kelengkapan_berkas = $this->data->kelengkapan_berkas;
-        $this->kadaluara_klaim = $this->data->kadaluarsa_klaim;
+        $this->kadaluarsa_klaim = $this->data->kadaluarsa_klaim;
         $this->pemulihan_kepesertaan = $this->data->pemulihan_kepesertaan;
         $this->penyelesaian_perselisihan = $this->data->penyelesaian_perselisihan;
         $this->iuran_tabbaru = $this->data->iuran_tabbaru;
@@ -205,7 +205,7 @@ class Edit extends Component
         $this->data->status = $this->status;
         $this->data->masa_leluasa = $this->masa_leluasa;
         $this->data->kelengkapan_berkas = $this->kelengkapan_berkas;
-        $this->data->kadaluara_klaim = $this->kadaluarsa_klaim;
+        $this->data->kadaluarsa_klaim = $this->kadaluarsa_klaim;
         $this->data->pemulihan_kepesertaan = $this->pemulihan_kepesertaan;
         $this->data->penyelesaian_perselisihan = $this->penyelesaian_perselisihan;
         $this->data->iuran_tabbaru = $this->iuran_tabbaru;
