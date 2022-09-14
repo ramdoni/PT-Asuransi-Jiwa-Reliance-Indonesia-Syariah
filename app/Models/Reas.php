@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Kepesertaan;
 use App\Models\Reasuradur;
+use App\Models\Pengajuan;
 
 class Reas extends Model
 {
@@ -26,5 +27,10 @@ class Reas extends Model
     public function rate_uw()
     {
         return $this->hasOne(ReasuradurRate::class,'id','reasuradur_rate_id');
+    }
+
+    public function pengajuan()
+    {
+        return $this->hasMany(Pengajuan::class,'reas_id','id');
     }
 }

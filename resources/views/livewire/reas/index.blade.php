@@ -35,7 +35,10 @@
                             <tr>
                                 <th>NO</th>
                                 <th class="text-center">STATUS</th>
+                                <th class="text-center">TANGGAL PENGAJUAN</th>
                                 <th>NO PENGAJUAN</th>
+                                <th>NO POLIS</th>
+                                <th>PEMEGANG POLIS</th>
                                 <th>REASURADUR</th>
                                 <th>RATE & UW Limit</th>
                                 <th>OR</th>
@@ -65,7 +68,26 @@
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif
                                     </td>
+                                    <td class="text-center">{{date('d-M-Y',strtotime($item->created_at))}}</td>
                                     <td><a href="{{route('reas.edit',$item->id)}}">{{$item->no_pengajuan}}</a></td>
+                                    <td>
+                                        @if(isset($item->pengajuan))
+                                            @php($polis=[])
+                                            @php($pemegang_polis=[])
+                                            @foreach($item->pengajuan as $p)
+                                                @if(isset($p->polis->no_polis))
+                                                    @php($polis[] = $p->polis->no_polis)
+                                                    @php($pemegang_polis[] = $p->polis->nama)
+                                                @endif
+                                            @endforeach
+                                            {{implode(',',$polis)}}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(isset($pemegang_polis))
+                                            {{implode(',',$pemegang_polis)}}
+                                        @endif
+                                    </td>
                                     <td>{{isset($item->reasuradur->name) ? $item->reasuradur->name :'-'}}</td>
                                     <td>{{isset($item->rate_uw->nama) ? $item->rate_uw->nama :'-'}}</td>
                                     <td>{{$item->or}}%</td>

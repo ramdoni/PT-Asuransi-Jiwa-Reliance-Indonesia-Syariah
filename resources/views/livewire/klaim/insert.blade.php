@@ -44,7 +44,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>Nilai Klaim</label>
+                                    <label>Nilai Pengajuan Klaim</label>
                                     <input type="number" class="form-control" wire:model="nilai_klaim" />
                                     @error('nilai_klaim')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -102,7 +102,7 @@
                                 </tr>
                                 <tr>
                                     <td>Usia Masuk As</td>
-                                    <td> : </td>
+                                    <td> : {{isset($peserta->tanggal_lahir) ? hitung_umur($peserta->tanggal_lahir,1,$peserta->tanggal_mulai) .' Tahun' : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Masa Asuransi</td>
@@ -110,9 +110,9 @@
                                 </tr>
                                 <tr>
                                     <td>Periode As</td>
-                                    <td> 
+                                    <td> : 
                                         @if(isset($peserta->tanggal_mulai))
-                                            {{date('d f Y',strtotime($peserta->tanggal_mulai))}} sd {{date('d f Y',strtotime($peserta->tanggal_akhir))}}
+                                            {{date('d F Y',strtotime($peserta->tanggal_mulai))}} sd {{date('d F Y',strtotime($peserta->tanggal_akhir))}}
                                         @else
                                             -
                                         @endif
@@ -120,7 +120,7 @@
                                 </tr>
                                 <tr>
                                     <td>Uang Asuransi</td>
-                                    <td>{{isset($peserta->basic) ? format_idr($peserta->basic) : '-'}}</td>
+                                    <td> : {{isset($peserta->basic) ? format_idr($peserta->basic) : '-'}}</td>
                                 </tr>
                             </table>
                             <h6><i class="fa fa-circle text-info"></i> Data Pembayaran</h6>
@@ -190,15 +190,19 @@
                                 </tr>
                                 <tr>
                                     <td>Share Reas</td>
-                                    <td> : </td>
+                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Nilai Klaim OR</td>
+                                    <td>Share OR</td>
                                     <td> : {{isset($peserta->reas->or) ? $peserta->reas->or : '-'}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Nilai Klaim OR</td>
+                                    <td> : {{isset($peserta->reas_manfaat_asuransi_ajri) ? format_idr($peserta->reas_manfaat_asuransi_ajri) : '-'}}</td>
+                                </tr>
+                                <tr>
                                     <td>Nilai Klaim Reas</td>
-                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
+                                    <td> : {{isset($peserta->nilai_manfaat_asuransi_reas) ? format_idr($peserta->nilai_manfaat_asuransi_reas) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>

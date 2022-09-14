@@ -103,11 +103,14 @@
                                     <tr>
                                         <td colspan="2">
                                             @if($data->status!=3)
-                                                <a href="javascript:void(0)" wire:click="hitung" wire:loading.remove wire:target="hitung" class="btn btn-warning"><i class="fa fa-refresh"></i> Hitung Reas</a>
-                                                <span wire:loading wire:target="hitung">
-                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                    <span class="sr-only">{{ __('Loading...') }}</span>
-                                                </span>
+                                                @if($is_calculate==false)
+                                                    <a href="javascript:void(0)" wire:click="hitung" class="btn btn-warning"><i class="fa fa-refresh"></i> Hitung Reas</a>
+                                                @else
+                                                    <span>
+                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                                    </span>
+                                                @endif
                                             @endif
                                         </td>
                                     </tr>

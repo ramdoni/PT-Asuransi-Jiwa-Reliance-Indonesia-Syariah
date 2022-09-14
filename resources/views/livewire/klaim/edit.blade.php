@@ -35,7 +35,7 @@
                                 </tr>
                                 <tr>
                                     <td>Usia Masuk As</td>
-                                    <td> : </td>
+                                    <td> : {{hitung_umur($data->kepesertaan->tanggal_lahir,1,$data->kepesertaan->tanggal_mulai)}}</td>
                                 </tr>
                                 <tr>
                                     <td>Masa Asuransi</td>
@@ -45,7 +45,7 @@
                                     <td>Periode As</td>
                                     <td> 
                                         @if(isset($peserta->tanggal_mulai))
-                                            {{date('d f Y',strtotime($peserta->tanggal_mulai))}} sd {{date('d f Y',strtotime($peserta->tanggal_akhir))}}
+                                            {{date('d F Y',strtotime($peserta->tanggal_mulai))}} sd {{date('d F Y',strtotime($peserta->tanggal_akhir))}}
                                         @else
                                             -
                                         @endif
@@ -147,15 +147,19 @@
                                 </tr>
                                 <tr>
                                     <td>Share Reas</td>
-                                    <td> : </td>
+                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Nilai Klaim OR</td>
+                                    <td>Share OR</td>
                                     <td> : {{isset($peserta->reas->or) ? $peserta->reas->or : '-'}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Nilai Klaim OR</td>
+                                    <td> : {{isset($peserta->reas_manfaat_asuransi_ajri) ? format_idr($peserta->reas_manfaat_asuransi_ajri) : '-'}}</td>
+                                </tr>
+                                <tr>
                                     <td>Nilai Klaim Reas</td>
-                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
+                                    <td> : {{isset($peserta->nilai_manfaat_asuransi_reas) ? format_idr($peserta->nilai_manfaat_asuransi_reas) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>
