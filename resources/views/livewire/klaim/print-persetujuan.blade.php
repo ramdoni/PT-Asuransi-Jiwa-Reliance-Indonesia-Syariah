@@ -335,6 +335,152 @@
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_2_date ? date('d F Y',strtotime($data->direksi_2_date)):''}}</td>
                 </tr>
             </table>
+            <div style="page-break-after: always;"></div>
+            <h1 style="text-align:center;">MONITOR DOKUMEN DAN ANALISA KLAIM</h1>
+            <h4 style="text-align:center;">Nomor : </h4>
+            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">I. Kepesertaan</h3>
+            <table>
+                <tr>
+                    <td>Nomor Polis</td>
+                    <td> : </td>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Pemegang Polis</td>
+                    <td> : </td>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Produk Asuransi</td>
+                    <td> : </td>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Nomor Peserta</td>
+                    <td> : </td>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Nama Peserta</td>
+                    <td> : </td>
+                    <th></th>
+                </tr>
+            </table>
+            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">II. Dokumen Pendukung</h3>
+            <div style="float:left;width:50%;">
+                <table style="width:100%;">
+                    <tr>
+                        <td>1</td>
+                        <td>Formulir Pengajuan Klaim</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Surat Keterangan Meninggal dari Kelurahan/Kades</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Surat Keterangan Meninggal Dunia dari RS</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Copy Identitas Peserta Asuransi (KTP/kartu pst)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Copy Identitas Ahli Waris (KTP,KK)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Resume Medis/Surat Keterangan Dokter</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Daftar Angsuran/Baki Debet</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float:left;width:50%;">
+                <table style="width:100%;">
+                    <tr>
+                        <td>8</td>
+                        <td>Copy Akad Pembiayaan</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Surat Kuasa</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>Surat Keterangan Ahli Waris</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td>Surat dari Pemegang Polis</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td>Dokumen Lainnya</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="clear:both"></div>
+            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">III. Analisa Klaim</h3>
+            <table style="width:100%;">
+                <tr>
+                    <th style="border-bottom:1px solid;">1</th>
+                    <th style="border-bottom:1px solid;">Sumber Informasi</th>
+                    <td style="border-bottom:1px solid;"> : </td>
+                    <td style="border-bottom:1px solid;">{{$data->sumber_informasi}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom:1px solid;">2</th>
+                    <th style="border-bottom:1px solid;">Sebab Meninggal</th>
+                    <td style="border-bottom:1px solid;"> : </td>
+                    <td style="border-bottom:1px solid;">{{$data->sebab_meninggal}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom:1px solid;">3</th>
+                    <th style="border-bottom:1px solid;">Riwayat Penyakit</th>
+                    <td style="border-bottom:1px solid;"> : </td>
+                    <td style="border-bottom:1px solid;">{{$data->riwayat_penyakit}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom:1px solid;">4</th>
+                    <th style="border-bottom:1px solid;">Tempat Meninggal</th>
+                    <td style="border-bottom:1px solid;"> : </td>
+                    <td style="border-bottom:1px solid;">{{$data->tempat_meninggal}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom:1px solid;">5</th>
+                    <th style="border-bottom:1px solid;">Verifikasi via telfon</th>
+                    <td style="border-bottom:1px solid;"> : </td>
+                    <td style="border-bottom:1px solid;">{{$data->verifikasi_via_telpon}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom:1px solid;">6</th>
+                    <th style="border-bottom:1px solid;">Analisa Medis</th>
+                    <td style="border-bottom:1px solid;"> : </td>
+                    <td style="border-bottom:1px solid;">{{$data->analisa_medis}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom:1px solid;">7</th>
+                    <th style="border-bottom:1px solid;">Kesimpulan</th>
+                    <td style="border-bottom:1px solid;"> : </td>
+                    <td style="border-bottom:1px solid;">{{$data->kesimpulan}}</td>
+                </tr>
+            </table>
         </div>
     </body>
 </html>
