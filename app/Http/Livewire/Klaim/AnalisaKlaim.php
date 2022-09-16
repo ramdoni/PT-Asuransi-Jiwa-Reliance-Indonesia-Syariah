@@ -46,6 +46,8 @@ class AnalisaKlaim extends Component
         $this->data->kesimpulan = $this->kesimpulan;
         $this->data->save();
 
+        \LogActivity::add("Analisa Klaim {$this->data->id}");
+
         session()->flash('message-success',__('Analisa klaim berhasil di submit'));
 
         return redirect()->route('klaim.edit',$this->data->id);

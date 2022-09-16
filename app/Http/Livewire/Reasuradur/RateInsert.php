@@ -18,6 +18,7 @@ class RateInsert extends Component
     public function updated($propertyName)
     {
         if($this->or>0) $this->reas = 100 - $this->or;
+        if($this->or==0 || $this->or =="") $this->reas = 100;
     }
 
     public function save()

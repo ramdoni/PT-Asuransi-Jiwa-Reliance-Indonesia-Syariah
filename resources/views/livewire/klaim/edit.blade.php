@@ -135,23 +135,23 @@
                                 </tr>
                                 <tr>
                                     <td>Retroaktif/Waiting Periode</td>
-                                    <td> : {{isset($peserta->polis->retroaktif) ? $peserta->polis->retroaktif .' Hargi Kalender' : '-' }}</td>
+                                    <td> : {{isset($peserta->polis->retroaktif) ? $peserta->polis->retroaktif .' Hari Kalender' : '-' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Kadaluwarsa Klaim</td>
-                                    <td> : </td>
+                                    <td> : {{$data->kadaluarsa_klaim_hari}} Hari Kalender</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl Kadaluwarsa Klaim</td>
-                                    <td> : </td>
-                                </tr>
-                                <tr>
-                                    <td>Share Reas</td>
-                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
+                                    <td> : {{date('d-M-Y',strtotime($data->kadaluarsa_klaim_tanggal))}}</td>
                                 </tr>
                                 <tr>
                                     <td>Share OR</td>
                                     <td> : {{isset($peserta->reas->or) ? $peserta->reas->or : '-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Share Reas</td>
+                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim OR</td>
@@ -189,8 +189,23 @@
                                             <td> : {{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Nilai Klaim</td>
+                                            <td>Nilai Pengajuan Klaim</td>
                                             <td> : {{format_idr($data->nilai_klaim)}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nilai Klaim Disetujui</td>
+                                            <td>
+                                                @if($data->status !=3)
+                                                    <input type="number" class="form-control" wire:model="nilai_klaim_disetujui" />
+                                                    <button type="button" wire:loading.remove wire:target="save" wire:click="save" class="btn btn-info my-2"><i class="fa fa-save"></i> Simpan</button>
+                                                    <span wire:loading wire:target="save">
+                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                                    </span>
+                                                @else
+                                                    {{format_idr($data->nilai_klaim_disetujui)}}
+                                                @endif
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Jenis Klaim</td>

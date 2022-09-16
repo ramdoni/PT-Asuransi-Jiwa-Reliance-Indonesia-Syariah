@@ -102,7 +102,12 @@
                                     <td>{{format_idr($item->nilai_klaim)}}</td>
                                     <td>{{$item->jenis_klaim}}</td>
                                     <td>
-                                        <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                        @if($item->status!=3)
+                                            <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                        @endif
+                                        @if($item->status==3)
+                                            <a href="{{route('klaim.print-persetujuan',$item->id)}}" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -35,6 +35,8 @@ class Setting extends Component
         $this->address = get_setting('address');
         $this->logoUrl = get_setting('logo');
         $this->faviconUrl = get_setting('favicon');
+
+        \LogActivity::add("Setting");
     }
     public function updateBasic()
     {
@@ -43,6 +45,8 @@ class Setting extends Component
         update_setting('phone',$this->phone);
         update_setting('website',$this->website);
         update_setting('address',$this->address);
+
+        \LogActivity::add("Setting Update");
     }
 
     public function save()
@@ -53,7 +57,9 @@ class Setting extends Component
             ]);
             $name = 'logo'.date('Ymdhis').'.'.$this->logo->extension();
             $this->logo->storePubliclyAs('public',$name);
-    
+            
+            \LogActivity::add("Update Logo");
+
             update_setting('logo',$name);
         }
 
@@ -63,6 +69,8 @@ class Setting extends Component
             ]);
             $name = 'favicon'.date('YmdHis').'.'.$this->favicon->extension();
             $this->favicon->storePubliclyAs('public',$name);
+
+            \LogActivity::add("Update Favicon");
 
             update_setting('favicon',$name);
         }

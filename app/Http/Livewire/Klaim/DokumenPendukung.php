@@ -35,7 +35,7 @@ class DokumenPendukung extends Component
             $this->formulir_pengajuan_klaim->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->formulir_pengajuan_klaim = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->surat_keterangan_meninggal_kelurahan){
@@ -47,7 +47,7 @@ class DokumenPendukung extends Component
             $this->surat_keterangan_meninggal_kelurahan->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->surat_keterangan_meninggal_kelurahan = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->surat_keterangan_meninggal_rs){
@@ -59,7 +59,7 @@ class DokumenPendukung extends Component
             $this->surat_keterangan_meninggal_rs->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->surat_keterangan_meninggal_rs = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->copy_ktp){
@@ -71,7 +71,7 @@ class DokumenPendukung extends Component
             $this->copy_ktp->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->copy_ktp = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->copy_ktp_ahli_waris){
@@ -83,7 +83,7 @@ class DokumenPendukung extends Component
             $this->copy_ktp_ahli_waris->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->copy_ktp_ahli_waris = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->resume_medis){
@@ -95,7 +95,7 @@ class DokumenPendukung extends Component
             $this->resume_medis->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->resume_medis = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->daftar_angsuran){
@@ -107,7 +107,7 @@ class DokumenPendukung extends Component
             $this->daftar_angsuran->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->daftar_angsuran = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->copy_akad_pembiayaan){
@@ -119,7 +119,7 @@ class DokumenPendukung extends Component
             $this->copy_akad_pembiayaan->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->copy_akad_pembiayaan = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->surat_kuasa){
@@ -131,7 +131,7 @@ class DokumenPendukung extends Component
             $this->surat_kuasa->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->surat_kuasa = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->surat_keterangan_ahli_waris){
@@ -143,7 +143,7 @@ class DokumenPendukung extends Component
             $this->surat_keterangan_ahli_waris->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->surat_keterangan_ahli_waris = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->surat_dari_pemegang_polis){
@@ -155,7 +155,7 @@ class DokumenPendukung extends Component
             $this->surat_dari_pemegang_polis->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->surat_dari_pemegang_polis = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
 
@@ -168,12 +168,13 @@ class DokumenPendukung extends Component
             $this->dokumen_lain->storeAs("public/klaim/{$this->data->id}", $name);
             $this->data->dokumen_lain = "storage/klaim/{$this->data->id}/{$name}";
             $this->data->save();
-
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
             $this->emit('reload-page');
         }
         if($this->dokumen_lain_keterangan){
             $this->data->dokumen_lain_keterangan = $this->dokumen_lain_keterangan;
             $this->data->save();
+            \LogActivity::add("Upload Dokument Klaim {$this->data->id}");
         }
     }
 
@@ -181,6 +182,8 @@ class DokumenPendukung extends Component
     {
         $this->data->tanggal_dok_lengkap = date('Y-m-d');
         $this->data->save();
+
+        \LogActivity::add("Dokumen Klaim Lengkap {$this->data->id}");
 
         session()->flash('message-success',__('Dokumen berhasil di submit'));
 

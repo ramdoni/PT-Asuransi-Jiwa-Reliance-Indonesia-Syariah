@@ -189,12 +189,12 @@
                                     <td> : {{date('d-M-Y',strtotime($kadaluarsa_klaim_tanggal))}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Share Reas</td>
-                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
-                                </tr>
-                                <tr>
                                     <td>Share OR</td>
                                     <td> : {{isset($peserta->reas->or) ? $peserta->reas->or : '-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Share Reas</td>
+                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim OR</td>
