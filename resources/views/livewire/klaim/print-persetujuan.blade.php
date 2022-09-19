@@ -51,10 +51,10 @@
             <br />
             <br />
             <br />
-            <h1 style="text-align:center">PERSETUJUAN PEMBAYARAN KLAIM<br />(MANFAAT ASURANSI)</h1>
-            <h6 style="text-align:center">Nomor : </h6>
+            <h1 style="text-align:center;margin-bottom:0;padding-bottom:0;">PERSETUJUAN PEMBAYARAN KLAIM<br />(MANFAAT ASURANSI)</h1>
+            <p style="text-align:center;font-size:11pt;margin-top:0;padding-top:0;">Nomor : {{$data->no_mak}}</p>
             <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">I. Data Kepesertaan</h3>
-            <div style="width:34%;float:left">
+            <div style="width:34%;float:left;">
                 <table width="100%">
                     <tr>
                         <th style="text-align:left;">Data Peserta</th>
@@ -117,7 +117,7 @@
                     </tr>
                 </table>
             </div>
-            <div style="width:34%;float:left">
+            <div style="width:34%;float:left;margin-left:5px;margin-right:5px;">
                 <table width="100%">
                     <tr>
                         <th colspan="2" style="text-align:left;">
@@ -241,9 +241,9 @@
             <div style="width:50%;float:left;">
                 <table style="width:100%">
                     <tr>
-                        <td>Tanggal Meninggal</td>
-                        <td> : </td>
-                        <td style="border-bottom:1px solid;">{{date('d-M-Y',strtotime($data->tanggal_meninggal))}}</td>
+                        <td style="width:30%;">Tanggal Meninggal</td>
+                        <td style=""> : </td>
+                        <td style="border-bottom:1px solid;width:70%">{{date('d-M-Y',strtotime($data->tanggal_meninggal))}}</td>
                     </tr>
                     <tr>
                         <td>Usia Polis</td>
@@ -262,12 +262,12 @@
                     </tr>
                 </table>
             </div>
-            <div style="width:50%;float:left;">
+            <div style="width:50%;float:left;margin-left:10px;">
                 <table style="width:100%">
                     <tr>
-                        <td>Tempat & Sebab Klaim</td>
+                        <td style="width:30%;">Tempat & Sebab Klaim</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{$data->tempat_dan_sebab}}</td>
+                        <td style="border-bottom:1px solid;width:70%;">{{$data->tempat_dan_sebab}}</td>
                     </tr>
                     <tr>
                         <td>Tanggal Pengajuan</td>
@@ -337,7 +337,7 @@
             </table>
             <div style="page-break-after: always;"></div>
             <h1 style="text-align:center;">MONITOR DOKUMEN DAN ANALISA KLAIM</h1>
-            <h4 style="text-align:center;">Nomor : </h4>
+            <p style="text-align:center;font-size:11pt;margin-top:0;padding-top:0;">Nomor : {{$data->no_apv}}</p>
             <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">I. Kepesertaan</h3>
             <table>
                 <tr>
@@ -370,39 +370,81 @@
             <div style="float:left;width:50%;">
                 <table style="width:100%;">
                     <tr>
-                        <td>1</td>
+                        <td style="padding:5px;">1</td>
                         <td>Formulir Pengajuan Klaim</td>
-                        <td></td>
+                        <td>
+                            @if($data->formulir_pengajuan_klaim)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <td>2</td>
+                        <td style="padding:5px;">2</td>
                         <td>Surat Keterangan Meninggal dari Kelurahan/Kades</td>
-                        <td></td>
+                        <td>
+                            @if($data->surat_keterangan_meninggal_kelurahan)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <td>3</td>
+                        <td style="padding:5px;">3</td>
                         <td>Surat Keterangan Meninggal Dunia dari RS</td>
-                        <td></td>
+                        <td>
+                            @if($data->surat_keterangan_meninggal_rs)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <td>4</td>
+                        <td style="padding:5px;">4</td>
                         <td>Copy Identitas Peserta Asuransi (KTP/kartu pst)</td>
-                        <td></td>
+                        <td>
+                            @if($data->copy_ktp)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <td>5</td>
+                        <td style="padding:5px;">5</td>
                         <td>Copy Identitas Ahli Waris (KTP,KK)</td>
-                        <td></td>
+                        <td>
+                            @if($data->copy_ktp_ahli_waris)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <td>6</td>
+                        <td style="padding:5px;">6</td>
                         <td>Resume Medis/Surat Keterangan Dokter</td>
-                        <td></td>
+                        <td>
+                            @if($data->resume_medis)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <td>7</td>
+                        <td style="padding:5px;">7</td>
                         <td>Daftar Angsuran/Baki Debet</td>
-                        <td></td>
+                        <td>
+                            @if($data->daftar_angsuran)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -411,74 +453,146 @@
                     <tr>
                         <td>8</td>
                         <td>Copy Akad Pembiayaan</td>
-                        <td></td>
+                        <td>
+                            @if($data->copy_akad_pembiayaan)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>9</td>
                         <td>Surat Kuasa</td>
-                        <td></td>
+                        <td>
+                            @if($data->surat_kuasa)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>10</td>
                         <td>Surat Keterangan Ahli Waris</td>
-                        <td></td>
+                        <td>
+                            @if($data->surat_keterangan_ahli_waris)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>11</td>
                         <td>Surat dari Pemegang Polis</td>
-                        <td></td>
+                        <td>
+                            @if($data->surat_dari_pemegang_polis)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>12</td>
                         <td>Dokumen Lainnya</td>
-                        <td></td>
+                        <td>
+                            @if($data->dokumen_lain)
+                                <div style="width:12px;height:13px;border:1px solid;padding-left:4px padding-bottom:4px;"> V </div>
+                            @else
+                                <div style="width:16px;height:13px;border:1px solid;"></div>
+                            @endif
+                        </td>
                     </tr>
                 </table>
             </div>
             <div style="clear:both"></div>
-            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">III. Analisa Klaim</h3>
+            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">III. Tanggal Status Dokumen</h3>
             <table style="width:100%;">
                 <tr>
-                    <th style="border-bottom:1px solid;">1</th>
-                    <th style="border-bottom:1px solid;">Sumber Informasi</th>
-                    <td style="border-bottom:1px solid;"> : </td>
-                    <td style="border-bottom:1px solid;">{{$data->sumber_informasi}}</td>
+                    <th style="border-bottom:1px solid;padding:10px;width:10px;text-align:left;border-top:1px solid;border-left:1px solid;">No</th>
+                    <th style="border-top:1px solid;border-bottom:1px solid;padding:10px;width:30%;text-align:left;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;">Tanggal</th>
+                    <th style="border-bottom:1px solid;padding:10px;width:10px;border-bottom:1px solid;border-top:1px solid;border-right:1px solid;">Progress </th>
                 </tr>
                 <tr>
-                    <th style="border-bottom:1px solid;">2</th>
-                    <th style="border-bottom:1px solid;">Sebab Meninggal</th>
-                    <td style="border-bottom:1px solid;"> : </td>
-                    <td style="border-bottom:1px solid;">{{$data->sebab_meninggal}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">IV. Analisa Klaim</h3>
+            <table style="width:100%;">
+                <tr>
+                    <th style="border-bottom:1px solid;padding:10px;width:10px;text-align:left;">1</th>
+                    <th style="border-bottom:1px solid;padding:10px;width:30%;text-align:left;">Sumber Informasi</th>
+                    <td style="border-bottom:1px solid;padding:10px;width:10px;"> : </td>
+                    <td style="border-bottom:1px solid;padding:10px;">{{$data->sumber_informasi}}</td>
                 </tr>
                 <tr>
-                    <th style="border-bottom:1px solid;">3</th>
-                    <th style="border-bottom:1px solid;">Riwayat Penyakit</th>
-                    <td style="border-bottom:1px solid;"> : </td>
-                    <td style="border-bottom:1px solid;">{{$data->riwayat_penyakit}}</td>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">2</th>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">Sebab Meninggal</th>
+                    <td style="border-bottom:1px solid;padding:10px;"> : </td>
+                    <td style="border-bottom:1px solid;padding:10px;">{{$data->sebab_meninggal}}</td>
                 </tr>
                 <tr>
-                    <th style="border-bottom:1px solid;">4</th>
-                    <th style="border-bottom:1px solid;">Tempat Meninggal</th>
-                    <td style="border-bottom:1px solid;"> : </td>
-                    <td style="border-bottom:1px solid;">{{$data->tempat_meninggal}}</td>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">3</th>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">Riwayat Penyakit</th>
+                    <td style="border-bottom:1px solid;padding:10px;"> : </td>
+                    <td style="border-bottom:1px solid;padding:10px;">{{$data->riwayat_penyakit}}</td>
                 </tr>
                 <tr>
-                    <th style="border-bottom:1px solid;">5</th>
-                    <th style="border-bottom:1px solid;">Verifikasi via telfon</th>
-                    <td style="border-bottom:1px solid;"> : </td>
-                    <td style="border-bottom:1px solid;">{{$data->verifikasi_via_telpon}}</td>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">4</th>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">Tempat Meninggal</th>
+                    <td style="border-bottom:1px solid;padding:10px;"> : </td>
+                    <td style="border-bottom:1px solid;padding:10px;">{{$data->tempat_meninggal}}</td>
                 </tr>
                 <tr>
-                    <th style="border-bottom:1px solid;">6</th>
-                    <th style="border-bottom:1px solid;">Analisa Medis</th>
-                    <td style="border-bottom:1px solid;"> : </td>
-                    <td style="border-bottom:1px solid;">{{$data->analisa_medis}}</td>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">5</th>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">Verifikasi via telfon</th>
+                    <td style="border-bottom:1px solid;padding:10px;"> : </td>
+                    <td style="border-bottom:1px solid;padding:10px;">{{$data->verifikasi_via_telpon}}</td>
                 </tr>
                 <tr>
-                    <th style="border-bottom:1px solid;">7</th>
-                    <th style="border-bottom:1px solid;">Kesimpulan</th>
-                    <td style="border-bottom:1px solid;"> : </td>
-                    <td style="border-bottom:1px solid;">{{$data->kesimpulan}}</td>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">6</th>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">Analisa Medis</th>
+                    <td style="border-bottom:1px solid;padding:10px;"> : </td>
+                    <td style="border-bottom:1px solid;padding:10px;">{{$data->analisa_medis}}</td>
+                </tr>
+                <tr>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">7</th>
+                    <th style="border-bottom:1px solid;padding:10px;text-align:left;">Kesimpulan</th>
+                    <td style="border-bottom:1px solid;padding:10px;"> : </td>
+                    <td style="border-bottom:1px solid;padding:10px;">{{$data->kesimpulan}}</td>
+                </tr>
+            </table>
+            <br />
+            <br />
+            <br />
+            <table style="width:200px;float:right;text-align:center;">
+                <tr>
+                    <th style="text-align:left">
+                        Jakarta,
+                    </th>
+                    <th style="text-align:right;border-bottom:1px solid; width:100px;">
+                        {{date('Y')}}
+                    </th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2"><span style="border-bottom:1px solid;">(Estikomah)</span></th>
                 </tr>
             </table>
         </div>
