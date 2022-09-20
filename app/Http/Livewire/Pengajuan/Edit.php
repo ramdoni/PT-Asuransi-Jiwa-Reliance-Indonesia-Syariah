@@ -233,10 +233,10 @@ class Edit extends Component
             $key++;
         }
         
-        $get_peserta_awal =  Kepesertaan::where('pengajuan_id',$this->data->id)->orderBy('no_peserta','ASC')->first();
+        $get_peserta_awal =  Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->orderBy('no_peserta','ASC')->first();
         if($get_peserta_awal) $this->data->no_peserta_awal = $get_peserta_awal->no_peserta;
 
-        $no_peserta_akhir =  Kepesertaan::where('pengajuan_id',$this->data->id)->orderBy('no_peserta','DESC')->first();
+        $no_peserta_akhir =  Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->orderBy('no_peserta','DESC')->first();
         if($no_peserta_akhir) $this->data->no_peserta_akhir = $no_peserta_akhir->no_peserta;
         
         // save running number
@@ -310,7 +310,6 @@ class Edit extends Component
 
         $total = $kontribusi+$ektra_kontribusi+$extra_mortalita+$this->data->biaya_sertifikat+$this->data->biaya_polis_materai+$this->data->pph-($this->data->ppn+$this->data->potong_langsung);
         $this->data->net_kontribusi = $total;
-
         $this->data->save();
 
         $select_tertunda =  Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
