@@ -106,7 +106,9 @@
                                             <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
                                         @endif
                                         @if($item->status==3)
-                                            <a href="{{route('klaim.print-persetujuan',$item->id)}}" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
+                                            <a href="{{route('klaim.print-persetujuan',$item->id)}}" class="badge badge-info badge-active" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
+                                            <a href="{{route('klaim.print-tolak',$item->id)}}" class="badge badge-danger badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Tolak</a>
+                                            <a href="{{route('klaim.print-memo',$item->id)}}" class="badge badge-warning badge-active" target="_blank"><i class="fa fa-print"></i> Memo Pembayaran</a>
                                         @endif
                                     </td>
                                 </tr>

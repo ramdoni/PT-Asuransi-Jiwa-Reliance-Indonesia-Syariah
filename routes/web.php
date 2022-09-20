@@ -56,6 +56,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('klaim/insert',App\Http\Livewire\Klaim\Insert::class)->name('klaim.insert');
     Route::get('klaim/edit/{id}',App\Http\Livewire\Klaim\Edit::class)->name('klaim.edit');
     Route::get('klaim/print-persetujuan/{id}',[App\Http\Controllers\KlaimController::class,'printPersetujuan'])->name('klaim.print-persetujuan');
+    Route::get('klaim/print-tolak/{id}',[App\Http\Controllers\KlaimController::class,'printTolak'])->name('klaim.print-tolak');
+    Route::get('klaim/print-memo/{id}',[App\Http\Controllers\KlaimController::class,'printMemo'])->name('klaim.print-memo');
 });
 
 // Administrator

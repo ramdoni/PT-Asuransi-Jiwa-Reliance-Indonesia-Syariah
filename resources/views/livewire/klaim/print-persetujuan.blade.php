@@ -343,22 +343,22 @@
                 <tr>
                     <td>Nomor Polis</td>
                     <td> : </td>
-                    <th></th>
+                    <th> {{isset($data->polis->no_polis) ? $data->polis->no_polis : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Pemegang Polis</td>
                     <td> : </td>
-                    <th></th>
+                    <th> {{isset($data->polis->nama) ? $data->polis->nama : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Produk Asuransi</td>
                     <td> : </td>
-                    <th></th>
+                    <th> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Nomor Peserta</td>
                     <td> : </td>
-                    <th></th>
+                    <th> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Nama Peserta</td>
@@ -508,20 +508,7 @@
                 </table>
             </div>
             <div style="clear:both"></div>
-            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">III. Tanggal Status Dokumen</h3>
-            <table style="width:100%;">
-                <tr>
-                    <th style="border-bottom:1px solid;padding:10px;width:10px;text-align:left;border-top:1px solid;border-left:1px solid;">No</th>
-                    <th style="border-top:1px solid;border-bottom:1px solid;padding:10px;width:30%;text-align:left;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;">Tanggal</th>
-                    <th style="border-bottom:1px solid;padding:10px;width:10px;border-bottom:1px solid;border-top:1px solid;border-right:1px solid;">Progress </th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
-            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">IV. Analisa Klaim</h3>
+            <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">III. Analisa Klaim</h3>
             <table style="width:100%;">
                 <tr>
                     <th style="border-bottom:1px solid;padding:10px;width:10px;text-align:left;">1</th>

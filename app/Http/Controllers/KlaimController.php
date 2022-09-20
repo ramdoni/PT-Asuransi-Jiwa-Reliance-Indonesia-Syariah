@@ -22,4 +22,34 @@ class KlaimController extends Controller
 
         return $pdf->stream();
     }
+
+    public function printTolak(Klaim $id)
+    {
+        \LogActivity::add("Print Persetujuan {$id->id}");
+
+        if($id->no_surat_tolak==""){
+            $id->no_surat_tolak = $id->id. '/KLM-APV/AJRIUS/'.numberToRomawi(date('m')).'/'. date('Y');
+            $id->save();
+        }
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.klaim.print-tolak',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;
+
+        return $pdf->stream();
+    }
+
+    public function printMemo(Klaim $id)
+    {
+        \LogActivity::add("Print Memo Pembayaran {$id->id}");
+
+        if($id->no_memo==""){
+            $id->no_memo = $id->id. '/KEP-KLM-DN/AJRIUS/'.numberToRomawi(date('m')).'/'. date('Y');
+            $id->save();
+        }
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.klaim.print-memo',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;
+
+        return $pdf->stream();
+    }
 }
