@@ -47,6 +47,11 @@ class KlaimController extends Controller
             $id->save();
         }
 
+        if($id->jatuh_tempo){
+            $id->jatuh_tempo = date('Y-m-d',strtotime(" +{$id->polis->pembayaran_klaim} days", strtotime($id->created_at)));
+            $id->save();
+        }
+
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('livewire.klaim.print-memo',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;
 

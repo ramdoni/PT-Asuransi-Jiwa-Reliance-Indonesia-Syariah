@@ -116,7 +116,7 @@
             <tr>
                 <td>Periode Asuransi</td>
                 <td> : </td>
-                <td>{{isset($data->kepesertaan->tanggal_lahir) ? date('d F Y',strtotime($data->kepesertaan->tanggal_lahir)) : '-'}}</td>
+                <td>-</td>
             </tr>
             <tr>
                 <td>Klaim Disetujui</td>

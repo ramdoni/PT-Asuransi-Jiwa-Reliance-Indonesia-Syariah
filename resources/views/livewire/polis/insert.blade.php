@@ -461,8 +461,8 @@
                                 <input type="text" class="form-control" wire:model="peninjauan_ulang" />
                             </div>
                             <div class="form-group">
-                                <label>Pembayaran Klaim</label>
-                                <input type="text" class="form-control" wire:model="pembayaran_klaim" />
+                                <label>Pembayaran Klaim (Hari)</label>
+                                <input type="number" class="form-control" wire:model="pembayaran_klaim" />
                             </div>
                             <div class="form-group">
                                 <label>Retroaktif</label>
