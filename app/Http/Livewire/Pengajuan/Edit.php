@@ -310,7 +310,6 @@ class Edit extends Component
 
         $total = $kontribusi+$ektra_kontribusi+$extra_mortalita+$this->data->biaya_sertifikat+$this->data->biaya_polis_materai+$this->data->pph-($this->data->ppn+$this->data->potong_langsung);
         $this->data->net_kontribusi = $total;
-
         $this->data->save();
 
         $select_tertunda =  Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
