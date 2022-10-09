@@ -9,9 +9,16 @@ use App\Models\Pengajuan;
 
 class Index extends Component
 {
+    public $filter_keyword;
     public function render()
     {
         $data  = Reas::withCount('kepesertaan')->orderBy('id','DESC');
+
+        if($this->filter_keyword) $data->where(function($table){
+            foreach(\Illuminate\Support\Facades\Schema::getColumnListing('reas') as $column){
+                $table->orWhere($column,'LIKE',"%{$this->filter_keyword}%");
+            }
+        });
 
         return view('livewire.reas.index')->with(['data'=>$data->paginate(100)]);
     }

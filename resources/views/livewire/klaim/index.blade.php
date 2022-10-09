@@ -25,7 +25,7 @@
                                     <div class="from-group my-2">
                                         <select class="form-control" wire:model="filter_status">
                                             <option value=""> -- Status -- </option>
-                                            <option value="0"> Underwriting</option>
+                                            <option value="0"> Klaim Analis</option>
                                             <option value="1"> Head Teknik</option>
                                             <option value="2"> Head Syariah</option>
                                             <option value="3"> Selesai</option>
@@ -72,7 +72,7 @@
                                     <td style="width: 50px;">{{$k+1}}</td>
                                     <td class="text-center">
                                         @if($item->status==0)
-                                            <span class="badge badge-warning">Underwriting</span>
+                                            <span class="badge badge-warning">Klaim Analis</span>
                                         @endif
                                         @if($item->status==1)
                                             <span class="badge badge-info">Head Teknik</span>
