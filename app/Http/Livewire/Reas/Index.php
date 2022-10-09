@@ -6,13 +6,15 @@ use Livewire\Component;
 use App\Models\Reas;
 use App\Models\Kepesertaan;
 use App\Models\Pengajuan;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
-    public $filter_keyword;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     public function render()
     {
-        $data  = Reas::withCount('kepesertaan')->orderBy('id','DESC');
+        $data  = Reas::with(['pengajuan','reasuradur','rate_uw'])->withCount('kepesertaan')->orderBy('id','DESC');
 
         if($this->filter_keyword) $data->where(function($table){
             foreach(\Illuminate\Support\Facades\Schema::getColumnListing('reas') as $column){
@@ -26,7 +28,7 @@ class Index extends Component
     public function delete(Reas $id)
     {
         Kepesertaan::where('reas_id',$id->id)->update(['reas_id'=>null,'status_reas'=>null]);
-        
+
         Pengajuan::where('reas_id',$id->id)->update(['reas_id'=>null]);
 
         $id->delete();

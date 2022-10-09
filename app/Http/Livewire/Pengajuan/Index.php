@@ -19,8 +19,6 @@ class Index extends Component
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager'])
-                // ->withCount(['akseptasi','diterima','ditolak'])
-                // ->withSum('diterima','total_kontribusi_dibayar')
                 ->orderBy('created_at','DESC');
 
         if($this->filter_keyword) $data->where(function($table){
@@ -50,7 +48,7 @@ class Index extends Component
             else
                 $data->whereBetween('head_syariah_submit',[$this->start_tanggal_akseptasi,$this->end_tanggal_akseptasi]);
         }
-        
+
         $total_dn = clone $data;
 
         return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100),'total_dn'=>$total_dn->sum('net_kontribusi')]);
@@ -77,7 +75,7 @@ class Index extends Component
     {
         Kepesertaan::where('pengajuan_id',$this->selected->id)->delete();
 
-        $this->selected->delete();        
+        $this->selected->delete();
 
         session()->flash('message-success',__('Pengajuan berhasil dihapus'));
 
@@ -98,7 +96,7 @@ class Index extends Component
         $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';
         if($status==1) $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';
         if($status==2) $title = 'DAFTAR KEPESERTAAN TERTUNDA ASURANSI JIWA KUMPULAN SYARIAH';
-        
+
         $activeSheet = $objPHPExcel->setActiveSheetIndex(0);
         $activeSheet->setCellValue('A1', $title);
         $activeSheet->mergeCells("A1:O1");
@@ -252,9 +250,9 @@ class Index extends Component
                     ->setCellValue('O'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
                     ->setCellValue('P'.$num,$i->ul)
                     ->setCellValue('Q'.$num,$i->reason_reject);
-                
+
                     $activeSheet->getStyle("H{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-                    
+
                     if($i->extra_mortalita) $activeSheet->getStyle("L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
                     if($i->extra_kontribusi) $activeSheet->getStyle("M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
 
@@ -390,7 +388,7 @@ class Index extends Component
             $activeSheet
                 ->setCellValue('N'.$num,"Jakarta, ".date('d F Y'))
                 ->setCellValue('N'.($num+4),"Underwriting Syariah");
-            
+
             $activeSheet->getStyle("N".$num)->applyFromArray([
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -416,7 +414,7 @@ class Index extends Component
                 $activeSheet
                         ->setCellValue('K'.$num,"Jakarta, ".date('d F Y'))
                         ->setCellValue('K'.($num+4),"Underwriting Syariah");
-                    
+
                     $activeSheet->getStyle("K".$num)->applyFromArray([
                             'alignment' => [
                                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,

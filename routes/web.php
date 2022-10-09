@@ -18,7 +18,7 @@ Route::get('/', Home::class)->name('home')->middleware('auth');
 Route::get('login', App\Http\Livewire\Login::class)->name('login');
 
 // All login
-Route::group(['middleware' => ['auth']], function(){    
+Route::group(['middleware' => ['auth']], function(){
     Route::get('profile',App\Http\Livewire\Profile::class)->name('profile');
     Route::get('back-to-admin',[App\Http\Controllers\IndexController::class,'backtoadmin'])->name('back-to-admin');
     Route::get('get-premium-receivable',[App\Http\Controllers\PremiumReceivableController::class,'data'])->name('ajax.get-premium-receivable');
@@ -58,10 +58,12 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('klaim/print-persetujuan/{id}',[App\Http\Controllers\KlaimController::class,'printPersetujuan'])->name('klaim.print-persetujuan');
     Route::get('klaim/print-tolak/{id}',[App\Http\Controllers\KlaimController::class,'printTolak'])->name('klaim.print-tolak');
     Route::get('klaim/print-memo/{id}',[App\Http\Controllers\KlaimController::class,'printMemo'])->name('klaim.print-memo');
+    Route::get('klaim-reason',App\Http\Livewire\KlaimReason\Index::class)->name('klaim-reason.index');
+    Route::get('recovery-claim',App\Http\Livewire\RecoveryClaim\Index::class)->name('recovery-claim.index');
 });
 
 // Administrator
-Route::group(['middleware' => ['auth','access:1']], function(){    
+Route::group(['middleware' => ['auth','access:1']], function(){
     Route::get('setting',App\Http\Livewire\Setting::class)->name('setting');
     Route::get('users/insert',App\Http\Livewire\User\Insert::class)->name('users.insert');
     Route::get('user-access', App\Http\Livewire\UserAccess\Index::class)->name('user-access.index');

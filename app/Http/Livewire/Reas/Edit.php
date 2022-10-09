@@ -15,11 +15,12 @@ class Edit extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['reload-page'=>'$refresh','set_calculate_reas'=>'set_calculate_reas'];
-    public $data,$no_pengajuan,$tab_active='tab_draft',$check_id=[],$filter_status,$is_calculate=false;
+    public $data,$no_pengajuan,$tab_active='tab_draft',$check_id=[],$filter_status,$is_calculate=false,$perhitungan_usia;
+    public $filter_ul_arr=[],$filter_ul;
     public function render()
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1]);
-        
+
         $draft = clone $kepesertaan;
         $reas = clone $kepesertaan;
         $or = clone $kepesertaan;
@@ -34,7 +35,20 @@ class Edit extends Component
     public function mount(Reas $id)
     {
         $this->data = $id;
+        $this->perhitungan_usia = $this->data->perhitungan_usia;
         $this->no_pengajuan = $id->no_pengajuan;
+        $this->filter_ul_arr = Kepesertaan::where('reas_id',$this->data->id)->groupBy('ul')->get();
+    }
+
+    public function updated($propertyName)
+    {
+        if($propertyName=='perhitungan_usia'){
+            $this->data->perhitungan_usia = $this->perhitungan_usia;
+            $this->data->save();
+        }
+        if($propertyName=='filter_ul'){
+            $this->emit('filter-ul',$this->filter_ul);
+        }
     }
 
     public function hitung()

@@ -49,7 +49,7 @@ class Insert extends Component
         ]);
 
         $data = new Klaim();
-        $data->no_pengajuan = 'K'.date('dmy').str_pad((Klaim::count()+1),6, '0', STR_PAD_LEFT);;
+        $data->no_pengajuan = 'K'.date('dmy').str_pad((Klaim::count()+1),6, '0', STR_PAD_LEFT);
         $data->polis_id = $this->polis_id;
         $data->kepesertaan_id = $this->kepesertaan_id;
         $data->tanggal_meninggal = $this->tanggal_meninggal;

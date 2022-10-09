@@ -54,7 +54,7 @@ class PengajuanCalculate implements ShouldQueue
         $key=0;
         $update  =[];
         foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->with(['double_peserta','rate_'])->get() as $data){
-            
+
             echo "{$key}. Calculate Nama : ".$data->nama ."\n";
             // $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
             //     $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
@@ -95,20 +95,20 @@ class PengajuanCalculate implements ShouldQueue
                 $data->rate =  $rate ? $rate->rate : 0;
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }
-            
+
             $update[$key]['dana_tabarru'] = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
-            $update[$key]['dana_ujrah'] = ($data->kontribusi*$ujrah)/100; 
+            $update[$key]['dana_ujrah'] = ($data->kontribusi*$ujrah)/100;
             $update[$key]['extra_mortalita'] = $data->rate_em*$nilai_manfaat_asuransi/1000;
 
-            $data->dana_tabarru =  ($data->kontribusi*$iuran_tabbaru)/100; 
-            $data->dana_ujrah = ($data->kontribusi*$ujrah)/100; 
+            $data->dana_tabarru =  ($data->kontribusi*$iuran_tabbaru)/100;
+            $data->dana_ujrah = ($data->kontribusi*$ujrah)/100;
             $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
-            
+
             if($data->akumulasi_ganda)
                 $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
             else
                 $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
-            
+
             if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw){
                 $update[$key]['uw'] = $uw->keterangan;
@@ -116,7 +116,7 @@ class PengajuanCalculate implements ShouldQueue
                 $data->uw = $uw->keterangan;
                 $data->ul = $uw->keterangan;
             }
-            
+
             $update[$key]['is_hitung'] = 1;
             $data->is_hitung = 1;
             $data->save();

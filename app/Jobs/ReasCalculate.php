@@ -21,7 +21,7 @@ class ReasCalculate implements ShouldQueue
 
     /**
      * The object reas
-     * 
+     *
      * @var object
      */
     public $data;
@@ -53,7 +53,7 @@ class ReasCalculate implements ShouldQueue
     {
         ini_set('memory_limit', '-1');
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1])->get();
-        
+
         $rate = ReasuradurRate::find($this->data->reasuradur_rate_id);
 
         if($rate){
@@ -66,15 +66,18 @@ class ReasCalculate implements ShouldQueue
         $or = $this->data->reas;
         $ajri = $this->data->or;
         $ri_com = $this->data->ri_com;
+        $perhitungan_usia = $this->data->perhitungan_usia;
 
         echo "\n\nOR : {$or}\n";
         echo "AJRI : {$ajri}\n";
         echo "RI COM :{$ri_com}\n\n";
-        
+
         foreach($kepesertaan as $k => $item){
             $manfaat_asuransi = $item->basic;
-            
+
             echo "{$k}. Nama : {$item->nama}\n";
+
+            $item->usia_reas = $item->tanggal_lahir ? hitung_umur($item->tanggal_lahir,$perhitungan_usia,$this->data->created_at) : '0';
 
             $reas_manfaat_asuransi_ajri = ($manfaat_asuransi*$ajri)/100;
             if($reas_manfaat_asuransi_ajri>=100000000){
@@ -85,7 +88,7 @@ class ReasCalculate implements ShouldQueue
                 $item->nilai_manfaat_asuransi_reas = ($manfaat_asuransi*$or)/100;
                 $item->reas_manfaat_asuransi_ajri = ($manfaat_asuransi*$ajri)/100;
             }
-            
+
             // kontribusi reas
             $rate = ReasuradurRateRates::where(['tahun'=>$item->usia,'bulan'=>$item->masa_bulan,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
             if($rate){
@@ -93,29 +96,29 @@ class ReasCalculate implements ShouldQueue
                 $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/1000;
             }
 
-            if($ri_com) 
-                $item->ujroh_reas = ($item->total_kontribusi_reas * $ri_com) / 100; 
+            if($ri_com)
+                $item->ujroh_reas = ($item->total_kontribusi_reas * $ri_com) / 100;
             else
                 $item->ujroh_reas = 0;
-            
+
             // ul
-            $uw = ReasuradurRateUw::whereRaw("{$manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$item->usia,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
-            if(!$uw) $uw = ReasuradurRateUw::where(['usia'=>$item->usia,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->orderBy('max_amount','ASC')->first();
+            $uw = ReasuradurRateUw::whereRaw("{$manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$item->usia_reas,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
+            if(!$uw) $uw = ReasuradurRateUw::where(['usia'=>$item->usia_reas,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->orderBy('max_amount','ASC')->first();
             if($uw) $item->ul_reas = $uw->keterangan;
-            
+
             $item->net_kontribusi_reas = $item->total_kontribusi_reas + $item->reas_extra_kontribusi - $item->ujroh_reas;
-            
-            if($item->total_kontribusi_reas<=0) 
+
+            if($item->total_kontribusi_reas<=0)
                 $item->status_reas = 2; // tidak direaskan karna distribusinya 0
             else
                 $item->status_reas = 1;
 
-            $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days")); 
-            $item->kadaluarsa_reas_hari =  $item->polis->kadaluarsa_reas; 
+            $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days"));
+            $item->kadaluarsa_reas_hari =  $item->polis->kadaluarsa_reas;
             $item->save();
             echo "Net Kontribusi : {$item->net_kontribusi_reas}";
         }
-        
+
         $this->data->jumlah_peserta = Kepesertaan::where('reas_id',$this->data->id)->count();
         $this->data->extra_kontribusi = Kepesertaan::where('reas_id',$this->data->id)->sum('reas_extra_kontribusi');
         $this->data->manfaat_asuransi_reas = Kepesertaan::where('reas_id',$this->data->id)->sum('nilai_manfaat_asuransi_reas');
