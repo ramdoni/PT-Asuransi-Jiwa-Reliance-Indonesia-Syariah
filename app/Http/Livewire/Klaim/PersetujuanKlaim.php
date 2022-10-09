@@ -10,7 +10,7 @@ class PersetujuanKlaim extends Component
 {
     use WithFileUploads;
     public $data,$head_klaim_status,$head_klaim_note,$head_klaim_date,$head_teknik_status,$head_teknik_note,$head_teknik_date,$head_devisi_status,$head_devisi_note,$head_devisi_date;
-    public $keputusa_arr = [''=>'-',1=>'Terima',2=>'Tolak',3=>'Tunda',4=>'Investigasi'];
+    public $keputusa_arr = [''=>'-',1=>'Terima',2=>'Tolak',3=>'Tunda',4=>'Investigasi',5=>'Liable',6=>'STNC'];
     public $direksi_1_file,$direksi_1_status,$direksi_1_note,$direksi_1_date;
     public $direksi_2_file,$direksi_2_status,$direksi_2_note,$direksi_2_date;
     public function render()

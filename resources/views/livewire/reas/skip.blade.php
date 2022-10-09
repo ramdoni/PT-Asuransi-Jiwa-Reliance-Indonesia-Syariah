@@ -1,9 +1,10 @@
 <div>
-    <div class="table-responsive"> 
+    <div class="table-responsive">
         <table class="table table-hover m-b-0 c_list table-nowrap vertical-align-middle" id="table_postpone">
             <thead style="text-transform: uppercase;">
                 <tr>
                     <th>No</th>
+                    <th></th>
                     <th>No Pengajuan</th>
                     <th>No Polis</th>
                     <th>Nama Pemegang Polis</th>
@@ -36,7 +37,13 @@
                     @php($index_proses++)
                     <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                         <td>{{$index_proses}}</td>
-                        <td><a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
+                        <td>
+                            @if($reassign)
+                                <input type="checkbox" wire:model="assign_id.{{$k}}" value="{{$item->id}}" />
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
                         <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
                         <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                         <td>{{$item->no_peserta}}</td>
@@ -45,29 +52,29 @@
                         <td>{{date('d-m-Y',strtotime($item->tanggal_lahir))}}</td>
                         <td class="text-center">{{$item->usia}}</td>
                         <td>{{date('d-m-Y',strtotime($item->tanggal_mulai))}}</td>
-                        <td>{{date('d-m-Y',strtotime($item->tanggal_akhir))}}</td>    
-                        <td class="text-center">{{$item->masa_bulan}}</td>                                                 
+                        <td>{{date('d-m-Y',strtotime($item->tanggal_akhir))}}</td>
+                        <td class="text-center">{{$item->masa_bulan}}</td>
                         <td class="text-right">{{format_idr($item->basic)}}</td>
-                        <td class="text-right">{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>        
-                        <td class="text-right">{{format_idr($item->reas_manfaat_asuransi_ajri)}}</td>                         
-                        <td class="text-right">{{$item->reas_manfaat}}</td>                         
-                        <td class="text-right">{{$item->reas_type}}</td>   
+                        <td class="text-right">{{format_idr($item->nilai_manfaat_asuransi_reas)}}</td>
+                        <td class="text-right">{{format_idr($item->reas_manfaat_asuransi_ajri)}}</td>
+                        <td class="text-right">{{$item->reas_manfaat}}</td>
+                        <td class="text-right">{{$item->reas_type}}</td>
                         <td class="text-right">{{$item->rate_reas}}</td>
-                        <td class="text-right">{{format_idr($item->total_kontribusi_reas)}}</td>    
+                        <td class="text-right">{{format_idr($item->total_kontribusi_reas)}}</td>
                         <td class="text-right">
                             <a href="javascript:void(0)" wire:click="$emit('add-extra-kontribusi',{{$item->id}})">
                                 @if($item->reas_extra_kontribusi==0)
-                                    <i class="fa fa-plus"></i>    
+                                    <i class="fa fa-plus"></i>
                                 @else
                                     {{format_idr($item->reas_extra_kontribusi)}}
                                 @endif
                             </a>
-                        </td>                      
-                        <td class="text-right">{{format_idr($item->ujroh_reas)}}</td>                         
-                        <td class="text-right">{{format_idr($item->net_kontribusi_reas)}}</td>    
-                        <td class="text-center">{{$item->ul_reas}}</td>    
-                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>                     
-                        <td class="text-center">{{$item->ul}}</td>                     
+                        </td>
+                        <td class="text-right">{{format_idr($item->ujroh_reas)}}</td>
+                        <td class="text-right">{{format_idr($item->net_kontribusi_reas)}}</td>
+                        <td class="text-center">{{$item->ul_reas}}</td>
+                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                        <td class="text-center">{{$item->ul}}</td>
                     </tr>
                 @endforeach
                 @if($kepesertaan->count()==0)
@@ -79,7 +86,7 @@
             <tfoot style="background: #eee;">
                 <tr>
                     <th colspan="16" class="text-right">Total</th>
-                
+
                 </tr>
             </tfoot>
         </table>

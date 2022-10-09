@@ -1,5 +1,5 @@
 @section('sub-title', 'Index')
-@section('title', 'Klaim')
+@section('title', 'Recovery Klaim')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -32,7 +32,6 @@
                     </div>
                     <div class="col-md-9">
                         <a href="{{route('klaim.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
-                        <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_migrasi" class="btn btn-danger"><i class="fa fa-upload"></i> Migrasi</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
@@ -46,9 +45,10 @@
                         <thead style="background: #eee;vertical-align:middle">
                             <tr>
                                 <th>No</th>
-                                <th class="text-center">Status Approval</th>
-                                <th class="text-center">Status Pengajuan</th>
+                                <th class="text-center">Status</th>
                                 <th>No Pengajuan</th>
+                                <th>No Klaim</th>
+                                <th>No Reas</th>
                                 <th>No Polis</th>
                                 <th>Pemegang Polis</th>
                                 <th>No Peserta</th>
@@ -56,8 +56,7 @@
                                 <th>Masa Asuransi</th>
                                 <th>Tanggal Klaim</th>
                                 <th>Tanggal Meninggal</th>
-                                <th>Nilai Klaim</th>
-                                <th>Jenis Klaim</th>
+                                <th class="text-right">Nilai Klaim</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -66,63 +65,38 @@
                                 <tr>
                                     <td style="width: 50px;">{{$k+1}}</td>
                                     <td class="text-center">
-                                        @if($item->status==0)
-                                            <span class="badge badge-warning">Underwriting</span>
-                                        @endif
                                         @if($item->status==1)
-                                            <span class="badge badge-info">Head Teknik</span>
+                                            <span class="badge badge-warning">Unpaid</span>
                                         @endif
                                         @if($item->status==2)
-                                            <span class="badge badge-danger">Head Syariah</span>
-                                        @endif
-                                        @if($item->status==3)
-                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
-                                        @endif
-                                        @if($item->status==4)
-                                            <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
+                                            <span class="badge badge-success">Paid</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">
-                                        @if($item->status_pengajuan==1)
-                                            <span class="badge badge-warning">Analisa</span>
-                                        @endif
-                                        @if($item->status_pengajuan==2)
-                                            <span class="badge badge-danger">Batal</span>
-                                        @endif
-                                        @if($item->status_pengajuan==3)
-                                            <span class="badge badge-success">Diterima</span>
-                                        @endif
-                                        @if($item->status_pengajuan==4)
-                                            <span class="badge badge-danger">Tolak</span>
-                                        @endif
-                                        @if($item->status_pengajuan==5)
-                                            <span class="badge badge-info">Tunda</span>
-                                        @endif
-                                    </td>
-
-                                    <td><a href="{{route('klaim.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
+                                    <td><a href="{{route('klaim.edit', $item->id)}}" target="_blank">{{$item->no_pengajuan}}</a></td>
                                     <td>
-                                        <a href="{{route('polis.edit',$item->polis_id)}}">
-                                            {{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}
-                                        </a>
+                                        @if(isset($item->klaim->no_pengajuan))
+                                            <a href="{{route('klaim.edit',$item->klaim_id)}}" target="_blank">{{ $item->klaim->no_pengajuan }}</a>
+                                        @else
+                                            -
+                                        @endif
                                     </td>
+                                    <td>
+                                        @if(isset($item->reas->no_pengajuan))
+                                            <a href="{{route('reas.edit',$item->reas_id)}}" target="_blank">{{ $item->reas->no_pengajuan }}</a>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td><a href="{{route('polis.edit',$item->polis_id)}}" target="_blank">{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</a></td>
                                     <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                                     <td>{{isset($item->kepesertaan->no_peserta) ? $item->kepesertaan->no_peserta : '-'}}</td>
                                     <td>{{isset($item->kepesertaan->nama) ? $item->kepesertaan->nama : '-'}}</td>
                                     <td class="text-center">{{isset($item->kepesertaan->masa_bulan) ? $item->kepesertaan->masa_bulan : '-'}}</td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
-                                    <td>{{date('d-F-Y',strtotime($item->tanggal_meninggal))}}</td>
-                                    <td>{{format_idr($item->nilai_klaim)}}</td>
-                                    <td>{{$item->jenis_klaim}}</td>
+                                    <td>{{isset($item->klaim->tanggal_meninggal) ? date('d-F-Y',strtotime($item->klaim->tanggal_meninggal)) : '-'}}</td>
+                                    <td class="text-right">{{format_idr($item->nilai_klaim)}}</td>
                                     <td>
-                                        @if($item->status!=3)
-                                            <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
-                                        @endif
-                                        @if($item->status==3)
-                                            <a href="{{route('klaim.print-persetujuan',$item->id)}}" class="badge badge-info badge-active" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
-                                            <a href="{{route('klaim.print-tolak',$item->id)}}" class="badge badge-danger badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Tolak</a>
-                                            <a href="{{route('klaim.print-memo',$item->id)}}" class="badge badge-warning badge-active" target="_blank"><i class="fa fa-print"></i> Memo Pembayaran</a>
-                                        @endif
+
                                     </td>
                                 </tr>
                             @endforeach

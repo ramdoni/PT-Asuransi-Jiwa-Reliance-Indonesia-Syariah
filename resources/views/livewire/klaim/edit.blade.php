@@ -43,7 +43,7 @@
                                 </tr>
                                 <tr>
                                     <td>Periode As</td>
-                                    <td> 
+                                    <td>
                                         @if(isset($peserta->tanggal_mulai))
                                             {{date('d F Y',strtotime($peserta->tanggal_mulai))}} sd {{date('d F Y',strtotime($peserta->tanggal_akhir))}}
                                         @else
@@ -82,51 +82,52 @@
                             <table class="table ml-2">
                                 <tr>
                                     <td style="width:30%">Nomor DN</td>
-                                    <td style="width:70%;white-space: break-spaces"> : 
-                                        @if(isset($peserta->pengajuan->no_pengajuan))
-                                            {{$peserta->pengajuan->dn_number}}
-                                        @elseif(isset($peserta->no_debit_note))
-                                            {{$peserta->no_debit_note}}
-                                        @else
-                                            -
-                                        @endif
-                                    </td>
+                                    <td> : </td>
+                                    <td style="width:70%;white-space: break-spaces">@if(isset($peserta->pengajuan->no_pengajuan)){{$peserta->pengajuan->dn_number}}@elseif(isset($peserta->no_debit_note)){{$peserta->no_debit_note}} @else - @endif</td>
                                 </tr>
                                 <tr>
                                     <td>Kontribusi DN</td>
-                                    <td> : {{isset($peserta->pengajuan->kontribusi) ? format_idr($peserta->pengajuan->kontribusi+$peserta->pengajuan->extra_kontribusi+$peserta->pengajuan->extra_mortalita) : '-'}}</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->pengajuan->kontribusi) ? format_idr($peserta->pengajuan->kontribusi+$peserta->pengajuan->extra_kontribusi+$peserta->pengajuan->extra_mortalita) : format_idr($peserta->kontribusi)}}</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl. Bayar Kontribusi</td>
-                                    <td> : {{isset($peserta->pengajuan->payment_date) ? date('d-F-Y',strtotime($peserta->pengajuan->payment_date)) : '-' }} </td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->pengajuan->payment_date) ? date('d-F-Y',strtotime($peserta->pengajuan->payment_date)) : '-' }} </td>
                                 </tr>
                                 <tr>
                                     <td>Kontribusi Peserta</td>
-                                    <td> : {{isset($peserta->kontribusi) ? format_idr($peserta->kontribusi) : '-'}}</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->kontribusi) ? format_idr($peserta->kontribusi) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Reasuradur</td>
-                                    <td> : {{isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-'}}</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Type Reas</td>
-                                    <td> : {{isset($peserta->reas->type_reas) ? $peserta->reas->type_reas : '-'}}</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->reas->type_reas) ? $peserta->reas->type_reas : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Model Reas</td>
-                                    <td> : {{isset($peserta->reas->manfaat) ? $peserta->reas->manfaat : '-'}}</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->reas->manfaat) ? $peserta->reas->manfaat : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>OR Surplus</td>
-                                    <td> : {{isset($peserta->reas->manfaat_asuransi_ajri) ? format_idr($peserta->reas->manfaat_asuransi_ajri) : '-'}}</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->reas->manfaat_asuransi_ajri) ? format_idr($peserta->reas->manfaat_asuransi_ajri) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Kadaluarsa Reas</td>
-                                    <td> : {{isset($peserta->kadaluarsa_reas_hari) ? $peserta->kadaluarsa_reas_hari .' Hari Kalender' : '-'}}</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->kadaluarsa_reas_hari) ? $peserta->kadaluarsa_reas_hari .' Hari Kalender' : '-'}}</td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="col-md-4">  
+                        <div class="col-md-4">
                             <h6><i class="fa fa-circle text-info"></i> Ketentuan Asuransi</h6>
                             <table class="table ml-2">
                                 <tr>
@@ -178,7 +179,7 @@
                     <div class="tab-content px-0">
                         <div class="tab-pane active show" id="tab_data_klaim">
                             <div class="row">
-                                <div class="col-md-4">  
+                                <div class="col-md-4">
                                     <table class="table ml-2">
                                         <tr>
                                             <td>Tanggal Meninggal</td>
@@ -213,7 +214,7 @@
                                         </tr>
                                     </table>
                                 </div>
-                                <div class="col-md-4">  
+                                <div class="col-md-4">
                                     <table class="table ml-2">
                                         <tr>
                                             <td>Tempat & Sebab Klaim</td>

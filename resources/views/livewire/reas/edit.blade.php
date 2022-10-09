@@ -12,7 +12,7 @@
                                     @if($data->dn_number)
                                         <tr>
                                             <td><strong>Debit Note Number</strong></td>
-                                            <td>: 
+                                            <td>:
                                                 {{$data->dn_number}}
                                                 @if($data->dn_number)
                                                     <a href="{{route('pengajuan.print-dn',$data->id)}}" target="_blank"><i class="fa fa-print"></i></a>
@@ -101,6 +101,52 @@
                                         <td> : {{format_idr($data->kontribusi_netto)}}</td>
                                     </tr>
                                     <tr>
+                                        <th>Perhitungan Usia</th>
+                                        <td>
+                                            <select class="form-control" wire:model="perhitungan_usia" wire:loading.remove wire:target="perhitungan_usia">
+                                                <option value=""> -- Pilih -- </option>
+                                                <option value="1">Nears Birthday</option>
+                                                <option value="2">Actual Birthday</option>
+                                            </select>
+                                            @error('perhitungan_usia')
+                                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                            @enderror
+                                            <span wire:loading wire:target="perhitungan_usia">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span> Saved...
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tampilkan Peserta</th>
+                                        <td>
+                                            <select class="form-control" wire:loading.remove wire:target="show_peserta" wire:model="show_peserta">
+                                                <option value="1">Semua Peserta</option>
+                                                <option value="2">Peserta Ganda</option>
+                                            </select>
+                                            <span wire:loading wire:target="show_peserta">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>UL/UW</th>
+                                        <td>
+                                            <select wire:loading.remove wire:target="filter_ul" class="form-control" wire:model="filter_ul">
+                                                <option value=""> -- Pilih -- </option>
+                                                @foreach($filter_ul_arr as $item)
+                                                    @if($item->ul=="") @continue @endif
+                                                    <option>{{$item->ul}}</option>
+                                                @endforeach
+                                            </select>
+                                            <span wire:loading wire:target="filter_ul">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {{-- <tr>
                                         <td colspan="2">
                                             @if($data->status!=3)
                                                 @if($is_calculate==false)
@@ -112,8 +158,9 @@
                                                     </span>
                                                 @endif
                                             @endif
+                                            <a href="javasript:void(0)" class="btn btn-danger" wire:click="$emit('reassign',true)"><i class="fa fa-pencil-square"></i> Reassign</a>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 </thead>
                             </table>
                         </div>

@@ -21,6 +21,7 @@
                                     <li><a href="{{ route('produk.index') }}">Produk</a></li>
                                     <li><a href="{{ route('reasuradur.index') }}">Reasuradur</a></li>
                                     <li><a href="{{ route('users.index') }}">Users</a></li>
+                                    <li><a href="{{ route('klaim-reason.index') }}">Klaim Reason</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ route('polis.index') }}" class="text-info icon-menu px-1">Pemegang Polis</a></li>
@@ -28,6 +29,7 @@
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
+                            <li><a href="{{ route('recovery-claim.index') }}" class="text-info icon-menu px-1">Recovery Claim</a></li>
                         @endif
                         @if (\Auth::user()->user_access_id == 2)
                             <!-- Head Underwriting -->
@@ -62,7 +64,7 @@
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
                         @endif
-                        
+
                     </ul>
                 </div>
             </form>

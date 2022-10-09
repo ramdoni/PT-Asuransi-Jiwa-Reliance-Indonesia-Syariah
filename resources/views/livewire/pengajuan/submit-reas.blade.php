@@ -26,6 +26,17 @@
                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                     @enderror
                 </div>
+                <div class="form-group">
+                    <label>Perhitungan Usia</label>
+                    <select class="form-control" wire:model="perhitungan_usia">
+                        <option value=""> -- Pilih -- </option>
+                        <option value="1">Nears Birthday</option>
+                        <option value="2">Actual Birthday</option>
+                    </select>
+                    @error('perhitungan_usia')
+                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                    @enderror
+                </div>
                 <span wire:loading wire:target="reasuradur_id">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <span class="sr-only">{{ __('Loading...') }}</span>

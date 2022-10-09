@@ -12,7 +12,7 @@ use App\Models\Kepesertaan;
 class SubmitReas extends Component
 {
     public $pengajuan = [];
-    public $reasuradur_id,$reasuradur=[],$rate=[],$or,$reas,$ri_com,$reasuradur_rate_id,$manfaat,$type_reas;
+    public $reasuradur_id,$reasuradur=[],$rate=[],$or,$reas,$ri_com,$reasuradur_rate_id,$manfaat,$type_reas,$perhitungan_usia;
     protected $listeners = ['set_pengajuan'=>'set_pengajuan'];
     public function render()
     {
@@ -45,7 +45,8 @@ class SubmitReas extends Component
         $this->validate([
             'reasuradur_id' => 'required',
             'reasuradur_rate_id' => 'required',
-            'manfaat' => 'required'
+            'manfaat' => 'required',
+            'perhitungan_usia' => 'required'
         ]);
 
         $data = new Reas();
@@ -57,6 +58,7 @@ class SubmitReas extends Component
         $data->ri_com = $this->ri_com;
         $data->manfaat  = $this->manfaat;
         $data->type_reas = $this->type_reas;
+        $data->perhitungan_usia = $this->perhitungan_usia;
         $data->save();
 
         foreach($this->pengajuan as $item){

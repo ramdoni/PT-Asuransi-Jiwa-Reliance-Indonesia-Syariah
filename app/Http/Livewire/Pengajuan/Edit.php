@@ -25,15 +25,15 @@ class Edit extends Component
     {
         $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
-            if($this->filter_ul) $table->where('ul',$this->filter_ul);   
+            if($this->filter_ul) $table->where('ul',$this->filter_ul);
         })->get();
         $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->where(function($table){
-            if($this->show_peserta==2) $table->where('is_double',1);   
-            if($this->filter_ul) $table->where('ul',$this->filter_ul);   
+            if($this->show_peserta==2) $table->where('is_double',1);
+            if($this->filter_ul) $table->where('ul',$this->filter_ul);
         })->get();
         $this->kepesertaan_reject = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->where(function($table){
-            if($this->show_peserta==2) $table->where('is_double',1);   
-            if($this->filter_ul) $table->where('ul',$this->filter_ul);   
+            if($this->show_peserta==2) $table->where('is_double',1);
+            if($this->filter_ul) $table->where('ul',$this->filter_ul);
         })->get();
 
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
@@ -48,7 +48,7 @@ class Edit extends Component
     {
         $this->data = $data;
         $this->no_pengajuan = $data->no_pengajuan;
-        $this->filter_ul_arr = Kepesertaan::where('pengajuan_id',$this->data->id)->groupBy('ul')->get(); 
+        $this->filter_ul_arr = Kepesertaan::where('pengajuan_id',$this->data->id)->groupBy('ul')->get();
     }
 
     public function updated($propertyName)
@@ -98,17 +98,17 @@ class Edit extends Component
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi);
-           
+
             if($data->is_double){
                 $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
-                $data->akumulasi_ganda = $sum+$data->basic;    
+                $data->akumulasi_ganda = $sum+$data->basic;
             }
             $nilai_manfaat_asuransi = $data->basic;
 
             // find rate
             $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
             $data->rate = $rate ? $rate->rate : 0;
-            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000; 
+            $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
 
             // find rate
             $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
@@ -119,16 +119,16 @@ class Edit extends Component
                 $data->rate = $rate ? $rate->rate : 0;
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }
-            
+
             $data->dana_tabarru = ($data->kontribusi*$data->polis->iuran_tabbaru)/100; // persen ngambil dari daftarin polis
-            $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100; 
+            $data->dana_ujrah = ($data->kontribusi*$data->polis->ujrah_atas_pengelolaan)/100;
             $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
-            
+
             if($data->akumulasi_ganda)
                 $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->first();
             else
                 $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->first();
-            
+
             if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->data->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw){
                 $data->uw = $uw->keterangan;
@@ -136,9 +136,9 @@ class Edit extends Component
             }
             $data->save();
         }
-        
+
         /**
-         * 
+         *
             mstnc
             tanggal akseptasi - tanggal mulai > retroaktif dihitung today
             tanggal akseptasi - tanggal mulai  < retroaktif value 0
@@ -161,9 +161,9 @@ class Edit extends Component
         //             }
         //         }
         //     }
-            
+
         //     if(in_array($peserta->ul,['NM','A','B','C'])) $peserta->tanggal_stnc = $this->data->head_syariah_submit;
-            
+
         //     $peserta->save();
         // }
 
@@ -192,7 +192,7 @@ class Edit extends Component
         $this->data->dn_number = $dn_number;
 
         $running_no_surat = get_setting('running_surat')+1;
-        
+
         $this->data->no_surat = str_pad($running_no_surat,6, '0', STR_PAD_LEFT).'/UWS-M/AJRI-US/'.numberToRomawi(date('m')).'/'.date('Y');
 
         update_setting('running_surat',$running_no_surat);
@@ -206,7 +206,7 @@ class Edit extends Component
 
         // generate no peserta
         $running_number = $this->data->polis->running_number_peserta;
-    
+
         $key=0;
         foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
             $running_number++;
@@ -225,29 +225,29 @@ class Edit extends Component
                     }
                 }
             }
-            
+
             if(in_array($peserta->ul,['NM','A','B','C'])) $peserta->tanggal_stnc = date('Y-m-d');
-            
+
             $peserta->save();
 
             $key++;
         }
-        
+
         $get_peserta_awal =  Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->orderBy('no_peserta','ASC')->first();
         if($get_peserta_awal) $this->data->no_peserta_awal = $get_peserta_awal->no_peserta;
 
         $no_peserta_akhir =  Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->orderBy('no_peserta','DESC')->first();
         if($no_peserta_akhir) $this->data->no_peserta_akhir = $no_peserta_akhir->no_peserta;
-        
+
         // save running number
         ModelPolis::where('id',$this->data->polis->id)->update(
             [
                 'running_number_dn' => $running_number_dn,
                 'running_number_peserta' => $running_number
             ]);
-        
+
         if(isset($this->data->polis->masa_leluasa)) $this->data->tanggal_jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->polis->masa_leluasa} days"));
-        
+
         $this->data->save();
 
         $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
@@ -264,19 +264,19 @@ class Edit extends Component
         $kontribusi = $select->total_kontribusi;
         $ektra_kontribusi = $select->total_extract_kontribusi;
         $extra_mortalita = $select->total_extra_mortalita;
-        
+
         $this->data->nilai_manfaat = $nilai_manfaat;
         $this->data->dana_tabbaru = $dana_tabbaru;
         $this->data->dana_ujrah = $dana_ujrah;
         $this->data->kontribusi = $kontribusi;
         $this->data->extra_kontribusi = $ektra_kontribusi;
         $this->data->extra_mortalita = $extra_mortalita;
-        
+
         if($this->data->polis->potong_langsung){
             $this->data->potong_langsung_persen = $this->data->polis->potong_langsung;
             $this->data->potong_langsung = $kontribusi*($this->data->polis->potong_langsung/100);
         }
-        
+
         /**
          * Hitung PPH
          */
@@ -302,7 +302,7 @@ class Edit extends Component
         /**
          * Biaya Polis dan Materai
          * jika pengajuan baru pertama kali ada biaya polis dan materia 100.000
-         * */ 
+         * */
         if($running_number==0){
             $this->data->biaya_polis_materai = $this->data->polis->biaya_polis_materai;
             $this->data->biaya_sertifikat = $this->data->polis->biaya_sertifikat;
@@ -330,7 +330,7 @@ class Edit extends Component
             'transaksi_id' => $this->data->no_pengajuan,
             'tanggal_produksi'=> date('Y-m-d'),
             'no_debit_note' => $this->data->dn_number,
-            'no_polis' => $this->data->polis->no_polis, 
+            'no_polis' => $this->data->polis->no_polis,
             'pemegang_polis' => $this->data->polis->nama,
             'alamat' => $this->data->polis->alamat,
             'jenis_produk' => isset($this->data->polis->produk->nama) ? $this->data->polis->produk->nama : '-',
@@ -381,7 +381,7 @@ class Edit extends Component
             'status' => 1,
             'user_id' => \Auth::user()->id
         ]);
-        
+
         // find polis
         $polis = Polis::where('no_polis',$this->data->polis->no_polis)->first();
         if(!$polis){
@@ -404,7 +404,7 @@ class Edit extends Component
         $income->transaction_id = $this->data->id;
         $income->type = 2; // Syariah
         $income->policy_id = $polis->id;
-        if($this->data->tanggal_jatuh_tempo) $income->due_date = $this->data->tanggal_jatuh_tempo; 
+        if($this->data->tanggal_jatuh_tempo) $income->due_date = $this->data->tanggal_jatuh_tempo;
         $income->save();
 
         $this->emit('message-success','Data berhasil di proses');
@@ -419,7 +419,7 @@ class Edit extends Component
     public function approve(Kepesertaan $data)
     {
         \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Approve");
-        
+
         $data->status_akseptasi = 1;
         $data->save();
 
@@ -466,7 +466,7 @@ class Edit extends Component
         foreach($this->data->kepesertaan as $item){
             $item->status_akseptasi = 1;
             $item->save();
-            
+
             PengajuanHistory::insert([
                 'pengajuan_id' => $item->pengajuan_id,
                 'kepesertaan_id' => $item->id,
@@ -477,7 +477,7 @@ class Edit extends Component
         $this->check_id = []; $this->check_all = 0;
 
         \LogActivity::add("[web][Pengajuan][{$this->data->no_pengajuan}] Approve All");
-    
+
         $this->emit('message-success','Data berhasil di setujui');
         $this->emit('reload-page');
     }
@@ -487,7 +487,7 @@ class Edit extends Component
         foreach($this->data->kepesertaan as $item){
             $item->status_akseptasi = 2;
             $item->save();
-            
+
             PengajuanHistory::insert([
                 'pengajuan_id' => $item->pengajuan_id,
                 'kepesertaan_id' => $item->id,
@@ -497,7 +497,7 @@ class Edit extends Component
         }
         $this->check_id = [];$this->check_all = 0;
 
-        $this->emit('reload-page');        
+        $this->emit('reload-page');
         $this->emit('message-success','Data berhasil diproses');
     }
 }

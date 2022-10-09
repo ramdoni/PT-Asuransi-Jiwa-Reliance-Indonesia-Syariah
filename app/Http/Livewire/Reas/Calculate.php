@@ -10,8 +10,8 @@ use Livewire\WithPagination;
 class Calculate extends Component
 {
     use WithPagination;
-    protected $paginationTheme = 'bootstrap';
-    public $check_id=[],$data,$extra_kontribusi;
+    protected $paginationTheme = 'bootstrap',$listeners = ['reassign'=>'set_reassign'];
+    public $check_id=[],$data,$extra_kontribusi,$reassign=false;
     public function render()
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where('reas_id',$this->data->id)->where('status_reas',1);
@@ -22,5 +22,10 @@ class Calculate extends Component
     public function mount(Reas $data)
     {
         $this->data = $data;
+    }
+
+    public function set_reassign($bol)
+    {
+        $this->reassign = $bol;
     }
 }

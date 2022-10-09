@@ -11,10 +11,9 @@
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="head_klaim_status">
                                 <option value=""> -- Keputusan -- </option>
-                                <option value="1">Terima</option>
-                                <option value="2">Tolak</option>
-                                <option value="3">Tunda</option>
-                                <option value="4">Investigasi</option>
+                                @foreach($keputusa_arr as $k => $val)
+                                    <option value="{{$k}}">{{$val}}</option>
+                                @endforeach
                             </select>
                             @error('head_klaim_status')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -36,7 +35,7 @@
                     </div>
                 @else
                     <div class="my-3">
-                        <span class="badge badge-info">{{$keputusa_arr[$data->head_klaim_status]}}</span>
+                        <span class="badge badge-info">{{@$keputusa_arr[$data->head_klaim_status]}}</span>
                         {{$data->head_klaim_note}}
                     </div>
                 @endif
@@ -58,10 +57,9 @@
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="head_teknik_status">
                                 <option value=""> -- Keputusan -- </option>
-                                <option value="1">Terima</option>
-                                <option value="2">Tolak</option>
-                                <option value="3">Tunda</option>
-                                <option value="4">Investigasi</option>
+                                @foreach($keputusa_arr as $k => $val)
+                                    <option value="{{$k}}">{{$val}}</option>
+                                @endforeach
                             </select>
                             @error('head_teknik_status')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -84,7 +82,7 @@
                 @else
                     @if($data->head_teknik_status)
                         <div class="my-3">
-                            <span class="badge badge-info">{{$keputusa_arr[$data->head_teknik_status]}}</span>
+                            <span class="badge badge-info">{{@$keputusa_arr[$data->head_teknik_status]}}</span>
                             {{$data->head_teknik_note}}
                         </div>
                     @endif
@@ -108,10 +106,9 @@
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="head_devisi_status">
                                 <option value=""> -- Keputusan -- </option>
-                                <option value="1">Terima</option>
-                                <option value="2">Tolak</option>
-                                <option value="3">Tunda</option>
-                                <option value="4">Investigasi</option>
+                                @foreach($keputusa_arr as $k => $val)
+                                    <option value="{{$k}}">{{$val}}</option>
+                                @endforeach
                             </select>
                             @error('head_devisi_status')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -134,7 +131,7 @@
                 @else
                     @if($data->head_devisi_status)
                         <div class="my-3">
-                            <span class="badge badge-info">{{$keputusa_arr[$data->head_devisi_status]}}</span>
+                            <span class="badge badge-info">{{@$keputusa_arr[$data->head_devisi_status]}}</span>
                             {{$data->head_devisi_note}}
                         </div>
                     @endif
@@ -146,7 +143,6 @@
                 @endif
             </td>
         </tr>
-
         <tr style="background:#17a2b84a">
             <th>4. Direksi 1</th>
             <th>Tanggal</th>
@@ -158,10 +154,9 @@
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="direksi_1_status">
                                 <option value=""> -- Keputusan -- </option>
-                                <option value="1">Terima</option>
-                                <option value="2">Tolak</option>
-                                <option value="3">Tunda</option>
-                                <option value="4">Investigasi</option>
+                                @foreach($keputusa_arr as $k => $val)
+                                    <option value="{{$k}}">{{$val}}</option>
+                                @endforeach
                             </select>
                             @error('direksi_1_status')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -213,10 +208,9 @@
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="direksi_2_status">
                                 <option value=""> -- Keputusan -- </option>
-                                <option value="1">Terima</option>
-                                <option value="2">Tolak</option>
-                                <option value="3">Tunda</option>
-                                <option value="4">Investigasi</option>
+                                @foreach($keputusa_arr as $k => $val)
+                                    <option value="{{$k}}">{{$val}}</option>
+                                @endforeach
                             </select>
                             @error('direksi_2_status')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
