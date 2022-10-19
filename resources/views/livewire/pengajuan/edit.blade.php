@@ -675,6 +675,14 @@
 </div>
 @push('after-scripts')
     <script>
+        var channel = pusher.subscribe('pengajuan');
+        channel.bind('generate', function(data) {
+            Livewire.emit('set_calculate',false);
+            console.log(data);
+            if(data.transaction_id=={{$transaction_id}}){
+                show_toast(data.message,'top-center');
+            }
+        });
         $(document).ready(function() { 
             // var table_postpone = $('#table_postpone').DataTable( { "searching": false, scrollX: true, scrollCollapse: true, paging: false } ); 
             // new $.fn.dataTable.FixedColumns( table_postpone, { leftColumns: 4 } ); 

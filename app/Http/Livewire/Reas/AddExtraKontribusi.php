@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Reas;
 
 use Livewire\Component;
 use App\Models\Kepesertaan;
+use App\Models\ReasuradurRateRates;
+use App\Models\ReasuradurRateUw;
 
 class AddExtraKontribusi extends Component
 {

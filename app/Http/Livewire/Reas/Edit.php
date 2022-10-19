@@ -16,7 +16,7 @@ class Edit extends Component
     protected $paginationTheme = 'bootstrap';
     protected $listeners = ['reload-page'=>'$refresh','set_calculate_reas'=>'set_calculate_reas'];
     public $data,$no_pengajuan,$tab_active='tab_draft',$check_id=[],$filter_status,$is_calculate=false,$perhitungan_usia;
-    public $filter_ul_arr=[],$filter_ul;
+    public $filter_ul_arr=[],$filter_ul,$filter_peserta;
     public function render()
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1]);
@@ -37,7 +37,7 @@ class Edit extends Component
         $this->data = $id;
         $this->perhitungan_usia = $this->data->perhitungan_usia;
         $this->no_pengajuan = $id->no_pengajuan;
-        $this->filter_ul_arr = Kepesertaan::where('reas_id',$this->data->id)->groupBy('ul')->get();
+        $this->filter_ul_arr = Kepesertaan::where('reas_id',$this->data->id)->groupBy('ul_reas')->get();
     }
 
     public function updated($propertyName)
@@ -45,10 +45,11 @@ class Edit extends Component
         if($propertyName=='perhitungan_usia'){
             $this->data->perhitungan_usia = $this->perhitungan_usia;
             $this->data->save();
+
+            ReasCalculate::dispatch($this->data->id);
         }
-        if($propertyName=='filter_ul'){
-            $this->emit('filter-ul',$this->filter_ul);
-        }
+        if($propertyName=='filter_ul') $this->emit('filter-ul',$this->filter_ul);
+        if($propertyName=='filter_peserta') $this->emit('filter-peserta',$this->filter_peserta);
     }
 
     public function hitung()

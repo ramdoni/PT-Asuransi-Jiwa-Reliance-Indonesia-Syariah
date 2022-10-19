@@ -4,6 +4,7 @@
             <thead style="text-transform: uppercase;">
                 <tr>
                     <th>No</th>
+                    <th></th>
                     <th>No Pengajuan</th>
                     <th>No Polis</th>
                     <th>Nama Pemegang Polis</th>
@@ -17,7 +18,7 @@
                     <th>Jangka Waktu Asuransi</th>
                     <th>Manfaat</th>
                     <th>Type Reas</th>
-                    <th class="text-right">Kontribusi AJRI<br /><span class="sub_total">{{format_idr($kepesertaan->sum('kontribusi'))}}</span></th>
+                    <th class="text-right">Kontribusi AJRI<br /><span class="sub_total">{{format_idr($kepesertaan->sum('extra_mortalita')+$kepesertaan->sum('kontribusi')+$kepesertaan->sum('extra_kontribusi'))}}</span></th>
                     <th>UW Limit</th>
                 </tr>
             </thead>
@@ -45,8 +46,7 @@
                         <td class="text-center">{{$item->masa_bulan}}</td>
                         <td class="text-right">{{$item->reas_manfaat}}</td>
                         <td class="text-right">{{$item->reas_type}}</td>
-                        <td class="text-center">{{$item->ul_reas}}</td>
-                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                        <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
                         <td class="text-center">{{$item->ul}}</td>
                     </tr>
                 @endforeach
@@ -58,7 +58,7 @@
             </tbody>
             <tfoot style="background: #eee;">
                 <tr>
-                    <th colspan="16" class="text-right">Total</th>
+                    <th colspan="15" class="text-right">Total</th>
 
                 </tr>
             </tfoot>

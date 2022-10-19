@@ -120,11 +120,11 @@
                                     <tr>
                                         <th>Tampilkan Peserta</th>
                                         <td>
-                                            <select class="form-control" wire:loading.remove wire:target="show_peserta" wire:model="show_peserta">
+                                            <select class="form-control" wire:loading.remove wire:target="filter_peserta" wire:model="filter_peserta">
                                                 <option value="1">Semua Peserta</option>
                                                 <option value="2">Peserta Ganda</option>
                                             </select>
-                                            <span wire:loading wire:target="show_peserta">
+                                            <span wire:loading wire:target="filter_peserta">
                                                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                 <span class="sr-only">{{ __('Loading...') }}</span>
                                             </span>
@@ -136,8 +136,8 @@
                                             <select wire:loading.remove wire:target="filter_ul" class="form-control" wire:model="filter_ul">
                                                 <option value=""> -- Pilih -- </option>
                                                 @foreach($filter_ul_arr as $item)
-                                                    @if($item->ul=="") @continue @endif
-                                                    <option>{{$item->ul}}</option>
+                                                    @if($item->ul_reas=="") @continue @endif
+                                                    <option>{{$item->ul_reas}}</option>
                                                 @endforeach
                                             </select>
                                             <span wire:loading wire:target="filter_ul">
@@ -146,9 +146,8 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    {{-- <tr>
+                                    <tr>
                                         <td colspan="2">
-                                            @if($data->status!=3)
                                                 @if($is_calculate==false)
                                                     <a href="javascript:void(0)" wire:click="hitung" class="btn btn-warning"><i class="fa fa-refresh"></i> Hitung Reas</a>
                                                 @else
@@ -157,10 +156,9 @@
                                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                                     </span>
                                                 @endif
-                                            @endif
-                                            <a href="javasript:void(0)" class="btn btn-danger" wire:click="$emit('reassign',true)"><i class="fa fa-pencil-square"></i> Reassign</a>
+                                            <!-- <a href="javasript:void(0)" class="btn btn-danger" wire:click="$emit('reassign',true)"><i class="fa fa-pencil-square"></i> Reassign</a> -->
                                         </td>
-                                    </tr> --}}
+                                    </tr>
                                 </thead>
                             </table>
                         </div>

@@ -13,6 +13,7 @@ use App\Models\Finance\Income;
 use App\Models\Finance\Polis;
 use App\Models\Finance\SyariahUnderwriting;
 use App\Models\Finance\Journal;
+use App\Jobs\PengajuanCalculate;
 
 class Edit extends Component
 {
@@ -20,7 +21,7 @@ class Edit extends Component
     public $check_all=0,$check_id=[],$check_arr,$selected,$status_reject=2,$note,$tab_active='tab_postpone';
     protected $listeners = ['reload-page'=>'$refresh'];
     public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
-    public $show_peserta = 1,$filter_ul,$filter_ul_arr=[];
+    public $show_peserta = 1,$filter_ul,$filter_ul_arr=[],$transaction_id;
     public function render()
     {
         $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->where(function($table){
@@ -49,6 +50,7 @@ class Edit extends Component
         $this->data = $data;
         $this->no_pengajuan = $data->no_pengajuan;
         $this->filter_ul_arr = Kepesertaan::where('pengajuan_id',$this->data->id)->groupBy('ul')->get();
+        $this->transaction_id = date('dmyHis');
     }
 
     public function updated($propertyName)
@@ -94,6 +96,10 @@ class Edit extends Component
 
     public function hitung()
     {
+        // $this->is_calculate = true;
+        // PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id);
+
+        // /*
         foreach($this->data->kepesertaan as $data){
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);

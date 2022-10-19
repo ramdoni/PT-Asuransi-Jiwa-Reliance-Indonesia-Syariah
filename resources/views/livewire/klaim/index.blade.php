@@ -100,7 +100,11 @@
                                         @endif
                                     </td>
 
-                                    <td><a href="{{route('klaim.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
+                                    <td>
+                                        @if($item->is_migrate==1)
+                                            <span class="badge badge-default" title="Migrasi">M</span>
+                                        @endif
+                                        <a href="{{route('klaim.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td>
                                         <a href="{{route('polis.edit',$item->polis_id)}}">
                                             {{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}

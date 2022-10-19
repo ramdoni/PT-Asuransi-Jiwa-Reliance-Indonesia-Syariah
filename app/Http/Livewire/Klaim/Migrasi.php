@@ -157,7 +157,7 @@ class Migrasi extends Component
                 }
 
                 $recovery = RecoveryClaim::where('klaim_id',$data->id)->first();
-                if(!$$recovery){
+                if(!$recovery){
                     $recovery = new RecoveryClaim();
                     $recovery->klaim_id = $data->id;
                     $recovery->no_pengajuan = 'RC'.date('dmy').str_pad((RecoveryClaim::count()+1),6, '0', STR_PAD_LEFT);

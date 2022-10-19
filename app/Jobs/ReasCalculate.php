@@ -90,10 +90,13 @@ class ReasCalculate implements ShouldQueue
             }
 
             // kontribusi reas
-            $rate = ReasuradurRateRates::where(['tahun'=>$item->usia,'bulan'=>$item->masa_bulan,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
+            $rate = ReasuradurRateRates::where(['tahun'=>$item->usia_reas,'bulan'=>$item->masa_bulan,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
             if($rate){
                 $item->rate_reas = $rate->rate;
                 $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/1000;
+            }else {
+                $item->rate_reas = 0;
+                $item->total_kontribusi_reas = 0;
             }
 
             if($ri_com)
@@ -121,11 +124,11 @@ class ReasCalculate implements ShouldQueue
 
         $this->data->jumlah_peserta = Kepesertaan::where('reas_id',$this->data->id)->count();
         $this->data->extra_kontribusi = Kepesertaan::where('reas_id',$this->data->id)->sum('reas_extra_kontribusi');
-        $this->data->manfaat_asuransi_reas = Kepesertaan::where('reas_id',$this->data->id)->sum('nilai_manfaat_asuransi_reas');
-        $this->data->manfaat_asuransi_ajri = Kepesertaan::where('reas_id',$this->data->id)->sum('reas_manfaat_asuransi_ajri');
-        $this->data->kontribusi = Kepesertaan::where('reas_id',$this->data->id)->sum('total_kontribusi_reas');
-        $this->data->ujroh = Kepesertaan::where('reas_id',$this->data->id)->sum('ujroh_reas');
-        $this->data->kontribusi_netto = Kepesertaan::where('reas_id',$this->data->id)->sum('net_kontribusi_reas');
+        $this->data->manfaat_asuransi_reas = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('nilai_manfaat_asuransi_reas');
+        $this->data->manfaat_asuransi_ajri = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('reas_manfaat_asuransi_ajri');
+        $this->data->kontribusi = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('total_kontribusi_reas');
+        $this->data->ujroh = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('ujroh_reas');
+        $this->data->kontribusi_netto = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('net_kontribusi_reas');
         $this->data->save();
 
         event(new RequestReas('Data berhasil dikalkukasi',$this->data->id));

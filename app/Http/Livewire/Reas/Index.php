@@ -12,6 +12,7 @@ class Index extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+    public $filter_keyword;
     public function render()
     {
         $data  = Reas::with(['pengajuan','reasuradur','rate_uw'])->withCount('kepesertaan')->orderBy('id','DESC');

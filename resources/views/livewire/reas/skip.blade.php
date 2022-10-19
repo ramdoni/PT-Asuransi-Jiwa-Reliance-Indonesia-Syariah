@@ -27,7 +27,7 @@
                     <th class="text-right">Ujroh<br /><span class="sub_total">{{format_idr($kepesertaan->sum('ujroh_reas'))}}</span></th>
                     <th class="text-right">Kontribusi Netto<br /><span class="sub_total">{{format_idr($kepesertaan->sum('net_kontribusi_reas'))}}</span></th>
                     <th>Akseptasi</th>
-                    <th class="text-right">Kontribusi AJRI<br /><span class="sub_total">{{format_idr($kepesertaan->sum('kontribusi'))}}</span></th>
+                    <th class="text-right">Kontribusi AJRI<br /><span class="sub_total">{{format_idr($kepesertaan->sum('extra_mortalita')+$kepesertaan->sum('kontribusi')+$kepesertaan->sum('extra_kontribusi'))}}</span></th>
                     <th>UW Limit</th>
                 </tr>
             </thead>
@@ -73,7 +73,7 @@
                         <td class="text-right">{{format_idr($item->ujroh_reas)}}</td>
                         <td class="text-right">{{format_idr($item->net_kontribusi_reas)}}</td>
                         <td class="text-center">{{$item->ul_reas}}</td>
-                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                        <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
                         <td class="text-center">{{$item->ul}}</td>
                     </tr>
                 @endforeach

@@ -18,7 +18,7 @@ class Index extends Component
     public $start_tanggal_akseptasi,$end_tanggal_akseptasi;
     public function render()
     {
-        $data = Pengajuan::with(['polis','account_manager'])
+        $data = Pengajuan::with(['polis','account_manager','reas'])
                 ->orderBy('created_at','DESC');
 
         if($this->filter_keyword) $data->where(function($table){
