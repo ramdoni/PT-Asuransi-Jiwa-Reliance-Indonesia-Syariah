@@ -102,7 +102,6 @@
                                             <span class="badge badge-info">Tunda</span>
                                         @endif
                                     </td>
-
                                     <td>
                                         @if($item->is_migrate==1)
                                             <span class="badge badge-default" title="Migrasi">M</span>
