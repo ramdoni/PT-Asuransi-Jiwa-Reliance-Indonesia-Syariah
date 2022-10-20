@@ -68,6 +68,10 @@
                                         <td>: {{$data->ri_com}}%</td>
                                     </tr>
                                     <tr>
+                                        <th>Jumlah Peserta</th>
+                                        <td> : {{format_idr($data->jumlah_peserta)}}</td>
+                                    </tr>
+                                    <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
                                 </thead>
@@ -76,10 +80,6 @@
                         <div class="col-md-6">
                             <table class="table">
                                 <thead>
-                                    <tr>
-                                        <th>Jumlah Peserta</th>
-                                        <td> : {{format_idr($data->jumlah_peserta)}}</td>
-                                    </tr>
                                     <tr>
                                         <th>Uang Asuransi Ajri</th>
                                         <td> : {{format_idr($data->manfaat_asuransi_ajri)}}</td>
@@ -121,8 +121,8 @@
                                         <th>Tampilkan Peserta</th>
                                         <td>
                                             <select class="form-control" wire:loading.remove wire:target="filter_peserta" wire:model="filter_peserta">
-                                                <option value="1">Semua Peserta</option>
-                                                <option value="2">Peserta Ganda</option>
+                                                <option value="0">Semua Peserta</option>
+                                                <option value="1">Peserta Ganda</option>
                                             </select>
                                             <span wire:loading wire:target="filter_peserta">
                                                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -153,7 +153,7 @@
                                                 @else
                                                     <span>
                                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                                        <span class="sr-only">{{ __('Loading...') }}</span> Sedang menghitung
                                                     </span>
                                                 @endif
                                             <!-- <a href="javasript:void(0)" class="btn btn-danger" wire:click="$emit('reassign',true)"><i class="fa fa-pencil-square"></i> Reassign</a> -->

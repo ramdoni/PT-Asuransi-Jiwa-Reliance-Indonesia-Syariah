@@ -35,7 +35,7 @@
                 @php($index_proses = 0)
                 @foreach($kepesertaan as $k => $item)
                     @php($index_proses++)
-                    <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
+                    <tr style="{{$item->is_double_reas==1?'background:#17a2b854':''}}" title="{{$item->is_double_reas==1?'Data Ganda':''}}">
                         <td>{{$index_proses}}</td>
                         <td>
                             @if($reassign)
@@ -50,7 +50,7 @@
                         <td>{{$item->nama}}</td>
                         <td class="text-center">{{$item->jenis_kelamin}}</td>
                         <td>{{date('d-m-Y',strtotime($item->tanggal_lahir))}}</td>
-                        <td class="text-center">{{$item->usia}}</td>
+                        <td class="text-center">{{$item->usia_reas}}</td>
                         <td>{{date('d-m-Y',strtotime($item->tanggal_mulai))}}</td>
                         <td>{{date('d-m-Y',strtotime($item->tanggal_akhir))}}</td>
                         <td class="text-center">{{$item->masa_bulan}}</td>

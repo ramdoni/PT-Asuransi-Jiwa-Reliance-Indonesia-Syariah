@@ -74,10 +74,17 @@ class ReasCalculate implements ShouldQueue
 
         foreach($kepesertaan as $k => $item){
             $manfaat_asuransi = $item->basic;
-
             echo "{$k}. Nama : {$item->nama}\n";
-
-            $item->usia_reas = $item->tanggal_lahir ? hitung_umur($item->tanggal_lahir,$perhitungan_usia,$this->data->created_at) : '0';
+            $item->usia_reas = $item->tanggal_lahir ? hitung_umur($item->tanggal_lahir,$perhitungan_usia,$item->tanggal_mulai) : '0';
+            // check double
+            $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama])->whereNotNull('reas_id')->first();
+            if($check_double){
+                if(isset($check_double->reas->reasuradur_id) and isset($this->data->reas->reasuradur_id)){
+                    if($check_double->reas->reasuradur_id==$this->data->reas->reasuradur_id){
+                        $item->is_double_reas = 1;
+                    }
+                }
+            }
 
             $reas_manfaat_asuransi_ajri = ($manfaat_asuransi*$ajri)/100;
             if($reas_manfaat_asuransi_ajri>=100000000){
@@ -91,6 +98,7 @@ class ReasCalculate implements ShouldQueue
 
             // kontribusi reas
             $rate = ReasuradurRateRates::where(['tahun'=>$item->usia_reas,'bulan'=>$item->masa_bulan,'reasuradur_rate_id'=>$this->data->reasuradur_rate_id])->first();
+            
             if($rate){
                 $item->rate_reas = $rate->rate;
                 $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/1000;
@@ -119,7 +127,7 @@ class ReasCalculate implements ShouldQueue
             $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days"));
             $item->kadaluarsa_reas_hari =  $item->polis->kadaluarsa_reas;
             $item->save();
-            echo "Net Kontribusi : {$item->net_kontribusi_reas}";
+            echo "Net Kontribusi : {$item->net_kontribusi_reas}\n\n";
         }
 
         $this->data->jumlah_peserta = Kepesertaan::where('reas_id',$this->data->id)->count();
