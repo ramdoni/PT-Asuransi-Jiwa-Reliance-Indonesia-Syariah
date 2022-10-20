@@ -67,6 +67,9 @@
                                         @if($data->status==2)
                                             <span class="badge badge-danger">Head Syariah</span>
                                         @endif
+                                        @if($data->status==5)
+                                            <span class="badge badge-danger">Direksi</span>
+                                        @endif
                                         @if($data->status==3)
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif

@@ -75,6 +75,9 @@
                                         @if($item->status==2)
                                             <span class="badge badge-danger">Head Syariah</span>
                                         @endif
+                                        @if($item->status==5)
+                                            <span class="badge badge-default">Direksi</span>
+                                        @endif
                                         @if($item->status==3)
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif

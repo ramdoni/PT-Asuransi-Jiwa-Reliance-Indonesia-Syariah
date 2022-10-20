@@ -86,7 +86,14 @@ class PersetujuanKlaim extends Component
             'head_devisi_status'=>'required',
             'head_devisi_note'=>'required'
         ]);
-        $this->data->status = 3;
+
+        if($this->data->nilai_klaim_disetujui<=150000000){
+            $this->data->status_pengajuan = $this->head_devisi_status;
+            $this->data->status = 3;
+        }else{
+            $this->data->status = 5;
+        }
+
         $this->data->head_devisi_status = $this->head_devisi_status;
         $this->data->head_devisi_note = $this->head_devisi_note;
         $this->data->head_devisi_date = date('Y-m-d');

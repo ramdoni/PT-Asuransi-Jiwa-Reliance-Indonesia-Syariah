@@ -6,7 +6,7 @@
         </tr>
         <tr>
             <td>
-                @if($data->status==0 and (\Auth::user()->user_access_id==2 || \Auth::user()->user_access_id==1))
+                @if($data->head_klaim_status=="" and (\Auth::user()->user_access_id==2 || \Auth::user()->user_access_id==1))
                     <div class="row">
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="head_klaim_status">
@@ -52,7 +52,7 @@
         </tr>
         <tr>
             <td>
-                @if($data->status==1 and \Auth::user()->user_access_id==3)
+                @if($data->head_teknik_status=="" and \Auth::user()->user_access_id==3)
                     <div class="row">
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="head_teknik_status">
@@ -101,7 +101,7 @@
         </tr>
         <tr>
             <td>
-                @if($data->status==2 and \Auth::user()->user_access_id==4)
+                @if($data->head_devisi_status=="" and \Auth::user()->user_access_id==4)
                     <div class="row">
                         <div class="form-group col-md-4">
                             <select class="form-control" wire:model="head_devisi_status">

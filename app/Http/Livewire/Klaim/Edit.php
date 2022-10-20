@@ -31,4 +31,6 @@ class Edit extends Component
 
         $this->emit('message-success','Data berhasil disimpan');
     }
+
+
 }
