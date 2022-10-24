@@ -103,15 +103,15 @@
                                     <tr>
                                         <th>Perhitungan Usia</th>
                                         <td>
-                                            <select class="form-control" wire:model="perhitungan_usia" wire:loading.remove wire:target="perhitungan_usia">
+                                            <select class="form-control" wire:model="filter_perhitungan_usia" wire:loading.remove wire:target="filter_perhitungan_usia">
                                                 <option value=""> -- Pilih -- </option>
                                                 <option value="1">Nears Birthday</option>
                                                 <option value="2">Actual Birthday</option>
                                             </select>
-                                            @error('perhitungan_usia')
+                                            @error('filter_perhitungan_usia')
                                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                             @enderror
-                                            <span wire:loading wire:target="perhitungan_usia">
+                                            <span wire:loading wire:target="filter_perhitungan_usia">
                                                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                 <span class="sr-only">{{ __('Loading...') }}</span> Saved...
                                             </span>
@@ -148,15 +148,29 @@
                                     </tr>
                                     <tr>
                                         <td colspan="2">
-                                                @if($is_calculate==false)
-                                                    <a href="javascript:void(0)" wire:click="hitung" class="btn btn-warning"><i class="fa fa-refresh"></i> Hitung Reas</a>
-                                                @else
-                                                    <span>
-                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                        <span class="sr-only">{{ __('Loading...') }}</span> Sedang menghitung
-                                                    </span>
-                                                @endif
-                                            <!-- <a href="javasript:void(0)" class="btn btn-danger" wire:click="$emit('reassign',true)"><i class="fa fa-pencil-square"></i> Reassign</a> -->
+                                            @if($is_calculate==false)
+                                                <a href="javascript:void(0)" wire:click="hitung" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> Hitung Reas</a>
+                                            @else
+                                                <span>
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                    <span class="sr-only">{{ __('Loading...') }}</span> Sedang menghitung
+                                                </span>
+                                            @endif
+
+                                            @if($is_reassign==false)
+                                                <a href="javasript:void(0)" wire:loading.remove wire:target="set_reassign(true)" class="btn btn-danger btn-sm" wire:click="set_reassign(true)"><i class="fa fa-pencil-square"></i> Reassign</a>
+                                                <span wire:loading wire:target="set_reassign(true)">
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                    <span class="sr-only">{{ __('Loading...') }}</span> Please wait...
+                                                </span>
+                                            @else
+                                                <a href="javascript:void(0)" wire:click="set_reassign(false)" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Cancel</a>
+                                                <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_reassign" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> Submit Reassign</a>
+                                                <span wire:loading wire:target="set_reassign(false),submit_reassign">
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                    <span class="sr-only">{{ __('Loading...') }}</span> Please wait...
+                                                </span>
+                                            @endif
                                         </td>
                                     </tr>
                                 </thead>
@@ -202,6 +216,165 @@
             </div>
         </div>
     </div>
+
+    <div wire:ignore.self class="modal fade" id="modal_reassign" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-plus"></i> Reassign</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true close-btn">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <form wire:submit.prevent="submit_reassign">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No Polis</th>
+                                        <th>Nama Pemegang Polis</th>
+                                        <th>No Peserta</th>
+                                        <th>Nama Peserta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php($num=0)
+                                    @foreach($data_reassign_draft as $k => $item)
+                                        @php($num++)
+                                        <tr>
+                                            <td>{{$num}}</td>
+                                            <td>{{isset($item->polis->no_polis)?$item->polis->no_polis : '-'}}</td>
+                                            <td>{{isset($item->polis->nama)?$item->polis->nama : '-'}}</td>
+                                            <td>{{$item->no_peserta}}</td>
+                                            <td>{{$item->nama}}</td>
+                                        </tr>
+                                    @endforeach
+                                    @foreach($data_reassign_reas as $k => $item)
+                                        @php($num++)
+                                        <tr>
+                                            <td>{{$num}}</td>
+                                            <td>{{isset($item->polis->no_polis)?$item->polis->no_polis : '-'}}</td>
+                                            <td>{{isset($item->polis->nama)?$item->polis->nama : '-'}}</td>
+                                            <td>{{$item->no_peserta}}</td>
+                                            <td>{{$item->nama}}</td>
+                                        </tr>
+                                    @endforeach
+                                    @foreach($data_reassign_or as $k => $item)
+                                        @php($num++)
+                                        <tr>
+                                            <td>{{$num}}</td>
+                                            <td>{{isset($item->polis->no_polis)?$item->polis->no_polis : '-'}}</td>
+                                            <td>{{isset($item->polis->nama)?$item->polis->nama : '-'}}</td>
+                                            <td>{{$item->no_peserta}}</td>
+                                            <td>{{$item->nama}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Reasuradur</label>
+                                    <select class="form-control" wire:model="reasuradur_id">
+                                        <option value=""> -- Pilih -- </option>
+                                        @foreach($reasuradur as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('reasuradur_rate_id')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Perhitungan Usia</label>
+                                    <select class="form-control" wire:model="perhitungan_usia">
+                                        <option value=""> -- Pilih -- </option>
+                                        <option value="1">Nears Birthday</option>
+                                        <option value="2">Actual Birthday</option>
+                                    </select>
+                                    @error('perhitungan_usia')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <span wire:loading wire:target="reasuradur_id">
+                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                <span class="sr-only">{{ __('Loading...') }}</span>
+                            </span>
+                            @if($reasuradur_id)
+                                <div wire:loading.remove wire:target="reasuradur_id">
+                                    <div class="form-group">
+                                        <label>Rate & UW Limit</label>
+                                        <select class="form-control" wire:model="reasuradur_rate_id">
+                                            <option value=""> -- Pilih -- </option>
+                                            @foreach($rate as $item)
+                                                <option value="{{$item->id}}">{{$item->nama}} - OR ({{$item->or}}%) - Reas ({{$item->reas}}%)</option>
+                                            @endforeach
+                                        </select>
+                                        @error('reasuradur_rate_id')
+                                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                        @enderror
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label>OR</label>
+                                            <input type="text" class="form-control" wire:model="or" readonly />
+                                            @error('or')
+                                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label>Reas</label>
+                                            <input type="text" class="form-control" wire:model="reas" readonly />
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label>RI COM</label>
+                                            <input type="text" class="form-control" wire:model="ri_com" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Manfaat</label>
+                                        <select class="form-control" wire:model="manfaat">
+                                            <option value=""> -- Pilih -- </option>
+                                            <option> MENURUN </option>
+                                            <option> TETAP </option>
+                                        </select>
+                                        @error('manfaat')
+                                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Type Reas</label>
+                                        <select class="form-control" wire:model="type_reas">
+                                            <option value=""> -- Pilih -- </option>
+                                            <option> TREATY </option>
+                                            <option> FAKULTATIF </option>
+                                        </select>
+                                        @error('type_reas')
+                                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="form-group">
+                                <span wire:loading wire:target="submit_reassign">
+                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                    <span class="sr-only">{{ __('Loading...') }}</span>
+                                </span>
+                                @if($num>0)
+                                    <button type="submit" wire:loading.remove wire:target="submit_reassign" class="btn btn-info"><i class="fa fa-save"></i> Submit Reassign</button>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 <div wire:ignore.self class="modal fade" id="modal_edit_rate" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reasuradur.edit-rate')
@@ -214,7 +387,6 @@
          Livewire.on('add-extra-kontribusi', (id) => {
             $('#modal_add_extra_kontribusi').modal('show');
         });
-
         var channel = pusher.subscribe('reas');
         channel.bind('generate_reas', function(data) {
             Livewire.emit('set_calculate_reas',false);

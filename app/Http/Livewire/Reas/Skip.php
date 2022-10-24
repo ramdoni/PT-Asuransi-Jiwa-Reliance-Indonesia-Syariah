@@ -11,7 +11,7 @@ class Skip extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap',$listeners = ['reassign'=>'set_reassign','filter-ul'=>'filter_ul','filter-peserta'=>'filter_peserta_'];
-    public $check_id=[],$data,$extra_kontribusi,$reassign=false,$ul,$filter_peserta;
+    public $check_id=[],$data,$extra_kontribusi,$reassign=false,$ul,$filter_peserta,$assign_id=[];
     public function render()
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where('reas_id',$this->data->id)->where('status_reas',2);
@@ -20,6 +20,11 @@ class Skip extends Component
         if($this->filter_peserta) $kepesertaan->where('is_double_reas',$this->filter_peserta);
 
         return view('livewire.reas.skip')->with(['kepesertaan'=>$kepesertaan->get()]);
+    }
+
+    public function updated()
+    {
+        $this->emit('data_assign_or_',$this->assign_id);
     }
 
     public function filter_peserta_($filter_peserta)

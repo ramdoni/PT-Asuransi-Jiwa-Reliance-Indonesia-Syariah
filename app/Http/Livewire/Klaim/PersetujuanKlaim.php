@@ -55,9 +55,11 @@ class PersetujuanKlaim extends Component
 
         session()->flash('message-success',__('Data berhasil di submit'));
 
+        event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
+
         \LogActivity::add("Klaim Submit Head Klaim {$this->data->id}");
 
-        return redirect()->route('klaim.edit',$this->data->id);
+        // return redirect()->route('klaim.edit',$this->data->id);
     }
 
     public function save_head_teknik()
@@ -75,9 +77,11 @@ class PersetujuanKlaim extends Component
 
         session()->flash('message-success',__('Data berhasil di submit'));
 
+        event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
+
         \LogActivity::add("Klaim Submit Head Teknik {$this->data->id}");
 
-        return redirect()->route('klaim.edit',$this->data->id);
+        // return redirect()->route('klaim.edit',$this->data->id);
     }
 
     public function save_devisi_syariah()
@@ -100,11 +104,13 @@ class PersetujuanKlaim extends Component
         $this->data->head_devisi_id = \Auth::user()->id;
         $this->data->save();
 
+        event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
+
         session()->flash('message-success',__('Data berhasil di submit'));
 
         \LogActivity::add("Klaim Submit Devisi Syariah {$this->data->id}");
 
-        return redirect()->route('klaim.edit',$this->data->id);
+        // return redirect()->route('klaim.edit',$this->data->id);
     }
 
     public function save_direksi1()
@@ -126,7 +132,9 @@ class PersetujuanKlaim extends Component
 
         session()->flash('message-success',__('Data berhasil di submit'));
 
-        return redirect()->route('klaim.edit',$this->data->id);
+        event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
+
+        // return redirect()->route('klaim.edit',$this->data->id);
     }
 
     public function save_direksi2()
@@ -148,6 +156,8 @@ class PersetujuanKlaim extends Component
 
         session()->flash('message-success',__('Data berhasil di submit'));
 
-        return redirect()->route('klaim.edit',$this->data->id);
+        event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
+
+        // return redirect()->route('klaim.edit',$this->data->id);
     }
 }

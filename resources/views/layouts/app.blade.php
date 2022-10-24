@@ -30,7 +30,7 @@
     <script src="{{ asset('assets/vendor/datatables/datatables.min.js') }}" defer></script>
     <script src="{{ asset('assets/vendor/datatables/FixedColumns-4.1.0/js/dataTables.fixedColumns.min.js') }}" defer></script>
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
-    
+
     @stack('after-styles')
     @if (trim($__env->yieldContent('page-styles')))
         @yield('page-styles')
@@ -83,17 +83,17 @@
                                 aria-hidden="true">&times;</span></button>
                         <i class="fa fa-check-circle"></i> <span class="message"></span>
                     </div>
-                    <div class="col-lg-5 col-md-8 col-sm-12">      
+                    <div class="col-lg-5 col-md-8 col-sm-12">
                         @if (trim($__env->yieldContent('title')))
                             <h2><a href="javascript:void(0);" onclick="history.back()" class="btn btn-xs "><i class="fa fa-arrow-left"></i></a> @yield('title')</h2>
-                        @endif                  
+                        @endif
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a href="/"><i class="icon-home"></i></a>
                             </li>
                             <li class="breadcrumb-item">@yield('sub-title')</li>
                         </ul>
-                    </div> 
+                    </div>
 
                 </div>
                 @yield('content')
@@ -112,12 +112,19 @@
     <script src="{{ asset('assets/bundles/mainscripts.bundle.js') }}"></script>
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     @livewireScripts
-    <script>
-        Pusher.logToConsole = true;
-        var pusher = new Pusher('61e7a83b5c1a48939522', {
-            cluster: 'ap1'
-        });
-    </script>
+        <script>
+            var pusher = new Pusher('61e7a83b5c1a48939522', {
+                cluster: 'ap1'
+            });
+            Pusher.logToConsole = true;
+
+            var channel_general = pusher.subscribe('general');
+            channel_general.bind('notification', function(data) {
+                console.log(data.message)
+                show_toast(data.message,'top-right');
+
+            });
+        </script>
     @stack('after-scripts')
     @if (trim($__env->yieldContent('page-script')))
         <script>
@@ -126,7 +133,7 @@
     @endif
     <script>
         Livewire.on('modal', (act) => {
-            if(act=='hide') 
+            if(act=='hide')
                 $('.modal').modal('hide');
             else
                 $(act).modal('show');
@@ -152,13 +159,8 @@
             toastr.options.closeButton = true;
             toastr['info'](message, '', {
                 positionClass: 'toast-'+positon
-            }); 
+            });
         }
-
-        var channel_notifikasi = pusher.subscribe('notifikasi');
-        channel_notifikasi.bind('info', function(data) {
-            show_toast(data.message,'top-center');
-        });
     </script>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
         {{ csrf_field() }}

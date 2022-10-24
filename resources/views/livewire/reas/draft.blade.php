@@ -4,7 +4,12 @@
             <thead style="text-transform: uppercase;">
                 <tr>
                     <th>No</th>
-                    <th></th>
+                    <th>
+                        <span wire:loading>
+                            <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                            <span class="sr-only">{{ __('Loading...') }}</span>
+                        </span>
+                    </th>
                     <th>No Pengajuan</th>
                     <th>No Polis</th>
                     <th>Nama Pemegang Polis</th>
