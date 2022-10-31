@@ -97,7 +97,12 @@
                                     <td class="text-right">{{format_idr($item->manfaat_asuransi_reas)}}</td>
                                     <td class="text-right">{{format_idr($item->kontribusi)}}</td>
                                     <td>
-                                        <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                        @if($item->status!=3)
+                                            <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                        @endif
+                                        @if($item->status==3)
+                                            <a href="{{route('reas.download-report',$item->id)}}" target="_blank"><i class="fa fa-download"></i> Report</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -119,9 +124,9 @@
 </div>
 @push('after-scripts')
     <script>
-        $(document).ready(function() { 
-            // var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
-            // new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 
+        $(document).ready(function() {
+            // var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } );
+            // new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } );
         } );
     </script>
 @endpush

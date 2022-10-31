@@ -109,12 +109,16 @@ class PengajuanCalculate implements ShouldQueue
             else
                 $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
 
-            if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
+            //if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
+
             if($uw){
                 $update[$key]['uw'] = $uw->keterangan;
                 $update[$key]['ul'] = $uw->keterangan;
                 $data->uw = $uw->keterangan;
                 $data->ul = $uw->keterangan;
+            }else{
+                $data->uw = '>Max UA';
+                $data->ul = '>Max UA';
             }
 
             $update[$key]['is_hitung'] = 1;

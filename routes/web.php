@@ -50,8 +50,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('pengajuan/download-report/{id}',[App\Http\Controllers\PengajuanController::class,'downloadReport'])->name('pengajuan.download-report');
     Route::get('peserta',App\Http\Livewire\Peserta\Index::class)->name('peserta.index');
     Route::get('daily-activity',App\Http\Livewire\DailyActivity\Index::class)->name('daily-activity.index');
+
     Route::get('reas',App\Http\Livewire\Reas\Index::class)->name('reas.index');
     Route::get('reas/edit/{id}',App\Http\Livewire\Reas\Edit::class)->name('reas.edit');
+    Route::get('reas/download-report/{id}',[App\Http\Controllers\ReinsuranceController::class,'downloadReport'])->name('reas.download-report');
+
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('klaim/insert',App\Http\Livewire\Klaim\Insert::class)->name('klaim.insert');
     Route::get('klaim/edit/{id}',App\Http\Livewire\Klaim\Edit::class)->name('klaim.edit');
