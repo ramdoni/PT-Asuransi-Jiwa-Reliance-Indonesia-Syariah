@@ -31,7 +31,7 @@ class Edit extends Component
         $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
-        })->get();
+        })->orderBy('no_peserta','ASC')->get();
         $this->kepesertaan_reject = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);

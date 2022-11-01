@@ -68,7 +68,7 @@ class ReinsuranceController extends Controller
         $activeSheet->getRowDimension('1')->setRowHeight(34);
         $activeSheet->getStyle('B1')->getFont()->setSize(16);
         $activeSheet->getStyle('B1')->getAlignment()->setWrapText(false);
-        $activeSheet->getStyle('A4:S4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('c2d7f3');
+        $activeSheet->getStyle('A4:X4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('c2d7f3');
         $activeSheet
                     ->setCellValue('A4', 'No')
                     ->setCellValue('B4', 'No Polis')
