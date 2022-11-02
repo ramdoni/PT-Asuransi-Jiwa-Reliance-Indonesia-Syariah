@@ -1,4 +1,4 @@
-<div class="table-responsive"> 
+<div class="table-responsive">
     <table class="table table-hover table-bordered m-b-0 c_list table-nowrap">
         <thead style="background: #eee;">
             <tr>
@@ -50,7 +50,9 @@
                             <i class="fa fa-check-circle text-success"></i>
                         @endif
                     </td>
-                    <td class="text-center"></td>
+                    <td class="text-center">
+                        <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                    </td>
                     <td class="text-center">
                         @if($item->is_hitung==1)
                             <span title="Sudah dihitung"><i class="text-success fa fa-check-circle"></i></span>

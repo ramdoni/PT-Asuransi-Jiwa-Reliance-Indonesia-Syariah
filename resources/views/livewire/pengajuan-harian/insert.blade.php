@@ -1,5 +1,5 @@
 @section('sub-title','Nomor Pengajuan :'.$no_pengajuan)
-@section('title', 'Pengajuan')
+@section('title', 'Pengajuan Harian')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -78,8 +78,7 @@
                                             <a href="javascript:void(0)" wire:loading.remove wire:click="calculate" class="btn btn-warning mx-2"><i class="fa fa-refresh"></i> Hitung</a>
                                         @endif
                                         @if($total_pengajuan >0)
-                                            <button wire:loading.remove wire:target="save,file,hitung,draft" type="submit" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit</button>
-                                            <button wire:loading.remove wire:target="save,file,hitung,draft" type="button" class="btn btn-danger"><i class="fa fa-save"></i> Save as Draft</button>
+                                            <button wire:loading.remove wire:target="save,file,hitung" type="submit" class="btn btn-info"><i class="fa fa-check-circle"></i> Upload Pengajuan</button>
                                         @endif
                                     @endif
                                     @if(count($check_id)>0)

@@ -39,8 +39,13 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('produk',App\Http\Livewire\Produk\Index::class)->name('produk.index');
     Route::get('rate',App\Http\Livewire\Rate\Index::class)->name('rate.index');
     Route::get('reasuradur',App\Http\Livewire\Reasuradur\Index::class)->name('reasuradur.index');
+
     Route::get('pengajuan',App\Http\Livewire\Pengajuan\Index::class)->name('pengajuan.index');
     Route::get('pengajuan/insert',App\Http\Livewire\Pengajuan\Insert::class)->name('pengajuan.insert');
+    Route::get('pengajuan-harian',App\Http\Livewire\PengajuanHarian\Index::class)->name('pengajuan-harian.index');
+    Route::get('pengajuan-harian/insert',App\Http\Livewire\PengajuanHarian\Insert::class)->name('pengajuan-harian.insert');
+    Route::get('pengajuan-harian/edit/{data}',App\Http\Livewire\PengajuanHarian\Edit::class)->name('pengajuan-harian.edit');
+
     Route::get('pengajuan/edit/{data}',App\Http\Livewire\Pengajuan\Edit::class)->name('pengajuan.edit');
     Route::get('uw-limit',App\Http\Livewire\UwLimit\Index::class)->name('uw-limit.index');
     Route::get('extra-mortalita',App\Http\Livewire\ExtraMortalita\Index::class)->name('extra-mortalita.index');

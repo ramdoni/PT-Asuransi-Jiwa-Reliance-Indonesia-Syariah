@@ -36,6 +36,11 @@ class InsertRow extends Component
         $this->polis_id = $polis_id;
     }
 
+    public function delete(Kepesertaan $data)
+    {
+        $data->delete();
+    }
+
     public function set_polis_id($polis_id)
     {
         $this->polis_id = $polis_id;
@@ -77,20 +82,20 @@ class InsertRow extends Component
                 $update[$key]['kontribusi'] = $nilai_manfaat_asuransi * $data->rate/1000;
 
             }
-            
+
             // $data->dana_tabarru = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
-            // $data->dana_ujrah = ($data->kontribusi*$ujrah)/100; 
+            // $data->dana_ujrah = ($data->kontribusi*$ujrah)/100;
             // $data->extra_mortalita = $data->rate_em*$nilai_manfaat_asuransi/1000;
-            
+
             $update[$key]['dana_tabarru'] = ($data->kontribusi*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
-            $update[$key]['dana_ujrah'] = ($data->kontribusi*$ujrah)/100; 
+            $update[$key]['dana_ujrah'] = ($data->kontribusi*$ujrah)/100;
             $update[$key]['extra_mortalita'] = $data->rate_em*$nilai_manfaat_asuransi/1000;
-            
+
             if($data->akumulasi_ganda)
                 $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
             else
                 $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
-            
+
             if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
             if($uw){
                 $update[$key]['uw'] = $uw->keterangan;
@@ -100,7 +105,7 @@ class InsertRow extends Component
             }
             // $data->is_hitung = 1;
             // $data->save();
-            
+
             $update[$key]['is_hitung'] = 1;
             $key++;
         }

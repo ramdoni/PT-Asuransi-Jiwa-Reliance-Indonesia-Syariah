@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Pengajuan;
+namespace App\Http\Livewire\PengajuanHarian;
 
 use App\Models\Pengajuan;
 use Livewire\Component;
@@ -19,7 +19,7 @@ class Insert extends Component
     protected $listeners = ['set_calculate'=>'set_calculate'];
     public function render()
     {
-        return view('livewire.pengajuan.insert');
+        return view('livewire.pengajuan-harian.insert');
     }
 
     public function mount()
@@ -27,11 +27,6 @@ class Insert extends Component
         $this->transaction_id = date('dmyHis');
         $this->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
         $this->polis = Polis::where('status_approval',1)->get();
-    }
-
-    public function draft()
-    {
-
     }
 
     public function set_calculate($condition=false)
@@ -189,7 +184,8 @@ class Insert extends Component
         $pengajuan->total_akseptasi = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->count();;
         $pengajuan->total_approve = 0;
         $pengajuan->total_reject = 0;
-        $pengajuan->no_pengajuan =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
+        $pengajuan->no_pengajuan_harian =  date('dmy').str_pad((Pengajuan::count()+1),6, '0', STR_PAD_LEFT);
+        $pengajuan->is_pengajuan_harian = 1;
         $pengajuan->account_manager_id = \Auth::user()->id;
         $pengajuan->save();
 
@@ -202,6 +198,6 @@ class Insert extends Component
 
         session()->flash('message-success',__('Pengajuan berhasil diupload, silahkan menunggu persetujuan'));
 
-        return redirect()->route('pengajuan.index');
+        return redirect()->route('pengajuan-harian.index');
     }
 }
