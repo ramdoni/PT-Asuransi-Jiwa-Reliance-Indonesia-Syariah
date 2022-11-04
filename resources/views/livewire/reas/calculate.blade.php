@@ -46,7 +46,13 @@
                         <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
                         <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                         <td>{{$item->no_peserta}}</td>
-                        <td>{{$item->nama}}</td>
+                        <td>
+                            @if($item->is_double_reas==1)
+                                <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_view_double" wire:click="$emit('set_id_reas',{{$item->id}})">{{$item->nama}}</a>
+                            @else
+                                {{$item->nama}}
+                            @endif
+                        </td>
                         <td class="text-center">{{$item->jenis_kelamin}}</td>
                         <td>{{date('d-m-Y',strtotime($item->tanggal_lahir))}}</td>
                         <td class="text-center">{{$item->usia_reas}}</td>

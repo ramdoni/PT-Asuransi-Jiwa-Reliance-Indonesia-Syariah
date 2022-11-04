@@ -15,6 +15,7 @@ class CreateDn extends Migration
     {
         Schema::create('dn', function (Blueprint $table) {
             $table->id();
+            $table->string('dn',200)->nullable();
             $table->timestamps();
         });
     }

@@ -139,7 +139,7 @@
                                     </td>
                                     <td>
                                         @if($is_calculate==false)
-                                                <a href="javascript:void(0)" wire:click="hitung" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> Hitung Reas</a>
+                                                <a href="javascript:void(0)" wire:click="hitung" class="btn btn-warning btn-sm mx-2"><i class="fa fa-refresh"></i> Hitung Reas</a>
                                             @else
                                                 <span>
                                                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -367,13 +367,17 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
+
+<div wire:ignore.self class="modal fade" id="modal_view_double" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    @livewire('reas.view-double')
+</div>
+
 <div wire:ignore.self class="modal fade" id="modal_edit_rate" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reasuradur.edit-rate')
 </div>
+
 <div wire:ignore.self class="modal fade" id="modal_add_extra_kontribusi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('reas.add-extra-kontribusi')
 </div>
