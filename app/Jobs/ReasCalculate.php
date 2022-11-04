@@ -80,16 +80,20 @@ class ReasCalculate implements ShouldQueue
             $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id])->whereNotNull('reas_id')->first();
             $is_double = false;
             if($check_double){
-                if(isset($check_double->reas->reasuradur_id) and isset($this->data->reas->reasuradur_id)){
-                    if($check_double->reas->reasuradur_id==$this->data->reas->reasuradur_id){
+                // echo "Is Double True ";
+                if(isset($check_double->reas->reasuradur_id) and isset($this->data->reasuradur_id)){
+                    if($check_double->reas->reasuradur_id==$this->data->reasuradur_id){
+                        //echo ", Reas True";
                         $is_double = true;
                         $item->is_double_reas = 1;
                         $item->akumulasi_ganda_reas = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,
                                                                             'nama'=>$item->nama,
                                                                             'polis_id'=>$item->polis_id])
                                                                         ->join('reas','reas.id','=','kepesertaan.reas_id')
-                                                                        ->where('reas.reasuradur_id',$this->data->reas->reasuradur_id)->get()
+                                                                        ->where('reas.reasuradur_id',$this->data->reasuradur_id)->get()
                                                                         ->sum('reas_manfaat_asuransi_ajri');
+                        
+                        echo " Total : {$item->akumulasi_ganda_reas}\n";
                     }
                 }
             }
