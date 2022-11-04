@@ -55,6 +55,7 @@ return array(
     'App\\Http\\Livewire\\PengajuanHarian\\Edit' => $baseDir . '/app/Http/Livewire/PengajuanHarian/Edit.php',
     'App\\Http\\Livewire\\PengajuanHarian\\Index' => $baseDir . '/app/Http/Livewire/PengajuanHarian/Index.php',
     'App\\Http\\Livewire\\PengajuanHarian\\Insert' => $baseDir . '/app/Http/Livewire/PengajuanHarian/Insert.php',
+    'App\\Http\\Livewire\\Pengajuan\\ConfirmDelete' => $baseDir . '/app/Http/Livewire/Pengajuan/ConfirmDelete.php',
     'App\\Http\\Livewire\\Pengajuan\\Edit' => $baseDir . '/app/Http/Livewire/Pengajuan/Edit.php',
     'App\\Http\\Livewire\\Pengajuan\\Editable' => $baseDir . '/app/Http/Livewire/Pengajuan/Editable.php',
     'App\\Http\\Livewire\\Pengajuan\\Index' => $baseDir . '/app/Http/Livewire/Pengajuan/Index.php',

@@ -79,7 +79,7 @@
                                         @endif
                                         @if($total_pengajuan >0)
                                             <button wire:loading.remove wire:target="save,file,hitung,draft" type="submit" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit</button>
-                                            <button wire:loading.remove wire:target="save,file,hitung,draft" type="button" class="btn btn-danger"><i class="fa fa-save"></i> Save as Draft</button>
+                                            <button wire:loading.remove wire:target="save,file,hitung,draft" wire:click="draft" type="button" class="btn btn-danger"><i class="fa fa-save"></i> Save as Draft</button>
                                         @endif
                                     @endif
                                     @if(count($check_id)>0)

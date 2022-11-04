@@ -12,22 +12,23 @@ use App\Models\UnderwritingLimit;
 use App\Models\Finance\Income;
 use App\Models\Finance\Polis;
 use App\Models\Finance\SyariahUnderwriting;
-use App\Models\Finance\Journal;
+use Livewire\WithFileUploads;
 use App\Jobs\PengajuanCalculate;
 
 class Edit extends Component
 {
+    use WithFileUploads;
     public $data,$no_pengajuan,$kepesertaan=[],$kepesertaan_proses,$kepesertaan_approve,$kepesertaan_reject,$note_edit;
     public $check_all=0,$check_id=[],$check_arr,$selected,$status_reject=2,$note,$tab_active='tab_postpone';
-    protected $listeners = ['reload-page'=>'$refresh'];
+    protected $listeners = ['reload-page'=>'$refresh','set_calculate'=>'set_calculate'];
     public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
-    public $show_peserta = 1,$filter_ul,$filter_ul_arr=[],$transaction_id;
+    public $show_peserta = 1,$filter_ul,$filter_ul_arr=[],$transaction_id,$file,$is_calculate=false,$is_draft=false;
     public function render()
     {
         $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
-        })->get();
+        })->orderBy('id','DESC')->get();
         $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
@@ -36,7 +37,6 @@ class Edit extends Component
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
         })->get();
-
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
         $this->data->total_approve = $this->kepesertaan_approve->count();
         $this->data->total_reject = $this->kepesertaan_reject->count();
@@ -50,7 +50,29 @@ class Edit extends Component
         $this->data = $data;
         $this->no_pengajuan = $data->no_pengajuan;
         $this->filter_ul_arr = Kepesertaan::where('pengajuan_id',$this->data->id)->groupBy('ul')->get();
-        $this->transaction_id = date('dmyHis');
+        $this->transaction_id = $this->data->id;
+    }
+
+    public function set_calculate($condition=false)
+    {
+        $this->is_calculate = $condition;
+        $this->emit('reload-row');
+        $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->count();
+    }
+    public function calculate()
+    {
+        $this->is_calculate = true;
+        PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id);
+    }
+
+    public function submit()
+    {
+        $this->data->status=0;
+        $this->data->save();
+
+        session()->flash('message-success',__('Pengajuan berhasil submit, silahkan menunggu persetujuan'));
+
+        return redirect()->route('pengajuan.edit',$this->data->id);
     }
 
     public function updated($propertyName)
@@ -92,6 +114,62 @@ class Edit extends Component
 
         $this->emit('message-success','Data berhasil di proses');
         $this->emit('reload-page');
+    }
+
+    public function upload()
+    {
+        $this->validate([
+            'file'=>'required|mimes:xlsx|max:51200', // 50MB maksimal
+        ]);
+
+        $path = $this->file->getRealPath();
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        $reader->setReadDataOnly(true);
+        $xlsx = $reader->load($path);
+        $sheetData = $xlsx->getActiveSheet()->toArray();
+        $total_data = 0;
+        $total_double = 0;
+        $total_success = 0;
+        Kepesertaan::where(['polis_id'=>$this->data->polis_id,'is_temp'=>1,'is_double'=>1])->delete();
+        $insert = [];
+        foreach($sheetData as $key => $item){
+            if($key<=1) continue;
+            /**
+             * Skip
+             * Nama, Tanggal lahir
+             */
+            if($item[1]=="" || $item[10]=="") continue;
+            $insert[$total_data]['polis_id'] = $this->data->polis_id;
+            $insert[$total_data]['nama'] = $item[1];
+            $insert[$total_data]['no_ktp'] = $item[2];
+            $insert[$total_data]['alamat'] = $item[3];
+            $insert[$total_data]['no_telepon'] = $item[4];
+            $insert[$total_data]['pekerjaan'] = $item[5];
+            $insert[$total_data]['bank'] = $item[6];
+            $insert[$total_data]['cab'] = $item[7];
+            $insert[$total_data]['no_closing'] = $item[8];
+            $insert[$total_data]['no_akad_kredit'] = $item[9];
+            $insert[$total_data]['tanggal_lahir'] = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[10])->format('Y-m-d');
+            $insert[$total_data]['jenis_kelamin'] = $item[11];
+            if($item[12]) $insert[$total_data]['tanggal_mulai'] = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[12])->format('Y-m-d');
+            if($item[13]) $insert[$total_data]['tanggal_akhir'] = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[13])->format('Y-m-d');
+            $insert[$total_data]['basic'] = $item[14];
+            $insert[$total_data]['tinggi_badan'] = $item[15];
+            $insert[$total_data]['berat_badan'] = $item[16];
+            $insert[$total_data]['kontribusi'] = 0;
+            $insert[$total_data]['is_temp'] = 1;
+            $insert[$total_data]['is_double'] = 2;
+            $insert[$total_data]['pengajuan_id'] = $this->data->id;
+            $insert[$total_data]['status_polis'] = 'Akseptasi';
+            $total_data++;
+        }
+
+        if(count($insert)>0)  {
+            Kepesertaan::insert($insert);
+        }
+
+        $this->emit('reload-row');
+        $this->emit('attach-file');
     }
 
     public function hitung()

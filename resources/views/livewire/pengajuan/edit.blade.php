@@ -12,7 +12,7 @@
                                     @if($data->dn_number)
                                         <tr>
                                             <td><strong>Debit Note Number</strong></td>
-                                            <td>: 
+                                            <td>:
                                                 {{$data->dn_number}}
                                                 @if($data->dn_number)
                                                     <a href="{{route('pengajuan.print-dn',$data->id)}}" target="_blank"><i class="fa fa-print"></i></a>
@@ -22,7 +22,7 @@
                                     @endif
                                     <tr>
                                         <td><strong>No Pengajuan</strong></td>
-                                        <td>: {{$no_pengajuan}} 
+                                        <td>: {{$no_pengajuan}}
                                             <a href="javascript:void(0)" wire:loading.remove wire:target="hitung" wire:click="hitung"><i class="fa fa-refresh"></i></a>
                                             <span wire:loading wire:target="hitung">
                                                 <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -48,14 +48,20 @@
                                                 <span class="badge badge-info">Head Teknik</span>
                                             @endif
                                             @if($data->status==2)
-                                                <span class="badge badge-info">Head Syariah</span>
+                                                <span class="badge badge-danger">Head Syariah</span>
                                             @endif
                                             @if($data->status==3)
                                                 <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                             @endif
+                                            @if($data->status==4)
+                                                <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
+                                            @endif
+                                            @if($data->status==5)
+                                                <span class="badge badge-default badge-active" title="Draft"><i class="fa fa-save"></i> Draft</span>
+                                            @endif
                                         </td>
                                     </tr>
-                                    
+
                                 </thead>
                             </table>
                         </div>
@@ -78,40 +84,71 @@
                                         <td> : {{$data->masa_asuransi==1?'Day to Day':'Day to Day -1'}}</td>
                                     </tr>
                                     <tr>
-                                        <th>Tampilkan Peserta</th>
-                                        <td>
-                                            <select class="form-control" wire:loading.remove wire:target="show_peserta" wire:model="show_peserta">
-                                                <option value="1">Semua Peserta</option>
-                                                <option value="2">Peserta Ganda</option>
-                                            </select>
-                                            <span wire:loading wire:target="show_peserta">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>UL/UW</th>
-                                        <td>
-                                            <select wire:loading.remove wire:target="filter_ul" class="form-control" wire:model="filter_ul">
-                                                <option value=""> -- Pilih -- </option>
-                                                @foreach($filter_ul_arr as $item)
-                                                    <option>{{$item->ul}}</option>
-                                                @endforeach
-                                            </select>
-                                            <span wire:loading wire:target="filter_ul">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
+                        <div class="col-md-12">
+                            <hr />
+                            <table class="ml-2">
+                                <tr>
+                                    <td>Filter</td>
+                                    <td>
+                                        <select class="form-control" wire:model="show_peserta">
+                                            <option value=""> -- Type Peserta -- </option>
+                                            <option value="1">Semua Peserta</option>
+                                            <option value="2">Peserta Ganda</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" wire:model="filter_ul">
+                                            <option value=""> -- UL/UW -- </option>
+                                            @foreach($filter_ul_arr as $item)
+                                                <option>{{$item->ul}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    @if($data->status==5)
+                                        <td class="px-2">Tambah Peserta :</td>
+                                        <td class="px-2">
+                                            <input type="file" class="form-control" wire:model="file" />
+                                            @error('file')
+                                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                            @enderror
+                                        </td>
+                                        <td>
+                                            @if($file)
+                                                <button type="button" wire:loading.remove wire:target="upload" class="btn btn-info mt-1" wire:click="upload"><i class="fa fa-upload"></i> Upload</button>
+                                            @endif
+                                            @if($is_calculate==false)
+                                                <a href="javascript:void(0)" wire:loading.remove wire:click="calculate" class="btn btn-warning mx-2"><i class="fa fa-refresh"></i> Hitung</a>
+                                            @endif
+                                            @if($is_calculate)
+                                                <span>
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                    <span class="sr-only">{{ __('Loading...') }}</span> Sedang Menghitung...
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" wire:click="submit"><i class="fa fa-arrow-right"></i> Submit</button>
+                                        </td>
+                                        <td>
+                                            <a href="{{asset('template/template-kepesertaan.xlsx')}}"><i class="fa fa-download"></i> Template Uploader</a>
+                                        </td>
+                                    @endif
+                                    <td>
+                                        <span wire:loading wire:target="file,show_peserta,filter_ul,submit">
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
+                    <hr />
                     <ul class="nav nav-tabs">
                         <li class="nav-item"><a class="nav-link {{$tab_active=='tab_postpone' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_postpone')" data-toggle="tab" href="#kepesertaan_postpone">{{ __('Proses') }} <span class="badge badge-danger">{{$kepesertaan_proses->count()}}</span></a></li>
                         <li class="nav-item"><a class="nav-link {{$tab_active=='tab_approve' ? 'active show' : ''}}" wire:click="$set('tab_active','tab_approve')" data-toggle="tab" href="#kepesertaan_approve">{{ __('Diterima') }}  <span class="badge badge-danger">{{$kepesertaan_approve->count()}}</span></a></li>
@@ -119,7 +156,7 @@
                     </ul>
                     <div class="tab-content px-0">
                         <div class="tab-pane {{$tab_active=='tab_postpone' ? 'active show' : ''}}" id="kepesertaan_postpone">
-                            <div class="table-responsive"> 
+                            <div class="table-responsive">
                                 @php($nilai_manfaat = $data->kepesertaan->where('status_akseptasi',0)->sum('basic'))
                                 @php($dana_tabbaru = $data->kepesertaan->where('status_akseptasi',0)->sum('dana_tabarru'))
                                 @php($dana_ujrah = $data->kepesertaan->where('status_akseptasi',0)->sum('dana_ujrah'))
@@ -133,6 +170,7 @@
                                             <th class="text-center">
                                                 <label>Check All <br /><input type="checkbox" wire:model="check_all" value="1" /></label>
                                             </th>
+                                            <th></th>
                                             <th>
                                                 @if(count($check_id)>0)
                                                     <span wire:loading wire:target="approveAll,rejectAll">
@@ -140,7 +178,6 @@
                                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                                     </span>
                                                     <a href="javascript:void(0)" wire:click="approveAll" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima Semua</a>
-                                                    <!-- <a href="javascript:void(0)" wire:click="rejectAll" class="badge badge-danger badge-active"><i class="fa fa-trash"></i> Ditolak Semua</a> -->
                                                 @endif
                                             </th>
                                             <th>Nama Bank</th>
@@ -173,10 +210,10 @@
                                         @php($index_proses = 0)
                                         @foreach($kepesertaan_proses as $k => $item)
                                             @php($index_proses++)
-                                            <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
+                                            <tr x-data="{selected_id:{{$item->id}},confirm_delete:false}" style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_proses}}</td>
                                                 <td class="text-center">
-                                                    @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                    @if(($data->status==0 || $data->status==5) and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
                                                         <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                                     @endif
                                                     @if($data->status==1 and \Auth::user()->user_access_id==3)
@@ -186,17 +223,24 @@
                                                         <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
+                                                    @livewire('pengajuan.confirm-delete',['id'=>$item->id],key($item->id))
+                                                </td>
+                                                <td class="text-center">
                                                     <span wire:loading wire:target="approve({{$item->id}})">
                                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                         <span class="sr-only">{{ __('Loading...') }}</span>
                                                     </span>
                                                     {{-- Underwriting --}}
-                                                    @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
-                                                        <div wire:loading.remove wire:target="approve({{$item->id}})">
-                                                            <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
-                                                            <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
-                                                        </div>
+                                                    @if(($data->status==0 || $data->status==5) and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                        @if($item->is_hitung==1)
+                                                            <div wire:loading.remove wire:target="approve({{$item->id}})">
+                                                                <a href="javascript:void(0)" wire:click="approve({{$item->id}})" class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Diterima</a>
+                                                                <a href="javascript:void(0)" wire:click="set_id({{$item->id}})" data-toggle="modal" data-target="#modal_reject_selected" class="badge badge-danger badge-active"><i class="fa fa-times"></i> Ditolak</a>
+                                                            </div>
+                                                        @else
+                                                            <span title="Belum dihitung"><i class="text-danger fa fa-close"></i></span>
+                                                        @endif
                                                     @endif
                                                     {{-- Head Teknik --}}
                                                     @if($data->status==1 and \Auth::user()->user_access_id==3)
@@ -281,7 +325,7 @@
                             </div>
                         </div>
                         <div class="tab-pane {{$tab_active=='tab_approve' ? 'active show' : ''}}" id="kepesertaan_approve">
-                            <div class="table-responsive"> 
+                            <div class="table-responsive">
                                 @php($nilai_manfaat_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('basic'))
                                 @php($dana_tabbaru_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))
                                 @php($dana_ujrah_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))
@@ -415,7 +459,7 @@
                             </div>
                         </div>
                         <div class="tab-pane {{$tab_active=='tab_reject' ? 'active show' : ''}}" id="kepesertaan_reject" >
-                            <div class="table-responsive"> 
+                            <div class="table-responsive">
                                 @php($nilai_manfaat_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('basic'))
                                 @php($dana_tabbaru_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('dana_tabarru'))
                                 @php($dana_ujrah_reject = $data->kepesertaan->where('status_akseptasi',2)->sum('dana_ujrah'))
@@ -683,15 +727,5 @@
                 show_toast(data.message,'top-center');
             }
         });
-        $(document).ready(function() { 
-            // var table_postpone = $('#table_postpone').DataTable( { "searching": false, scrollX: true, scrollCollapse: true, paging: false } ); 
-            // new $.fn.dataTable.FixedColumns( table_postpone, { leftColumns: 4 } ); 
-
-            // var table_approve = $('#table_approve').DataTable( { "searching": false, scrollX: true, scrollCollapse: true, paging: false } ); 
-            // new $.fn.dataTable.FixedColumns( table_approve, { leftColumns: 4 } ); 
-
-            // var table_reject = $('#table_reject').DataTable( { "searching": false,scrollX: true, scrollCollapse: true, paging: false } ); 
-            // new $.fn.dataTable.FixedColumns( table_reject, { leftColumns: 4 } ); 
-        } );
     </script>
 @endpush

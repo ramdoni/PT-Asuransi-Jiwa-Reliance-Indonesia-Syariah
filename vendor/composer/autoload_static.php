@@ -730,6 +730,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Http\\Livewire\\PengajuanHarian\\Edit' => __DIR__ . '/../..' . '/app/Http/Livewire/PengajuanHarian/Edit.php',
         'App\\Http\\Livewire\\PengajuanHarian\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/PengajuanHarian/Index.php',
         'App\\Http\\Livewire\\PengajuanHarian\\Insert' => __DIR__ . '/../..' . '/app/Http/Livewire/PengajuanHarian/Insert.php',
+        'App\\Http\\Livewire\\Pengajuan\\ConfirmDelete' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/ConfirmDelete.php',
         'App\\Http\\Livewire\\Pengajuan\\Edit' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/Edit.php',
         'App\\Http\\Livewire\\Pengajuan\\Editable' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/Editable.php',
         'App\\Http\\Livewire\\Pengajuan\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/Pengajuan/Index.php',

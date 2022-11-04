@@ -6,8 +6,6 @@ use App\Models\Pengajuan;
 use Livewire\Component;
 use App\Models\Polis;
 use App\Models\Kepesertaan;
-use App\Models\Rate;
-use App\Models\UnderwritingLimit;
 use Livewire\WithFileUploads;
 use App\Jobs\PengajuanCalculate;
 
@@ -15,7 +13,7 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
-    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '',$is_calculate=false,$transaction_id;
+    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '',$is_calculate=false,$transaction_id,$is_draft=false;
     protected $listeners = ['set_calculate'=>'set_calculate'];
     public function render()
     {
@@ -31,7 +29,8 @@ class Insert extends Component
 
     public function draft()
     {
-
+        $this->is_draft = true;
+        $this->save();
     }
 
     public function set_calculate($condition=false)
@@ -185,7 +184,7 @@ class Insert extends Component
         $pengajuan->masa_asuransi = $this->masa_asuransi;
         $pengajuan->perhitungan_usia = $this->perhitungan_usia;
         $pengajuan->polis_id = $this->polis_id;
-        $pengajuan->status = 0;
+        $pengajuan->status = $this->is_draft ? 5 : 0;
         $pengajuan->total_akseptasi = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->count();;
         $pengajuan->total_approve = 0;
         $pengajuan->total_reject = 0;

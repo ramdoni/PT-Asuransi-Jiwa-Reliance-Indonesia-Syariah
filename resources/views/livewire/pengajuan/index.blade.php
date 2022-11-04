@@ -98,26 +98,31 @@
                                 <tr>
                                     <td style="width: 50px;">{{$k+1}}</td>
                                     <td class="text-center">
-                                        @if($item->status==0)
-                                            <span class="badge badge-warning">Underwriting</span>
-                                        @endif
-                                        @if($item->status==1)
-                                            <span class="badge badge-info">Head Teknik</span>
-                                        @endif
-                                        @if($item->status==2)
-                                            <span class="badge badge-danger">Head Syariah</span>
-                                        @endif
-                                        @if($item->status==3)
-                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
-                                        @endif
-                                        @if($item->status==4)
-                                            <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
-                                        @endif
+                                        <a href="{{route('pengajuan.edit',$item->id)}}">
+                                            @if($item->status==0)
+                                                <span class="badge badge-warning">Underwriting</span>
+                                            @endif
+                                            @if($item->status==1)
+                                                <span class="badge badge-info">Head Teknik</span>
+                                            @endif
+                                            @if($item->status==2)
+                                                <span class="badge badge-danger">Head Syariah</span>
+                                            @endif
+                                            @if($item->status==3)
+                                                <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
+                                            @endif
+                                            @if($item->status==4)
+                                                <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
+                                            @endif
+                                            @if($item->status==5)
+                                                <span class="badge badge-default badge-active" title="Draft"><i class="fa fa-save"></i> Draft</span>
+                                            @endif
+                                        </a>
                                     </td>
                                     <td>
                                         @if($item->status==3)
                                             @if($is_pengajuan_reas and $item->reas_id=="")
-                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" /> 
+                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                             @endif
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                         @endif
@@ -181,7 +186,7 @@
                         </tbody>
                     </table>
                 </div>
-                <br /> 
+                <br />
                 {{ $data->links() }}
             </div>
         </div>
@@ -223,9 +228,9 @@
         Livewire.on('modal_submit_reas',()=>{
             $("#modal_submit_reas").modal('show');
         });
-        $(document).ready(function() { 
-            var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } ); 
-            new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } ); 
+        $(document).ready(function() {
+            var table = $('#data_table').DataTable( { "searching": false,scrollY: "600px", scrollX: true, scrollCollapse: true, paging: false } );
+            new $.fn.dataTable.FixedColumns( table, { leftColumns: 6 } );
         } );
 
         $('.tanggal_pengajuan').daterangepicker({
@@ -263,6 +268,6 @@
             @this.set("end_tanggal_akseptasi", end.format('YYYY-MM-DD'));
             $('.tanggal_akseptasi').val(start.format('DD/MM/YYYY') + '-' + end.format('DD/MM/YYYY'));
         });
-        
+
     </script>
 @endpush

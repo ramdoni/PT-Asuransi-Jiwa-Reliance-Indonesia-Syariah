@@ -17,7 +17,7 @@ use App\Events\RequestPengajuan;
 class PengajuanCalculate implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public $polis_id,$perhitungan_usia=1,$masa_asuransi=1,$transaction_id;
+    public $polis_id,$perhitungan_usia=1,$masa_asuransi=1,$transaction_id,$type_calculate;
 
      /**
      * The number of seconds the job can run before timing out.
@@ -31,12 +31,13 @@ class PengajuanCalculate implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($polis_id,$perhitungan_usia,$masa_asuransi,$transaction_id)
+    public function __construct($polis_id,$perhitungan_usia,$masa_asuransi,$transaction_id,$type_calculate='new')
     {
         $this->polis_id = $polis_id;
         $this->perhitungan_usia = $perhitungan_usia;
         $this->masa_asuransi = $masa_asuransi;
         $this->transaction_id = $transaction_id;
+        $this->type_calculate = $type_calculate;
     }
 
     /**
@@ -53,7 +54,15 @@ class PengajuanCalculate implements ShouldQueue
         echo "Polis : {$polis->nama}\n\n";
         $key=0;
         $update  =[];
-        foreach(Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->with(['double_peserta','rate_'])->get() as $data){
+        $kepesertaan = Kepesertaan::where(function($table){
+            if($this->type_calculate=='draft') {
+                $table->where('pengajuan_id',$this->transaction_id);
+            }else{
+                $table->where(['polis_id'=>$this->polis_id,'is_temp'=>1]);
+            }
+        })->with(['double_peserta','rate_'])->get();
+
+        foreach($kepesertaan as $data){
 
             echo "{$key}. Calculate Nama : ".$data->nama ."\n";
             // $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){

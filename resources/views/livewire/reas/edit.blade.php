@@ -64,14 +64,6 @@
                                         <td>: {{$data->reas}}%</td>
                                     </tr>
                                     <tr>
-                                        <th>RI COM</th>
-                                        <td>: {{$data->ri_com}}%</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Jumlah Peserta</th>
-                                        <td> : {{format_idr($data->jumlah_peserta)}}</td>
-                                    </tr>
-                                    <tr>
                                         <td colspan="2">&nbsp;</td>
                                     </tr>
                                 </thead>
@@ -80,6 +72,14 @@
                         <div class="col-md-6">
                             <table class="table">
                                 <thead>
+                                    <tr>
+                                        <th>RI COM</th>
+                                        <td>: {{$data->ri_com}}%</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Jumlah Peserta</th>
+                                        <td> : {{format_idr($data->jumlah_peserta)}}</td>
+                                    </tr>
                                     <tr>
                                         <th>Uang Asuransi Ajri</th>
                                         <td> : {{format_idr($data->manfaat_asuransi_ajri)}}</td>
@@ -100,55 +100,45 @@
                                         <th>Kontribusi Netto</th>
                                         <td> : {{format_idr($data->kontribusi_netto)}}</td>
                                     </tr>
-                                    <tr>
-                                        <th>Perhitungan Usia</th>
-                                        <td>
-                                            <select class="form-control" wire:model="filter_perhitungan_usia" wire:loading.remove wire:target="filter_perhitungan_usia">
-                                                <option value=""> -- Pilih -- </option>
-                                                <option value="1">Nears Birthday</option>
-                                                <option value="2">Actual Birthday</option>
-                                            </select>
-                                            @error('filter_perhitungan_usia')
-                                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                            @enderror
-                                            <span wire:loading wire:target="filter_perhitungan_usia">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span> Saved...
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tampilkan Peserta</th>
-                                        <td>
-                                            <select class="form-control" wire:loading.remove wire:target="filter_peserta" wire:model="filter_peserta">
-                                                <option value="0">Semua Peserta</option>
-                                                <option value="1">Peserta Ganda</option>
-                                            </select>
-                                            <span wire:loading wire:target="filter_peserta">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>UL/UW</th>
-                                        <td>
-                                            <select wire:loading.remove wire:target="filter_ul" class="form-control" wire:model="filter_ul">
-                                                <option value=""> -- Pilih -- </option>
-                                                @foreach($filter_ul_arr as $item)
-                                                    @if($item->ul_reas=="") @continue @endif
-                                                    <option>{{$item->ul_reas}}</option>
-                                                @endforeach
-                                            </select>
-                                            <span wire:loading wire:target="filter_ul">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            @if($is_calculate==false)
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <table>
+                                <tr>
+                                    <td>Filter </td>
+                                    <td>
+                                        <select class="form-control" wire:model="filter_peserta">
+                                            <option value=""> -- Tampilkan Peserta -- </option>
+                                            <option value="0">Semua Peserta</option>
+                                            <option value="1">Peserta Ganda</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" wire:model="filter_ul">
+                                            <option value=""> -- Pilih UL/UW -- </option>
+                                            @foreach($filter_ul_arr as $item)
+                                                @if($item->ul_reas=="") @continue @endif
+                                                <option>{{$item->ul_reas}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" wire:model="filter_perhitungan_usia" wire:loading.remove wire:target="filter_perhitungan_usia">
+                                            <option value=""> -- Set Perhitungan Usia -- </option>
+                                            <option value="1">Nears Birthday</option>
+                                            <option value="2">Actual Birthday</option>
+                                        </select>
+                                        @error('filter_perhitungan_usia')
+                                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                        @enderror
+                                        <span wire:loading wire:target="filter_perhitungan_usia">
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span> Saved...
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if($is_calculate==false)
                                                 <a href="javascript:void(0)" wire:click="hitung" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> Hitung Reas</a>
                                             @else
                                                 <span>
@@ -171,10 +161,15 @@
                                                     <span class="sr-only">{{ __('Loading...') }}</span> Please wait...
                                                 </span>
                                             @endif
-                                        </td>
-                                    </tr>
-                                </thead>
+                                    <td>
+                                        <span wire:loading>
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                        </span>
+                                    </td>
+                                </tr>
                             </table>
+                            <hr />
                         </div>
                     </div>
                     <ul class="nav nav-tabs">
