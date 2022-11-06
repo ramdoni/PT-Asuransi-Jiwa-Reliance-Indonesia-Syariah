@@ -84,6 +84,7 @@ class PengajuanCalculate implements ShouldQueue
             }
 
             $nilai_manfaat_asuransi = $data->basic;
+            if($data->basic=="" || $data->basic==0) continue;
 
             $update[$key]['usia'] =  $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->perhitungan_usia,$data->tanggal_mulai) : '0';
             $update[$key]['masa'] = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
@@ -100,7 +101,7 @@ class PengajuanCalculate implements ShouldQueue
                 $data->kontribusi = 0;
             }else{
                 $update[$key]['rate'] = $rate ? $rate->rate : 0;
-                $update[$key]['kontribusi'] = $nilai_manfaat_asuransi * $data->rate/1000;
+                $update[$key]['kontribusi'] = $update[$key]['rate']==0 ? 0 : ($nilai_manfaat_asuransi * $data->rate/1000);
                 $data->rate =  $rate ? $rate->rate : 0;
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }
@@ -117,8 +118,6 @@ class PengajuanCalculate implements ShouldQueue
                 $uw = UnderwritingLimit::whereRaw("{$data->akumulasi_ganda} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
             else
                 $uw = UnderwritingLimit::whereRaw("{$nilai_manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->first();
-
-            //if(!$uw) $uw = UnderwritingLimit::where(['usia'=>$data->usia,'polis_id'=>$this->polis_id])->orderBy('max_amount','ASC')->first();
 
             if($uw){
                 $update[$key]['uw'] = $uw->keterangan;

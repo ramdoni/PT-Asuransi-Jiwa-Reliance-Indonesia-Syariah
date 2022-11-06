@@ -147,8 +147,16 @@
                                             <a href="{{route('reas.edit',$item->reas_id)}}" target="_blank">{{$item->reas->no_pengajuan}}</a>
                                         @endif
                                     </td>
-                                    <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a></td>
-                                    <td><a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a></td>
+                                    <td>
+                                        @if(isset($item->polis_id))
+                                            <a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->no_polis ) ? $item->polis->no_polis :'-'}}</a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(isset($item->polis_id))
+                                            <a href="{{route('polis.edit',$item->polis_id)}}">{{isset($item->polis->nama ) ? $item->polis->nama :'-'}}</a>
+                                        @endif
+                                    </td>
                                     <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->created_at))}}</td>
                                     <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>

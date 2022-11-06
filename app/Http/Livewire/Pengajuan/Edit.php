@@ -57,12 +57,12 @@ class Edit extends Component
     {
         $this->is_calculate = $condition;
         $this->emit('reload-row');
-        $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->count();
+        $this->total_pengajuan = Kepesertaan::where(['polis_id'=>$this->data->polis_id,'is_temp'=>1])->count();
     }
     public function calculate()
     {
         $this->is_calculate = true;
-        PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id);
+        PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id,'draft');
     }
 
     public function submit()

@@ -290,7 +290,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-right">
-                                                    @if($item->extra_kontribusi)
+                                                    @if($item->extra_kontribusi>0)
                                                         <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
                                                         <a href="{{route('peserta.print-ek',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                     @else
@@ -424,7 +424,7 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-right">
-                                                    @if($item->extra_kontribusi)
+                                                    @if($item->extra_kontribusi>0)
                                                         <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
                                                         <a href="{{route('peserta.print-ek',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                     @else
@@ -596,7 +596,7 @@
                                                 </td>
                                                 <td class="text-right">
                                                     @if($item->status !=3)
-                                                        @if($item->extra_kontribusi)
+                                                        @if($item->extra_kontribusi>0)
                                                             <a href="javascript:void(0)" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_extra_kontribusi">{{format_idr($item->extra_kontribusi)}}</a>
                                                             <a href="{{route('peserta.print-ek',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                                         @else

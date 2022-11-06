@@ -41,19 +41,19 @@ class SinkronPeserta extends Command
     {
         ini_set('memory_limit', '-1');
 
-        $inputFileName = './public/migrasi/migrasi-juli.xls';
+        $inputFileName = './public/migrasi/migrasi-oktober.xls';
 
         /** Load $inputFileName to a Spreadsheet Object  **/
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-        
+
         $arr = [];
         $key=0;
         $num=0;
         foreach($sheetData as $item){
             $num++;
             if($num<6) continue;
-            
+
             $nomor_polis = $item['B'];
             $keterangan = $item['H'];
             $nomor_peserta = $item['G'];
@@ -123,7 +123,7 @@ class SinkronPeserta extends Command
             $pay_date_reas = @\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item['BW'])->format('Y-m-d');
 
             $data = Kepesertaan::where('no_peserta',$nomor_peserta)->first();
-            
+
             if(!$data) {
                 $data = new Kepesertaan;
                 $find_polis = Polis::where('no_polis',$nomor_polis)->first();
