@@ -16,6 +16,6 @@ class ViewDouble extends Component
 
     public function set_id(Kepesertaan $data)
     {
-        $this->data = Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->get();;
+        $this->data = Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'polis_id'=>$data->polis_id])->orderBy('id','ASC')->get();;
     }
 }

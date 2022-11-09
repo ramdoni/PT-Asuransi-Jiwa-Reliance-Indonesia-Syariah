@@ -10,7 +10,17 @@
                     Double : {{$total_double}}<br />
                     Total : {{$total_pengajuan}}<br />
                 </th>
-                <th></th>
+                <th>
+                    @if($total_selected>0)
+                        <a href="javascript:void(0)" wire:loading.remove wire:target="delete_selected" wire:click="delete_selected" class="badge badge-danger badge-active"><i class="fa fa-trash"></i> Delete Selected</a>
+                        <div wire:loading wire:target="delete_selected">
+                            <span>
+                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                <span class="sr-only">{{ __('Loading...') }}</span>
+                            </span>
+                        </div>
+                    @endif
+                </th>
                 <th>Hitung</th>
                 <th>Nama Bank</th>
                 <th>KC/KP</th>
@@ -42,7 +52,9 @@
             @foreach($kepesertaan as $k => $item)
                 <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                     <td>{{$num}}@php($num++)</td>
-                    <td class="text-center"></td>
+                    <td class="text-center">
+                        <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                    </td>
                     <td class="text-center">
                         @if($item->is_double==2)
                             <i class="fa fa-warning text-warning"></i>
@@ -51,7 +63,11 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                        <a href="javascript:void(0)" wire:loading.remove wire:target="delete({{$item->id}})" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                        <span wire:loading wire:target="delete({{$item->id}})">
+                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                            <span class="sr-only">{{ __('Loading...') }}</span>
+                        </span>
                     </td>
                     <td class="text-center">
                         @if($item->is_hitung==1)

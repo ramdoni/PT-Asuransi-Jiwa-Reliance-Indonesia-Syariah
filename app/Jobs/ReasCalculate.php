@@ -74,34 +74,37 @@ class ReasCalculate implements ShouldQueue
 
         foreach($kepesertaan as $k => $item){
             $manfaat_asuransi = $item->basic;
-            echo "{$k}. Nama : {$item->nama}\n";
+
+            // echo "{$k}. Nama : {$item->nama}\n";
             $item->usia_reas = $item->tanggal_lahir ? hitung_umur($item->tanggal_lahir,$perhitungan_usia,$item->tanggal_mulai) : '0';
             // check double
-            $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id])->whereNotNull('reas_id')->first();
+            $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id])->whereNotNull('reas_id');
+            $count = clone $check_double;
+
+            
+
             $is_double = false;
-            if($check_double){
-                // echo "Is Double True ";
+            if($count->get()->count() >= 2){
+                $check_double = $check_double->first();
                 if(isset($check_double->reas->reasuradur_id) and isset($this->data->reasuradur_id)){
                     if($check_double->reas->reasuradur_id==$this->data->reasuradur_id){
-                        //echo ", Reas True";
                         $is_double = true;
                         $item->is_double_reas = 1;
-                        $item->akumulasi_ganda_reas = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,
-                                                                            'nama'=>$item->nama,
-                                                                            'polis_id'=>$item->polis_id])
-                                                                        ->join('reas','reas.id','=','kepesertaan.reas_id')
-                                                                        ->where('reas.reasuradur_id',$this->data->reasuradur_id)->get()
-                                                                        ->sum('reas_manfaat_asuransi_ajri');
-                        
-                        echo " Total : {$item->akumulasi_ganda_reas}\n";
+                        $item->akumulasi_ganda_reas = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id])
+                                                                        ->leftJoin('reas','reas.id','=','kepesertaan.reas_id')
+                                                                        ->where('reas.reasuradur_id',$this->data->reasuradur_id)
+                                                                        ->get()->sum('reas_manfaat_asuransi_ajri');
                     }
                 }
+            }else{
+                $item->is_double_reas = 0;
+                $item->akumulasi_ganda_reas = 0;
             }
 
             $reas_manfaat_asuransi_ajri = ($manfaat_asuransi*$ajri)/100;
 
-            if($is_double){
-                if($item->akumulasi_ganda_reas>100000000){
+            if($item->is_double_reas==1){
+                if($item->akumulasi_ganda_reas>=100000000){
                     $item->nilai_manfaat_asuransi_reas = $manfaat_asuransi;
                     $item->reas_manfaat_asuransi_ajri = 0;
                 }else{
@@ -119,9 +122,8 @@ class ReasCalculate implements ShouldQueue
                 }
             }else{
                 if($reas_manfaat_asuransi_ajri>=100000000){
-                    $reas_manfaat_asuransi_ajri = 100000000;
                     $item->nilai_manfaat_asuransi_reas = $manfaat_asuransi - 100000000;
-                    $item->reas_manfaat_asuransi_ajri = $reas_manfaat_asuransi_ajri;
+                    $item->reas_manfaat_asuransi_ajri = 100000000;
                 }else{
                     $item->nilai_manfaat_asuransi_reas = ($manfaat_asuransi*$or)/100;
                     $item->reas_manfaat_asuransi_ajri = ($manfaat_asuransi*$ajri)/100;
@@ -158,7 +160,7 @@ class ReasCalculate implements ShouldQueue
             $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days"));
             $item->kadaluarsa_reas_hari =  $item->polis->kadaluarsa_reas;
             $item->save();
-            echo "Net Kontribusi : {$item->net_kontribusi_reas}\n\n";
+            // echo "Net Kontribusi : {$item->net_kontribusi_reas}\n\n";
         }
 
         $this->data->jumlah_peserta = Kepesertaan::where('reas_id',$this->data->id)->count();

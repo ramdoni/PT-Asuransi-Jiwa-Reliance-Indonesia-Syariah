@@ -121,6 +121,8 @@ class Edit extends Component
         $this->validate([
             'file'=>'required|mimes:xlsx|max:51200', // 50MB maksimal
         ]);
+        
+        Kepesertaan::where('pengajuan_id',$this->data->id)->delete();
 
         $path = $this->file->getRealPath();
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
@@ -130,7 +132,7 @@ class Edit extends Component
         $total_data = 0;
         $total_double = 0;
         $total_success = 0;
-        Kepesertaan::where(['polis_id'=>$this->data->polis_id,'is_temp'=>1,'is_double'=>1])->delete();
+        // Kepesertaan::where(['polis_id'=>$this->data->polis_id,'is_temp'=>1,'is_double'=>1])->delete();
         $insert = [];
         foreach($sheetData as $key => $item){
             if($key<=1) continue;
@@ -174,10 +176,11 @@ class Edit extends Component
 
     public function hitung()
     {
+    
         // $this->is_calculate = true;
         // PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id);
 
-        // /*
+        /** 
         foreach($this->data->kepesertaan as $data){
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
@@ -220,6 +223,7 @@ class Edit extends Component
             }
             $data->save();
         }
+        **/
 
         /**
          *
