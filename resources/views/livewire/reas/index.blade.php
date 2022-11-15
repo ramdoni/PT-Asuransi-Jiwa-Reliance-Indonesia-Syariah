@@ -74,7 +74,8 @@
                                         @if(isset($item->pengajuan))
                                             @php($polis=[])
                                             @php($pemegang_polis=[])
-                                            @foreach($item->pengajuan as $p)
+                                            @foreach($item->pengajuan as $k_2 => $p)
+                                                @if($k_2>1) @continue @endif
                                                 @if(isset($p->polis->no_polis))
                                                     @php($polis[] = $p->polis->no_polis)
                                                     @php($pemegang_polis[] = $p->polis->nama)

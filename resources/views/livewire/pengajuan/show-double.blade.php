@@ -41,7 +41,6 @@
                     </thead>
                     <tbody>
                         @foreach($data as $k => $item)
-                            @php($kontribusi = $item->basic * $item->rate/1000)
                             <tr>
                                 <td>{{$k+1}}</td>
                                 <td>
@@ -65,19 +64,19 @@
                                 <td class="text-center">{{$item->masa_bulan}}</td>
                                 <td class="text-right">{{format_idr($item->basic)}}</td>
                                 <td class="text-right">
-                                    @php($dana_tabarru = ($kontribusi*$item->polis->iuran_tabbaru)/100)
+                                    @php($dana_tabarru = ($item->kontribusi*$item->polis->iuran_tabbaru)/100)
                                     {{format_idr($dana_tabarru)}}
                                 </td>
                                 <td class="text-right">
-                                    @php($dana_ujrah = ($kontribusi*$item->polis->ujrah_atas_pengelolaan)/100) 
+                                    @php($dana_ujrah = ($item->kontribusi*$item->polis->ujrah_atas_pengelolaan)/100) 
                                     {{format_idr($dana_ujrah)}}
                                 </td>
                                 <td class="text-right">
-                                    {{format_idr($kontribusi)}}
+                                    {{format_idr($item->kontribusi)}}
                                 </td>
                                 <td class="text-right">{{format_idr($item->extra_mortalita)}}</td>
                                 <td class="text-right">{{format_idr($item->extra_kontribusi)}}</td>
-                                <td class="text-right">{{format_idr($item->extra_mortalita+$kontribusi+$item->extra_kontribusi)}}</td>
+                                <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
                                 <td>{{$item->tanggal_stnc ? date('d-M-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
                                 <td>{{$item->ul}}</td>
                                 <td>{{$item->keterangan}}</td>
@@ -95,12 +94,6 @@
                             <tr>
                                 <th colspan="16" class="text-right">Akumulasi</th>
                                 <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
-                                <!-- <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th> -->
-                                <!-- <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th> -->
-                                <!-- <th class="text-right">{{format_idr($kontribusi_approve)}}</th> -->
-                                <!-- <th class="text-right">{{format_idr($extra_mortalita_approve)}}</th> -->
-                                <!-- <th class="text-right">{{format_idr($extra_kontribusi_approve)}}</th> -->
-                                <!-- <th class="text-right">{{format_idr($kontribusi_approve+$extra_mortalita_approve+$extra_kontribusi_approve)}}</th> -->
                             </tr>
                         </tfoot>
                     @endif

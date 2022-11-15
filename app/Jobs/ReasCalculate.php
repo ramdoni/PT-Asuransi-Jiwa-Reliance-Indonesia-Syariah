@@ -78,10 +78,8 @@ class ReasCalculate implements ShouldQueue
             // echo "{$k}. Nama : {$item->nama}\n";
             $item->usia_reas = $item->tanggal_lahir ? hitung_umur($item->tanggal_lahir,$perhitungan_usia,$item->tanggal_mulai) : '0';
             // check double
-            $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id])->whereNotNull('reas_id');
+            $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id,'status_polis'=>'Inforce'])->whereNotNull('reas_id');
             $count = clone $check_double;
-
-            
 
             $is_double = false;
             if($count->get()->count() >= 2){
@@ -90,7 +88,7 @@ class ReasCalculate implements ShouldQueue
                     if($check_double->reas->reasuradur_id==$this->data->reasuradur_id){
                         $is_double = true;
                         $item->is_double_reas = 1;
-                        $item->akumulasi_ganda_reas = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id])
+                        $item->akumulasi_ganda_reas = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id,'status_polis'=>'Inforce'])
                                                                         ->leftJoin('reas','reas.id','=','kepesertaan.reas_id')
                                                                         ->where('reas.reasuradur_id',$this->data->reasuradur_id)
                                                                         ->get()->sum('reas_manfaat_asuransi_ajri');

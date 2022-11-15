@@ -33,7 +33,12 @@ class AddEm extends Component
     {
         // find reate
         $tahun = round($this->data->masa_bulan / 12);
-        $rate = ExtraMortalitaRate::where(['extra_mortalita_id'=>$this->extra_mortalita_id,'usia'=>$this->data->usia,'tahun'=>$tahun])->first();
+
+        if($this->data->masa_bulan>12 and $this->data->masa_bulan<24)
+            $rate = ExtraMortalitaRate::where(['extra_mortalita_id'=>$this->extra_mortalita_id,'usia'=>$this->data->usia,'tahun'=>2])->first();
+        else
+            $rate = ExtraMortalitaRate::where(['extra_mortalita_id'=>$this->extra_mortalita_id,'usia'=>$this->data->usia,'tahun'=>$tahun])->first();
+        
         if($rate){
             $this->data->rate_em = $rate->rate;
             $this->data->extra_mortalita = $this->data->basic * $rate->rate / 1000;

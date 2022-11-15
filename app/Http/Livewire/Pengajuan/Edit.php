@@ -28,11 +28,11 @@ class Edit extends Component
         $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
-        })->orderBy('id','DESC')->get();
+        })->orderBy('id','ASC')->get();
         $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
-        })->orderBy('no_peserta','ASC')->get();
+        })->orderBy('id','ASC')->get();
         $this->kepesertaan_reject = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
@@ -180,7 +180,7 @@ class Edit extends Component
         // $this->is_calculate = true;
         // PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id);
 
-        /** 
+        
         foreach($this->data->kepesertaan as $data){
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
@@ -194,11 +194,12 @@ class Edit extends Component
 
             // find rate
             $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
+
+            //$rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
             $data->rate = $rate ? $rate->rate : 0;
             $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
 
             // find rate
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
             if(!$rate || $rate->rate ==0 || $rate->rate ==""){
                 $data->rate = 0;
                 $data->kontribusi = 0;
@@ -223,7 +224,6 @@ class Edit extends Component
             }
             $data->save();
         }
-        **/
 
         /**
          *

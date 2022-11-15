@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Kepesertaan;
 use App\Models\Polis;
 use App\Models\Pengajuan;
+use App\Models\Reasuradur;
 use App\Models\Dn;
 use Illuminate\Console\Command;
 
@@ -43,7 +44,8 @@ class PengajuanMigrasi extends Command
     {
         ini_set('memory_limit', '-1');
 
-        $inputFileName = './public/migrasi/migrasi-oktober.xlsx';
+        $inputFileName = './public/migrasi/migrasi-juni.xlsx';
+        // $inputFileName = './public/migrasi/migrasi-juli.xls';
 
         /** Load $inputFileName to a Spreadsheet Object  **/
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
@@ -99,10 +101,10 @@ class PengajuanMigrasi extends Command
             $dn = $item['AU'];
             $no_reg = $item['AT'];
 
-            // $this->info("{$k}. Nomor Peserta : ".$no_peserta);
+            $this->info("{$k}. Nomor Peserta : ".$no_peserta);
 
-            $polis = Polis::where('no_polis',$no_polis)->first();
-            $pengajuan = Pengajuan::where('dn_number',$dn)->first();
+            // $polis = Polis::where('no_polis',$no_polis)->first();
+            // $pengajuan = Pengajuan::where('dn_number',$dn)->first();
 
             // if($pengajuan){
             //     $pengajuan->no_surat = $no_reg;
@@ -111,8 +113,21 @@ class PengajuanMigrasi extends Command
             //     echo "No Surat : {$no_reg}\n";
             // }
 
-            $peserta = Kepesertaan::with('polis')->where('no_peserta',$no_peserta)->first();
-           
+            $reasuradur = Reasuradur::where('name',$item['BL'])->first();
+            
+            if(ltrim($item['Q'])!="DODDY ARIANTO") continue;
+
+            $peserta = Kepesertaan::with('polis')->where('no_peserta',$item['G'])->first();
+            if($peserta){
+                if($reasuradur) $peserta->reasuradur_id = $reasuradur->id;
+                if($peserta->reas_manfaat_asuransi_ajri==0 || $peserta->reas_manfaat_asuransi_ajri==""){
+                    $manfaat_asuransi_ajri = replace_idr($item['BO']);
+                    $manfaat_asuransi = replace_idr($item['X']);
+                    $peserta->reas_manfaat_asuransi_ajri = $manfaat_asuransi - $manfaat_asuransi_ajri;
+                }
+                $peserta->save();
+            }
+
             // if(!$peserta) {
             //     $peserta = new Kepesertaan();
             //     $peserta->no_peserta = $no_peserta;
@@ -179,6 +194,7 @@ class PengajuanMigrasi extends Command
             // $key++;
         }
 
+        /*
         $pengajuans = Pengajuan::with('polis')->where('is_migrate',1)->get();
         foreach($pengajuans as $data){
 
@@ -202,9 +218,6 @@ class PengajuanMigrasi extends Command
                 $data->potong_langsung = $kontribusi*($data->polis->potong_langsung/100);
             }
 
-            /**
-             * Hitung PPH
-             */
             if($data->polis->pph){
                 $data->pph_persen =  $data->polis->pph;
                 if($data->potong_langsung)
@@ -213,9 +226,6 @@ class PengajuanMigrasi extends Command
                     $data->pph = $kontribusi*($data->polis->pph/100);
             }
 
-            /**
-             * Hitung PPN
-             */
             if($data->polis->ppn){
                 $data->ppn_persen =  $data->polis->ppn;
                 if($data->potong_langsung)
@@ -248,6 +258,7 @@ class PengajuanMigrasi extends Command
             //     $pengajuan->save();
             
         }
+        */
 
         $this->info("Double : {$double}");
         echo "\nSELESAI\n";

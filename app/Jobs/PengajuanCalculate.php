@@ -70,7 +70,7 @@ class PengajuanCalculate implements ShouldQueue
             // })->sum('basic');
 
             // $update[$key]['id'] = $data->id;
-            if($data->double_peserta->where('tanggal_lahir',$data->tanggal_lahir)->count() > 0){
+            if($data->double_peserta->where('tanggal_lahir',$data->tanggal_lahir)->count() > 1){
                 $update[$key]['is_double'] = 1;
                 $data->is_double = 1;
                 $check =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where(function($table){
@@ -94,8 +94,8 @@ class PengajuanCalculate implements ShouldQueue
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
             $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->masa_asuransi);
             // find rate
-            // $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
-            $rate = $data->rate_()->where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan])->first();
+            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->polis_id])->first();
+            
             if(!$rate || $rate->rate ==0 || $rate->rate ==""){
                 $data->rate = 0;
                 $data->kontribusi = 0;
