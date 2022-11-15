@@ -42,7 +42,7 @@ class Insert extends Component
     public function calculate()
     {
         $this->is_calculate = true;
-        PengajuanCalculate::dispatch($this->polis_id,$this->perhitungan_usia,$this->masa_asuransi,$this->transaction_id);
+        PengajuanCalculate::dispatch($this->polis_id,$this->perhitungan_usia,$this->masa_asuransi,$this->transaction_id,'new');
     }
 
     public function clear_file()

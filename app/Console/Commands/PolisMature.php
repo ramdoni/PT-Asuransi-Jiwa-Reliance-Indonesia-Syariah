@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Polis;
 use App\Models\Kepesertaan;
 
 class PolisMature extends Command
@@ -20,7 +19,7 @@ class PolisMature extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Data Polis yang sudah Mature atau tanggal berakhir sudah melewati hari ini';
 
     /**
      * Create a new command instance.
@@ -39,11 +38,15 @@ class PolisMature extends Command
      */
     public function handle()
     {
-        $polis =  Polis::get();
-        foreach($polis as $item){
-            if($item->tanggal_akhir > date('Y-m-d')){
-                Kepesertaan::where('polis_id',$item->id)->where('status_polis','Inforce')->update(['status'=>'Mature']);
-                echo "Polis : {$item->no_polis} \ {$item->nama} \n";
+        // $polis =  Kepesertaan::where('status_polis','Mature')->whereRaw('tanggal_akhir > curdate()')->get();
+        $polis =  Kepesertaan::where('status_polis','Inforce')->get();
+        foreach($polis as $num=> $item){
+            if($item->tanggal_akhir < date('Y-m-d')){
+                $find = Kepesertaan::find($item->id);
+                $find->status_polis = 'Mature';
+                $find->save();
+
+                echo "{$num}. Peserta : {$item->no_peserta} \ {$item->nama} \n";
             }
         }
 

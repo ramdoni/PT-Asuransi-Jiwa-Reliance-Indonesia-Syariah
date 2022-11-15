@@ -26,17 +26,21 @@
                             <th>Mulai Asuransi</th>
                             <th>Akhir Asuransi</th>
                             <th class="text-right">Nilai Manfaat Asuransi</th>
-                            <th class="text-right">Dana Tabarru</th>
-                            <th class="text-right">Dana Ujrah</th>
-                            <th class="text-right">Kontribusi</th>
-                            <th class="text-right">Extra Mortality</th>
+                            <th class="text-right">Nilai Manfaat Asuransi Reas</th>
+                            <th class="text-right">Nilai Manfaat Asuransi Ajri</th>
                             <th class="text-right">Total Kontribusi</th>
+                            <th class="text-right">Kontribusi Netto Reas</th>
                             <th>Tgl Stnc</th>
                             <th>UL</th>
                             <th>Ket</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php($total_manfaat_reas=0)
+                        @php($total_manfaat_ajri=0)
+                        @php($total_basic=0)
+                        @php($total_kontribusi=0)
+                        @php($total_kontribusi_reas=0)
                         @foreach($data as $k => $item)
                             <tr>
                                 <td>{{$k+1}}</td>
@@ -65,18 +69,42 @@
                                 <td class="text-center">{{$item->usia}}</td>
                                 <td>{{$item->tanggal_mulai ? date('d-M-Y',strtotime($item->tanggal_mulai)) : '-'}}</td>
                                 <td>{{$item->tanggal_akhir ? date('d-M-Y',strtotime($item->tanggal_akhir)) : '-'}}</td>
-                                <td class="text-right">{{format_idr($item->basic)}}</td>
-                                <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
-                                <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
-                                <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                <td class="text-right">{{format_idr($item->extra_mortalita)}}</td>
-                                <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi)}}</td>
+                                <td class="text-right">
+                                    {{format_idr($item->basic)}}
+                                    @php($total_basic += $item->basic)
+                                </td>
+                                <td class="text-right">
+                                    {{format_idr($item->nilai_manfaat_asuransi_reas)}}
+                                    @php($total_manfaat_reas +=$item->nilai_manfaat_asuransi_reas)
+                                </td>
+                                <td class="text-right">
+                                    {{format_idr($item->reas_manfaat_asuransi_ajri)}}
+                                    @php($total_manfaat_ajri +=$item->reas_manfaat_asuransi_ajri)
+                                </td>
+                                <td class="text-right">
+                                    {{format_idr($item->extra_mortalita+$item->kontribusi)}}
+                                    @php($total_kontribusi += $item->extra_mortalita+$item->kontribusi)
+                                </td>
+                                <td class="text-right">
+                                    {{format_idr($item->net_kontribusi_reas)}}
+                                    @php($total_kontribusi_reas += $item->extra_mortalita+$item->kontribusi)
+                                </td>
                                 <td>{{$item->tgl_stnc ? date('d-M-Y',strtotime($item->tgl_stnc)) : '-'}}</td>
                                 <td>{{$item->ul}}</td>
                                 <td>{{$item->keterangan}}</td>
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr style="background: #eee;">
+                            <th colspan="14" class="text-right">Total</th>
+                            <th class="text-right">{{format_idr($total_basic)}}</th>
+                            <th class="text-right">{{format_idr($total_manfaat_reas)}}</th>
+                            <th class="text-right">{{format_idr($total_manfaat_ajri)}}</th>
+                            <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                            <th class="text-right">{{format_idr($total_kontribusi_reas)}}</th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>

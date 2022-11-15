@@ -311,7 +311,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="17" class="text-right">Total</th>
+                                            <th colspan="18" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($nilai_manfaat)}}</th>
                                             <th class="text-right">{{format_idr($dana_tabbaru)}}</th>
                                             <th class="text-right">{{format_idr($dana_ujrah)}}</th>
