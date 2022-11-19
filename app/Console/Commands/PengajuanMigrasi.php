@@ -43,7 +43,7 @@ class PengajuanMigrasi extends Command
     public function handle()
     {
         ini_set('memory_limit', '-1');
-
+        echo ini_get('memory_limit');
         $inputFileName = './public/migrasi/migrasi-juni.xlsx';
         // $inputFileName = './public/migrasi/migrasi-juli.xls';
 
@@ -101,7 +101,7 @@ class PengajuanMigrasi extends Command
             $dn = $item['AU'];
             $no_reg = $item['AT'];
 
-            $this->info("{$k}. Nomor Peserta : ".$no_peserta);
+            // $this->info("{$k}. Nomor Peserta : ".$no_peserta);
 
             // $polis = Polis::where('no_polis',$no_polis)->first();
             // $pengajuan = Pengajuan::where('dn_number',$dn)->first();
@@ -116,6 +116,8 @@ class PengajuanMigrasi extends Command
             $reasuradur = Reasuradur::where('name',$item['BL'])->first();
             
             if(ltrim($item['Q'])!="DODDY ARIANTO") continue;
+
+            echo "{$item['G']}. Reas : ". replace_idr($item['BO']) ."\n";
 
             $peserta = Kepesertaan::with('polis')->where('no_peserta',$item['G'])->first();
             if($peserta){
