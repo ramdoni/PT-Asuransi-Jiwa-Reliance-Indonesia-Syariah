@@ -28,14 +28,14 @@
                     @enderror
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>OR</label>
                         <input type="number" class="form-control" wire:model="or" />
                         @error('or')
                             <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Reas</label>
                         <div wire:loading wire:target="or">
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -46,11 +46,24 @@
                             <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
+                    <div class="col-md-4 form-group">
+                        <label>RI COM (%)</label>
+                        <input type="number"  class="form-control" wire:model="ri_com" />
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 form-group">
-                        <label>RI COM (%)</label>
-                        <input type="number"  class="form-control" wire:model="ri_com" />
+                        <label>Model Reas</label>
+                        <select class="form-control" wire:model="model_reas">
+                            <option value=""> -- Pilih -- </option>
+                            @foreach(['OR','Surplus','QS','QS_Surplus'] as $item)
+                                <option>{{$item}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Max OR</label>
+                        <input type="text"  class="form-control" wire:model="max_or" />
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@
                     <p class="lead">{{__('Login to your account')}}</p>
                 </div>
                 <div class="body">
-                    <form class="form-auth-small" method="POST" wire:submit.prevent="login" action="">
+                    <form class="form-auth-small" method="POST" wire:submit.prevent="login">
                         @if($message)
                        <p class="text-danger">{{$message}}</p>
                         @endif
@@ -35,14 +35,22 @@
                                 <span>{{__('Remember me')}}</span>
                             </label>								
                         </div>
-                        <button type="submit" class="btn btn-info btn-lg btn-block">{{ __('LOGIN') }}</button>
-                        {{-- <div class="bottom">
-                            <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a href="#">{{ __('Forgot password?') }}</a></span>
-                            <span>{{ __("Don't have an account?") }} <a href="#">{{ __('Register') }}</a></span>
-                        </div> --}}
+                        <div wire:ignore>
+                            <div class="g-recaptcha" data-callback="verifyCallback" data-sitekey="{{env('CAPTCHA_SITE_KEY')}}"></div>
+                            <button 
+                                type="submit"
+                                class="btn btn-info btn-lg btn-block">{{ __('LOGIN') }}</button>
+                        </div>
+                        
                     </form>
                 </div>
             </div>
 		</div>
 	</div>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        var verifyCallback = function(response) {
+            @this.set('token', response);
+        };
+    </script>
 </div>

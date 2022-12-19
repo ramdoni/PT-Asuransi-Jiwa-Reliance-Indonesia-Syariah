@@ -38,6 +38,21 @@ class KlaimController extends Controller
         return $pdf->stream();
     }
 
+    public function printDiterima(Klaim $id)
+    {
+        \LogActivity::add("Print Diterima {$id->id}");
+
+        if($id->no_surat_diterima==""){
+            $id->no_surat_diterima = $id->id. '/KEP-KLM/AJRIUS/'.numberToRomawi(date('m')).'/'. date('Y');
+            $id->save();
+        }
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.klaim.print-diterima',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;
+
+        return $pdf->stream();
+    }
+
     public function printMemo(Klaim $id)
     {
         \LogActivity::add("Print Memo Pembayaran {$id->id}");

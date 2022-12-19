@@ -116,7 +116,7 @@
             <tr>
                 <td>Periode Asuransi</td>
                 <td> : </td>
-                <td>-</td>
+                <td>{{date('d M Y',strtotime($data->kepesertaan->tanggal_mulai))}} sd {{date('d M Y',strtotime($data->kepesertaan->tanggal_akhir))}} ({{$data->kepesertaan->masa_bulan}} Bulan) </td>
             </tr>
             <tr>
                 <td>Klaim Disetujui</td>

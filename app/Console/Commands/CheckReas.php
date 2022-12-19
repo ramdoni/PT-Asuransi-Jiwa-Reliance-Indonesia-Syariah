@@ -38,7 +38,7 @@ class CheckReas extends Command
      */
     public function handle()
     {
-        $peserta = Kepesertaan::whereNull('reas_id')->get();
+        $peserta = Kepesertaan::whereNull('reas_id')->whereNull('pengajuan_id')->get();
         foreach($peserta as $k => $item){
             if($item->nilai_manfaat_asuransi_reas > 0){
                 $item->reas_manfaat_asuransi_ajri = $item->basic - $item->nilai_manfaat_asuransi_reas;

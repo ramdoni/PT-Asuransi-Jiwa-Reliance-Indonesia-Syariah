@@ -91,7 +91,9 @@
                                 <tr>
                                     <td>Kontribusi DN</td>
                                     <td> : </td>
-                                    <td>{{isset($peserta->pengajuan->kontribusi) ? format_idr($peserta->pengajuan->kontribusi+$peserta->pengajuan->extra_kontribusi+$peserta->pengajuan->extra_mortalita) : format_idr($peserta->kontribusi)}}</td>
+                                    <td>
+                                        {{isset($peserta->pengajuan) ? format_idr($peserta->pengajuan->kontribusi+$peserta->pengajuan->extra_kontribusi+$peserta->pengajuan->extra_mortalita) : format_idr($peserta->kontribusi)}}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Tgl. Bayar Kontribusi</td>
@@ -114,9 +116,14 @@
                                     <td>{{isset($peserta->reas->type_reas) ? $peserta->reas->type_reas : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Model Reas</td>
+                                    <td>Manfaat</td>
                                     <td> : </td>
                                     <td>{{isset($peserta->reas->manfaat) ? $peserta->reas->manfaat : '-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Model Reas</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->reas->reasuradur->model_reas) ? $peserta->reas->reasuradur->model_reas : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>OR Surplus</td>
@@ -163,7 +170,7 @@
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim Reas</td>
-                                    <td> : {{isset($peserta->nilai_manfaat_asuransi_reas) ? format_idr($peserta->nilai_manfaat_asuransi_reas) : '-'}}</td>
+                                    <td> : {{isset($peserta->nilai_manfaat_asuransi_reas) ? format_idr($data->nilai_klaim - $peserta->nilai_manfaat_asuransi_reas) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>
@@ -186,18 +193,22 @@
                                     <table class="table ml-2">
                                         <tr>
                                             <td>Tanggal Meninggal</td>
-                                            <td> : {{date('d-F-Y',strtotime($data->tanggal_meninggal))}}</td>
+                                            <td> : </td>
+                                            <td>{{date('d-F-Y',strtotime($data->tanggal_meninggal))}}</td>
                                         </tr>
                                         <tr>
                                             <td>Usia Polis</td>
-                                            <td> : {{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
+                                            <td> : </td>
+                                            <td>{{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
                                         </tr>
                                         <tr>
                                             <td>Nilai Pengajuan Klaim</td>
-                                            <td> : {{format_idr($data->nilai_klaim)}}</td>
+                                            <td> : </td>
+                                            <td>{{format_idr($data->nilai_klaim)}}</td>
                                         </tr>
                                         <tr>
                                             <td>Nilai Klaim Disetujui</td>
+                                            <td> : </td>
                                             <td>
                                                 @if($data->status !=3)
                                                     <input type="number" class="form-control" wire:model="nilai_klaim_disetujui" />
@@ -213,12 +224,21 @@
                                         </tr>
                                         <tr>
                                             <td>Jenis Klaim</td>
-                                            <td> : {{$data->jenis_klaim}}</td>
+                                            <td> : </td>
+                                            <td>{{$data->jenis_klaim}}</td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div class="col-md-4">
                                     <table class="table ml-2">
+                                        <tr>
+                                            <td>Provinsi</td>
+                                            <td> : {{isset($data->provinsi->nama) ? $data->provinsi->nama : '-'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kabupaten</td>
+                                            <td> : {{isset($data->kabupaten->name) ? $data->kabupaten->name : '-'}}</td>
+                                        </tr>
                                         <tr>
                                             <td>Tempat & Sebab Klaim</td>
                                             <td> : {{$data->tempat_dan_sebab}}</td>

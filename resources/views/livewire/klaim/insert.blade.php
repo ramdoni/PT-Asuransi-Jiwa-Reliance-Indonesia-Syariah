@@ -23,13 +23,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Peserta</label>
-                                    <select class="form-control" id="kepesertaan_id" wire:model="kepesertaan_id">
-                                        <option value=""> -- Select Peserta -- </option>
-                                        @foreach($kepesertaan as $item)
-                                            <option value="{{$item->id}}">{{$item->no_peserta}} / {{$item->nama}}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <label>Peserta</label>
+                                        <select class="form-control" id="kepesertaan_id" wire:model="kepesertaan_id">
+                                            <option value=""> -- Select Peserta -- </option>
+                                        </select>
+                                    </div>
                                     @error('kepesertaan_id')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                     @enderror
@@ -52,19 +51,103 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Jenis Klaim</label>
-                                    <input type="text" class="form-control" wire:model="jenis_klaim" />
+                                    <select class="form-control" wire:model="jenis_klaim">
+                                        <option value=""> -- Pilih -- </option>
+                                        @foreach(\App\Models\KlaimJenis::get() as $item)
+                                            <option>{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
                                     @error('jenis_klaim')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Tempat & Sebab Klaim</label>
-                                <textarea class="form-control" wire:model="tempat_dan_sebab"></textarea>
-                                @error('tempat_dan_sebab')
-                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                @enderror
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Tempat Klaim</label>
+                                    <textarea class="form-control" wire:model="tempat_dan_sebab"></textarea>
+                                    @error('tempat_dan_sebab')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Sebab Klaim</label>
+                                    <textarea class="form-control" wire:model="sebab"></textarea>
+                                    @error('sebab')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
                             </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Provinsi</label>
+                                    <select class="form-control" wire:model="provinsi_id">
+                                        <option value=""> -- Pilih -- </option>
+                                        @foreach($provinsi as $item)
+                                            <option value="{{$item->id}}">{{$item->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('provinsi_id')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Kabupaten</label>
+                                    <select class="form-control" wire:model="kabupaten_id">
+                                        <option value=""> -- Pilih -- </option>
+                                        @foreach($kabupaten as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('kabupaten_id')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-8">
+                                    <h6>Ditransfer ke</h6>
+                                    <table class="table">
+                                        <tr>
+                                            <td>Nomor Rekening</td>
+                                            <td>
+                                                <input type="text" class="form-control" wire:model="bank_nomor_rekening" />
+                                                @error('bank_nomor_rekening')
+                                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bank Cabang</td>
+                                            <td>
+                                                <input type="text" class="form-control" wire:model="bank_cabang" />
+                                                @error('bank_cabang')
+                                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Atas Nama</td>
+                                            <td>
+                                                <input type="text" class="form-control" wire:model="bank_atas_nama" />
+                                                @error('bank_atas_nama')
+                                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mata Uang</td>
+                                            <td>
+                                                <input type="text" class="form-control" wire:model="bank_mata_uang" />
+                                                @error('bank_mata_uang')
+                                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <hr />
                             <div class="form-group">
                                 <span wire:loading>
                                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -127,7 +210,7 @@
                             <table class="table ml-2">
                                 <tr>
                                     <td style="width:30%">Nomor DN</td>
-                                    <td style="width:70%"> : 
+                                    <td style="width:70%"> :
                                         @if(isset($peserta->pengajuan->no_pengajuan))
                                             {{$peserta->pengajuan->dn_number}}
                                         @elseif(isset($peserta->no_debit_note))
@@ -135,7 +218,7 @@
                                         @else
                                             -
                                         @endif
-                                    </td>
+                                    </>
                                 </tr>
                                 <tr>
                                     <td>Kontribusi DN</td>
@@ -158,8 +241,12 @@
                                     <td> : {{isset($peserta->reas->type_reas) ? $peserta->reas->type_reas : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <td>Model Reas</td>
+                                    <td>Manfaat</td>
                                     <td> : {{isset($peserta->reas->manfaat) ? $peserta->reas->manfaat : '-'}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Model Reas</td>
+                                    <td> : {{isset($peserta->reas->reasuradur->model_reas) ? $peserta->reas->reasuradur->model_reas : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>OR Surplus</td>
@@ -186,7 +273,7 @@
                                 </tr>
                                 <tr>
                                     <td>Tgl Kadaluwarsa Klaim</td>
-                                    <td> : {{date('d-M-Y',strtotime($kadaluarsa_klaim_tanggal))}}</td>
+                                    <td> : {{$kadaluarsa_klaim_tanggal ? date('d-M-Y',strtotime($kadaluarsa_klaim_tanggal)) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Share OR</td>
@@ -215,36 +302,59 @@
             </div>
         </div>
     </div>
-</div>
-@push('after-scripts')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
-    <script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
-    <style>
-        .select2-container .select2-selection--single {height:36px;padding-left:10px;}
-        .select2-container .select2-selection--single .select2-selection__rendered{padding-top:3px;}
-        .select2-container--default .select2-selection--single .select2-selection__arrow{top:4px;right:10px;}
-        .select2-container {width: 100% !important;}
-    </style>
-    <script>
-        Livewire.on('reload-kepesertaan',()=>{
-            select_2_peserta = $('#kepesertaan_id').select2();
-            $('#kepesertaan_id').on('change', function (e) {
-                var data = $(this).select2("val");
-                @this.set('kepesertaan_id', data);
-            });
+    @push('after-scripts')
+        <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
+        <script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
+        <style>
+            .select2-container .select2-selection--single {height:36px;padding-left:10px;}
+            .select2-container .select2-selection--single .select2-selection__rendered{padding-top:3px;}
+            .select2-container--default .select2-selection--single .select2-selection__arrow{top:4px;right:10px;}
+            .select2-container {width: 100% !important;}
+        </style>
+        <script>
+            Livewire.on('reload-kepesertaan',(polis_id)=>{
+                setTimeout(function(){
+                    select_2_peserta = $('#kepesertaan_id').select2({
+                            ajax: {
+                                dataType: 'json',
+                                url: '{{route('api.get-kepesertaan')}}',
+                                data: function (params) {
+                                    var query = {
+                                        search: params.term,
+                                        polis_id : polis_id ? polis_id : polis_id
+                                    }
+                                    return query;
+                                },
+                                processResults: function (data) {
+                                    console.log(data);
+                                    return {
+                                        results: data.items
+                                    };
+                                }
+                            }
+                        }
+                    );
 
-            var selected_kepesertaan = $('#kepesertaan_id').find(':selected').val();
-            if(selected_kepesertaan !="") select_2_peserta.val(selected_kepesertaan);
-        });
-        select__2 = $('#polis_id').select2();
-        $('#polis_id').on('change', function (e) {
-            var data = $(this).select2("val");
-            @this.set('polis_id', data);
-        });
-        var selected__ = $('#polis_id').find(':selected').val();
-        if(selected__ !="") select__2.val(selected__);
-         Livewire.on('modal_show_double', (msg) => {
-            $('#modal_show_double').modal('show');
-        });
-    </script>
-@endpush
+                    $('#kepesertaan_id').on('change', function (e) {
+                        var data = $(this).select2("val");
+                        @this.set('kepesertaan_id', data);
+                    });
+
+                    var selected_kepesertaan = $('#kepesertaan_id').find(':selected').val();
+                    if(selected_kepesertaan !="") select_2_peserta.val(selected_kepesertaan);
+                },1000);            
+            });
+            select__2 = $('#polis_id').select2();
+            $('#polis_id').on('change', function (e) {
+                var data = $(this).select2("val");
+                @this.set('polis_id', data);
+            });
+            var selected__ = $('#polis_id').find(':selected').val();
+            if(selected__ !="") select__2.val(selected__);
+            Livewire.on('modal_show_double', (msg) => {
+                $('#modal_show_double').modal('show');
+            });
+        </script>
+    @endpush
+
+</div>

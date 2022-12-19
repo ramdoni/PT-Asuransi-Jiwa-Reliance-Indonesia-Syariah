@@ -11,7 +11,8 @@ class PersetujuanKlaim extends Component
     use WithFileUploads;
     public $data,$head_klaim_status,$head_klaim_note,$head_klaim_date,$head_teknik_status,$head_teknik_note,$head_teknik_date,$head_devisi_status,$head_devisi_note,$head_devisi_date;
     public $keputusa_arr = [''=>'-',1=>'Terima',2=>'Tolak',3=>'Tunda',4=>'Investigasi',5=>'Liable',6=>'STNC'];
-    public $direksi_1_file,$direksi_1_status,$direksi_1_note,$direksi_1_date;
+    public $direksi_1_file,$direksi_1_status,$direksi_1_note,$direksi_1_date,$is_edit_head_klaim=false,$is_edit_head_teknik=false,$is_edit_head_devisi=false;
+    public $is_edit_direksi_1=false,$is_edit_direksi_2=false;
     public $direksi_2_file,$direksi_2_status,$direksi_2_note,$direksi_2_date;
     public function render()
     {
@@ -46,11 +47,23 @@ class PersetujuanKlaim extends Component
             'head_klaim_status'=>'required',
             'head_klaim_note'=>'required'
         ]);
-        $this->data->status = 1;
+        
         $this->data->head_klaim_status = $this->head_klaim_status;
         $this->data->head_klaim_note = $this->head_klaim_note;
-        $this->data->head_klaim_date = date('Y-m-d');
-        $this->data->head_klaim_id = \Auth::user()->id;
+
+        /**
+         * Jika nilai klaim dibawah 50 jt maka langsung approve oleh Head Departemen Claim Unit Syariah
+         */
+        if($this->data->nilai_klaim_disetujui<=50000000){
+            $this->data->status = 3;
+            $this->data->status_pengajuan = $this->head_klaim_status;
+        }
+
+        if($is_edit_head_klaim==false){
+            $this->data->status = 1;
+            $this->data->head_klaim_date = date('Y-m-d');
+            $this->data->head_klaim_id = \Auth::user()->id;
+        }
         $this->data->save();
 
         session()->flash('message-success',__('Data berhasil di submit'));
@@ -58,8 +71,6 @@ class PersetujuanKlaim extends Component
         event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
 
         \LogActivity::add("Klaim Submit Head Klaim {$this->data->id}");
-
-        // return redirect()->route('klaim.edit',$this->data->id);
     }
 
     public function save_head_teknik()
@@ -68,11 +79,15 @@ class PersetujuanKlaim extends Component
             'head_teknik_status'=>'required',
             'head_teknik_note'=>'required'
         ]);
-        $this->data->status = 2;
+
+        if($is_edit_head_teknik==false){
+            $this->data->status = 2;    
+            $this->data->head_teknik_date = date('Y-m-d');
+            $this->data->head_teknik_id = \Auth::user()->id;
+        }
+        
         $this->data->head_teknik_status = $this->head_teknik_status;
         $this->data->head_teknik_note = $this->head_teknik_note;
-        $this->data->head_teknik_date = date('Y-m-d');
-        $this->data->head_teknik_id = \Auth::user()->id;
         $this->data->save();
 
         session()->flash('message-success',__('Data berhasil di submit'));
@@ -80,8 +95,6 @@ class PersetujuanKlaim extends Component
         event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
 
         \LogActivity::add("Klaim Submit Head Teknik {$this->data->id}");
-
-        // return redirect()->route('klaim.edit',$this->data->id);
     }
 
     public function save_devisi_syariah()
@@ -94,6 +107,7 @@ class PersetujuanKlaim extends Component
         if($this->data->nilai_klaim_disetujui<=150000000){
             $this->data->status_pengajuan = $this->head_devisi_status;
             $this->data->status = 3;
+            $this->data->status_pengajuan = $this->head_devisi_status;
         }else{
             $this->data->status = 5;
         }
@@ -120,6 +134,13 @@ class PersetujuanKlaim extends Component
             'direksi_1_status'=>'required'
         ]);
 
+        if($this->data->nilai_klaim_disetujui>200000000 )
+            $this->data->status = 5;
+        else{
+            $this->data->status_pengajuan = $this->direksi_1_status;
+            $this->data->status = 3;
+        }
+        
         $name = "direksi_1.".$this->direksi_1_file->extension();
         $this->direksi_1_file->storeAs("public/klaim/{$this->data->id}", $name);
         $this->data->direksi_1_file = "storage/klaim/{$this->data->id}/{$name}";
@@ -143,6 +164,9 @@ class PersetujuanKlaim extends Component
             'direksi_2_file' => 'required|mimes:xls,xlsx,pdf,doc,docx,jpeg,png,jpg,gif,svg|max:2048',
             'direksi_2_status'=>'required'
         ]);
+
+        $this->data->status = 3;
+        $this->data->status_pengajuan = $this->direksi_2_status;
 
         $name = "direksi_2.".$this->direksi_2_file->extension();
         $this->direksi_2_file->storeAs("public/klaim/{$this->data->id}", $name);

@@ -53,6 +53,8 @@ class ReasCalculate implements ShouldQueue
     {
         ini_set('memory_limit', '-1');
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1])->get();
+        
+        Kepesertaan::where('reas_id',$this->data->id)->update(['akumulasi_ganda_reas'=>0,'reas_manfaat_asuransi_ajri'=>0,'nilai_manfaat_asuransi_reas'=>0]);
 
         $rate = ReasuradurRate::find($this->data->reasuradur_rate_id);
 
@@ -161,8 +163,8 @@ class ReasCalculate implements ShouldQueue
             // echo "Net Kontribusi : {$item->net_kontribusi_reas}\n\n";
         }
 
-        $this->data->jumlah_peserta = Kepesertaan::where('reas_id',$this->data->id)->count();
-        $this->data->extra_kontribusi = Kepesertaan::where('reas_id',$this->data->id)->sum('reas_extra_kontribusi');
+        $this->data->jumlah_peserta = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->count();
+        $this->data->extra_kontribusi = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('reas_extra_kontribusi');
         $this->data->manfaat_asuransi_reas = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('nilai_manfaat_asuransi_reas');
         $this->data->manfaat_asuransi_ajri = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('reas_manfaat_asuransi_ajri');
         $this->data->kontribusi = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('total_kontribusi_reas');

@@ -15,28 +15,19 @@
                                     <div class="from-group my-2">
                                         <input type="text" class="form-control" wire:model="filter_keyword" placeholder="Keyword" />
                                     </div>
-                                    {{-- <div class="from-group my-2">
-                                        <select class="form-control" wire:model="filter_status">
-                                            <option value=""> -- Status -- </option>
-                                            <option value="0"> Klaim Analis</option>
-                                            <option value="1"> Head Teknik</option>
-                                            <option value="2"> Head Syariah</option>
-                                            <option value="3"> Selesai</option>
-                                            <option value="4"> Migrasi</option>
-                                        </select>
-                                    </div> --}}
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-11">
                         <a href="{{route('klaim.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
                         <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_migrasi" class="btn btn-danger"><i class="fa fa-upload"></i> Migrasi</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
+                        <a href="{{route('klaim.pengaturan')}}" class="btn btn-warning float-right"><i class="fa fa-gear"></i> Pengaturan</a>
                     </div>
                 </div>
             </div>
@@ -53,6 +44,8 @@
                                 <th>Pemegang Polis</th>
                                 <th>No Peserta</th>
                                 <th>Nama Peserta</th>
+                                <th>Provinsi</th>
+                                <th>Kabupaten</th>
                                 <th>Masa Asuransi</th>
                                 <th>Tanggal Klaim</th>
                                 <th>Tanggal Meninggal</th>
@@ -115,6 +108,8 @@
                                     <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                                     <td>{{isset($item->kepesertaan->no_peserta) ? $item->kepesertaan->no_peserta : '-'}}</td>
                                     <td>{{isset($item->kepesertaan->nama) ? $item->kepesertaan->nama : '-'}}</td>
+                                    <td>{{isset($item->provinsi->nama) ? $item->provinsi->nama : '-'}}</td>
+                                    <td>{{isset($item->kabupaten->name) ? $item->kabupaten->name : '-'}}</td>
                                     <td class="text-center">{{isset($item->kepesertaan->masa_bulan) ? $item->kepesertaan->masa_bulan : '-'}}</td>
                                     <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
                                     <td>{{date('d-F-Y',strtotime($item->tanggal_meninggal))}}</td>
@@ -124,9 +119,12 @@
                                         @if($item->status!=3)
                                             <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
                                         @endif
+                                        @if($item->status==4)
+                                            <a href="{{route('klaim.print-tolak',$item->id)}}" class="badge badge-danger badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Tolak</a>
+                                        @endif
                                         @if($item->status==3)
                                             <a href="{{route('klaim.print-persetujuan',$item->id)}}" class="badge badge-info badge-active" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
-                                            <a href="{{route('klaim.print-tolak',$item->id)}}" class="badge badge-danger badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Tolak</a>
+                                            <a href="{{route('klaim.print-diterima',$item->id)}}" class="badge badge-success badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Diterima</a>
                                             <a href="{{route('klaim.print-memo',$item->id)}}" class="badge badge-warning badge-active" target="_blank"><i class="fa fa-print"></i> Memo Pembayaran</a>
                                         @endif
                                     </td>

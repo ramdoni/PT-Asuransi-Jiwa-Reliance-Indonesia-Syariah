@@ -43,6 +43,7 @@
                 text-align:right;
                 content:counter(item) ".";
             }
+            .text-left{text-align:left;}
         </style>
     </head>
     <body>
@@ -343,27 +344,27 @@
                 <tr>
                     <td>Nomor Polis</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->no_polis) ? $data->polis->no_polis : '-'}}</th>
+                    <th class="text-left"> {{isset($data->polis->no_polis) ? $data->polis->no_polis : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Pemegang Polis</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->nama) ? $data->polis->nama : '-'}}</th>
+                    <th class="text-left" > {{isset($data->polis->nama) ? $data->polis->nama : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Produk Asuransi</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
+                    <th class="text-left"> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Nomor Peserta</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
+                    <th class="text-left"> {{isset($data->kepesertaan->no_peserta) ? $data->kepesertaan->no_peserta : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Nama Peserta</td>
                     <td> : </td>
-                    <th></th>
+                    <th class="text-left"> {{isset($data->kepesertaan->nama) ? $data->kepesertaan->nama : '-'}}</th>
                 </tr>
             </table>
             <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">II. Dokumen Pendukung</h3>

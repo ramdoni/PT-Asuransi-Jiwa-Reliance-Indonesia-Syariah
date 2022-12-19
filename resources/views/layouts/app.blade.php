@@ -116,11 +116,9 @@
             var pusher = new Pusher('61e7a83b5c1a48939522', {
                 cluster: 'ap1'
             });
-            Pusher.logToConsole = true;
 
             var channel_general = pusher.subscribe('general');
             channel_general.bind('notification', function(data) {
-                console.log(data.message)
                 show_toast(data.message,'top-right');
 
             });
