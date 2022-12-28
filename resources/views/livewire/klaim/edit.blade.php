@@ -59,7 +59,7 @@
                                     <td>Status</td>
                                     <td>
                                         @if($data->status==0)
-                                            <span class="badge badge-warning">Underwriting</span>
+                                            <span class="badge badge-warning">Klaim Analis</span>
                                         @endif
                                         @if($data->status==1)
                                             <span class="badge badge-info">Head Teknik</span>
@@ -123,13 +123,18 @@
                                 <tr>
                                     <td>Model Reas</td>
                                     <td> : </td>
-                                    <td>{{isset($peserta->reas->reasuradur->model_reas) ? $peserta->reas->reasuradur->model_reas : '-'}}</td>
+                                    <td>{{isset($peserta->reas->rate_uw->model_reas) ? $peserta->reas->rate_uw->model_reas : '-'}}</td>
                                 </tr>
                                 <tr>
+                                    <td>Max OR</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->reas->rate_uw->max_or) ? format_idr($peserta->reas->rate_uw->max_or) : '-'}}</td>
+                                </tr>
+                                <!-- <tr>
                                     <td>OR Surplus</td>
                                     <td> : </td>
                                     <td>{{isset($peserta->reas->manfaat_asuransi_ajri) ? format_idr($peserta->reas->manfaat_asuransi_ajri) : '-'}}</td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td>Kadaluarsa Reas</td>
                                     <td> : </td>
@@ -166,11 +171,11 @@
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim OR</td>
-                                    <td> : {{isset($peserta->reas_manfaat_asuransi_ajri) ? format_idr($peserta->reas_manfaat_asuransi_ajri) : '-'}}</td>
+                                    <td> : {{isset($data->nilai_klaim_or) ? format_idr($data->nilai_klaim_or) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim Reas</td>
-                                    <td> : {{isset($peserta->nilai_manfaat_asuransi_reas) ? format_idr($data->nilai_klaim - $peserta->nilai_manfaat_asuransi_reas) : '-'}}</td>
+                                    <td> : {{isset($data->nilai_klaim_reas) ? format_idr($data->nilai_klaim_reas) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>
@@ -189,70 +194,112 @@
                     <div class="tab-content px-0">
                         <div class="tab-pane active show" id="tab_data_klaim">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <table class="table ml-2">
-                                        <tr>
-                                            <td>Tanggal Meninggal</td>
-                                            <td> : </td>
-                                            <td>{{date('d-F-Y',strtotime($data->tanggal_meninggal))}}</td>
+                                        <tr style="border-top:0">
+                                            <th style="border-top:0">Tanggal Meninggal</th>
+                                            <td style="border-top:0"> : </td>
+                                            <td style="border-top:0">{{date('d-F-Y',strtotime($data->tanggal_meninggal))}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Usia Polis</td>
+                                            <th>Usia Polis</th>
                                             <td> : </td>
                                             <td>{{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Nilai Pengajuan Klaim</td>
+                                            <th>Nilai Pengajuan Klaim</th>
                                             <td> : </td>
                                             <td>{{format_idr($data->nilai_klaim)}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Nilai Klaim Disetujui</td>
+                                            <th>Nilai Klaim Disetujui</th>
                                             <td> : </td>
                                             <td>
                                                 @if($data->status !=3)
                                                     <input type="number" class="form-control" wire:model="nilai_klaim_disetujui" />
-                                                    <button type="button" wire:loading.remove wire:target="save" wire:click="save" class="btn btn-info my-2"><i class="fa fa-save"></i> Simpan</button>
-                                                    <span wire:loading wire:target="save">
-                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                        <span class="sr-only">{{ __('Loading...') }}</span>
-                                                    </span>
                                                 @else
                                                     {{format_idr($data->nilai_klaim_disetujui)}}
                                                 @endif
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Jenis Klaim</td>
+                                            <th>Jenis Klaim</th>
                                             <td> : </td>
                                             <td>{{$data->jenis_klaim}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kategori Penyakit</th>
+                                            <td></td>
+                                            <td>
+                                                <select class="form-control" wire:model="kategori_penyakit">
+                                                    <option value=""> -- Pilih -- </option>
+                                                    @foreach(\App\Models\KlaimKategoriPenyakit::get() as $item)
+                                                        <option>{{$item->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('kategori_penyakit')
+                                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Organ yang mencakup</th>
+                                            <td> : </td>
+                                            <td>
+                                                <select class="form-control" wire:model="organ_yang_mencakup">
+                                                    <option value=""> -- Pilih -- </option>
+                                                    @foreach(\App\Models\KlaimOrgan::get() as $item)
+                                                        <option>{{$item->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('organ_yang_mencakup')
+                                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                                @enderror
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                @if($data->status !=3)
+                                                    <button type="button" wire:loading.remove wire:target="save" wire:click="save" class="btn btn-info my-2"><i class="fa fa-save"></i> Simpan</button>
+                                                    <span wire:loading wire:target="save">
+                                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                                    </span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div class="col-md-4">
                                     <table class="table ml-2">
                                         <tr>
-                                            <td>Provinsi</td>
-                                            <td> : {{isset($data->provinsi->nama) ? $data->provinsi->nama : '-'}}</td>
+                                            <th style="border-top:0">Provinsi</th>
+                                            <td style="border-top:0"> : {{isset($data->provinsi->nama) ? $data->provinsi->nama : '-'}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Kabupaten</td>
+                                            <th>Kabupaten</th>
                                             <td> : {{isset($data->kabupaten->name) ? $data->kabupaten->name : '-'}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Tempat & Sebab Klaim</td>
+                                            <th>Tempat</th>
                                             <td> : {{$data->tempat_dan_sebab}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Tanggal Pengajuan</td>
+                                            <th>Sebab</th>
+                                            <td> : {{$data->sebab}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tanggal Pengajuan</th>
                                             <td> : {{date('d-F-Y',strtotime($data->created_at))}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Tanggal Dok Lengkap</td>
+                                            <th>Tanggal Dok Lengkap</th>
                                             <td> : {{$data->tanggal_dok_lengkap ? date('d-F-Y',strtotime($data->tanggal_dok_lengkap)) : '-'}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Tanggal Proses</td>
+                                            <th>Tanggal Proses</th>
                                             <td> : {{$data->tanggal_proses ? date('d-F-Y',strtotime($data->tanggal_proses)) : '-'}}</td>
                                         </tr>
                                     </table>

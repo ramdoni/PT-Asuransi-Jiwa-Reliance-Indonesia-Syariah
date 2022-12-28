@@ -14,7 +14,7 @@ class Insert extends Component
 {
     public $kepesertaan=[],$peserta,$no_pengajuan,$polis,$polis_id,$transaction_id,$kepesertaan_id,$tanggal_meninggal,$nilai_klaim,$jenis_klaim,$tempat_dan_sebab;
     public $kadaluarsa_klaim_hari,$kadaluarsa_klaim_tanggal,$kadaluarsa_reas_tanggal,$sebab,$bank_nomor_rekening,$bank_cabang,$bank_atas_nama,$bank_mata_uang;
-    public $provinsi = [],$kabupaten=[],$provinsi_id,$kabupaten_id,$nilai_klaim_or;
+    public $provinsi = [],$kabupaten=[],$provinsi_id,$kabupaten_id,$nilai_klaim_or,$nilai_klaim_reas,$kategori_penyakit,$organ_yang_mencakup;
     public function render()
     {
         return view('livewire.klaim.insert');
@@ -39,34 +39,53 @@ class Insert extends Component
         if($this->kepesertaan_id) {
             $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
             
-            if(isset($this->peserta->reas->reasuradur->model_reas)){
-                // AS
-                $max_or = $this->peserta->reas->reasuradur->max_or ? $this->peserta->reas->reasuradur->max_or : 0; 
-                // AR
-                $model_reas = $peserta->reas->reasuradur->model_reas;
-                // V
-                $basic = $this->peserta->basic;
-                $nilai_klaim = $this->nilai_klaim;
+            if(isset($this->peserta->reas->rate_uw->model_reas)){
+                $max_or = $this->peserta->reas->rate_uw->max_or ? $this->peserta->reas->rate_uw->max_or : 0; // AS
+                $model_reas = $this->peserta->reas->rate_uw->model_reas; // AR
+                $basic = $this->peserta->basic; // V
+                $or_share = $this->peserta->reas->or; // AT
+                $nilai_klaim = $this->nilai_klaim; // Z
 
                 if($model_reas=="OR"){
                     $this->nilai_klaim_or = $this->nilai_klaim ? $this->nilai_klaim : 0;
-
-                /**
-                 * Model Reas = Surplus dan UW Basic <= Max OR
-                 */
                 }elseif($model_reas=="Surplus" and $basic<=$max_or){
-                    $this->nilai_klaim_or = ($max_or / $basic) * $this->nilai_klaim;
+                    if($this->nilai_klaim) {
+                        $this->nilai_klaim_or = ($max_or / $basic) * $this->nilai_klaim;
+                    }
+                }elseif($model_reas=='QS'){
+                    if($nilai_klaim) {
+                        $this->nilai_klaim_or =  ($or_share/100)*$nilai_klaim;
+                    }
+                }elseif($model_reas=='QS_Surplus' and (($or_share/100)*$basic)<=$max_or){
+                    if($nilai_klaim) {
+                        $this->nilai_klaim_or = ($or_share/100) * $nilai_klaim;
+                    }
+                }elseif($model_reas=='QS_Surplus' and (($or_share/100)*$basic)>$max_or){
+                    if($nilai_klaim) {
+                        $this->nilai_klaim_or = ($max_or/$basic)*$nilai_klaim;
+                    }
+                }else{
+                    $this->nilai_klaim_or = 0;
                 }
+                if($nilai_klaim) $this->nilai_klaim_reas = $nilai_klaim - $this->nilai_klaim_or;
             }
+            
             /**
              *  =IF( 
              *     AR7="OR";
-             *          Z7;
-             *          IF(AND(AR7="Surplus";V7<=AS7);
+             *       Z7;
+             *     IF(AND(AR7="Surplus";V7<=AS7);
              *              MIN(Z7;AS7);
-             *                  IF(AND(AR7="Surplus";V7>AS7);
+             *            IF(AND(AR7="Surplus";V7>AS7); (AS7/V7)*Z7;
+             * 
+             *              IF(AR7="QS";
+             *                  AT7*Z7;
+             *              IF(AND(AR7="QS_Surplus";AT7*V7<=AS7);
+             *                  AT7*Z7;
+             *              IF(AND(AR7="QS_Surplus";AT7*V7>AS7);
              *                  (AS7/V7)*Z7;
-             *              IF(AR7="QS";AT7*Z7;IF(AND(AR7="QS_Surplus";AT7*V7<=AS7);AT7*Z7;IF(AND(AR7="QS_Surplus";AT7*V7>AS7);(AS7/V7)*Z7;"Cek lagi"))))))
+             * "Cek lagi")))))
+             * )
              * 
              * */
 
@@ -123,7 +142,8 @@ class Insert extends Component
             'bank_mata_uang'=>'required',
             'provinsi_id'=>'required',
             'kabupaten_id'=>'required',
-            'nilai_klaim_or'=>'required'
+            'kategori_penyakit'=>'required',
+            'organ_yang_mencakup'=>'required'
         ]);
 
         $data = new Klaim();
@@ -138,6 +158,11 @@ class Insert extends Component
         $data->kadaluarsa_klaim_tanggal = $this->kadaluarsa_klaim_tanggal;
         $data->provinsi_id = $this->provinsi_id;
         $data->kabupaten_id = $this->kabupaten_id;
+        $data->nilai_klaim_or = $this->nilai_klaim_or;
+        $data->nilai_klaim_reas = $this->nilai_klaim_reas;
+        $data->sebab = $this->sebab;
+        $data->organ_yang_mencakup = $this->organ_yang_mencakup;
+        $data->kategori_penyakit = $this->kategori_penyakit;
         $data->save();
 
         $this->peserta->kadaluarsa_reas_tanggal = $this->kadaluarsa_reas_tanggal;

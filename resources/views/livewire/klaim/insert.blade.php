@@ -65,15 +65,41 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label>Tempat Klaim</label>
-                                    <textarea class="form-control" wire:model="tempat_dan_sebab"></textarea>
+                                    <input type="text" class="form-control" wire:model="tempat_dan_sebab" />
                                     @error('tempat_dan_sebab')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Sebab Klaim</label>
-                                    <textarea class="form-control" wire:model="sebab"></textarea>
+                                    <input type="text" class="form-control" wire:model="sebab" />
                                     @error('sebab')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Kategori Penyakit</label>
+                                    <select class="form-control" wire:model="kategori_penyakit">
+                                        <option value=""> -- Pilih -- </option>
+                                        @foreach(\App\Models\KlaimKategoriPenyakit::get() as $item)
+                                            <option>{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('kategori_penyakit')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Organ yang mencakup</label>
+                                    <select class="form-control" wire:model="organ_yang_mencakup">
+                                        <option value=""> -- Pilih -- </option>
+                                        @foreach(\App\Models\KlaimOrgan::get() as $item)
+                                            <option>{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('organ_yang_mencakup')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                     @enderror
                                 </div>
@@ -246,11 +272,11 @@
                                 </tr>
                                 <tr>
                                     <td>Model Reas</td>
-                                    <td> : {{isset($peserta->reas->reasuradur->model_reas) ? $peserta->reas->reasuradur->model_reas : '-'}}</td>
+                                    <td> : {{isset($peserta->reas->rate_uw->model_reas) ? $peserta->reas->rate_uw->model_reas : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <td>OR Surplus</td>
-                                    <td> : {{isset($peserta->reas->manfaat_asuransi_ajri) ? format_idr($peserta->reas->manfaat_asuransi_ajri) : '-'}}</td>
+                                    <td>Max OR</td>
+                                    <td> : {{isset($peserta->reas->rate_uw->max_or) ? format_idr($peserta->reas->rate_uw->max_or) : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <td>Kadaluarsa Reas</td>
@@ -285,11 +311,11 @@
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim OR</td>
-                                    <td> : {{isset($peserta->reas_manfaat_asuransi_ajri) ? format_idr($peserta->reas_manfaat_asuransi_ajri) : '-'}}</td>
+                                    <td> : {{format_idr($nilai_klaim_or)}}</td>
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim Reas</td>
-                                    <td> : {{isset($peserta->nilai_manfaat_asuransi_reas) ? format_idr($peserta->nilai_manfaat_asuransi_reas) : '-'}}</td>
+                                    <td> : {{format_idr($nilai_klaim_reas)}}</td>
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>
