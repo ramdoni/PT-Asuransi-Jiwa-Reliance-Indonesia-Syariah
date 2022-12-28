@@ -10,7 +10,7 @@
             body { margin: 0px; }
             * {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size:8pt;
+                font-size:7pt;
             }
             h1 {font-size: 14pt;}
             table {border-collapse: collapse;}
@@ -257,9 +257,14 @@
             <div style="width:50%;float:left;margin-left:10px;">
                 <table style="width:100%">
                     <tr>
-                        <td style="width:30%;">Tempat & Sebab Klaim</td>
+                        <td style="width:30%;">Tempat Klaim</td>
                         <td> : </td>
                         <td style="border-bottom:1px solid;width:70%;">{{$data->tempat_dan_sebab}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width:30%;">Sebab Klaim</td>
+                        <td> : </td>
+                        <td style="border-bottom:1px solid;width:70%;">{{$data->sebab}}</td>
                     </tr>
                     <tr>
                         <td>Tanggal Pengajuan</td>

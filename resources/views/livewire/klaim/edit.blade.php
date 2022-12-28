@@ -199,12 +199,12 @@
                                         <tr style="border-top:0">
                                             <th style="border-top:0">Tanggal Meninggal</th>
                                             <td style="border-top:0"> : </td>
-                                            <td style="border-top:0">{{date('d-F-Y',strtotime($data->tanggal_meninggal))}}</td>
+                                            <td style="border-top:0">{{date('d-M-Y',strtotime($data->tanggal_meninggal))}}</td>
                                         </tr>
                                         <tr>
                                             <th>Usia Polis</th>
                                             <td> : </td>
-                                            <td>{{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
+                                            <td>{{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->tanggal_meninggal)}}</td>
                                         </tr>
                                         <tr>
                                             <th>Nilai Pengajuan Klaim</th>
@@ -262,7 +262,7 @@
                                             <td></td>
                                             <td>
                                                 @if($data->status !=3)
-                                                    <button type="button" wire:loading.remove wire:target="save" wire:click="save" class="btn btn-info my-2"><i class="fa fa-save"></i> Simpan</button>
+                                                    <button type="button" wire:loading.remove wire:target="save" wire:click="save" class="btn btn-info my-2"><i class="fa fa-save"></i> Simpan Perubahan</button>
                                                     <span wire:loading wire:target="save">
                                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                                         <span class="sr-only">{{ __('Loading...') }}</span>

@@ -10,7 +10,7 @@
             body { margin: 0px; }
             * {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size:11pt;
+                font-size:10pt;
             }
             h1 {font-size: 14pt;}
             table {border-collapse: collapse;}
@@ -85,7 +85,7 @@
         <table style="width:100%;">
             <tr>
                 <td>Nomor polis</td>
-                <td> : </td>
+                <td style="width:20px;"> : </td>
                 <td>{{isset($data->polis->no_polis) ? $data->polis->no_polis : '-'}}</td>
             </tr>
             <tr>
@@ -163,7 +163,7 @@
             </tr>
         </table>
         <p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terimakasih.</p>
-        <p>Wassalam.</p>
+        <p>Wassalamu’alaikum Wr. Wb</p>
         <table style="width:100%;">
             <tr>
                 <td></td>
