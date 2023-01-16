@@ -193,7 +193,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Kadaluarsa Reas</label>
-                                <input type="text" class="form-control" wire:model="kadaluarsa_reas" />
+                                <input type="number" class="form-control" wire:model="kadaluarsa_reas" />
                             </div>
                             <div class="form-group">
                                 <label>No Perjanjian Reas</label>

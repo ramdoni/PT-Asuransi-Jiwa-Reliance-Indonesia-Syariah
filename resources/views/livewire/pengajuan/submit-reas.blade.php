@@ -72,27 +72,36 @@
                                 <input type="text" class="form-control" wire:model="ri_com" readonly />
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Manfaat</label>
-                            <select class="form-control" wire:model="manfaat">
-                                <option value=""> -- Pilih -- </option>
-                                <option> MENURUN </option>
-                                <option> TETAP </option>
-                            </select>
-                            @error('manfaat')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label>Type Reas</label>
-                            <select class="form-control" wire:model="type_reas">
-                                <option value=""> -- Pilih -- </option>
-                                <option> TREATY </option>
-                                <option> FAKULTATIF </option>
-                            </select>
-                            @error('type_reas')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
+                        <div class="row">
+                            <!-- <div class="col-md-4 form-group">
+                                <label>Kadaluarsa Reas</label>
+                                <input type="number" class="form-control" placeholder="Hari" wire:model="kadaluarsa_reas_hari" />
+                                @error('kadaluarsa_reas_hari')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div> -->
+                            <div class="col-md-4 form-group">
+                                <label>Manfaat</label>
+                                <select class="form-control" wire:model="manfaat">
+                                    <option value=""> -- Pilih -- </option>
+                                    <option> MENURUN </option>
+                                    <option> TETAP </option>
+                                </select>
+                                @error('manfaat')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>Type Reas</label>
+                                <select class="form-control" wire:model="type_reas">
+                                    <option value=""> -- Pilih -- </option>
+                                    <option> TREATY </option>
+                                    <option> FAKULTATIF </option>
+                                </select>
+                                @error('type_reas')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                 @endif

@@ -74,7 +74,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" style="padding-top:10px;padding-bottom:10px;text-align:justify;">
-                        Tagihan Penutupan Asuransi produk <strong>RELIANCE PEMBIAYAAN SYARIAH</strong> dengan No Polis {{$data->polis->no_polis}} dan Jumlah Peserta {{$data->kepesertaan->where('status_akseptasi',1)->count()}} orang (No Peserta {{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " sd {$data->no_peserta_akhir}" : '' }}  ).                     
+                        Tagihan Penutupan Asuransi produk <strong>{{isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-'}}</strong> dengan No Polis {{$data->polis->no_polis}} dan Jumlah Peserta {{$data->kepesertaan->where('status_akseptasi',1)->count()}} orang (No Peserta {{$data->no_peserta_awal}} {{isset($data->no_peserta_akhir) ? " sd {$data->no_peserta_akhir}" : '' }}  ).                     
                     </td>
                 </tr>
                 <tr>

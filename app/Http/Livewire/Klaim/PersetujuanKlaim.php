@@ -53,13 +53,14 @@ class PersetujuanKlaim extends Component
 
         /**
          * Jika nilai klaim dibawah 50 jt maka langsung approve oleh Head Departemen Claim Unit Syariah
-         */
+         *
         if($this->data->nilai_klaim_disetujui<=50000000){
             $this->data->status = 3;
             $this->data->status_pengajuan = $this->head_klaim_status;
         }
+        */
 
-        if($is_edit_head_klaim==false){
+        if($this->is_edit_head_klaim==false){
             $this->data->status = 1;
             $this->data->head_klaim_date = date('Y-m-d');
             $this->data->head_klaim_id = \Auth::user()->id;
@@ -80,7 +81,7 @@ class PersetujuanKlaim extends Component
             'head_teknik_note'=>'required'
         ]);
 
-        if($is_edit_head_teknik==false){
+        if($this->is_edit_head_teknik==false){
             $this->data->status = 2;    
             $this->data->head_teknik_date = date('Y-m-d');
             $this->data->head_teknik_id = \Auth::user()->id;
@@ -108,6 +109,7 @@ class PersetujuanKlaim extends Component
             $this->data->status_pengajuan = $this->head_devisi_status;
             $this->data->status = 3;
             $this->data->status_pengajuan = $this->head_devisi_status;
+            $this->data->jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->kepesertaan->polis->pembayaran_klaim} days"));
         }else{
             $this->data->status = 5;
         }

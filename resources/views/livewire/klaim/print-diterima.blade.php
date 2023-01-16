@@ -126,7 +126,7 @@
             </tr>
             <tr>
                 <td style="font-size:14px">Usia Polis</td>
-                <td style="font-size:14px"> : </td>
+                <td style="font-size:14px"> : </td> 
                 <td style="font-size:14px">{{$data->tanggal_meninggal ? hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal) : '-'}}</td>
             </tr>
         </table>
@@ -140,7 +140,7 @@
             Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terimakasih.
         </p>
         <p style="font-size:14px">
-            <i>Wassalamu’alaikum Wr. Wb.</i><br />
+            <i>Wassalamu’alaikum Wr. Wb.</i><br /><br />
             <strong>PT ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>
         </p>
         <br />
@@ -149,6 +149,6 @@
         <br />
         <br />
         <strong style="font-size:14px"><i>Ahmad Syafei</i></strong>
-        <p style="font-size:14px">Head of Teknik Syariah</p>
+        <p style="font-size:14px;margin-top:0;">Head of Teknik Syariah</p>
     </body>
 </html>

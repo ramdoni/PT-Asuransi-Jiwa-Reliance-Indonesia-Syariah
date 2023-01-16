@@ -169,7 +169,7 @@
                     <tr>
                         <td>Model Reas</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->manfaat) ? $data->kepesertaan->reas->manfaat : '-'}}</td>
+                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->rate_uw->model_reas) ? $data->kepesertaan->reas->rate_uw->model_reas : '-'}}</td>
                     </tr>
                     <tr>
                         <td>Max OR</td>
@@ -223,7 +223,7 @@
                         </tr>
                         <tr>
                             <td>Tgl. Kadaluwarsa Reas</td>
-                            <td style="border-bottom:1px solid;"> : {{isset($data->kepesertaan->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kepesertaan->kadaluarsa_reas_tanggal)) : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : {{isset($data->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kadaluarsa_reas_tanggal)) : '-'}}</td>
                         </tr>
                     </tr>
                 </table>
@@ -240,7 +240,7 @@
                     <tr>
                         <td>Usia Polis</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
+                        <td style="border-bottom:1px solid;">{{hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal)}}</td>
                     </tr>
                     <tr>
                         <td>Nilai Klaim</td>
@@ -279,7 +279,7 @@
                     <tr>
                         <td>Tanggal Proses</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{date('d-M-Y',strtotime($data->tanggal_proses))}}</td>
+                        <td style="border-bottom:1px solid;">{{date('d-M-Y',strtotime($data->head_devisi_date))}}</td>
                     </tr>
                 </table>
             </div>

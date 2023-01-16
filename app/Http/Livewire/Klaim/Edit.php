@@ -10,7 +10,7 @@ use App\Models\Pengajuan;
 class Edit extends Component
 {
     public $data,$peserta,$tab_active='tab_data_klaim',$nilai_klaim_disetujui,$nilai_klaim_or,$nilai_klaim_reas;
-    public $organ_yang_mencakup,$kategori_penyakit;
+    public $organ_yang_mencakup,$kategori_penyakit,$bank_cabang;
     public function render()
     {
         return view('livewire.klaim.edit');
@@ -19,11 +19,20 @@ class Edit extends Component
     public function mount(Klaim $id)
     {
         $this->data = $id;
+        $this->bank_no_rekening = $this->data->bank_no_rekening;
+        $this->bank_cabang = $this->data->bank_cabang;
+        $this->bank_atas_nama = $this->data->bank_atas_nama;
+        $this->bank_mata_uang = $this->data->bank_mata_uang;
         $this->peserta = $this->data->kepesertaan;
         $this->nilai_klaim_disetujui = $id->nilai_klaim_disetujui;
         $this->organ_yang_mencakup = $this->data->organ_yang_mencakup;
         $this->kategori_penyakit = $this->data->kategori_penyakit;
-        
+        if($this->data->jatuh_tempo==""){
+            if(isset($this->peserta->polis->pembayaran_klaim)){
+                $this->data->jatuh_tempo = date('Y-m-d',strtotime("{$this->data->updated_at} +{$this->data->kepesertaan->polis->pembayaran_klaim} days"));
+                $this->data->save();
+            }
+        }
         if($this->peserta->pengajuan->kontribusi<=0){
             $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
                     \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
@@ -102,6 +111,10 @@ class Edit extends Component
         $this->data->nilai_klaim_disetujui = $this->nilai_klaim_disetujui;
         $this->data->organ_yang_mencakup = $this->organ_yang_mencakup;
         $this->data->kategori_penyakit = $this->kategori_penyakit;
+        $this->data->bank_no_rekening = $this->bank_no_rekening;
+        $this->data->bank_cabang = $this->bank_cabang;
+        $this->data->bank_atas_nama = $this->bank_atas_nama;
+        $this->data->bank_mata_uang = $this->bank_mata_uang;
         $this->data->save();
 
         $this->emit('message-success','Data berhasil disimpan');

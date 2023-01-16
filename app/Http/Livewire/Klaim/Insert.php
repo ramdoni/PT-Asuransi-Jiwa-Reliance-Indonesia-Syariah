@@ -30,11 +30,11 @@ class Insert extends Component
     public function updated($propertyName)
     {
         $this->kepesertaan = [];$this->peserta = [];
-        if($this->provinsi_id) 
+        if($this->provinsi_id) {
             $this->kabupaten = Kabupaten::where('provinsi_id',$this->provinsi_id)->orderBy('name','ASC')->get();
-        else
+        }else{
             $this->kabupaten = [];
-
+        }
         if($this->polis_id) $this->emit('reload-kepesertaan',$this->polis_id);
         if($this->kepesertaan_id) {
             $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
@@ -114,14 +114,14 @@ class Insert extends Component
                                     'extra_mortalita'=>$extra_mortalita,
                                     ]);
                 }
-
-                
             }
-
             $this->kadaluarsa_klaim_hari = $this->peserta->polis->kadaluarsa_klaim;
             if($this->tanggal_meninggal) {
                 $this->kadaluarsa_klaim_tanggal = $this->peserta->polis->kadaluarsa_klaim ? date('Y-m-d',strtotime($this->tanggal_meninggal ." +{$this->peserta->polis->kadaluarsa_klaim} days")) : '';
-                $this->kadaluarsa_reas_tanggal = $this->peserta->polis->kadaluarsa_reas ? date('Y-m-d',strtotime($this->tanggal_meninggal ." +{$this->peserta->polis->kadaluarsa_reas} days")) : '';
+                
+                if($this->peserta->polis->kadaluarsa_reas !="-" || $this->peserta->polis->kadaluarsa_reas!=0){
+                    $this->kadaluarsa_reas_tanggal = $this->peserta->polis->kadaluarsa_reas ? date('Y-m-d',strtotime($this->tanggal_meninggal ." +{$this->peserta->polis->kadaluarsa_reas} days")) : '';
+                }
             }
         }
     }
@@ -155,7 +155,8 @@ class Insert extends Component
         $data->jenis_klaim = $this->jenis_klaim;
         $data->tempat_dan_sebab = $this->tempat_dan_sebab;
         $data->kadaluarsa_klaim_hari = $this->kadaluarsa_klaim_hari;
-        $data->kadaluarsa_klaim_tanggal = $this->kadaluarsa_klaim_tanggal;
+        if($this->kadaluarsa_klaim_tanggal) $data->kadaluarsa_klaim_tanggal = $this->kadaluarsa_klaim_tanggal;
+        if($this->kadaluarsa_reas_tanggal) $data->kadaluarsa_reas_tanggal = $this->kadaluarsa_reas_tanggal;
         $data->provinsi_id = $this->provinsi_id;
         $data->kabupaten_id = $this->kabupaten_id;
         $data->nilai_klaim_or = $this->nilai_klaim_or;
@@ -163,9 +164,13 @@ class Insert extends Component
         $data->sebab = $this->sebab;
         $data->organ_yang_mencakup = $this->organ_yang_mencakup;
         $data->kategori_penyakit = $this->kategori_penyakit;
+        $data->bank_no_rekening = $this->bank_nomor_rekening;
+        $data->bank_cabang = $this->bank_cabang;
+        $data->bank_atas_nama = $this->bank_atas_nama;
+        $data->bank_mata_uang = $this->bank_mata_uang;
         $data->save();
 
-        $this->peserta->kadaluarsa_reas_tanggal = $this->kadaluarsa_reas_tanggal;
+        if($this->kadaluarsa_reas_tanggal) $this->peserta->kadaluarsa_reas_tanggal = $this->kadaluarsa_reas_tanggal;
         $this->peserta->klaim_id = $data->id;
         $this->peserta->save();
 
