@@ -694,6 +694,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Console\\Commands\\PengajuanMigrasi' => __DIR__ . '/../..' . '/app/Console/Commands/PengajuanMigrasi.php',
         'App\\Console\\Commands\\PolisMature' => __DIR__ . '/../..' . '/app/Console/Commands/PolisMature.php',
         'App\\Console\\Commands\\SinkronPeserta' => __DIR__ . '/../..' . '/app/Console/Commands/SinkronPeserta.php',
+        'App\\Console\\Commands\\SinkronReas' => __DIR__ . '/../..' . '/app/Console/Commands/SinkronReas.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Events\\GeneralNotification' => __DIR__ . '/../..' . '/app/Events/GeneralNotification.php',
         'App\\Events\\OrderStatusUpdated' => __DIR__ . '/../..' . '/app/Events/OrderStatusUpdated.php',

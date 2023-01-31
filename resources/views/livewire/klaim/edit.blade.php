@@ -143,7 +143,7 @@
                                 <tr>
                                     <th>Kadaluarsa Reas</th>
                                     <td> : </td>
-                                    <td>{{isset($peserta->reas->kadaluarsa_reas_hari) ? $peserta->reas->kadaluarsa_reas_hari .' Hari Kalender' : '-'}}</td>
+                                    <td>{{isset($peserta->polis->kadaluarsa_reas) ? $peserta->polis->kadaluarsa_reas .' Hari Kalender' : '-'}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -168,11 +168,11 @@
                                 </tr>
                                 <tr>
                                     <th>Share OR</th>
-                                    <td> : {{isset($peserta->reas->or) ? $peserta->reas->or : '-'}}</td>
+                                    <td> : {{isset($peserta->reas->or) ? $peserta->reas->or ."%" : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <th>Share Reas</th>
-                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
+                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas ."%" : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <th>Nilai Klaim OR</th>
@@ -191,7 +191,10 @@
                                 </tr>
                                 <tr>
                                     <th>Tgl. Kadaluwarsa Reas </th>
-                                    <td> : {{isset($peserta->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($peserta->kadaluarsa_reas_tanggal)) : '-'}}</td>
+                                    <td> : 
+                                        <!-- {{isset($data->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kadaluarsa_reas_tanggal)) : '-'}} -->
+                                        <input type="text" class="form-control" wire:model="kadaluarsa_reas_tanggal" />
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -216,7 +219,10 @@
                                         <tr>
                                             <th>Usia Polis</th>
                                             <td> : </td>
-                                            <td>{{hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal)}}</td>
+                                            <td>
+                                                {{hitung_umur($data->kepesertaan->tanggal_mulai,3,(date('Y-m-d',strtotime($data->tanggal_meninggal ." +1 days"))) )}}
+                                                <!-- {{hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal )}} -->
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Nilai Pengajuan Klaim</th>
@@ -227,11 +233,12 @@
                                             <th>Nilai Klaim Disetujui</th>
                                             <td> : </td>
                                             <td>
-                                                @if($data->status !=3)
+                                                <input type="number" class="form-control" wire:model="nilai_klaim_disetujui" />
+                                                <!-- @if($data->status !=3)
                                                     <input type="number" class="form-control" wire:model="nilai_klaim_disetujui" />
                                                 @else
                                                     {{format_idr($data->nilai_klaim_disetujui)}}
-                                                @endif
+                                                @endif -->
                                             </td>
                                         </tr>
                                         <tr>
@@ -337,13 +344,11 @@
                                 </div>
                             </div>
                             <hr />
-                            @if($data->status !=3)
-                                <button type="button" wire:loading.remove wire:target="save" wire:click="save" class="btn btn-info my-2"><i class="fa fa-save"></i> Simpan Perubahan</button>
-                                <span wire:loading wire:target="save">
-                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                    <span class="sr-only">{{ __('Loading...') }}</span>
-                                </span>
-                            @endif
+                            <button type="button" wire:loading.remove wire:target="save" wire:click="save" class="btn btn-info my-2"><i class="fa fa-save"></i> Simpan Perubahan</button>
+                            <span wire:loading wire:target="save">
+                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                <span class="sr-only">{{ __('Loading...') }}</span>
+                            </span>
                         </div>
                         <div class="tab-pane" id="tab_persetujuan_klaim">
                             @livewire('klaim.persetujuan-klaim',['id'=>$data->id],key(1))

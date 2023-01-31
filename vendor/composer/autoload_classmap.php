@@ -19,6 +19,7 @@ return array(
     'App\\Console\\Commands\\PengajuanMigrasi' => $baseDir . '/app/Console/Commands/PengajuanMigrasi.php',
     'App\\Console\\Commands\\PolisMature' => $baseDir . '/app/Console/Commands/PolisMature.php',
     'App\\Console\\Commands\\SinkronPeserta' => $baseDir . '/app/Console/Commands/SinkronPeserta.php',
+    'App\\Console\\Commands\\SinkronReas' => $baseDir . '/app/Console/Commands/SinkronReas.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Events\\GeneralNotification' => $baseDir . '/app/Events/GeneralNotification.php',
     'App\\Events\\OrderStatusUpdated' => $baseDir . '/app/Events/OrderStatusUpdated.php',

@@ -117,17 +117,19 @@
             <tr>
                 <td style="font-size:14px">Uang Asuransi</td>
                 <td style="font-size:14px"> : </td>
-                <td style="font-size:14px">Rp. {{$data->nilai_klaim ? format_idr($data->nilai_klaim) : '-'}}</td>
+                <td style="font-size:14px">Rp. {{$data->kepesertaan->basic ? format_idr($data->kepesertaan->basic) : '-'}}</td>
             </tr>
             <tr>
-                <td style="font-size:14px">Uang Asuransi</td>
+                <td style="font-size:14px">Tanggal Meninggal</td>
                 <td style="font-size:14px"> : </td>
-                <td style="font-size:14px">Rp. {{$data->tanggal_meninggal ? date('d M Y',strtotime($data->tanggal_meninggal)) : '-'}}</td>
+                <td style="font-size:14px">{{$data->tanggal_meninggal ? date('d M Y',strtotime($data->tanggal_meninggal)) : '-'}}</td>
             </tr>
             <tr>
                 <td style="font-size:14px">Usia Polis</td>
                 <td style="font-size:14px"> : </td> 
-                <td style="font-size:14px">{{$data->tanggal_meninggal ? hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal) : '-'}}</td>
+                <td style="font-size:14px">
+                    {{hitung_umur($data->kepesertaan->tanggal_mulai,3,(date('Y-m-d',strtotime($data->tanggal_meninggal ." +1 days"))) )}}
+                </td>
             </tr>
         </table>
         <p style="text-align: justify;font-size:14px">

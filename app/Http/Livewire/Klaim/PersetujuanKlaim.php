@@ -13,7 +13,7 @@ class PersetujuanKlaim extends Component
     public $keputusa_arr = [''=>'-',1=>'Terima',2=>'Tolak',3=>'Tunda',4=>'Investigasi',5=>'Liable',6=>'STNC'];
     public $direksi_1_file,$direksi_1_status,$direksi_1_note,$direksi_1_date,$is_edit_head_klaim=false,$is_edit_head_teknik=false,$is_edit_head_devisi=false;
     public $is_edit_direksi_1=false,$is_edit_direksi_2=false;
-    public $direksi_2_file,$direksi_2_status,$direksi_2_note,$direksi_2_date;
+    public $direksi_2_file,$direksi_2_status,$direksi_2_note,$direksi_2_date,$detail_penolakan,$edit_detail_penolakan=false;
     public function render()
     {
         return view('livewire.klaim.persetujuan-klaim');
@@ -39,6 +39,14 @@ class PersetujuanKlaim extends Component
         $this->direksi_2_status = $id->direksi_2_status;
         $this->direksi_2_note = $id->direksi_2_note;
         $this->direksi_2_date = $id->direksi_2_date;
+        $this->detail_penolakan = $id->detail_penolakan;
+    }
+
+    public function saveDetailPenolakan()
+    {
+        $this->data->detail_penolakan = $this->detail_penolakan;
+        $this->data->save();
+        $this->edit_detail_penolakan = false;
     }
 
     public function save_head_klaim()
@@ -108,7 +116,6 @@ class PersetujuanKlaim extends Component
         if($this->data->nilai_klaim_disetujui<=150000000){
             $this->data->status_pengajuan = $this->head_devisi_status;
             $this->data->status = 3;
-            $this->data->status_pengajuan = $this->head_devisi_status;
             $this->data->jatuh_tempo = date('Y-m-d',strtotime("+{$this->data->kepesertaan->polis->pembayaran_klaim} days"));
         }else{
             $this->data->status = 5;
@@ -118,7 +125,9 @@ class PersetujuanKlaim extends Component
         $this->data->head_devisi_note = $this->head_devisi_note;
         $this->data->head_devisi_date = date('Y-m-d');
         $this->data->head_devisi_id = \Auth::user()->id;
+        $this->data->detail_penolakan = $this->detail_penolakan;
         $this->data->save();
+        $this->is_edit_head_devisi = false;
 
         event(new \App\Events\GeneralNotification(\Auth::user()->name."<br />Klaim {$this->data->no_pengajuan} submitted"));
 
@@ -136,7 +145,7 @@ class PersetujuanKlaim extends Component
             'direksi_1_status'=>'required'
         ]);
 
-        if($this->data->nilai_klaim_disetujui>200000000 )
+        if($this->data->nilai_klaim_disetujui>200000000)
             $this->data->status = 5;
         else{
             $this->data->status_pengajuan = $this->direksi_1_status;

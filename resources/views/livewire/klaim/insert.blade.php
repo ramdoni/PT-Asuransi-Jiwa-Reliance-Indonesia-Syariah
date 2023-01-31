@@ -280,7 +280,7 @@
                                 </tr>
                                 <tr>
                                     <td>Kadaluarsa Reas</td>
-                                    <td> : {{isset($peserta->reas->kadaluarsa_reas_hari) ? $peserta->reas->kadaluarsa_reas_hari .' Hari Kalender' : '-'}}</td>
+                                    <td> : {{isset($peserta->polis->kadaluarsa_reas) ? $peserta->polis->kadaluarsa_reas .' Hari Kalender' : '-'}}</td>
                                 </tr>
                             </table>
                             <h6><i class="fa fa-circle text-info"></i> Ketentuan Asuransi</h6>
@@ -303,11 +303,27 @@
                                 </tr>
                                 <tr>
                                     <td>Share OR</td>
-                                    <td> : {{isset($peserta->reas->or) ? $peserta->reas->or : '-'}}</td>
+                                    <td> :
+                                        @if(isset($peserta->id))
+                                            @if($peserta->status_reas==2)    
+                                                100%
+                                            @else
+                                                {{isset($peserta->reas->or) ? $peserta->reas->or."%" : '-'}}
+                                            @endif
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Share Reas</td>
-                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas : '-'}}</td>
+                                    <td> : 
+                                        @if(isset($peserta->id))
+                                            @if($peserta->status_reas==2)    
+                                                0%
+                                            @else
+                                                {{isset($peserta->reas->reas) ? $peserta->reas->reas ."%" : '-'}}
+                                            @endif
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Nilai Klaim OR</td>
@@ -319,7 +335,15 @@
                                 </tr>
                                 <tr>
                                     <td>Tgl. Kadaluwarsa Reas </td>
-                                    <td> : {{isset($kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($kadaluarsa_reas_tanggal)) : '-'}}</td>
+                                    <td> : 
+                                        @if(isset($peserta->id))
+                                            @if($peserta->status_reas==2)
+                                                -
+                                            @else    
+                                                {{date('d-M-Y',strtotime($kadaluarsa_reas_tanggal))}}
+                                            @endif
+                                        @endif
+                                    </td>
                                 </tr>
                             </table>
                         </div>

@@ -10,7 +10,7 @@
             body { margin: 0px; }
             * {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size:11pt;
+                font-size:10pt;
             }
             h1 {font-size: 14pt;}
             table {border-collapse: collapse;}
@@ -117,7 +117,7 @@
             <tr>
                 <td>Uang Asuransi</td>
                 <td> : </td>
-                <td>Rp. {{$data->nilai_klaim ? format_idr($data->nilai_klaim) : '-'}}</td>
+                <td>Rp. {{$data->kepesertaan->basic ? format_idr($data->kepesertaan->basic) : '-'}}</td>
             </tr>
             <tr>
                 <td>Tanggal Meninggal</td>
@@ -126,18 +126,17 @@
             </tr>
         </table>
         <p style="text-align: justify">
-            Dengan ini disampaikan bahwa setelah melakukan verifikasi dan analisa berdasarkan dokumen klaim yang kami terima, pengajuan klaim tersebut di atas dengan sangat menyesal tidak dapat disetujui dikarenakan sebagai berikut : 
+            Dengan ini disampaikan bahwa setelah melakukan verifikasi dan analisa berdasarkan dokumen klaim yang kami terima, pengajuan klaim tersebut di atas dengan sangat menyesal <b>tidak dapat disetujui</b> dikarenakan sebagai berikut : 
         </p>
         <table style="width:90%;margin:auto;">
-            <tr>
-                <td> - </td>
-                <td style="padding-left:10px;"> Peserta dikenakan Subject to No Claim  (STNC) per tanggal 23 Desember 2021</td>
-            </tr>
-            <tr>
-                <td> - </td>
-                <td style="padding-left:10px;"> Sesuai Daftar peserta akseptasi asuransi jiwa kumpulan syariah tanggal 30 Desember 2021 (surat terlampir)</td>
-            </tr>
-        </table>
+            @foreach(explode("\n",$data->detail_penolakan) as $item)
+                @if($item=="") @continue @endif
+                <tr>
+                    <td style="vertical-align: top;"> - </td>
+                    <td style="padding-left:10px;"> {{$item}}</td>
+                </tr>
+            @endforeach
+        </table> 
         <p>
             Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terimakasih.
         </p>

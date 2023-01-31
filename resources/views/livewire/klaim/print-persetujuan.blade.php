@@ -207,23 +207,49 @@
                         </tr>
                         <tr>
                             <td>Share OR</td>
-                            <td style="border-bottom:1px solid;"> : {{isset($data->kepesertaan->reas->or) ? $data->kepesertaan->reas->or : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                @if($data->kepesertaan->status_reas==2)
+                                    100%
+                                @else
+                                    {{isset($data->kepesertaan->reas->or) ? $data->kepesertaan->reas->or : '0'}}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Share Reas</td>
-                            <td style="border-bottom:1px solid;"> : {{isset($data->kepesertaan->reas->reas) ? $data->kepesertaan->reas->reas : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                @if($data->kepesertaan->status_reas==2)
+                                    0
+                                @else
+                                    {{isset($data->kepesertaan->reas->reas) ? $data->kepesertaan->reas->reas : '0'}}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Nilai Klaim OR</td>
-                            <td style="border-bottom:1px solid;"> : {{isset($data->nilai_klaim_or) ? format_idr($data->nilai_klaim_or) : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                @if($data->kepesertaan->status_reas==2)
+                                    {{format_idr($data->nilai_klaim_disetujui)}}
+                                @else
+                                    {{isset($data->nilai_klaim_or) ? format_idr($data->nilai_klaim_or) : '-'}}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Nilai Klaim Reas</td>
-                            <td style="border-bottom:1px solid;"> : {{isset($data->nilai_klaim_reas) ? format_idr($data->nilai_klaim_reas) : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> :
+                                @if($data->kepesertaan->status_reas==2)
+                                    0
+                                @else
+                                    {{isset($data->nilai_klaim_reas) ? format_idr($data->nilai_klaim_reas) : '-'}}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Tgl. Kadaluwarsa Reas</td>
-                            <td style="border-bottom:1px solid;"> : {{isset($data->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kadaluarsa_reas_tanggal)) : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                {{isset($data->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kadaluarsa_reas_tanggal)) : '-'}}
+                            </td>
                         </tr>
                     </tr>
                 </table>
@@ -240,7 +266,10 @@
                     <tr>
                         <td>Usia Polis</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal)}}</td>
+                        <td style="border-bottom:1px solid;">
+                            <!-- {{hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal)}} -->
+                            {{hitung_umur($data->kepesertaan->tanggal_mulai,3,(date('Y-m-d',strtotime($data->tanggal_meninggal ." +1 days"))) )}}
+                        </td>
                     </tr>
                     <tr>
                         <td>Nilai Klaim</td>
@@ -292,7 +321,10 @@
                     <th style="text-align:center;border-top:1px solid;border-bottom:1px solid;border-right:1px solid;border-left:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;">{{$data->head_klaim_note}}</td>
+                    <td colspan="2" style="padding:10px;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->head_klaim_status]}}<br />
+                        {{$data->head_klaim_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;border-left:1px solid;">{{$data->head_klaim_date ? date('d F Y',strtotime($data->head_klaim_date)):''}}</td>
                 </tr>
                 <tr>
@@ -301,7 +333,10 @@
                     <th style="text-align:center;border-top:1px solid;border-bottom:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-top:1px solid;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->head_teknik_note}}</td>
+                    <td colspan="2" style="padding:10px;border-top:1px solid;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->head_teknik_status]}}<br />
+                        {{$data->head_teknik_note}}
+                    </td>
                     <td style="text-align:center;border-right:1px solid;border-top:1px solid;border-bottom:1px solid;">{{$data->head_teknik_date ? date('d F Y',strtotime($data->head_teknik_date)):''}}</td>
                 </tr>
                 <tr>
@@ -310,7 +345,10 @@
                     <th style="text-align:center;border-bottom:1px solid;border-top:1px solid;border-left:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->head_devisi_note}}</td>
+                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->head_devisi_status]}}<br />
+                        {{$data->head_devisi_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;">{{$data->head_devisi_date ? date('d F Y',strtotime($data->head_devisi_date)):''}}</td>
                 </tr>
                 <tr>
@@ -319,7 +357,10 @@
                     <th style="border-bottom:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_1_note}}</td>
+                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->direksi_1_status]}}<br />
+                        {{$data->direksi_1_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_1_date ? date('d F Y',strtotime($data->direksi_1_date)):''}}</td>
                 </tr>
                 <tr>
@@ -328,7 +369,10 @@
                     <th style="border-bottom:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_2_note}}</td>
+                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->direksi_2_status]}}<br />
+                        {{$data->direksi_2_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_2_date ? date('d F Y',strtotime($data->direksi_2_date)):''}}</td>
                 </tr>
             </table>

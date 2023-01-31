@@ -152,10 +152,13 @@ class ReasCalculate implements ShouldQueue
 
             $item->net_kontribusi_reas = $item->total_kontribusi_reas + $item->reas_extra_kontribusi - $item->ujroh_reas;
 
-            if($item->total_kontribusi_reas<=0)
+            if($item->total_kontribusi_reas<=0){
+                $item->nilai_manfaat_asuransi_reas = 0;
+                $item->reas_manfaat_asuransi_ajri = $item->basic;
                 $item->status_reas = 2; // tidak direaskan karna distribusinya 0
-            else
+            }else{
                 $item->status_reas = 1;
+            }
 
             $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days"));
             $item->kadaluarsa_reas_hari =  $item->polis->kadaluarsa_reas;

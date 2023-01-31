@@ -40,12 +40,12 @@ class Edit extends Component
                                                     'count_or'=>$or->where('status_reas',2)->count()]);
     }
 
-    public function mount(Reas $id)
+    public function mount($id)
     {
-        $this->data = $id;
+        $this->data = Reas::find($id);
         $this->kadaluarsa_reas_hari = $this->data->kadaluarsa_reas_hari;
         $this->filter_perhitungan_usia = $this->data->perhitungan_usia;
-        $this->no_pengajuan = $id->no_pengajuan;
+        $this->no_pengajuan = $this->data->no_pengajuan;
         $this->filter_ul_arr = Kepesertaan::where('reas_id',$this->data->id)->groupBy('ul_reas')->get();
         $this->reasuradur = Reasuradur::get();
     }

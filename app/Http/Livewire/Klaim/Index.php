@@ -12,6 +12,7 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $filter_keyword;
+    
     public function render()
     {
         $data = Klaim::select('klaim.*')->with(['kepesertaan','polis','provinsi','kabupaten'])->orderBy('klaim.id','DESC')

@@ -79,20 +79,27 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($item->status_pengajuan==1)
+                                        
+                                        @if($item->status_pengajuan=="")
                                             <span class="badge badge-warning">Analisa</span>
                                         @endif
-                                        @if($item->status_pengajuan==2)
-                                            <span class="badge badge-danger">Batal</span>
-                                        @endif
-                                        @if($item->status_pengajuan==3)
+                                        @if($item->status_pengajuan==1)
                                             <span class="badge badge-success">Diterima</span>
                                         @endif
-                                        @if($item->status_pengajuan==4)
+                                        @if($item->status_pengajuan==2)
                                             <span class="badge badge-danger">Tolak</span>
                                         @endif
+                                        @if($item->status_pengajuan==3)
+                                            <span class="badge badge-danger">Tunda</span>
+                                        @endif
+                                        @if($item->status_pengajuan==4)
+                                            <span class="badge badge-warning">Investigasi</span>
+                                        @endif
                                         @if($item->status_pengajuan==5)
-                                            <span class="badge badge-info">Tunda</span>
+                                            <span class="badge badge-warning">Liable</span>
+                                        @endif
+                                        @if($item->status_pengajuan==6)
+                                            <span class="badge badge-danger">STNC</span>
                                         @endif
                                     </td>
                                     <td>
@@ -116,13 +123,20 @@
                                     <td>{{format_idr($item->nilai_klaim)}}</td>
                                     <td>{{$item->jenis_klaim}}</td>
                                     <td>
+                                        <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
                                         @if($item->status!=3)
-                                            <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                            <!-- <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a> -->
                                         @endif
+                                        
                                         @if($item->status==4)
+                                        @endif
+                                        
+                                        @if($item->status_pengajuan==2)
+                                            <a href="{{route('klaim.print-persetujuan',$item->id)}}" class="badge badge-info badge-active" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
                                             <a href="{{route('klaim.print-tolak',$item->id)}}" class="badge badge-danger badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Tolak</a>
                                         @endif
-                                        @if($item->status==3)
+
+                                        @if($item->status==3 and $item->status_pengajuan==1)
                                             <a href="{{route('klaim.print-persetujuan',$item->id)}}" class="badge badge-info badge-active" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
                                             <a href="{{route('klaim.print-diterima',$item->id)}}" class="badge badge-success badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Diterima</a>
                                             <a href="{{route('klaim.print-memo',$item->id)}}" class="badge badge-warning badge-active" target="_blank"><i class="fa fa-print"></i> Memo Pembayaran</a>

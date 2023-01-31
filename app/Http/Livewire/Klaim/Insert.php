@@ -39,37 +39,43 @@ class Insert extends Component
         if($this->kepesertaan_id) {
             $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
             
-            if(isset($this->peserta->reas->rate_uw->model_reas)){
-                $max_or = $this->peserta->reas->rate_uw->max_or ? $this->peserta->reas->rate_uw->max_or : 0; // AS
-                $model_reas = $this->peserta->reas->rate_uw->model_reas; // AR
-                $basic = $this->peserta->basic; // V
-                $or_share = $this->peserta->reas->or; // AT
-                $nilai_klaim = $this->nilai_klaim; // Z
+            $nilai_klaim = $this->nilai_klaim; // Z
+            if($this->peserta->status_reas==2){
+                $this->nilai_klaim_or = $nilai_klaim;
+            }else{
+                if(isset($this->peserta->reas->rate_uw->model_reas)){
+                    $max_or = $this->peserta->reas->rate_uw->max_or ? $this->peserta->reas->rate_uw->max_or : 0; // AS
+                    $model_reas = $this->peserta->reas->rate_uw->model_reas; // AR
+                    $basic = $this->peserta->basic; // V
+                    $or_share = $this->peserta->reas->or; // AT
 
-                if($model_reas=="OR"){
-                    $this->nilai_klaim_or = $this->nilai_klaim ? $this->nilai_klaim : 0;
-                }elseif($model_reas=="Surplus" and $basic<=$max_or){
-                    if($this->nilai_klaim) {
-                        $this->nilai_klaim_or = ($max_or / $basic) * $this->nilai_klaim;
+                    if($model_reas=="OR"){
+                        $this->nilai_klaim_or = $this->nilai_klaim ? $this->nilai_klaim : 0;
+                    }elseif($model_reas=="Surplus" and $basic<=$max_or){
+                        if($this->nilai_klaim) {
+                            $this->nilai_klaim_or = ($max_or / $basic) * $this->nilai_klaim;
+                        }
+                    }elseif($model_reas=='QS'){
+                        if($nilai_klaim) {
+                            $this->nilai_klaim_or =  ($or_share/100)*$nilai_klaim;
+                        }
+                    }elseif($model_reas=='QS_Surplus' and (($or_share/100)*$basic)<=$max_or){
+                        if($nilai_klaim) {
+                            $this->nilai_klaim_or = ($or_share/100) * $nilai_klaim;
+                        }
+                    }elseif($model_reas=='QS_Surplus' and (($or_share/100)*$basic)>$max_or){
+                        if($nilai_klaim) {
+                            $this->nilai_klaim_or = ($max_or/$basic)*$nilai_klaim;
+                        }
+                    }else{
+                        $this->nilai_klaim_or = 0;
                     }
-                }elseif($model_reas=='QS'){
-                    if($nilai_klaim) {
-                        $this->nilai_klaim_or =  ($or_share/100)*$nilai_klaim;
-                    }
-                }elseif($model_reas=='QS_Surplus' and (($or_share/100)*$basic)<=$max_or){
-                    if($nilai_klaim) {
-                        $this->nilai_klaim_or = ($or_share/100) * $nilai_klaim;
-                    }
-                }elseif($model_reas=='QS_Surplus' and (($or_share/100)*$basic)>$max_or){
-                    if($nilai_klaim) {
-                        $this->nilai_klaim_or = ($max_or/$basic)*$nilai_klaim;
-                    }
+                    if($nilai_klaim) $this->nilai_klaim_reas = $nilai_klaim - $this->nilai_klaim_or;
                 }else{
-                    $this->nilai_klaim_or = 0;
+                    $this->nilai_klaim_or = $nilai_klaim;
                 }
-                if($nilai_klaim) $this->nilai_klaim_reas = $nilai_klaim - $this->nilai_klaim_or;
             }
-            
+
             /**
              *  =IF( 
              *     AR7="OR";

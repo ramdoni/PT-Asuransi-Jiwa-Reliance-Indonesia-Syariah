@@ -32,7 +32,7 @@ class SubmitReas extends Component
     public function updated($propertyName)
     {
         if($this->reasuradur_id) $this->rate = ReasuradurRate::where('reasuradur_id',$this->reasuradur_id)->get();
-        if($this->reasuradur_rate_id) {
+        if($this->reasuradur_rate_id){
             $find = ReasuradurRate::find($this->reasuradur_rate_id);
             $this->or = $find->or;
             $this->reas = $find->reas;
