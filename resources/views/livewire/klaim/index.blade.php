@@ -79,7 +79,6 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        
                                         @if($item->status_pengajuan=="")
                                             <span class="badge badge-warning">Analisa</span>
                                         @endif
@@ -101,6 +100,9 @@
                                         @if($item->status_pengajuan==6)
                                             <span class="badge badge-danger">STNC</span>
                                         @endif
+                                        @if($item->status_pengajuan==7)
+                                            <span class="badge badge-danger">Batal</span>
+                                        @endif
                                     </td>
                                     <td>
                                         @if($item->is_migrate==1)
@@ -108,9 +110,11 @@
                                         @endif
                                         <a href="{{route('klaim.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td>
-                                        <a href="{{route('polis.edit',$item->polis_id)}}">
-                                            {{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}
-                                        </a>
+                                        @if(isset($item->polis_id))
+                                            <a href="{{route('polis.edit',$item->polis_id)}}">
+                                                {{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}
+                                            </a>
+                                        @endif
                                     </td>
                                     <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                                     <td>{{isset($item->kepesertaan->no_peserta) ? $item->kepesertaan->no_peserta : '-'}}</td>
@@ -136,7 +140,7 @@
                                             <a href="{{route('klaim.print-tolak',$item->id)}}" class="badge badge-danger badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Tolak</a>
                                         @endif
 
-                                        @if($item->status==3 and $item->status_pengajuan==1)
+                                        @if($item->status_pengajuan==1)
                                             <a href="{{route('klaim.print-persetujuan',$item->id)}}" class="badge badge-info badge-active" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
                                             <a href="{{route('klaim.print-diterima',$item->id)}}" class="badge badge-success badge-active" target="_blank"><i class="fa fa-print"></i> Keputusan Diterima</a>
                                             <a href="{{route('klaim.print-memo',$item->id)}}" class="badge badge-warning badge-active" target="_blank"><i class="fa fa-print"></i> Memo Pembayaran</a>

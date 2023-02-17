@@ -15,6 +15,7 @@ class Insert extends Component
     public $kepesertaan=[],$peserta,$no_pengajuan,$polis,$polis_id,$transaction_id,$kepesertaan_id,$tanggal_meninggal,$nilai_klaim,$jenis_klaim,$tempat_dan_sebab;
     public $kadaluarsa_klaim_hari,$kadaluarsa_klaim_tanggal,$kadaluarsa_reas_tanggal,$sebab,$bank_nomor_rekening,$bank_cabang,$bank_atas_nama,$bank_mata_uang;
     public $provinsi = [],$kabupaten=[],$provinsi_id,$kabupaten_id,$nilai_klaim_or,$nilai_klaim_reas,$kategori_penyakit,$organ_yang_mencakup;
+    public $max_or,$share_reas,$share_or;
     public function render()
     {
         return view('livewire.klaim.insert');
@@ -25,6 +26,7 @@ class Insert extends Component
         $this->transaction_id = date('ymdhis');
         $this->polis = Polis::where('status_approval',1)->get();
         $this->provinsi = Provinsi::orderBy('nama','ASC')->get();
+        $this->max_or = 100000000;
     }
 
     public function updated($propertyName)
@@ -39,15 +41,24 @@ class Insert extends Component
         if($this->kepesertaan_id) {
             $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
             
+            if(isset($this->peserta->reas->rate_uw->max_or)){
+                $this->max_or = $this->peserta->reas->rate_uw->max_or;
+            }
+
+            if(isset($this->peserta->reas->or)){
+                $this->share_or = $this->peserta->reas->or;
+                $this->share_reas = $this->peserta->reas->reas;
+            }
+            
             $nilai_klaim = $this->nilai_klaim; // Z
             if($this->peserta->status_reas==2){
                 $this->nilai_klaim_or = $nilai_klaim;
             }else{
                 if(isset($this->peserta->reas->rate_uw->model_reas)){
-                    $max_or = $this->peserta->reas->rate_uw->max_or ? $this->peserta->reas->rate_uw->max_or : 0; // AS
+                    $max_or = $this->max_or ? $this->max_or : $this->peserta->reas->rate_uw->max_or ? $this->peserta->reas->rate_uw->max_or : 0; // AS
                     $model_reas = $this->peserta->reas->rate_uw->model_reas; // AR
                     $basic = $this->peserta->basic; // V
-                    $or_share = $this->peserta->reas->or; // AT
+                    $or_share = $this->or_share ? $this->or_share : $this->peserta->reas->or; // AT
 
                     if($model_reas=="OR"){
                         $this->nilai_klaim_or = $this->nilai_klaim ? $this->nilai_klaim : 0;
@@ -129,7 +140,14 @@ class Insert extends Component
                     $this->kadaluarsa_reas_tanggal = $this->peserta->polis->kadaluarsa_reas ? date('Y-m-d',strtotime($this->tanggal_meninggal ." +{$this->peserta->polis->kadaluarsa_reas} days")) : '';
                 }
             }
+
+            if($this->share_or and $this->nilai_klaim){
+                $this->nilai_klaim_or = $this->nilai_klaim - ($this->nilai_klaim * ($this->share_or / 100));
+                $this->nilai_klaim_reas = $this->nilai_klaim - $this->nilai_klaim_or;
+            }
         }
+
+       
     }
 
     public function save()
@@ -174,6 +192,9 @@ class Insert extends Component
         $data->bank_cabang = $this->bank_cabang;
         $data->bank_atas_nama = $this->bank_atas_nama;
         $data->bank_mata_uang = $this->bank_mata_uang;
+        $data->max_or = $this->max_or;
+        $data->share_or = $this->share_or;
+        $data->share_reas = $this->share_reas;
         $data->save();
 
         if($this->kadaluarsa_reas_tanggal) $this->peserta->kadaluarsa_reas_tanggal = $this->kadaluarsa_reas_tanggal;

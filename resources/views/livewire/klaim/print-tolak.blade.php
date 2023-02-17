@@ -133,7 +133,7 @@
                 @if($item=="") @continue @endif
                 <tr>
                     <td style="vertical-align: top;"> - </td>
-                    <td style="padding-left:10px;"> {{$item}}</td>
+                    <td style="padding-left:10px;text-align: justify;"> {{$item}}</td>
                 </tr>
             @endforeach
         </table> 

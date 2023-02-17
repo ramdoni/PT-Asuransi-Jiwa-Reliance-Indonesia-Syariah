@@ -113,12 +113,26 @@
                                 <tr>
                                     <th>Reasuradur</th>
                                     <td> : </td>
-                                    <td>{{isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-'}}</td>
+                                    <td>
+                                        @if($data->reasuradur_)
+                                            {{$data->reasuradur_}}
+                                        @elseif(isset($peserta->reasuradur))
+                                            {{$peserta->reasuradur}}
+                                        @else
+                                            {{isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-'}}
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Type Reas</th>
                                     <td> : </td>
-                                    <td>{{isset($peserta->reas->type_reas) ? $peserta->reas->type_reas : '-'}}</td>
+                                    <td>
+                                        @if($data->type_reas)
+                                            {{$data->type_reas}}
+                                        @else
+                                            {{isset($peserta->reas->type_reas) ? $peserta->reas->type_reas : '-'}}
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Manfaat</th>
@@ -128,12 +142,26 @@
                                 <tr>
                                     <th>Model Reas</th>
                                     <td> : </td>
-                                    <td>{{isset($peserta->reas->rate_uw->model_reas) ? $peserta->reas->rate_uw->model_reas : '-'}}</td>
+                                    <td>
+                                        @if($data->model_reas)
+                                            {{$data->model_reas}}
+                                        @elseif(isset($peserta->model_reas))
+                                            {{$peserta->model_reas}}
+                                        @else
+                                            {{isset($peserta->reas->rate_uw->model_reas) ? $peserta->reas->rate_uw->model_reas : '-'}}
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Max OR</th>
                                     <td> : </td>
-                                    <td>{{isset($peserta->reas->rate_uw->max_or) ? format_idr($peserta->reas->rate_uw->max_or) : '-'}}</td>
+                                    <td>
+                                        @if($data->max_or)
+                                            {{format_idr($data->max_or)}}
+                                        @else
+                                            {{isset($peserta->reas->rate_uw->max_or) ? format_idr($peserta->reas->rate_uw->max_or) : '-'}}
+                                        @endif
+                                    </td>
                                 </tr>
                                 <!-- <tr>
                                     <td>OR Surplus</td>
@@ -168,11 +196,25 @@
                                 </tr>
                                 <tr>
                                     <th>Share OR</th>
-                                    <td> : {{isset($peserta->reas->or) ? $peserta->reas->or ."%" : '-'}}</td>
+                                    <td> : 
+                                        @if($data->share_or)
+                                            {{$data->share_or}}
+                                        @else    
+                                            {{isset($peserta->reas->or) ? $peserta->reas->or : '-'}}
+                                        @endif
+                                        %
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Share Reas</th>
-                                    <td> : {{isset($peserta->reas->reas) ? $peserta->reas->reas ."%" : '-'}}</td>
+                                    <td> : 
+                                        @if($data->share_reas)
+                                            {{$data->share_reas}}
+                                        @else    
+                                            {{isset($peserta->reas->reas) ? $peserta->reas->reas ."%" : '-'}}
+                                        @endif
+                                        %
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>Nilai Klaim OR</th>
@@ -180,7 +222,7 @@
                                 </tr>
                                 <tr>
                                     <th>No Pengajuan Reas</th>
-                                    <td> : 
+                                    <td>
                                         @if(isset($data->kepesertaan->reas->no_pengajuan))
                                             <a href="{{route('reas.edit',$data->kepesertaan->reas_id)}}" target="_blank">{{$data->kepesertaan->reas->no_pengajuan}}</a>
                                         @else - @endif</td>
@@ -191,9 +233,9 @@
                                 </tr>
                                 <tr>
                                     <th>Tgl. Kadaluwarsa Reas </th>
-                                    <td> : 
+                                    <td>
                                         <!-- {{isset($data->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kadaluarsa_reas_tanggal)) : '-'}} -->
-                                        <input type="text" class="form-control" wire:model="kadaluarsa_reas_tanggal" />
+                                        <input type="date" class="form-control" wire:model="kadaluarsa_reas_tanggal" />
                                     </td>
                                 </tr>
                             </table>
@@ -303,7 +345,7 @@
                                         <tr>
                                             <th>Tanggal Pengajuan</th>
                                             <td> : </td>
-                                        <td> {{date('d-F-Y',strtotime($data->created_at))}}</td>
+                                        <td> {{$data->tanggal_pengajuan ? date('d-F-Y',strtotime($data->tanggal_pengajuan)) : date('d-F-Y',strtotime($data->created_at))}}</td>
                                         </tr>
                                         <tr>
                                             <th>Tanggal Dok Lengkap</th>

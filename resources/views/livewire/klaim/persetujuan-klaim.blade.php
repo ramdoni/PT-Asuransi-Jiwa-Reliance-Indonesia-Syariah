@@ -156,15 +156,17 @@
                             @if(\Auth::user()->user_access_id==4)
                                 <a href="javascript:void(0)" class="ml-2" wire:click="$set('is_edit_head_devisi',true)"><i class="fa fa-edit"></i> edit</a>
                             @endif
-                            <hr />
-                            <label>Detail Penolakan <a href="javascript:void(0)" wire:click="$set('edit_detail_penolakan',true)"><i class="fa fa-edit"></i></a></label>
-                            @if($edit_detail_penolakan)
-                                <label>Detail Penolakan</label>
-                                <textarea class="form-control mb-2" wire:model="detail_penolakan"></textarea>
-                                <a href="javascript:void(0)" wire:click="saveDetailPenolakan"><i class="fa fa-save"></i> Simpan</a>
-                                <a href="javascript:void(0)" wire:click="$set('edit_detail_penolakan',false)" class="text-danger ml-3"><i class="fa fa-close"></i> Batal</a>
-                            @else
-                                <p>{!!nl2br($data->detail_penolakan)!!}</p>
+                            @if($data->head_devisi_status==2) 
+                                <hr />
+                                <label>Detail Penolakan <a href="javascript:void(0)" wire:click="$set('edit_detail_penolakan',true)"><i class="fa fa-edit"></i></a></label>
+                                @if($edit_detail_penolakan)
+                                    <label>Detail Penolakan</label>
+                                    <textarea class="form-control mb-2" wire:model="detail_penolakan" style="min-height: 300px;"></textarea>
+                                    <a href="javascript:void(0)" wire:click="saveDetailPenolakan"><i class="fa fa-save"></i> Simpan</a>
+                                    <a href="javascript:void(0)" wire:click="$set('edit_detail_penolakan',false)" class="text-danger ml-3"><i class="fa fa-close"></i> Batal</a>
+                                @else
+                                    <p>{!!nl2br($data->detail_penolakan)!!}</p>
+                                @endif
                             @endif
                         </div>
                     @endif

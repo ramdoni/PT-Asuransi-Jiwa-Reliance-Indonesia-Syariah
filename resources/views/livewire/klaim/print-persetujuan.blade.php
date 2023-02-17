@@ -174,7 +174,13 @@
                     <tr>
                         <td>Max OR</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->rate_uw->max_or) ? format_idr($data->kepesertaan->reas->rate_uw->max_or) : '-'}}</td>
+                        <td style="border-bottom:1px solid;">
+                            @if($data->max_or)
+                                {{format_idr($data->max_or)}}
+                            @else
+                                {{isset($data->kepesertaan->reas->rate_uw->max_or) ? format_idr($data->kepesertaan->reas->rate_uw->max_or) : '-'}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Kadaluwarsa Reas</td>
@@ -208,20 +214,28 @@
                         <tr>
                             <td>Share OR</td>
                             <td style="border-bottom:1px solid;"> : 
-                                @if($data->kepesertaan->status_reas==2)
-                                    100%
+                                @if($data->share_or)
+                                    {{$data->share_or}}%
                                 @else
-                                    {{isset($data->kepesertaan->reas->or) ? $data->kepesertaan->reas->or : '0'}}
+                                    @if($data->kepesertaan->status_reas==2)
+                                        100%
+                                    @else
+                                        {{isset($data->kepesertaan->reas->or) ? $data->kepesertaan->reas->or : '0'}}
+                                    @endif
                                 @endif
                             </td>
                         </tr>
                         <tr>
                             <td>Share Reas</td>
                             <td style="border-bottom:1px solid;"> : 
-                                @if($data->kepesertaan->status_reas==2)
-                                    0
+                                @if($data->share_reas)
+                                    {{$data->share_reas}}%
                                 @else
-                                    {{isset($data->kepesertaan->reas->reas) ? $data->kepesertaan->reas->reas : '0'}}
+                                    @if($data->kepesertaan->status_reas==2)
+                                        0
+                                    @else
+                                        {{isset($data->kepesertaan->reas->reas) ? $data->kepesertaan->reas->reas : '0'}}
+                                    @endif
                                 @endif
                             </td>
                         </tr>

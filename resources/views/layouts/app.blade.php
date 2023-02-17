@@ -38,7 +38,7 @@
     @livewireStyles
 </head>
 
-<body class="theme-blue layout-fullwidth">
+<body class="theme-blue   layout-fullwidth">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -153,7 +153,6 @@
 
         function show_toast(message,positon)
         {
-            // toastr.options.timeOut = "false";
             toastr.options.closeButton = true;
             toastr['info'](message, '', {
                 positionClass: 'toast-'+positon
