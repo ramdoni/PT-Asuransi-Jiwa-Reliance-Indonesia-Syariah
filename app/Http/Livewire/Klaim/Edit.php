@@ -9,8 +9,8 @@ use App\Models\Pengajuan;
 
 class Edit extends Component
 {
-    public $data,$peserta,$tab_active='tab_data_klaim',$nilai_klaim_disetujui,$nilai_klaim_or,$nilai_klaim_reas;
-    public $organ_yang_mencakup,$kategori_penyakit,$bank_cabang,$kadaluarsa_reas_tanggal;
+    public $data,$peserta,$tab_active='tab_data_klaim', $nilai_klaim, $nilai_klaim_disetujui,$nilai_klaim_or,$nilai_klaim_reas;
+    public $organ_yang_mencakup,$kategori_penyakit,$bank_cabang,$kadaluarsa_reas_tanggal,$share_or,$share_reas;
     public function render()
     {
         return view('livewire.klaim.edit');
@@ -24,10 +24,15 @@ class Edit extends Component
         $this->bank_atas_nama = $this->data->bank_atas_nama;
         $this->bank_mata_uang = $this->data->bank_mata_uang;
         $this->peserta = $this->data->kepesertaan;
+        $this->nilai_klaim = $this->data->nilai_klaim;
         $this->nilai_klaim_disetujui = $id->nilai_klaim_disetujui;
         $this->organ_yang_mencakup = $this->data->organ_yang_mencakup;
         $this->kategori_penyakit = $this->data->kategori_penyakit;
         $this->kadaluarsa_reas_tanggal = $this->data->kadaluarsa_reas_tanggal;
+        $this->share_or = $this->data->share_or;
+        $this->share_reas = $this->data->share_reas;
+        $this->nilai_klaim_reas = $this->data->nilai_klaim_reas;
+        $this->nilai_klaim_or = $this->data->nilai_klaim_or;
         if($this->data->jatuh_tempo==""){
             if(isset($this->peserta->polis->pembayaran_klaim)){
                 $this->data->jatuh_tempo = date('Y-m-d',strtotime("{$this->data->updated_at} +{$this->data->kepesertaan->polis->pembayaran_klaim} days"));
@@ -96,6 +101,11 @@ class Edit extends Component
             }
             if($nilai_klaim) $this->nilai_klaim_reas = $nilai_klaim - $this->nilai_klaim_or;
         }
+        if($this->share_or and $this->nilai_klaim){
+            $this->nilai_klaim_reas = $this->nilai_klaim - ($this->nilai_klaim * ($this->share_or / 100));
+            $this->nilai_klaim_or = $this->nilai_klaim - $this->nilai_klaim_reas;
+            $this->share_reas = 100 - $this->share_or;
+        }
     }
 
     public function save()
@@ -117,10 +127,10 @@ class Edit extends Component
         $this->data->bank_atas_nama = $this->bank_atas_nama;
         $this->data->bank_mata_uang = $this->bank_mata_uang;
         $this->data->kadaluarsa_reas_tanggal = $this->kadaluarsa_reas_tanggal;
+        $this->data->share_or = $this->share_or;
+        $this->data->share_reas = $this->share_reas;
         $this->data->save();
 
         $this->emit('message-success','Data berhasil disimpan');
     }
-
-
 }

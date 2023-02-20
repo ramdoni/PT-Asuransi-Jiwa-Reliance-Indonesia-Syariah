@@ -284,7 +284,12 @@
                                 </tr>
                                 <tr>
                                     <td>Manfaat</td>
-                                    <td> : {{isset($peserta->reas->manfaat) ? $peserta->reas->manfaat : '-'}}</td>
+                                    <td>
+                                        <select class="form-control" wire:model="manfaat">
+                                            <option>Menurun</option>
+                                            <option>Tetap</option>
+                                        </select>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Model Reas</td>
@@ -330,7 +335,7 @@
                                 <tr>
                                     <td>Share OR</td>
                                     <td>
-                                        <input type="number" class="form-control" wire:model="share_or" style="width: 100px;" />
+                                        <input type="number" class="form-control" wire:model="share_or" style="width: 100px;" max="100" min="0" />
 
                                 <!--@if(isset($peserta->id))
                                             @if($peserta->status_reas==2)    

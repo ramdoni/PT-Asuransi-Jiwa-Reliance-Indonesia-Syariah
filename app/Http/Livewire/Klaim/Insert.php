@@ -15,7 +15,7 @@ class Insert extends Component
     public $kepesertaan=[],$peserta,$no_pengajuan,$polis,$polis_id,$transaction_id,$kepesertaan_id,$tanggal_meninggal,$nilai_klaim,$jenis_klaim,$tempat_dan_sebab;
     public $kadaluarsa_klaim_hari,$kadaluarsa_klaim_tanggal,$kadaluarsa_reas_tanggal,$sebab,$bank_nomor_rekening,$bank_cabang,$bank_atas_nama,$bank_mata_uang;
     public $provinsi = [],$kabupaten=[],$provinsi_id,$kabupaten_id,$nilai_klaim_or,$nilai_klaim_reas,$kategori_penyakit,$organ_yang_mencakup;
-    public $max_or,$share_reas,$share_or;
+    public $max_or,$share_reas,$share_or,$manfaat="Menurun";
     public function render()
     {
         return view('livewire.klaim.insert');
@@ -41,6 +41,10 @@ class Insert extends Component
         if($this->kepesertaan_id) {
             $this->peserta = Kepesertaan::with(['polis','reas','polis.produk','pengajuan'])->find($this->kepesertaan_id);
             
+            if(isset($this->peserta->reas->type_reas)){
+                $this->manfaat = $this->peserta->reas->type_reas;
+            }
+
             if(isset($this->peserta->reas->rate_uw->max_or)){
                 $this->max_or = $this->peserta->reas->rate_uw->max_or;
             }
@@ -195,6 +199,7 @@ class Insert extends Component
         $data->max_or = $this->max_or;
         $data->share_or = $this->share_or;
         $data->share_reas = $this->share_reas;
+        $data->manfaat = $this->manfaat;
         $data->save();
 
         if($this->kadaluarsa_reas_tanggal) $this->peserta->kadaluarsa_reas_tanggal = $this->kadaluarsa_reas_tanggal;
