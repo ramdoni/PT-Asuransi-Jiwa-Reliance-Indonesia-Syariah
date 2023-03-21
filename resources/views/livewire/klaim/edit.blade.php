@@ -221,7 +221,7 @@
                                 <tr>
                                     <th>Share Reas (%)</th>
                                     <td>
-                                        @if($share_reas)
+                                        @if($share_reas>=0)
                                             {{$share_reas}}
                                         @else    
                                             {{isset($peserta->reas->reas) ? $peserta->reas->reas ."%" : '-'}}
