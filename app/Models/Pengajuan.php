@@ -12,6 +12,8 @@ class Pengajuan extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];  
+
     protected $table = 'pengajuan';
 
     public function polis()

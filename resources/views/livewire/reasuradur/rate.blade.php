@@ -1,4 +1,4 @@
-<div class="col-lg-7">
+<div class="col-lg-8">
     <div class="card">
         <div class="header pb-0">
             <div class="row">
@@ -24,6 +24,8 @@
                             <th>RI COM</th>
                             <th>Rate</th>
                             <th>UW Limit</th>
+                            <th>Model Reas</th>
+                            <th>Max OR</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -39,21 +41,23 @@
                                 <td class="text-center">
                                     <a href="javascript:void(0)" wire:click="set_rates({{$item->id}})">
                                         @if($item->rate_count)
-                                            <i class="fa fa-check-circle"></i>
+                                            <i class="fa fa-check-circle text-success"></i>
                                         @else
-                                            <i class="fa fa-upload"></i>
+                                            <i class="fa fa-upload text-warning"></i>
                                         @endif
                                     </a>
                                 </td>
                                 <td class="text-center">
                                     <a href="javascript:void(0)" wire:click="set_uw_limit({{$item->id}})">
                                         @if($item->uw_limit_count)
-                                            <i class="fa fa-check-circle"></i></a>
+                                            <i class="fa fa-check-circle text-success"></i></a>
                                         @else
-                                            <i class="fa fa-upload"></i></a>
+                                            <i class="fa fa-upload text-warning"></i></a>
                                         @endif
                                     </a>
                                 </td>
+                                <td>{{$item->model_reas}}</td>
+                                <td>{{$item->max_or}}</td>
                                 <td>
                                     <a href="javascript:void(0)" wire:loading.remove wire:target="delete({{$item->id}})" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
                                     <span wire:loading wire:target="delete({{$item->id}})">

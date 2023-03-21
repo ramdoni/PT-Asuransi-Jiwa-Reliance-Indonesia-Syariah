@@ -10,7 +10,7 @@
             body { margin: 0px; }
             * {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size:8pt;
+                font-size:7pt;
             }
             h1 {font-size: 14pt;}
             table {border-collapse: collapse;}
@@ -43,6 +43,7 @@
                 text-align:right;
                 content:counter(item) ".";
             }
+            .text-left{text-align:left;}
         </style>
     </head>
     <body>
@@ -168,12 +169,18 @@
                     <tr>
                         <td>Model Reas</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->manfaat) ? $data->kepesertaan->reas->manfaat : '-'}}</td>
+                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->rate_uw->model_reas) ? $data->kepesertaan->reas->rate_uw->model_reas : '-'}}</td>
                     </tr>
                     <tr>
-                        <td>OR Surplus</td>
+                        <td>Max OR</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->manfaat_asuransi_ajri) ? format_idr($data->kepesertaan->reas->manfaat_asuransi_ajri) : '-'}}</td>
+                        <td style="border-bottom:1px solid;">
+                            @if($data->max_or)
+                                {{format_idr($data->max_or)}}
+                            @else
+                                {{isset($data->kepesertaan->reas->rate_uw->max_or) ? format_idr($data->kepesertaan->reas->rate_uw->max_or) : '-'}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Kadaluwarsa Reas</td>
@@ -190,48 +197,73 @@
                         </th>
                         <tr>
                             <td>Grace Periode</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->polis->masa_leluasa) ? $data->kepesertaan->polis->masa_leluasa .' Hari Kalender' : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : {{isset($data->kepesertaan->polis->masa_leluasa) ? $data->kepesertaan->polis->masa_leluasa .' Hari Kalender' : '-'}}</td>
                         </tr>
                         <tr>
                             <td>Retroaktif/Waiting Periode</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{isset($data->polis->retroaktif) ? $data->polis->retroaktif .' Hari Kalender' : '-' }}</td>
+                            <td style="border-bottom:1px solid;"> : {{isset($data->polis->retroaktif) ? $data->polis->retroaktif .' Hari Kalender' : '-' }}</td>
                         </tr>
                         <tr>
                             <td>Kadaluwarsa Klaim</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{$data->kadaluarsa_klaim_hari}} Hari Kalender</td>
+                            <td style="border-bottom:1px solid;"> : {{$data->kadaluarsa_klaim_hari}} Hari Kalender</td>
                         </tr>
                         <tr>
                             <td>Tgl. Kadaluwarsa Klaim</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{date('d-M-Y',strtotime($data->kadaluarsa_klaim_tanggal))}}</td>
+                            <td style="border-bottom:1px solid;"> : {{date('d-M-Y',strtotime($data->kadaluarsa_klaim_tanggal))}}</td>
                         </tr>
                         <tr>
                             <td>Share OR</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->or) ? $data->kepesertaan->reas->or : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                @if($data->share_or)
+                                    {{$data->share_or}}%
+                                @else
+                                    @if($data->kepesertaan->status_reas==2)
+                                        100%
+                                    @else
+                                        {{isset($data->kepesertaan->reas->or) ? $data->kepesertaan->reas->or : '0'}}
+                                    @endif
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Share Reas</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->reas) ? $data->kepesertaan->reas->reas : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                @if($data->share_reas)
+                                    {{$data->share_reas}}%
+                                @else
+                                    @if($data->kepesertaan->status_reas==2)
+                                        0
+                                    @else
+                                        {{isset($data->kepesertaan->reas->reas) ? $data->kepesertaan->reas->reas : '0'}}
+                                    @endif
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Nilai Klaim OR</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas_manfaat_asuransi_ajri) ? format_idr($data->kepesertaan->reas_manfaat_asuransi_ajri) : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                @if($data->kepesertaan->status_reas==2)
+                                    {{format_idr($data->nilai_klaim_disetujui)}}
+                                @else
+                                    {{isset($data->nilai_klaim_or) ? format_idr($data->nilai_klaim_or) : '-'}}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Nilai Klaim Reas</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->nilai_manfaat_asuransi_reas) ? format_idr($data->kepesertaan->nilai_manfaat_asuransi_reas) : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> :
+                                @if($data->kepesertaan->status_reas==2)
+                                    0
+                                @else
+                                    {{isset($data->nilai_klaim_reas) ? format_idr($data->nilai_klaim_reas) : '-'}}
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td>Tgl. Kadaluwarsa Reas</td>
-                            <td> : </td>
-                            <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kepesertaan->kadaluarsa_reas_tanggal)) : '-'}}</td>
+                            <td style="border-bottom:1px solid;"> : 
+                                {{isset($data->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kadaluarsa_reas_tanggal)) : '-'}}
+                            </td>
                         </tr>
                     </tr>
                 </table>
@@ -248,7 +280,10 @@
                     <tr>
                         <td>Usia Polis</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{hitung_umur($data->kepesertaan->tanggal_lahir,3,$data->kepesertaan->tanggal_mulai)}}</td>
+                        <td style="border-bottom:1px solid;">
+                            <!-- {{hitung_umur($data->kepesertaan->tanggal_mulai,3,$data->tanggal_meninggal)}} -->
+                            {{hitung_umur($data->kepesertaan->tanggal_mulai,3,(date('Y-m-d',strtotime($data->tanggal_meninggal ." +1 days"))) )}}
+                        </td>
                     </tr>
                     <tr>
                         <td>Nilai Klaim</td>
@@ -265,9 +300,14 @@
             <div style="width:50%;float:left;margin-left:10px;">
                 <table style="width:100%">
                     <tr>
-                        <td style="width:30%;">Tempat & Sebab Klaim</td>
+                        <td style="width:30%;">Tempat Klaim</td>
                         <td> : </td>
                         <td style="border-bottom:1px solid;width:70%;">{{$data->tempat_dan_sebab}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width:30%;">Sebab Klaim</td>
+                        <td> : </td>
+                        <td style="border-bottom:1px solid;width:70%;">{{$data->sebab}}</td>
                     </tr>
                     <tr>
                         <td>Tanggal Pengajuan</td>
@@ -282,7 +322,7 @@
                     <tr>
                         <td>Tanggal Proses</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{date('d-M-Y',strtotime($data->tanggal_proses))}}</td>
+                        <td style="border-bottom:1px solid;">{{date('d-M-Y',strtotime($data->head_devisi_date))}}</td>
                     </tr>
                 </table>
             </div>
@@ -295,7 +335,10 @@
                     <th style="text-align:center;border-top:1px solid;border-bottom:1px solid;border-right:1px solid;border-left:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;">{{$data->head_klaim_note}}</td>
+                    <td colspan="2" style="padding:10px;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->head_klaim_status]}}<br />
+                        {{$data->head_klaim_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;border-left:1px solid;">{{$data->head_klaim_date ? date('d F Y',strtotime($data->head_klaim_date)):''}}</td>
                 </tr>
                 <tr>
@@ -304,7 +347,10 @@
                     <th style="text-align:center;border-top:1px solid;border-bottom:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-top:1px solid;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->head_teknik_note}}</td>
+                    <td colspan="2" style="padding:10px;border-top:1px solid;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->head_teknik_status]}}<br />
+                        {{$data->head_teknik_note}}
+                    </td>
                     <td style="text-align:center;border-right:1px solid;border-top:1px solid;border-bottom:1px solid;">{{$data->head_teknik_date ? date('d F Y',strtotime($data->head_teknik_date)):''}}</td>
                 </tr>
                 <tr>
@@ -313,7 +359,10 @@
                     <th style="text-align:center;border-bottom:1px solid;border-top:1px solid;border-left:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->head_devisi_note}}</td>
+                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->head_devisi_status]}}<br />
+                        {{$data->head_devisi_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;">{{$data->head_devisi_date ? date('d F Y',strtotime($data->head_devisi_date)):''}}</td>
                 </tr>
                 <tr>
@@ -322,7 +371,10 @@
                     <th style="border-bottom:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_1_note}}</td>
+                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->direksi_1_status]}}<br />
+                        {{$data->direksi_1_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_1_date ? date('d F Y',strtotime($data->direksi_1_date)):''}}</td>
                 </tr>
                 <tr>
@@ -331,7 +383,10 @@
                     <th style="border-bottom:1px solid;border-right:1px solid;">Tanggal/Tanda Tangan</th>
                 </tr>
                 <tr>
-                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_2_note}}</td>
+                    <td colspan="2" style="padding:10px;border-left:1px solid;border-bottom:1px solid;border-right:1px solid;">
+                        {{@$keputusa_arr[$data->direksi_2_status]}}<br />
+                        {{$data->direksi_2_note}}
+                    </td>
                     <td style="text-align:center;border-bottom:1px solid;border-right:1px solid;">{{$data->direksi_2_date ? date('d F Y',strtotime($data->direksi_2_date)):''}}</td>
                 </tr>
             </table>
@@ -343,27 +398,27 @@
                 <tr>
                     <td>Nomor Polis</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->no_polis) ? $data->polis->no_polis : '-'}}</th>
+                    <th class="text-left"> {{isset($data->polis->no_polis) ? $data->polis->no_polis : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Pemegang Polis</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->nama) ? $data->polis->nama : '-'}}</th>
+                    <th class="text-left" > {{isset($data->polis->nama) ? $data->polis->nama : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Produk Asuransi</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
+                    <th class="text-left"> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Nomor Peserta</td>
                     <td> : </td>
-                    <th> {{isset($data->polis->produk->singkatan) ? $data->polis->produk->singkatan : '-'}}</th>
+                    <th class="text-left"> {{isset($data->kepesertaan->no_peserta) ? $data->kepesertaan->no_peserta : '-'}}</th>
                 </tr>
                 <tr>
                     <td>Nama Peserta</td>
                     <td> : </td>
-                    <th></th>
+                    <th class="text-left"> {{isset($data->kepesertaan->nama) ? $data->kepesertaan->nama : '-'}}</th>
                 </tr>
             </table>
             <h3 style="font-size:18px;margin-bottom:0;paddin-bottom:0;">II. Dokumen Pendukung</h3>

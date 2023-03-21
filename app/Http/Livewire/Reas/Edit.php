@@ -24,7 +24,7 @@ class Edit extends Component
     public $data,$no_pengajuan,$tab_active='tab_draft',$check_id=[],$filter_status,$is_calculate=false,$filter_perhitungan_usia;
     public $filter_ul_arr=[],$filter_ul,$filter_peserta,$is_reassign=false;
     public $data_reassign_draft=[],$data_reassign_reas=[],$data_reassign_or=[],$reasuradur=[],$reasuradur_id,$reasuradur_rate_id;
-    public $manfaat,$perhitungan_usia,$or,$reas,$ri_com,$type_reas;
+    public $manfaat,$perhitungan_usia,$or,$reas,$ri_com,$type_reas,$kadaluarsa_reas_hari,$is_edit_kadaluarsa=false;
     public function render()
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1]);
@@ -40,13 +40,21 @@ class Edit extends Component
                                                     'count_or'=>$or->where('status_reas',2)->count()]);
     }
 
-    public function mount(Reas $id)
+    public function mount($id)
     {
-        $this->data = $id;
+        $this->data = Reas::find($id);
+        $this->kadaluarsa_reas_hari = $this->data->kadaluarsa_reas_hari;
         $this->filter_perhitungan_usia = $this->data->perhitungan_usia;
-        $this->no_pengajuan = $id->no_pengajuan;
+        $this->no_pengajuan = $this->data->no_pengajuan;
         $this->filter_ul_arr = Kepesertaan::where('reas_id',$this->data->id)->groupBy('ul_reas')->get();
         $this->reasuradur = Reasuradur::get();
+    }
+
+    public function saveKadaluarsa()
+    {
+        $this->data->kadaluarsa_reas_hari = $this->kadaluarsa_reas_hari;
+        $this->data->save();
+        $this->is_edit_kadaluarsa = false;
     }
 
     public function submit_reassign()

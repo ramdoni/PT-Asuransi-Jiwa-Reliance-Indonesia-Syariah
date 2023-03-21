@@ -10,7 +10,7 @@
             body { margin: 0px; }
             * {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size:11pt;
+                font-size:10pt;
             }
             h1 {font-size: 14pt;}
             table {border-collapse: collapse;}
@@ -85,7 +85,7 @@
         <table style="width:100%;">
             <tr>
                 <td>Nomor polis</td>
-                <td> : </td>
+                <td style="width:20px;"> : </td>
                 <td>{{isset($data->polis->no_polis) ? $data->polis->no_polis : '-'}}</td>
             </tr>
             <tr>
@@ -116,7 +116,7 @@
             <tr>
                 <td>Periode Asuransi</td>
                 <td> : </td>
-                <td>-</td>
+                <td>{{date('d M Y',strtotime($data->kepesertaan->tanggal_mulai))}} sd {{date('d M Y',strtotime($data->kepesertaan->tanggal_akhir))}} ({{$data->kepesertaan->masa_bulan}} Bulan) </td>
             </tr>
             <tr>
                 <td>Klaim Disetujui</td>
@@ -129,29 +129,29 @@
                 <td>{{terbilang($data->nilai_klaim_disetujui)}}</td>
             </tr>
             <tr>
-                <td>Ditransfer ke </td>
-                <td> : </td>
+                <td style="vertical-align: top;">Ditransfer ke </td>
+                <td style="vertical-align: top;"> : </td>
                 <td>
                     <table>
                         <tr>
                             <td>Nomor Rekening</td>
                             <td> : </td>
-                            <td>505 5050009</td>
+                            <td>{{$data->bank_no_rekening}}</td>
                         </tr>
                         <tr>
                             <td>Bank-Cabang</td>
                             <td> : </td>
-                            <td>Bank Syariah Mandiri Cab Saharjo – Jakarta Selatan</td>
+                            <td>{{$data->bank_cabang}}</td>
                         </tr>
                         <tr>
                             <td>Atas Nama</td>
                             <td> : </td>
-                            <td>PT. Asuransi Jasindo Syariah</td>
+                            <td>{{$data->bank_atas_nama}}</td>
                         </tr>
                         <tr>
                             <td>Mata Uang</td>
                             <td> : </td>
-                            <td>Rupiah</td>
+                            <td>{{$data->bank_mata_uang}}</td>
                         </tr>
                         <tr>
                             <td>Jatuh Tempo</td>
@@ -163,7 +163,7 @@
             </tr>
         </table>
         <p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terimakasih.</p>
-        <p>Wassalam.</p>
+        <p><i>Wassalamu’alaikum Wr. Wb</i></p>
         <table style="width:100%;">
             <tr>
                 <td></td>

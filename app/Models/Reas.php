@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Kepesertaan;
 use App\Models\Reasuradur;
 use App\Models\Pengajuan;
+use App\Models\ReasuradurRate;
 
 class Reas extends Model
 {

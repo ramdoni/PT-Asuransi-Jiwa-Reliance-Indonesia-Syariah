@@ -51,7 +51,8 @@
                                     </tr>
                                     <tr>
                                         <th>Rate & UW Limit</th>
-                                        <td> : {{isset($data->rate_uw->nama) ? $data->rate_uw->nama : '-'}}
+                                        <td> :     
+                                            {{isset($data->rate_uw->nama) ? $data->rate_uw->nama : '-'}}
                                             <a href="javascript:void(0)" class="badge badge-info badge-active" wire:click="$emit('edit-rate',{{$data->reasuradur_rate_id}})" data-toggle="modal" data-target="#modal_edit_rate"><i class="fa fa-edit"></i> edit</a>
                                         </td>
                                     </tr>
@@ -74,32 +75,53 @@
                                 <thead>
                                     <tr>
                                         <th>RI COM</th>
-                                        <td>: {{$data->ri_com}}%</td>
+                                        <td>: </td>
+                                        <td>{{$data->ri_com}}%</td>
                                     </tr>
                                     <tr>
                                         <th>Jumlah Peserta</th>
-                                        <td> : {{format_idr($data->jumlah_peserta)}}</td>
+                                        <td> :  </td>
+                                        <td>{{format_idr($data->jumlah_peserta)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Uang Asuransi Ajri</th>
-                                        <td> : {{format_idr($data->manfaat_asuransi_ajri)}}</td>
+                                        <td> :  </td>
+                                        <td>{{format_idr($data->manfaat_asuransi_ajri)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Uang Asuransi Reas</th>
-                                        <td> : {{format_idr($data->manfaat_asuransi_reas)}}</td>
+                                        <td> :  </td>
+                                        <td>{{format_idr($data->manfaat_asuransi_reas)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Kontribusi Gross</th>
-                                        <td> : {{format_idr($data->kontribusi)}}</td>
+                                        <td> :  </td>
+                                        <td>{{format_idr($data->kontribusi)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Ujroh</th>
-                                        <td> : {{format_idr($data->ujroh)}}</td>
+                                        <td> :  </td>
+                                        <td>{{format_idr($data->ujroh)}}</td>
                                     </tr>
                                     <tr>
                                         <th>Kontribusi Netto</th>
-                                        <td> : {{format_idr($data->kontribusi_netto)}}</td>
+                                        <td> :  </td>
+                                        <td>{{format_idr($data->kontribusi_netto)}}</td>
                                     </tr>
+                                    <!-- <tr>
+                                        <th>Kadaluarsa Reas</th>
+                                        <td> : </td>
+                                        <td>
+                                            @if($is_edit_kadaluarsa)
+                                                <input type="number" class="form-control" wire:model="kadaluarsa_reas_hari" style="width:100px;" />
+                                                <a href="javascript:void(0)" wire:click="saveKadaluarsa"><i class="fa fa-save"></i></a>
+                                                <a href="javascript:void(0)" class="text-danger" wire:click="$set('is_edit_kadaluarsa',false)"><i class="fa fa-close"></i></a>
+                                            @else
+                                                : {{format_idr($data->kadaluarsa_reas_hari)}}
+                                                <a href="javascript:void(0)" wire:click="$set('is_edit_kadaluarsa',true)"><i class="fa fa-edit"></i></a>
+                                            @endif
+                                        </td>
+                                    </tr> -->
                                 </thead>
                             </table>
                         </div>
@@ -346,6 +368,7 @@
                                             <option value=""> -- Pilih -- </option>
                                             <option> TREATY </option>
                                             <option> FAKULTATIF </option>
+                                            <option> OR </option>
                                         </select>
                                         @error('type_reas')
                                             <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>

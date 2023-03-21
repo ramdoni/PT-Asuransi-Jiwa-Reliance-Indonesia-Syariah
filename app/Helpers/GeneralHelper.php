@@ -2,7 +2,6 @@
 use App\Models\User;
 use App\Models\UserOtp;
 
-
 function terbilang($nilai) {
     $nilai = abs($nilai);
     $huruf = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");

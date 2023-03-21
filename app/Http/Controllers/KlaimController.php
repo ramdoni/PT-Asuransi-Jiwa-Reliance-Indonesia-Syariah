@@ -7,9 +7,12 @@ use App\Models\Klaim;
 
 class KlaimController extends Controller
 {
+
     public function printPersetujuan(Klaim $id)
     {
         \LogActivity::add("Print Persetujuan {$id->id}");
+        
+        $keputusa_arr = [''=>'-',1=>'Terima',2=>'Tolak',3=>'Tunda',4=>'Investigasi',5=>'Liable',6=>'STNC'];
 
         if($id->no_apv=="" || $id->no_mak==""){
             $id->no_apv = $id->id. '/KLM-APV/AJRIUS/'.numberToRomawi(date('m')).'/'. date('Y');
@@ -18,7 +21,7 @@ class KlaimController extends Controller
         }
 
         $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadView('livewire.klaim.print-persetujuan',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;
+        $pdf->loadView('livewire.klaim.print-persetujuan',['data'=>$id,'keputusa_arr'=>$keputusa_arr])->setPaper([0, 0, 210, 297], 'landscape');;
 
         return $pdf->stream();
     }
@@ -34,6 +37,21 @@ class KlaimController extends Controller
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('livewire.klaim.print-tolak',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;
+
+        return $pdf->stream();
+    }
+
+    public function printDiterima(Klaim $id)
+    {
+        \LogActivity::add("Print Diterima {$id->id}");
+
+        if($id->no_surat_diterima==""){
+            $id->no_surat_diterima = $id->id. '/KEP-KLM/AJRIUS/'.numberToRomawi(date('m')).'/'. date('Y');
+            $id->save();
+        }
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.klaim.print-diterima',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;
 
         return $pdf->stream();
     }

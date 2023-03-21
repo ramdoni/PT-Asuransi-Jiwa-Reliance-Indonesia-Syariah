@@ -65,9 +65,15 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('klaim/edit/{id}',App\Http\Livewire\Klaim\Edit::class)->name('klaim.edit');
     Route::get('klaim/print-persetujuan/{id}',[App\Http\Controllers\KlaimController::class,'printPersetujuan'])->name('klaim.print-persetujuan');
     Route::get('klaim/print-tolak/{id}',[App\Http\Controllers\KlaimController::class,'printTolak'])->name('klaim.print-tolak');
+    Route::get('klaim/print-diterima/{id}',[App\Http\Controllers\KlaimController::class,'printDiterima'])->name('klaim.print-diterima');
     Route::get('klaim/print-memo/{id}',[App\Http\Controllers\KlaimController::class,'printMemo'])->name('klaim.print-memo');
     Route::get('klaim-reason',App\Http\Livewire\KlaimReason\Index::class)->name('klaim-reason.index');
+    Route::get('klaim/pengaturan',App\Http\Livewire\Klaim\Pengaturan::class)->name('klaim.pengaturan');
     Route::get('recovery-claim',App\Http\Livewire\RecoveryClaim\Index::class)->name('recovery-claim.index');
+});
+
+Route::group(['middleware' => ['auth']], function(){
+    Route::get('api/get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('api.get-kepesertaan');
 });
 
 // Administrator

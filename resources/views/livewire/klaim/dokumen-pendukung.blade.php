@@ -136,7 +136,7 @@
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <span class="sr-only">{{ __('Loading...') }}</span> Upload...
                     </span>
-                    <input type="file" class="form-control" wire:loading.remove wire:target="daftar_angsuran" wire:model="resume_medis" />
+                    <input type="file" class="form-control" wire:loading.remove wire:target="daftar_angsuran" wire:model="daftar_angsuran" />
                     @error('daftar_angsuran')
                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                     @enderror

@@ -38,7 +38,7 @@
     @livewireStyles
 </head>
 
-<body class="theme-blue layout-fullwidth">
+<body class="theme-blue   layout-fullwidth">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -116,11 +116,9 @@
             var pusher = new Pusher('61e7a83b5c1a48939522', {
                 cluster: 'ap1'
             });
-            Pusher.logToConsole = true;
 
             var channel_general = pusher.subscribe('general');
             channel_general.bind('notification', function(data) {
-                console.log(data.message)
                 show_toast(data.message,'top-right');
 
             });
@@ -155,7 +153,6 @@
 
         function show_toast(message,positon)
         {
-            // toastr.options.timeOut = "false";
             toastr.options.closeButton = true;
             toastr['info'](message, '', {
                 positionClass: 'toast-'+positon

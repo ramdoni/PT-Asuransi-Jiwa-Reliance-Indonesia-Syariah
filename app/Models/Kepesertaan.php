@@ -13,6 +13,7 @@ class Kepesertaan extends Model
     use HasFactory;
 
     protected $table = 'kepesertaan';
+    protected $guarded = [];  
 
     public function parent()
     {

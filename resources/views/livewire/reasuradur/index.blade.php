@@ -1,7 +1,7 @@
 @section('sub-title', 'Index')
 @section('title', 'Reasuradur')
 <div class="clearfix row">
-    <div class="col-lg-5">
+    <div class="col-lg-4">
         <div class="card">
             <div class="header pb-0">
                 <div class="row">

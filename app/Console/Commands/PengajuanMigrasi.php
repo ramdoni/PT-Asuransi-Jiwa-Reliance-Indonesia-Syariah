@@ -43,9 +43,11 @@ class PengajuanMigrasi extends Command
     public function handle()
     {
         ini_set('memory_limit', '-1');
-        echo ini_get('memory_limit');
-        $inputFileName = './public/migrasi/migrasi-juni.xlsx';
-        // $inputFileName = './public/migrasi/migrasi-juli.xls';
+        //$inputFileName = './public/migrasi/migrasi-juni-03.xlsx';
+        //$inputFileName = './public/migrasi/peserta.xls';
+        //$inputFileName = './public/migrasi/migrasi-juli.xls';
+        // $inputFileName = './public/migrasi/change-masa-asuransi.xlsx';
+        $inputFileName = './public/migrasi/change-dn.xlsx';
 
         /** Load $inputFileName to a Spreadsheet Object  **/
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
@@ -57,49 +59,49 @@ class PengajuanMigrasi extends Command
         $double=0;
         foreach($sheetData as $k => $item){
             $num++;
-            if($num<6) continue;
+            if($num<1) continue;
 
-            $no_polis = $item['B'];
-            $nama_produk = $item['C'];
-            $no_peserta = $item['G'];
-            $bank = $item['I'];
-            $tempat_bekerja = $item['L'];
-            $pekerjaan = $item['M'];
-            $no_ktp = $item['N'];
-            $alamat = $item['O'];
-            $no_hp = $item['P'];
-            $nama = $item['Q'];
-            $tanggal_lahir = date('Y-m-d',strtotime($item['R']));
-            $usia = $item['S'];
-            $jenis_kelamin = $item['T'];
-            $tgl_cut_off = date('Y-m-d',strtotime($item['U']));
-            $mulai_asuransi = date('Y-m-d',strtotime($item['V']));
-            $akhir_asuransi = date('Y-m-d',strtotime($item['W']));
-            $masa_asuransi = $item['X'];
-            $manfaat_asurani = replace_idr($item['AA']);
-            $kontribusi = replace_idr($item['AD']);
-            $total_kontribusi = replace_idr($item['AE']);
-            $dana_tabbaru = replace_idr($item['AF']);
-            $dana_ujrah = replace_idr($item['AG']);
-            $extra_kontribusi = replace_idr($item['AH']);
-            $total_kontribusi = replace_idr($item['AI']);
-            $potongan_langsung = $item['AJ'];
-            $jumlah_potongan_langsung = $item['AK'];
-            $pph = $item['AL'];
-            $ppn = $item['AM'];
-            $total_kontribusi_bayar = replace_idr($item['AN']);
-            $tanggal_stnc = date('Y-m-d',strtotime($item['AP']));
-            $uw_limit = $item['AQ'];
-            $rate = $item['AR'];
-            $total_dn = replace_idr($item['AS']);
-            $accepted_date =  date('Y-m-d',strtotime($item['AX']));
-            $status_polis = $item['AY'];
-            $kontribusi_biaya_penutupan = replace_idr($item['BI']);
-            $perkalian_biaya_penutupan = $item['BJ'];
-            $bp = $item['BK'];
-            $total_biaya_penutupan = replace_idr($item['BL']);
-            $dn = $item['AU'];
-            $no_reg = $item['AT'];
+            // $no_polis = $item['B'];
+            // $nama_produk = $item['C'];
+            // $no_peserta = $item['G'];
+            // $bank = $item['I'];
+            // $tempat_bekerja = $item['L'];
+            // $pekerjaan = $item['M'];
+            // $no_ktp = $item['N'];
+            // $alamat = $item['O'];
+            // $no_hp = $item['P'];
+            // $nama = $item['Q'];
+            // $tanggal_lahir = date('Y-m-d',strtotime($item['R']));
+            // $usia = $item['S'];
+            // $jenis_kelamin = $item['T'];
+            // $tgl_cut_off = date('Y-m-d',strtotime($item['U']));
+            // $mulai_asuransi = date('Y-m-d',strtotime($item['V']));
+            // $akhir_asuransi = date('Y-m-d',strtotime($item['W']));
+            // $masa_asuransi = $item['X'];
+            // $manfaat_asurani = replace_idr($item['AA']);
+            // $kontribusi = replace_idr($item['AD']);
+            // $total_kontribusi = replace_idr($item['AE']);
+            // $dana_tabbaru = replace_idr($item['AF']);
+            // $dana_ujrah = replace_idr($item['AG']);
+            // $extra_kontribusi = replace_idr($item['AH']);
+            // $total_kontribusi = replace_idr($item['AI']);
+            // $potongan_langsung = $item['AJ'];
+            // $jumlah_potongan_langsung = $item['AK'];
+            // $pph = $item['AL'];
+            // $ppn = $item['AM'];
+            // $total_kontribusi_bayar = replace_idr($item['AN']);
+            // $tanggal_stnc = date('Y-m-d',strtotime($item['AP']));
+            // $uw_limit = $item['AQ'];
+            // $rate = $item['AR'];
+            // $total_dn = replace_idr($item['AS']);
+            // $accepted_date =  date('Y-m-d',strtotime($item['AX']));
+            // $status_polis = $item['AY'];
+            // $kontribusi_biaya_penutupan = replace_idr($item['BI']);
+            // $perkalian_biaya_penutupan = $item['BJ'];
+            // $bp = $item['BK'];
+            // $total_biaya_penutupan = replace_idr($item['BL']);
+            // $dn = $item['AU'];
+            // $no_reg = $item['AT'];
 
             // $this->info("{$k}. Nomor Peserta : ".$no_peserta);
 
@@ -113,20 +115,25 @@ class PengajuanMigrasi extends Command
             //     echo "No Surat : {$no_reg}\n";
             // }
 
-            $reasuradur = Reasuradur::where('name',$item['BL'])->first();
+            //$reasuradur = Reasuradur::where('name',$item['BL'])->first();
             
-            if(ltrim($item['Q'])!="DODDY ARIANTO") continue;
+            // if(ltrim($item['Q'])!="DODDY ARIANTO") continue;
 
-            echo "{$item['G']}. Reas : ". replace_idr($item['BO']) ."\n";
+            //echo "{$k}. {$item['G']}. Reas : ". replace_idr($item['BO']) ."\n";
 
-            $peserta = Kepesertaan::with('polis')->where('no_peserta',$item['G'])->first();
-            if($peserta){
-                if($reasuradur) $peserta->reasuradur_id = $reasuradur->id;
-                if($peserta->reas_manfaat_asuransi_ajri==0 || $peserta->reas_manfaat_asuransi_ajri==""){
-                    $manfaat_asuransi_ajri = replace_idr($item['BO']);
-                    $manfaat_asuransi = replace_idr($item['X']);
-                    $peserta->reas_manfaat_asuransi_ajri = $manfaat_asuransi - $manfaat_asuransi_ajri;
-                }
+            $peserta = Kepesertaan::with('polis')->where('no_peserta',$item['A'])->first();
+            $pengajuan = Pengajuan::where('dn_number',$item['B'])->first();
+            if($peserta and $pengajuan){
+                //if($reasuradur) $peserta->reasuradur_id = $reasuradur->id;
+                // if($peserta->reas_id=="" || $peserta->reas_id==null){
+                    //$manfaat_asuransi_reas = replace_idr($item['BO']);
+                    //$manfaat_asuransi = replace_idr($item['X']);
+                    //$peserta->nilai_manfaat_asuransi_reas = $manfaat_asuransi_reas;
+                    //$peserta->reas_manfaat_asuransi_ajri = $manfaat_asuransi - $manfaat_asuransi_reas;
+                // }
+                echo "{$k}. {$peserta->nama}\n";
+                // $peserta->masa_bulan = $item['B'];
+                $peserta->pengajuan_id = $pengajuan->id;
                 $peserta->save();
             }
 
