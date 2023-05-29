@@ -366,6 +366,7 @@
                                     <option value=""> -- pilih -- </option>
                                     <option>Potong Langsung</option>
                                     <option>Brokerage Ujroh</option>
+                                    <option>Potong Langsung + Brokerage Ujroh</option>
                                 </select>
                                 @error('ket_diskon')
                                     <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>

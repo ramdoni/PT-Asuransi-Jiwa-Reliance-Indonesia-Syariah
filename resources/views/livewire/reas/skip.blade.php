@@ -6,6 +6,7 @@
                     <th>No</th>
                     <th></th>
                     <th>No Pengajuan</th>
+                    <th>No DN</th>
                     <th>No Polis</th>
                     <th>Nama Pemegang Polis</th>
                     <th>No Peserta</th>
@@ -43,7 +44,14 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
+                            <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->p_no_pengajuan) ? $item->p_no_pengajuan : '-'}}</a>
+                        </td>
+                        <td>
+                            @if(isset($item->dn_number))
+                                <a href="{{route('pengajuan.print-dn',$item->pengajuan->id)}}" target="_blank"><i class="fa fa-print"></i></a>
+                                {{$item->dn_number?$item->dn_number:'-'}}
+                            @endif
+                        </td>
                         <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
                         <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                         <td>{{$item->no_peserta}}</td>

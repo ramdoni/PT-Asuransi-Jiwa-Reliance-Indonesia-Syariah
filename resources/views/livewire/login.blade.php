@@ -1,11 +1,12 @@
 @section('title', 'Login')
 <div class="vertical-align-wrap">
 	<div class="vertical-align-middle auth-main">
+        <img src="{{get_setting('logo')}}" alt="{{get_setting('company')}}" class="logo" style="position: absolute;top: 35px;right: 50px;height: 50px;">
 		<div class="auth-box">
-            <div class="top">
+            <!-- <div class="top">
                 {{-- <img src="{{url('/')}}/assets/img/logo-white.svg" alt="Lucid"> --}}
                 <img src="{{get_setting('logo')}}" alt="{{get_setting('company')}}">
-            </div>
+            </div> -->
 			<div class="card">
                 <div class="header">
                     <p class="lead">{{__('Login to your account')}}</p>

@@ -22,4 +22,14 @@ class PesertaController extends Controller
         
         return $pdf->stream();
     }
+
+    public function printSertifikasi(Kepesertaan $id)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.peserta.print-sertifikat',['data'=>$id]);
+        
+        // $pdf->save('sertifikat/'.$id->no_peserta. '.pdf');
+        // return $pdf->download('sertifikat-'.$id->no_peserta. '.pdf');
+        return $pdf->stream();
+    }
 }

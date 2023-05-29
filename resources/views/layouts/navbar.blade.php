@@ -22,6 +22,7 @@
                                     <li><a href="{{ route('reasuradur.index') }}">Reasuradur</a></li>
                                     <li><a href="{{ route('users.index') }}">Users</a></li>
                                     <li><a href="{{ route('klaim-reason.index') }}">Klaim Reason</a></li>
+                                    <li><a href="{{ route('rate-broker.index') }}">Rate Broker</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ route('polis.index') }}" class="text-info icon-menu px-1">Pemegang Polis</a></li>

@@ -123,14 +123,14 @@
                                 <tr>
                                     <td style="width: 50px;">{{ $num }}</td>
                                     <td>
-                                        @if($item->polis->no_polis)
+                                        @if(isset($item->polis->no_polis))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">{{$item->polis->no_polis}}</a>
                                         @else
                                         -
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->polis->nama)
+                                        @if(isset($item->polis->nama))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">{{$item->polis->nama}}</a>
                                         @else
                                         -

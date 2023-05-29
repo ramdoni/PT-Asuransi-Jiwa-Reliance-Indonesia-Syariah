@@ -59,6 +59,9 @@
                                             @if($data->status==5)
                                                 <span class="badge badge-default badge-active" title="Draft"><i class="fa fa-save"></i> Draft</span>
                                             @endif
+                                            @if($data->status==6)
+                                                <span class="badge badge-default badge-active" title="Draft"><i class="fa fa-save"></i> Draft</span>
+                                            @endif
                                         </td>
                                     </tr>
 
@@ -213,7 +216,7 @@
                                             <tr x-data="{selected_id:{{$item->id}},confirm_delete:false}" style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_proses}}</td>
                                                 <td class="text-center">
-                                                    @if(($data->status==0 || $data->status==5) and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
+                                                    @if(($data->status==0 || $data->status==5 || $data->status==6) and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
                                                         <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                                     @endif
                                                     @if($data->status==1 and \Auth::user()->user_access_id==3)

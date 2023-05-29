@@ -176,11 +176,8 @@ class Edit extends Component
 
     public function hitung()
     {
-    
         // $this->is_calculate = true;
         // PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id);
-
-        
         foreach($this->data->kepesertaan as $data){
             $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
             $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
@@ -294,12 +291,19 @@ class Edit extends Component
 
         // generate no peserta
         $running_number = $this->data->polis->running_number_peserta;
-
+        $running_number_first = $this->data->polis->running_number_peserta;
         $key=0;
         foreach($this->data->kepesertaan->where('status_akseptasi',1) as $peserta){
-            $running_number++;
-            $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
-            $peserta->no_peserta = $no_peserta;
+
+            /**
+             * Jika sudah ada nomor peserta jangan di generate ulang
+             */
+            if($peserta->no_peserta==""){
+                $running_number++;
+                $no_peserta = (isset($this->data->polis->produk->id) ? $this->data->polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($this->data->polis->running_number,3, '0', STR_PAD_LEFT);
+                $peserta->no_peserta = $no_peserta;
+            }
+        
             $peserta->status_polis = 'Inforce';
 
             if($peserta->ul=='GOA'){
@@ -364,16 +368,22 @@ class Edit extends Component
             $this->data->potong_langsung_persen = $this->data->polis->potong_langsung;
             $this->data->potong_langsung = $kontribusi*($this->data->polis->potong_langsung/100);
         }
+        
+        if($this->data->polis->fee_base_brokerage){
+            $this->data->brokerage_ujrah_persen = $this->data->polis->fee_base_brokerage;
+            $this->data->brokerage_ujrah = $kontribusi*($this->data->polis->fee_base_brokerage/100);
+        }
 
         /**
          * Hitung PPH
          */
         if($this->data->polis->pph){
             $this->data->pph_persen =  $this->data->polis->pph;
-            if($this->data->potong_langsung)
-                $this->data->pph = (($this->data->polis->pph/100) * $this->data->potong_langsung);
+
+            if($this->data->polis->ket_diskon=='Potong Langsung + Brokerage Ujroh')
+                $this->data->pph = $this->data->brokerage_ujrah*($this->data->polis->pph/100);
             else
-                $this->data->pph = $kontribusi*($this->data->polis->pph/100);
+                $this->data->pph = $this->data->potong_langsung*($this->data->polis->pph/100);
         }
 
          /**
@@ -391,12 +401,18 @@ class Edit extends Component
          * Biaya Polis dan Materai
          * jika pengajuan baru pertama kali ada biaya polis dan materia 100.000
          * */
-        if($running_number==0){
+        if($running_number_first==0 || $running_number_first==""){
             $this->data->biaya_polis_materai = $this->data->polis->biaya_polis_materai;
             $this->data->biaya_sertifikat = $this->data->polis->biaya_sertifikat;
         }
 
-        $total = $kontribusi+$ektra_kontribusi+$extra_mortalita+$this->data->biaya_sertifikat+$this->data->biaya_polis_materai+$this->data->pph-($this->data->ppn+$this->data->potong_langsung);
+        $total = $kontribusi+
+                    $ektra_kontribusi+
+                    $extra_mortalita+
+                    $this->data->biaya_sertifikat+
+                    $this->data->biaya_polis_materai+
+                    $this->data->pph-($this->data->ppn+$this->data->potong_langsung+$this->data->brokerage_ujrah);
+                    
         $this->data->net_kontribusi = $total;
         $this->data->save();
 
@@ -461,7 +477,7 @@ class Edit extends Component
             // if($tgl_lunas) $data->tgl_lunas = date('Y-m-d',($tgl_lunas));
             // $data->pembayaran = $pembayaran;
             // $data->piutang = $piutang;
-            // $data->total_peserta = $total_peserta;
+            'total_peserta' => $this->data->total_approve,
             // $data->outstanding_peserta = $outstanding_peserta;
             // $data->produksi_cash_basis = $produksi_cash_basis;
             // $data->ket_lampiran = $ket_lampiran;
@@ -493,6 +509,14 @@ class Edit extends Component
         $income->type = 2; // Syariah
         $income->policy_id = $polis->id;
         if($this->data->tanggal_jatuh_tempo) $income->due_date = $this->data->tanggal_jatuh_tempo;
+        $income->tabarru = $dana_tabbaru;
+        $income->ujrah = $dana_ujrah;
+        $income->nilai_manfaat_asuransi = $this->data->nilai_manfaat;
+        $income->tabarru = $this->data->dana_tabbaru;
+        $income->ujrah = $this->data->dana_ujrah;
+        $income->kontribusi = $this->data->kontribusi;
+        $income->extra_kontribusi = $this->data->extra_kontribusi;
+        $income->extra_mortality = $this->data->extra_mortalita;
         $income->save();
 
         $this->emit('message-success','Data berhasil di proses');

@@ -6,6 +6,7 @@
                     <th>No</th>
                     <th></th>
                     <th>No Pengajuan</th>
+                    <th>Nomor DN</th>
                     <th>No Polis</th>
                     <th>Nama Pemegang Polis</th>
                     <th>No Peserta</th>
@@ -31,7 +32,15 @@
                     <th>UW Limit</th>
                 </tr>
             </thead>
-            <tbody>
+            <tr wire:loading>
+                <td colspan="27">
+                    <div>
+                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        <span class="sr-only">{{ __('Loading...') }}</span> Please wait...
+                    </div>
+                </td>
+            </tr>
+            <tbody wire:loading.remove>
                 @php($index_proses = 0)
                 @foreach($kepesertaan as $k => $item)
                     @php($index_proses++)
@@ -42,7 +51,17 @@
                                 <input type="checkbox" wire:model="assign_id.{{$k}}" value="{{$item->id}}" />
                             @endif
                         </td>
-                        <td><a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>
+                        <td>
+                            @if(isset($item->pengajuan_id))
+                                <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->no_pengajuan) ? $item->no_pengajuan : '-'}}</a>
+                            @endif
+                        </td>
+                        <td>
+                            @if(isset($item->dn_number))
+                                <a href="{{route('pengajuan.print-dn',$item->pengajuan_id)}}" target="_blank"><i class="fa fa-print"></i></a>
+                                {{$item->dn_number?$item->dn_number:'-'}}
+                            @endif
+                        </td>
                         <td>{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</td>
                         <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                         <td>{{$item->no_peserta}}</td>

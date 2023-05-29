@@ -117,6 +117,9 @@
                                             @if($item->status==5)
                                                 <span class="badge badge-default badge-active" title="Draft"><i class="fa fa-save"></i> Draft</span>
                                             @endif
+                                            @if($item->status==6)
+                                                <span class="badge badge-default badge-active" title="Draft"><i class="fa fa-save"></i> Draft API</span>
+                                            @endif
                                         </a>
                                     </td>
                                     <td>

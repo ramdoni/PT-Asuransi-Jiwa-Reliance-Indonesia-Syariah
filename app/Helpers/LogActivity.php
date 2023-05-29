@@ -5,10 +5,10 @@ use App\Models\LogActivity as LogActivityModel;
 
 class LogActivity
 {
-    public static function add($subject)
+    public static function add($subject="")
     {
     	$log = [];
-    	$log['subject'] = $subject;
+    	$log['subject'] = $subject="" ? Request::route()->getName() : $subject;
     	$log['url'] = Request::fullUrl();
     	$log['method'] = Request::method();
     	$log['ip'] = Request::ip();

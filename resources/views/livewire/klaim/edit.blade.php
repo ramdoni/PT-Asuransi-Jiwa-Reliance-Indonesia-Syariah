@@ -156,13 +156,21 @@
                                     <th>Model Reas</th>
                                     <td> : </td>
                                     <td>
-                                        @if($data->model_reas)
+                                        <select class="form-control" wire:model="model_reas">
+                                            <option value=""> -- Select -- </option>
+                                            <option value="OR">OR</option>
+                                            <option value="Surplus">Surplus</option>
+                                            <option value="QS">QS</option>
+                                            <option value="QS_Surplus">QS_Surplus</option>
+                                        </select>
+
+                                        <!-- @if($data->model_reas)
                                             {{$data->model_reas}}
                                         @elseif(isset($peserta->model_reas))
                                             {{$peserta->model_reas}}
                                         @else
                                             {{isset($peserta->reas->rate_uw->model_reas) ? $peserta->reas->rate_uw->model_reas : '-'}}
-                                        @endif
+                                        @endif -->
                                     </td>
                                 </tr>
                                 <tr>

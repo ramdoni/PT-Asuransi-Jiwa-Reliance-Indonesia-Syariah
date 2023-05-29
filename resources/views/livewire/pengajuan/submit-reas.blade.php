@@ -97,6 +97,7 @@
                                     <option value=""> -- Pilih -- </option>
                                     <option> TREATY </option>
                                     <option> FAKULTATIF </option>
+                                    <option value="OR"> OR </option>
                                 </select>
                                 @error('type_reas')
                                     <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>

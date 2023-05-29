@@ -89,10 +89,21 @@
                     <td style="padding-left: 20px">Extra Mortalita</td>
                     <td style="text-align: right;">{{ $extra_mortalita ? format_idr($extra_mortalita) : '-'}}</td>
                 </tr>
-                <tr>
-                    <td style="padding-left: 20px">{{isset($data->polis->ket_diskon) ? $data->polis->ket_diskon : ''}} {{isset($data->potong_langsung_persen) ? $data->potong_langsung_persen.'%' : ''}}</td>
-                    <td style="text-align: right;">{{$data->potong_langsung ? '-'. format_idr($data->potong_langsung) : '-'}}</td>
-                </tr>
+                @if($data->polis->ket_diskon=='Potong Langsung + Brokerage Ujroh')
+                    <tr>
+                        <td style="padding-left: 20px">Potong Langsung {{isset($data->potong_langsung_persen) ? $data->potong_langsung_persen.'%' : ''}}</td>
+                        <td style="text-align: right;">{{$data->potong_langsung ? '-'. format_idr($data->potong_langsung) : '-'}}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px">Brokerage Ujroh {{isset($data->brokerage_ujrah_persen) ? $data->brokerage_ujrah_persen.'%' : ''}}</td>
+                        <td style="text-align: right;">{{$data->brokerage_ujrah ? '-'. format_idr($data->brokerage_ujrah) : '-'}}</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td style="padding-left: 20px">{{isset($data->polis->ket_diskon) ? $data->polis->ket_diskon : ''}} {{isset($data->potong_langsung_persen) ? $data->potong_langsung_persen.'%' : ''}}</td>
+                        <td style="text-align: right;">{{$data->potong_langsung ? '-'. format_idr($data->potong_langsung) : '-'}}</td>
+                    </tr>
+                @endif
                 <tr>
                     <td style="padding-left: 20px">PPN {{isset($data->ppn_persen) ? $data->ppn_persen : '0'}}%</td>
                     <td style="text-align: right;">{{isset($data->ppn) ? '-'.format_idr($data->ppn) : '-'}}</td>

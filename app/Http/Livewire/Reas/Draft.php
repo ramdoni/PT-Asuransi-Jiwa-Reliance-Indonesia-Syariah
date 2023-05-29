@@ -28,7 +28,7 @@ class Draft extends Component
     {
         $this->emit('data_assign_draft_',$this->assign_id);
     }
-
+    
     public function set_reassign($bol)
     {
         $this->reassign = $bol;

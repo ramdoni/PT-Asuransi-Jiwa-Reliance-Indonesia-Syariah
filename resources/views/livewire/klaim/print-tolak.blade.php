@@ -141,7 +141,7 @@
             Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terimakasih.
         </p>
         <p>
-            <i>Wassalamu’alaikum Wr. Wb.</i>
+            <i>Wassalamu’alaikum Wr. Wb.</i><br />
             <strong>PT ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>
         </p>
         <br />

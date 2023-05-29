@@ -17,6 +17,8 @@ date_default_timezone_set("Asia/Bangkok");
 Route::get('/', Home::class)->name('home')->middleware('auth');
 Route::get('login', App\Http\Livewire\Login::class)->name('login');
 
+Route::get('generate-sertifikat/{id}',[App\Http\Controllers\PesertaController::class,'printSertifikasi'])->name('print-sertifikasi');
+
 // All login
 Route::group(['middleware' => ['auth']], function(){
     Route::get('profile',App\Http\Livewire\Profile::class)->name('profile');
@@ -70,6 +72,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('klaim-reason',App\Http\Livewire\KlaimReason\Index::class)->name('klaim-reason.index');
     Route::get('klaim/pengaturan',App\Http\Livewire\Klaim\Pengaturan::class)->name('klaim.pengaturan');
     Route::get('recovery-claim',App\Http\Livewire\RecoveryClaim\Index::class)->name('recovery-claim.index');
+
+    Route::get('rate-broker',App\Http\Livewire\RateBroker\Index::class)->name('rate-broker.index');
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -86,4 +90,56 @@ Route::group(['middleware' => ['auth','access:1']], function(){
     Route::get('users/edit/{id}',App\Http\Livewire\User\Edit::class)->name('users.edit');
     Route::post('users/autologin/{id}',[App\Http\Livewire\User\Index::class,'autologin'])->name('users.autologin');
     Route::get('log-activity',App\Http\Livewire\LogActivity\Index::class)->name('log-activity');
+});
+
+
+Route::post('wa',function(Illuminate\Http\Request $r){
+
+
+    $data['message'] = 'success';
+    
+    \LogActivity::add('[webhook] Inbound WA');
+
+    return response()->json($data,200);
+    
+    // header("Content-Type: text/plain");
+    /**
+    * all data POST sent from  https://solo.wablas.com
+    * you must create URL what can receive POST data
+    * we will sent data like this:
+
+    * id = message ID - string
+    * phone = sender phone - string
+    * message = content of message - string
+    * pushName = Sender Name like contact name - string (optional)
+    * groupSubject = Group Name - string (optional)
+    * timestamp = time send message
+    * file = name of the file when receiving media message (optional)
+    * url = url file media message (optional)
+    * messageType = text/image/document/video/audio/location - string
+    * mimeType = type file (optional)
+    * deviceId = unix ID device
+    * sender = phone number device - integer
+    */
+    // $content = json_decode(file_get_contents('php://input'), true);
+
+    // $id = $content['id'];
+    // $pushName = $content['pushName'];
+    // $isGroup = $content['isGroup'];
+    // if ($isGroup == true) {
+    //     $subjectGroup = $content['group']['subject'];
+    //     $ownerGroup = $content['group']['owner'];
+    //     $decriptionGroup = $content['group']['desc'];
+    //     $partisipanGroup = $content['group']['participants'];
+    // }
+    // $message = $content['message'];
+    // $phone = $content['phone'];
+    // $messageType = $content['messageType'];
+    // $file = $content['file'];
+    // $mimeType = $content['mimeType'];
+    // $deviceId = $content['deviceId'];
+    // $sender = $content['sender'];
+    // $timestamp = $content['timestamp'];
+
+    // return $message;
 });

@@ -10,6 +10,7 @@ use App\Models\ReasuradurRateUw;
 use App\Models\ReasuradurRateRates;
 use App\Models\ReasuradurRate;
 use App\Models\Reasuradur;
+use App\Models\Polis;
 use Livewire\WithPagination;
 
 class Edit extends Component
@@ -22,12 +23,14 @@ class Edit extends Component
         'data_assign_or_'=>'data_assign_or_'
     ];
     public $data,$no_pengajuan,$tab_active='tab_draft',$check_id=[],$filter_status,$is_calculate=false,$filter_perhitungan_usia;
-    public $filter_ul_arr=[],$filter_ul,$filter_peserta,$is_reassign=false;
+    public $filter_ul_arr=[],$filter_ul,$filter_peserta,$is_reassign=false,$filter_polis_id,$filter_keyword;
     public $data_reassign_draft=[],$data_reassign_reas=[],$data_reassign_or=[],$reasuradur=[],$reasuradur_id,$reasuradur_rate_id;
-    public $manfaat,$perhitungan_usia,$or,$reas,$ri_com,$type_reas,$kadaluarsa_reas_hari,$is_edit_kadaluarsa=false;
+    public $manfaat,$perhitungan_usia,$or,$reas,$ri_com,$type_reas,$kadaluarsa_reas_hari,$is_edit_kadaluarsa=false,$polis=[];
     public function render()
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1]);
+
+        if($this->filter_polis_id) $kepesertaan->where('polis_id',$this->filter_polis_id);
 
         $draft = clone $kepesertaan;
         $reas = clone $kepesertaan;
@@ -43,11 +46,16 @@ class Edit extends Component
     public function mount($id)
     {
         $this->data = Reas::find($id);
-        $this->kadaluarsa_reas_hari = $this->data->kadaluarsa_reas_hari;
+        $this->kadaluarsa_reas_hari = isset($this->data->kadaluarsa_reas_hari) ? $this->data->kadaluarsa_reas_hari : 0;
         $this->filter_perhitungan_usia = $this->data->perhitungan_usia;
         $this->no_pengajuan = $this->data->no_pengajuan;
         $this->filter_ul_arr = Kepesertaan::where('reas_id',$this->data->id)->groupBy('ul_reas')->get();
         $this->reasuradur = Reasuradur::get();
+        $polis_id = [];
+        foreach(Kepesertaan::where('reas_id',$this->data->id)->groupBy('polis_id')->get() as $item){
+            $polis_id[] = $item->polis_id;
+        }
+        $this->polis = Polis::whereIn('id',$polis_id)->get();
     }
 
     public function saveKadaluarsa()
@@ -133,6 +141,8 @@ class Edit extends Component
         }
         if($propertyName=='filter_ul') $this->emit('filter-ul',$this->filter_ul);
         if($propertyName=='filter_peserta') $this->emit('filter-peserta',$this->filter_peserta);
+        if($propertyName=='filter_polis_id') $this->emit('filter-polis_id',$this->filter_polis_id);
+        if($propertyName=='filter_keyword') $this->emit('filter-keyword',$this->filter_keyword);
         if($this->reasuradur_id) $this->rate = ReasuradurRate::where('reasuradur_id',$this->reasuradur_id)->get();
         if($this->reasuradur_rate_id) {
             $find = ReasuradurRate::find($this->reasuradur_rate_id);

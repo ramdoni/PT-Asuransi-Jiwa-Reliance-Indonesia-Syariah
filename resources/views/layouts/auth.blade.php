@@ -6,22 +6,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> <!-- Favicon-->
-        <title>Login - Asuransi Reliance Indonesia Syariah</title>
+        <title>Login - {{get_setting('company')}}</title>
         <meta name="description" content="@yield('meta_description', config('app.name'))">
         <meta name="author" content="@yield('meta_author', config('app.name'))">
         @yield('meta')
-
         {{-- See https://laravel.com/docs/5.5/blade#stacks for usage --}}
         @stack('before-styles')
-
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}">
-        
         <!-- Custom Css -->
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/color_skins.css') }}">
         <style>
             .auth-main:after {background:none;}
+            .theme-blue:before, .theme-blue:after {
+                background: transparent;
+            }
+            .auth-main{
+                background:url('assets/img/bg_login.jpeg');
+                background-size: cover;
+                background-repeat: no-repeat;
+            }
+            .theme-blue #wrapper:before, .theme-blue #wrapper:after {
+                background: transparent;
+            }
         </style>
         @stack('after-styles')
         @livewireStyles
