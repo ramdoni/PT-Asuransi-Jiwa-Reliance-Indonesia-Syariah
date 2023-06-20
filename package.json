@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "laravel-echo": "^1.13.1",
-    "pusher-js": "^7.3.0"
+    "pusher-js": "^7.3.0",
+    "smartsheet": "^3.1.1"
   }
 }

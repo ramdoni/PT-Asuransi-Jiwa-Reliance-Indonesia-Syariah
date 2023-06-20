@@ -51,7 +51,7 @@
         <br />
         <br />
        <div style="width:50%;float:left">
-            <p style="font-size:14px;">Jakarta, {{date('d F Y',strtotime($data->created_at))}}</p>
+            <p style="font-size:14px;">Jakarta, {{date('d F Y',strtotime($data->head_devisi_date))}}</p>
         </div>
         <div style="width:50%;float:left">
             <table style="width:100%;">

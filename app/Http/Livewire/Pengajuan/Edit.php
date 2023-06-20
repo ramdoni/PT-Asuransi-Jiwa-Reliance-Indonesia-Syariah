@@ -370,8 +370,9 @@ class Edit extends Component
         }
         
         if($this->data->polis->fee_base_brokerage){
+            $this->data->polis->fee_base_brokerage = str_replace(",",".",$this->data->polis->fee_base_brokerage);
             $this->data->brokerage_ujrah_persen = $this->data->polis->fee_base_brokerage;
-            $this->data->brokerage_ujrah = $kontribusi*($this->data->polis->fee_base_brokerage/100);
+            $this->data->brokerage_ujrah = @$kontribusi*($this->data->polis->fee_base_brokerage/100);
         }
 
         /**

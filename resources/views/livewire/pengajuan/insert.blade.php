@@ -60,7 +60,7 @@
                                     <a href="{{asset('template/template-kepesertaan.xlsx')}}"><i class="fa fa-download"></i> Template</a>
                                     <span wire:loading wire:target="file">
                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                        <span class="sr-only">{{ __('Loading...') }}</span> Sedang upload...
                                     </span>
                                     <input type="file" wire:loading.remove wire:target="file" class="form-control" wire:model="file" />
                                     @error('file')

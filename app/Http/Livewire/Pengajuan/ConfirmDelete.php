@@ -20,6 +20,7 @@ class ConfirmDelete extends Component
     public function delete()
     {
         \App\Models\Kepesertaan::find($this->selected_id)->delete();
+        
         $this->emit('reload-page');
         $this->confirm_delete = false;
     }

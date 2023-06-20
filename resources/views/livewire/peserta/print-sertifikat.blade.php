@@ -4,7 +4,7 @@
         <style>
             @page { 
                 margin: 0px;
-                size: 560px 21cm landscape;
+                size: 600px 21cm landscape;
             }
             body { margin: 0px;  }
             * {
@@ -14,7 +14,7 @@
             .container {
                 background-size: content;
                 width: 21cm;
-                height: 560px;
+                height: 600px;
                 position: absolute;
                 top: 0;
                 width: 80%;
@@ -54,8 +54,8 @@
         </style>
     </head>
     <body>
-        <img src="assets/img/bg-sertifikat.jpeg" style="width: 21cm;height: 560px;position: absolute; top:0;right:0;z-index:1" />
-        <div class="container" style="z-index:2;padding-top: 60px;height: 560px;">
+        <img src="assets/img/bg-sertifikat.jpeg" style="width: 21cm;height: 600px;position: absolute; top:0;right:0;z-index:1" />
+        <div class="container" style="z-index:2;padding-top: 70px;height: 600px;">
             <p  style="text-align: center;margin-bottom:0;">Bismillahirrahmanirrahim</p>
             <h5 style="text-align: center;margin-top:0;padding-top:0;">
                 SERTIFIKAT KEPESERTAAN ASURANSI JIWA SYARIAH<br />
@@ -91,7 +91,7 @@
                     <tr>
                         <td>Manfaat Asuransi </td>
                         <td> : </td>
-                        <td></td>
+                        <td>Menurun</td>
                     </tr>
                     <tr>
                         <td>Masa Asuransi </td>
@@ -112,7 +112,7 @@
             </div>
             <div style="width:45%; float:left">
                 <table class="style1">
-                    <tr>
+                    <!-- <tr>
                         <td style="width:120px;">Dana Tabbaru </td>
                         <td> : </td>
                         <td>{{isset($data->dana_tabarru) ? format_idr($data->dana_tabarru) : '-'}}</td>
@@ -121,7 +121,7 @@
                         <td>Dana Ujrah </td>
                         <td> : </td>
                         <td>{{isset($data->dana_ujrah) ? format_idr($data->dana_ujrah) : '-'}}</td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td>Kontribusi Gross </td>
                         <td> : </td>
@@ -149,11 +149,9 @@
                 <div style="padding-top: 5px;position: relative;">
                     Jakarta, {{date('d M Y',strtotime($data->created_at))}}<br />
                     <strong>PT Asuransi Jiwa Reliance Indonesia Unit Syariah</strong><br />
-                    <img src="{{asset('logo-small.jpeg')}}" style="height: 50px;margin-left: 20px;" />
-                    <img src="{{asset('ttd.png')}}" style="height: 110px;position: absolute;botom:30px;left:0" />
-                    <br />
-                    <br />
-                    <p style="margin-bottom:0;"><strong><u>Gideon Heru Prasetya</u></strong></p>
+                    <img src="{{asset('logo-small.jpeg')}}" style="height: 50px;margin-left: 20px;position: absolute;right:70px;top:70px;" />
+                    <img src="{{asset('ttd.png')}}" style="height: 110px;z-index: 10" />
+                    <p style="margin-bottom:0;margin-top:0;padding-top:0;"><strong><u>Gideon Heru Prasetya</u></strong></p>
                     Direktur Utama
                 </div>
             </div>
@@ -238,82 +236,80 @@
             </div>
         </div>
         <img src="assets/img/bg-sertifikat.jpeg" style="width: 21cm;height: 700px;position: absolute; bottom:0;right:0;z-index:0" />
-        <!-- <div class="page_break"></div> -->
-        <!-- <div class="x">
-            <img src="assets/img/logo-syariah.png" width="100" style="margin-top: 20px;margin-left: 60px;" />
-            <div style="padding-left: 50px;padding-right: 50px;">
-                <hr />
-                <h2 class="text-center">SERTIFIKAT ASURANSI PEMBIAYAAN MULTIGUNA SYARIAH</h2>
-                <h2 class="text-center">NO: [CERS-00-2023-02-00000001]</h2>
-                <p class="text-justify">
-                    Sertifikat Asuransi Pembiayaan Multiguna Syariah ini merupakan bagian tak terpisahkan dari Polis Induk dan merupakan ringkasan dari obyek yang diasuransikan, berlaku untuk obyek asuransi di bawah ini:
-                </p>
-                <table class="style2">
-                    <tr>
-                        <th class="text-left" colspan="2">PEMEGANG POLIS</th>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">NOMOR POLIS INDUK</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">NAMA PEMEGANG POLIS</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">ALAMAT PEMEGANG POLIS</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <th class="text-left" colspan="2">
-                            PEMEGANG POLIS
-                        </th>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">NAMA</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">TANGGAL LAHIR</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">NIK</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">NO REKENING</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <td class="pl-20">KODE PAKET</td>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <th class="text-left">PERIODE ASURANSI</th>
-                        <td> : MULAI DARI TANGGAL [.....] SAMPAI DENGAN TANGGAL [......]</td>
-                    </tr>
-                    -<tr>
-                        <th class="text-left">NILAI ASURANSI</th>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <th class="text-left">SUKU KONTRIBUSI</th>
-                        <td> : </td>
-                    </tr>
-                    <tr>
-                        <th class="text-left">PERHITUNGAN KONTRIBUSI</th>
-                        <td> : </td>
-                    </tr>
-                </table>
-                <div style="width: 40%;float:right;">
-                    JAKARTA, [{{date('d F Y')}}]<br />
-                    <strong>PT ASURANSI RELIANCE INDONESIA</strong>
-                    <br />
-                    <img src="assets/img/TTD-Sukarman-untuk-Polis-General.png" style="width: 100px;" />
-                    <p>TTD (JPG/PNG)</p>
-                </p>
+        @if($data->ari_data)
+            @php($data_ari = json_decode($data->ari_data))
+            <div class="page_break"></div> 
+            <div class="x">
+                <img src="assets/img/logo-syariah.png" width="100" style="margin-top: 20px;margin-left: 60px;" />
+                <div style="padding-left: 50px;padding-right: 50px;">
+                    <hr />
+                    <h2 class="text-center" style="padding-bottom:0;margin-bottom:0;">SERTIFIKAT ASURANSI PEMBIAYAAN MULTIGUNA SYARIAH</h2>
+                    <h2 class="text-center" style="margin-top:0;padding-top:0;">NO: {{$data_ari->PolicyNo}}</h2>
+                    <p class="text-justify">   
+                        Sertifikat Asuransi Pembiayaan Multiguna Syariah ini merupakan bagian tak terpisahkan dari Polis Induk dan merupakan ringkasan dari Obyek yang diasuransikan.<br />
+                        Sertifikat Asuransi Pembiayaan Multiguna Syariah ini berlaku untuk obyek asuransi dibawah ini :
+                    </p>
+                    <table class="style2">
+                        <tr>
+                            <th class="text-left" colspan="2">PEMEGANG POLIS</th>
+                        </tr>
+                        <tr>
+                            <td class="pl-20">NOMOR POLIS INDUK</td>
+                            <td> : {{$data_ari->MasterPolicyNo}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-20">NAMA PEMEGANG POLIS</td>
+                            <td> : {{isset($data->polis->nama) ? $data->polis->nama : '-'}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-20">ALAMAT PEMEGANG POLIS</td>
+                            <td> : </td>
+                        </tr>
+                        <tr>
+                            <th class="text-left" colspan="2">PEMEGANG POLIS</th>
+                        </tr>
+                        <tr>
+                            <td class="pl-20">NAMA</td>
+                            <td> : {{$data->nama}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-20">ALAMAT</td>
+                            <td> : {{$data->alamat}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-20">NIK</td>
+                            <td> : {{$data->no_ktp}}</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-20">NO KONTRAK</td>
+                            <td> : {{$data_ari->ContractNo}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">PERIODE ASURANSI</th>
+                            <td> : Mulai dari tanggal {{date('d F Y',strtotime($data->tanggal_mulai))}}  sampai dengan tanggal  {{date('d F Y',strtotime($data->tanggal_akhir))}}</td>
+                        </tr>
+                        -<tr>
+                            <th class="text-left">NILAI ASURANSI</th>
+                            <td> : Rp. {{format_idr($data->basic)}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">SUKU KONTRIBUSI</th>
+                            <td> : {{$data->rate}} s%</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">PERHITUNGAN KONTRIBUSI</th>
+                            <td> : Rp. {{format_idr($data->basic)}} x {{$data->rate}} % = Rp. {{format_idr($data_ari->PremiumAmount)}}</td>
+                        </tr>
+                    </table>
+                    <div style="width: 40%;float:right;margin-top: 10px;">
+                        <p>JAKARTA, {{date('d F Y',strtotime($data->created_at))}}</p>
+                        <p>PT ASURANSI RELIANCE INDONESIA</p>
+                        <!-- <br />
+                        <img src="assets/img/TTD-Sukarman-untuk-Polis-General.png" style="width: 100px;" />
+                        <p>TTD (JPG/PNG)</p> -->
+                    </p>
+                </div>
             </div>
-        </div> -->
+        @endif
     </body>
 </html>

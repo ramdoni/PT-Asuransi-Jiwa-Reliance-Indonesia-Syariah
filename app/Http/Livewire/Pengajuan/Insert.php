@@ -118,6 +118,8 @@ class Insert extends Component
 
     public function temp_upload()
     {
+        ini_set('memory_limit', '-1');
+        
         $this->validate([
             'file'=>'required|mimes:xlsx|max:51200', // 50MB maksimal
         ]);

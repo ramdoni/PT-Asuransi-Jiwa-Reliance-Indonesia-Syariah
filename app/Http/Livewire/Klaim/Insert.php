@@ -15,7 +15,7 @@ class Insert extends Component
     public $kepesertaan=[],$peserta,$no_pengajuan,$polis,$polis_id,$transaction_id,$kepesertaan_id,$tanggal_meninggal,$nilai_klaim,$jenis_klaim,$tempat_dan_sebab;
     public $kadaluarsa_klaim_hari,$kadaluarsa_klaim_tanggal,$kadaluarsa_reas_tanggal,$sebab,$bank_nomor_rekening,$bank_cabang,$bank_atas_nama,$bank_mata_uang;
     public $provinsi = [],$kabupaten=[],$provinsi_id,$kabupaten_id,$nilai_klaim_or,$nilai_klaim_reas,$kategori_penyakit,$organ_yang_mencakup;
-    public $max_or,$share_reas,$share_or,$manfaat="Menurun";
+    public $max_or,$share_reas,$share_or,$manfaat="Menurun",$or_share;
     public function render()
     {
         return view('livewire.klaim.insert');
@@ -59,7 +59,7 @@ class Insert extends Component
                 $this->nilai_klaim_or = $nilai_klaim;
             }else{
                 if(isset($this->peserta->reas->rate_uw->model_reas)){
-                    $max_or = $this->max_or ? $this->max_or : $this->peserta->reas->rate_uw->max_or ? $this->peserta->reas->rate_uw->max_or : 0; // AS
+                    $max_or = $this->max_or ? $this->max_or : ($this->peserta->reas->rate_uw->max_or ? $this->peserta->reas->rate_uw->max_or : 0); // AS
                     $model_reas = $this->peserta->reas->rate_uw->model_reas; // AR
                     $basic = $this->peserta->basic; // V
                     $or_share = $this->or_share ? $this->or_share : $this->peserta->reas->or; // AT

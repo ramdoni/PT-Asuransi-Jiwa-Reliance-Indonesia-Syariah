@@ -18,6 +18,7 @@ Route::get('/', Home::class)->name('home')->middleware('auth');
 Route::get('login', App\Http\Livewire\Login::class)->name('login');
 
 Route::get('generate-sertifikat/{id}',[App\Http\Controllers\PesertaController::class,'printSertifikasi'])->name('print-sertifikasi');
+Route::get('preview-sertifikat/{id}',[App\Http\Controllers\PesertaController::class,'previewSertifikat'])->name('preview-sertifikat');
 
 // All login
 Route::group(['middleware' => ['auth']], function(){
@@ -93,8 +94,71 @@ Route::group(['middleware' => ['auth','access:1']], function(){
 });
 
 
-Route::post('wa',function(Illuminate\Http\Request $r){
+Route::get('send-wa',function(){
+    $token = "HioVXgQTselUx6alx9GmtfcJgpySCDnH3FCZh2tARb0C7vRtQon5shmOwx0KmGl1";
 
+    $curl = curl_init();
+    $data = [
+        // 'phone' => '628881264670',
+        'phone' => '6287889461000',
+        // 'phone' => '6281289992707',
+        // 'phone' => '6288224739153',
+        'title' => 'Approval',
+        'template_type' => 'text',
+        'message' => "We need your approval for new submissions on behalf of :\nName : Ramdoni\nBirthday : 13-03-1993\nAge : 30",
+        // 'url_display' => 'wablas.com',
+        // 'url_link' => 'https://wablas.com',
+        // 'contact_display' => 'contact us',
+        // 'contact_diplay' => '628881264670',
+        'reply1' => 'Approve',
+        'reply2' => 'Reject',
+        // 'footer' => 'Silahkan pilih salah satu',
+    ];
+
+    curl_setopt($curl, CURLOPT_HTTPHEADER,
+        array(
+            "Authorization: $token",
+        )
+    );
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+    curl_setopt($curl, CURLOPT_URL,  "https://solo.wablas.com/api/send-template-from-local");
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+    $result = curl_exec($curl);
+    curl_close($curl);
+
+    // $random = true;
+    // $payload = [
+    //     "data" => [
+    //         [
+    //             'phone' => '6281289992707-1515388137',
+    //             'message' => 'Test message to private message',
+    //             'isGroup' => 'true'
+    //         ]
+    //     ]
+    // ];
+    // curl_setopt($curl, CURLOPT_HTTPHEADER,
+    //     array(
+    //         "Authorization: $token",
+    //         "Content-Type: application/json"
+    //     )
+    // );
+    // curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload) );
+    // curl_setopt($curl, CURLOPT_URL,  "https://solo.wablas.com/api/v2/send-message");
+    // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    // $result = curl_exec($curl);
+    // curl_close($curl);
+    return $result;
+    // return response()->jsons(['message'=>'success',$result],200);
+});
+
+Route::post('wa',function(Illuminate\Http\Request $r){
 
     $data['message'] = 'success';
     

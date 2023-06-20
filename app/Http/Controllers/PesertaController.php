@@ -14,7 +14,6 @@ class PesertaController extends Controller
         
         return $pdf->stream();
     }
-
     public function printEk(Kepesertaan $id)
     {
         $pdf = \App::make('dompdf.wrapper');
@@ -22,7 +21,6 @@ class PesertaController extends Controller
         
         return $pdf->stream();
     }
-
     public function printSertifikasi(Kepesertaan $id)
     {
         $pdf = \App::make('dompdf.wrapper');
@@ -31,5 +29,12 @@ class PesertaController extends Controller
         // $pdf->save('sertifikat/'.$id->no_peserta. '.pdf');
         // return $pdf->download('sertifikat-'.$id->no_peserta. '.pdf');
         return $pdf->stream();
+    }
+
+    public function previewSertifikat(Kepesertaan $id)
+    {
+        $params['data'] = $id;
+
+        return view('preview-sertifikat')->with($params);
     }
 }

@@ -64,7 +64,6 @@
                                             @endif
                                         </td>
                                     </tr>
-
                                 </thead>
                             </table>
                         </div>
@@ -345,7 +344,7 @@
                                             <th>No KTP</th>
                                             <th>No Telepon</th>
                                             <th>Gender</th>
-                                            <th>No Peserta</th>
+                                            <!-- <th>No Peserta</th> -->
                                             <th>Nama Peserta</th>
                                             <th>Tgl. Lahir</th>
                                             <th>Usia</th>
@@ -398,7 +397,7 @@
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_ktp'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_ktp?$item->no_ktp:'<i>.....</i>'!!}</a></td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'no_telepon'})" data-toggle="modal" data-target="#modal_editable">{!!$item->no_telepon?$item->no_telepon:'<i>.....</i>'!!}</a></td>
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'jenis_kelamin'})" data-toggle="modal" data-target="#modal_editable">{!!$item->jenis_kelamin?$item->jenis_kelamin:'<i>.....</i>'!!}</a></td>
-                                                <td>{{$item->no_peserta}}</td>
+                                                <!-- <td>{{$item->no_peserta}}</td> -->
                                                 <td><a href="javascript:void(0)" wire:click="$emit('set_id',{id:{{$item->id}},field: 'nama'})" data-toggle="modal" data-target="#modal_editable">{!!$item->nama?$item->nama:'<i>.....</i>'!!}</a></td>
                                                 <td>{{$item->tanggal_lahir ? date('d-M-Y',strtotime($item->tanggal_lahir)) : '-'}}</td>
                                                 <td class="text-center">{{$item->usia}}</td>
