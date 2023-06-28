@@ -52,7 +52,7 @@ class ReasCalculate implements ShouldQueue
     public function handle()
     {
         ini_set('memory_limit', '-1');
-        $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1])->get();
+        $kepesertaan = Kepesertaan::where(['reas_id'=>$this->data->id,'status_akseptasi'=>1])->get();
         
         Kepesertaan::where('reas_id',$this->data->id)->update(['akumulasi_ganda_reas'=>0,'reas_manfaat_asuransi_ajri'=>0,'nilai_manfaat_asuransi_reas'=>0]);
 
@@ -93,7 +93,7 @@ class ReasCalculate implements ShouldQueue
                         $item->akumulasi_ganda_reas = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id,'status_polis'=>'Inforce'])
                                                                         ->leftJoin('reas','reas.id','=','kepesertaan.reas_id')
                                                                         ->where('reas.reasuradur_id',$this->data->reasuradur_id)
-                                                                        ->get()->sum('reas_manfaat_asuransi_ajri');
+                                                                        ->sum('reas_manfaat_asuransi_ajri');
                     }
                 }
             }else{

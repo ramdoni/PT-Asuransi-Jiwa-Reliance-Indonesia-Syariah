@@ -90,19 +90,19 @@ class Edit extends Component
             $item->reas_id = $data->id;
             $item->save();
 
-            Kepesertaan::where(['pengajuan_id'=>$item->id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
+            Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
         foreach($this->data_reassign_reas as $item){
             $item->reas_id = $data->id;
             $item->save();
 
-            Kepesertaan::where(['pengajuan_id'=>$item->id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
+            Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
         foreach($this->data_reassign_or as $item){
             $item->reas_id = $data->id;
             $item->save();
 
-            Kepesertaan::where(['pengajuan_id'=>$item->id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
+            Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
 
         session()->flash('message-success',__('Reassign berhasil submit, dengan no pengajuan : <a href="'.route('reas.edit',$data->id).'" target="_blank">'. $data->no_pengajuan.'</a>'));

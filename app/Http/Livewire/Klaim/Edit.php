@@ -113,6 +113,10 @@ class Edit extends Component
             if($nilai_klaim) $this->nilai_klaim_reas = $nilai_klaim - $this->nilai_klaim_or;
         }
 
+        if($propertyName=='share_or' and $this->share_or >0){
+            $this->share_reas = 100 - $this->share_or;
+        }
+
         // if($this->share_or and $this->nilai_klaim){
         //     $nilai_klaim = $this->nilai_klaim;
         //     if($this->nilai_klaim_disetujui) $nilai_klaim = $this->nilai_klaim_disetujui;
