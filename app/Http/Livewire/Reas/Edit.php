@@ -25,7 +25,7 @@ class Edit extends Component
     public $data,$no_pengajuan,$tab_active='tab_draft',$check_id=[],$filter_status,$is_calculate=false,$filter_perhitungan_usia;
     public $filter_ul_arr=[],$filter_ul,$filter_peserta,$is_reassign=false,$filter_polis_id,$filter_keyword;
     public $data_reassign_draft=[],$data_reassign_reas=[],$data_reassign_or=[],$reasuradur=[],$reasuradur_id,$reasuradur_rate_id;
-    public $manfaat,$perhitungan_usia,$or,$reas,$ri_com,$type_reas,$kadaluarsa_reas_hari,$is_edit_kadaluarsa=false,$polis=[];
+    public $manfaat,$perhitungan_usia,$or,$reas,$ri_com,$type_reas,$kadaluarsa_reas_hari,$is_edit_kadaluarsa=false,$polis=[],$rate;
     public function render()
     {
         $kepesertaan = Kepesertaan::with(['pengajuan','polis'])->where(['reas_id'=>$this->data->id,'status_akseptasi'=>1]);
@@ -88,21 +88,30 @@ class Edit extends Component
 
         foreach($this->data_reassign_draft as $item){
             $item->reas_id = $data->id;
+            $item->status_reas = 0;
+            $item->reas_manfaat = $this->manfaat;
+            $item->reas_type = $this->type_reas;
             $item->save();
 
-            Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
+            // Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
         foreach($this->data_reassign_reas as $item){
             $item->reas_id = $data->id;
+            $item->status_reas = 0;
+            $item->reas_manfaat = $this->manfaat;
+            $item->reas_type = $this->type_reas;
             $item->save();
 
-            Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
+            // Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
         foreach($this->data_reassign_or as $item){
             $item->reas_id = $data->id;
+            $item->status_reas = 0;
+            $item->reas_manfaat = $this->manfaat;
+            $item->reas_type = $this->type_reas;
             $item->save();
 
-            Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
+            // Kepesertaan::where(['pengajuan_id'=>$item->pengajuan_id,'status_akseptasi'=>1])->update(['status_reas'=>0,'reas_id'=>$data->id,'reas_manfaat'=>$this->manfaat,'reas_type'=>$this->type_reas]);
         }
 
         session()->flash('message-success',__('Reassign berhasil submit, dengan no pengajuan : <a href="'.route('reas.edit',$data->id).'" target="_blank">'. $data->no_pengajuan.'</a>'));
