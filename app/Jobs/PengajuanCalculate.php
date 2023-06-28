@@ -60,7 +60,10 @@ class PengajuanCalculate implements ShouldQueue
             }else{
                 $table->where(['polis_id'=>$this->polis_id,'is_temp'=>1]);
             }
-        })->with(['double_peserta','rate_'])->get();
+        })
+        ->with(['double_peserta'])->get()
+        // ->with(['double_peserta','rate_'])->get()
+        ;
 
         foreach($kepesertaan as $data){
 
