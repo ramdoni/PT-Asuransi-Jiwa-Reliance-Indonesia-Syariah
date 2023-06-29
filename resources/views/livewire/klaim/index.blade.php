@@ -132,7 +132,8 @@
                                             <!-- <a href="javascript:void(0)" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a> -->
                                         @endif
                                         
-                                        @if($item->status==4)
+                                        @if($item->status==5)
+                                            <a href="{{route('klaim.print-persetujuan',$item->id)}}" class="badge badge-info badge-active" target="_blank"><i class="fa fa-print"></i> Persetujuan</a>
                                         @endif
                                         
                                         @if($item->status_pengajuan==2)

@@ -42,6 +42,8 @@ class Insert extends Component
     public function calculate()
     {
         $this->is_calculate = true;
+        // $command = escapeshellcmd("python /var/www/ajrius/python/calculate.py {$this->polis_id} {$this->transaction_id}");
+        // $output = shell_exec($command);
         PengajuanCalculate::dispatch($this->polis_id,$this->perhitungan_usia,$this->masa_asuransi,$this->transaction_id,'new');
     }
 
@@ -161,6 +163,11 @@ class Insert extends Component
             $insert[$total_data]['kontribusi'] = 0;
             $insert[$total_data]['is_temp'] = 1;
             $insert[$total_data]['is_double'] = 2;
+
+            $insert[$total_data]['masa_bulan'] =  hitung_masa_bulan($insert[$total_data]['tanggal_mulai'],$insert[$total_data]['tanggal_akhir'],$this->masa_asuransi);
+            $insert[$total_data]['usia'] =  $insert[$total_data]['tanggal_lahir'] ? hitung_umur($insert[$total_data]['tanggal_lahir'],$this->perhitungan_usia,$insert[$total_data]['tanggal_mulai']) : '0';
+            $insert[$total_data]['masa'] = hitung_masa($insert[$total_data]['tanggal_mulai'],$insert[$total_data]['tanggal_akhir']);
+
             $total_data++;
         }
 
