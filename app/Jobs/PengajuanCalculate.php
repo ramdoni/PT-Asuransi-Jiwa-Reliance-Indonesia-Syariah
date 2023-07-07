@@ -49,6 +49,11 @@ class PengajuanCalculate implements ShouldQueue
     {
         ini_set('memory_limit', '-1');
         $polis = Polis::find($this->polis_id);
+
+        $command = escapeshellcmd("python /var/www/ajrius/python/calculate.py {$this->polis_id} {$this->transaction_id} {$polis->iuran_tabbaru} {$polis->ujrah_atas_pengelolaan}");
+        $output = shell_exec($command);
+        return;
+
         $iuran_tabbaru = $polis->iuran_tabbaru;
         $ujrah = $polis->ujrah_atas_pengelolaan;
         echo "Polis : {$polis->nama}\n\n";
@@ -61,7 +66,8 @@ class PengajuanCalculate implements ShouldQueue
                 $table->where(['polis_id'=>$this->polis_id,'is_temp'=>1]);
             }
         })
-        ->with(['double_peserta'])->get()
+        // ->with(['double_peserta'])
+        ->get()
         // ->with(['double_peserta','rate_'])->get()
         ;
 

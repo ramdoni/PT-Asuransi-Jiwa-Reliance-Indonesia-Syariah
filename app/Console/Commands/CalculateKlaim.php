@@ -3,8 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Klaim;
-use App\Models\Kepesertaan;
+use App\Models\Polis;
 
 class CalculateKlaim extends Command
 {
@@ -39,14 +38,31 @@ class CalculateKlaim extends Command
      */
     public function handle()
     {
-        $data = Klaim::get();
+        $data = Polis::with(['produk','provinsi'])
+                        ->withCount(['rate_','uw_limit_'])
+                        ->orderBy('id','desc')->get();
         foreach($data as $k => $item){
-            echo "{$k}.{$item->no_pengajuan}\n";
-            $item->kadaluarsa_klaim_tanggal = $item->kepesertaan->polis->kadaluarsa_klaim ? date('Y-m-d',strtotime($item->tanggal_meninggal ." +{$item->kepesertaan->polis->kadaluarsa_klaim} days")) : '';
-            $kadaluarsa_reas_tanggal = $item->kepesertaan->polis->kadaluarsa_reas ? date('Y-m-d',strtotime($item->tanggal_meninggal ." +{$item->kepesertaan->polis->kadaluarsa_reas} days")) : '';
+
+            if($item->rate__count){
+                $item->is_rate = 1;
+            }
+            if($item->uw_limit__count){
+                $item->is_uw = 1;
+            }
+
             $item->save();
 
-            Kepesertaan::find($item->kepesertaan_id)->update(['kadaluarsa_reas_tanggal'=>$kadaluarsa_reas_tanggal]);
+            echo "{$k}. No Polis : {$item->no_polis}\n";
         }
+
+        // $data = Klaim::get();
+        // foreach($data as $k => $item){
+        //     echo "{$k}.{$item->no_pengajuan}\n";
+        //     $item->kadaluarsa_klaim_tanggal = $item->kepesertaan->polis->kadaluarsa_klaim ? date('Y-m-d',strtotime($item->tanggal_meninggal ." +{$item->kepesertaan->polis->kadaluarsa_klaim} days")) : '';
+        //     $kadaluarsa_reas_tanggal = $item->kepesertaan->polis->kadaluarsa_reas ? date('Y-m-d',strtotime($item->tanggal_meninggal ." +{$item->kepesertaan->polis->kadaluarsa_reas} days")) : '';
+        //     $item->save();
+
+        //     Kepesertaan::find($item->kepesertaan_id)->update(['kadaluarsa_reas_tanggal'=>$kadaluarsa_reas_tanggal]);
+        // }
     }
 }

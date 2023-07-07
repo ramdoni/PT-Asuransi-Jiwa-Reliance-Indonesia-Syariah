@@ -42,7 +42,9 @@ class Insert extends Component
     public function calculate()
     {
         $this->is_calculate = true;
-        // $command = escapeshellcmd("python /var/www/ajrius/python/calculate.py {$this->polis_id} {$this->transaction_id}");
+
+        // $polis =  Polis::find($this->polis_id);
+        // $command = escapeshellcmd("python /var/www/ajrius/python/calculate.py {$this->polis_id} {$this->transaction_id} {$polis->iuran_tabbaru} {$polis->ujrah_atas_pengelolaan}");
         // $output = shell_exec($command);
         PengajuanCalculate::dispatch($this->polis_id,$this->perhitungan_usia,$this->masa_asuransi,$this->transaction_id,'new');
     }
@@ -172,7 +174,9 @@ class Insert extends Component
         }
 
         if(count($insert)>0)  {
-            Kepesertaan::insert($insert);
+            foreach (array_chunk($insert,1000) as $t)  {
+                Kepesertaan::insert($t);
+            }
         }
 
         $this->emit('reload-row');

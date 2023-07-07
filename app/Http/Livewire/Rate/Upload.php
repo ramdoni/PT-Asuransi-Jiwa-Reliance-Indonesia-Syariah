@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Rate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Rate;
+use App\Models\Polis;
 
 class Upload extends Component
 {
@@ -19,7 +20,6 @@ class Upload extends Component
     public function set_id($id)
     {
         $this->polis_id = $id;
-
 
         $data = Rate::where('polis_id',$this->polis_id)->groupBy('tahun')->get();
         $get_bulan = Rate::where('polis_id',$this->polis_id)->groupBy('bulan')->get();
@@ -69,6 +69,10 @@ class Upload extends Component
 
             Rate::insert($insert);
         }
+
+        $polis = Polis::find($this->polis_id);
+        $polis->is_rate = 1;
+        $polis->save();
 
         session()->flash('message-success',__('Data Rate berhasil di upload'));
 

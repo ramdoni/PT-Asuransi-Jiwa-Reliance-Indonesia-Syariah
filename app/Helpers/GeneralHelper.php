@@ -2,6 +2,11 @@
 use App\Models\User;
 use App\Models\UserOtp;
 
+function source_api($k){
+    $source  = [1=>'PAN'];
+    return @$source[$k];
+}
+
 function terbilang($nilai) {
     $nilai = abs($nilai);
     $huruf = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
@@ -323,9 +328,9 @@ function generate_no_voucer_journal($type="AP"){
 
 function generate_no_voucher($coa_id="",$count="")
 {
-    $coa = \App\Models\Coa::find($coa_id);
+    $coa = \App\Models\Finance\Coa::find($coa_id);
     if(empty($count)) 
-        $count = \App\Models\Journal::whereMonth('created_at',date('m'))->whereYear('created_at',date('Y'))->count()+1;
+        $count = \App\Models\Finance\Journal::whereMonth('created_at',date('m'))->whereYear('created_at',date('Y'))->count()+1;
     if($coa) 
         return $coa->code_voucher.'-'.str_pad($count,3, '0', STR_PAD_LEFT).'/'.date('m').'/'.date('Y');
 

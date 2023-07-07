@@ -37,10 +37,11 @@
     transform: rotate(360deg);
     }
 }
-.table tr td,.table tr th{
+.table.no-padding tr td,.table.table.no-padding tr th{
     padding-top:3px;
     padding-bottom:3px;
 }
+
 .table-style1 tr td,
 .table-style1 tr th{
     padding-top:4px;

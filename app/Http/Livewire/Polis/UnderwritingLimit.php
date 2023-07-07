@@ -83,6 +83,9 @@ class UnderwritingLimit extends Component
             }
         }
 
+        $this->data->is_uw = 1;
+        $this->data->save();
+
         $this->emit('reload-page');
     }
 }

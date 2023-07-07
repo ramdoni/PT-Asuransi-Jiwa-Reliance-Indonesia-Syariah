@@ -76,8 +76,6 @@ class ReasCalculate implements ShouldQueue
 
         foreach($kepesertaan as $k => $item){
             $manfaat_asuransi = $item->basic;
-
-            // echo "{$k}. Nama : {$item->nama}\n";
             $item->usia_reas = $item->tanggal_lahir ? hitung_umur($item->tanggal_lahir,$perhitungan_usia,$item->tanggal_mulai) : '0';
             // check double
             $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id,'status_polis'=>'Inforce'])->whereNotNull('reas_id');
@@ -155,9 +153,16 @@ class ReasCalculate implements ShouldQueue
             if($item->total_kontribusi_reas<=0){
                 $item->nilai_manfaat_asuransi_reas = 0;
                 $item->reas_manfaat_asuransi_ajri = $item->basic;
-                $item->status_reas = 2; // tidak direaskan karna distribusinya 0
+                // $item->status_reas = 2; // tidak direaskan karna distribusinya 0
             }else{
-                $item->status_reas = 1;
+                // $item->status_reas = 1;
+            }
+
+            if(isset($this->data->rate_uw->or)){
+                if($this->data->rate_uw->or==100.00)
+                    $item->status_reas = 2;
+                else
+                    $item->status_reas = 1;
             }
 
             $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days"));

@@ -149,8 +149,8 @@
                 <div style="padding-top: 5px;position: relative;">
                     Jakarta, {{date('d M Y',strtotime($data->created_at))}}<br />
                     <strong>PT Asuransi Jiwa Reliance Indonesia Unit Syariah</strong><br />
-                    <img src="{{asset('logo-small.jpeg')}}" style="height: 50px;margin-left: 20px;position: absolute;right:70px;top:70px;" />
-                    <img src="{{asset('ttd.png')}}" style="height: 110px;z-index: 10" />
+                    <img src="{{public_path('logo-small.jpeg')}}" style="height: 50px;margin-left: 20px;position: absolute;right:70px;top:70px;" />
+                    <img src="{{public_path('ttd.png')}}" style="height: 110px;z-index: 10" />
                     <p style="margin-bottom:0;margin-top:0;padding-top:0;"><strong><u>Gideon Heru Prasetya</u></strong></p>
                     Direktur Utama
                 </div>

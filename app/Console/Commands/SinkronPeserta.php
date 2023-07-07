@@ -39,6 +39,21 @@ class SinkronPeserta extends Command
      */
     public function handle()
     {
+        // foreach(Kepesertaan::where('pengajuan_id',10305)->get() as $peserta){
+
+        //     $polis = Polis::find($peserta->polis_id);
+        //     $running_number = $polis->running_number_peserta+1;
+        //     $no_peserta = (isset($polis->produk->id) ? $polis->produk->id : '0') ."-". date('ym').str_pad($running_number,7, '0', STR_PAD_LEFT).'-'.str_pad($polis->running_number,3, '0', STR_PAD_LEFT);
+        //     $peserta->no_peserta = $no_peserta;
+        //     $peserta->save();
+
+        //     echo "No Peserta : ". $peserta->no_peserta;
+            
+        //     $polis->running_number_peserta = $running_number;
+        //     $polis->save();
+        // }
+        // return;
+
         ini_set('memory_limit', '-1');
 
         $inputFileName = './public/migrasi/migrasi-oktober.xls';

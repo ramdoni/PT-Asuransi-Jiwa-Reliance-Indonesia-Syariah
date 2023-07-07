@@ -49,9 +49,18 @@ class Index extends Component
                 $data->whereBetween('head_syariah_submit',[$this->start_tanggal_akseptasi,$this->end_tanggal_akseptasi]);
         }
 
-        $total_dn = clone $data;
+        $total_all = clone $data;
+        $total_paid = clone $data;
+        $total_unpaid = clone $data;
 
-        return view('livewire.pengajuan.index')->with(['data'=>$data->paginate(100),'total_dn'=>$total_dn->sum('net_kontribusi')]);
+        return view('livewire.pengajuan.index')->with([
+                'data'=>$data->paginate(100),
+                'total_all'=>$total_all->count(),
+                'total_dn'=>$total_all->sum('net_kontribusi'),
+                'total_dn_count'=> $total_all->whereNotNull('dn_number')->count(),
+                'total_dn_paid'=>$total_paid->where('status_invoice',1)->sum('net_kontribusi'),
+                'total_dn_unpaid'=>$total_unpaid->whereNotNull('dn_number')->where('status_invoice','0')->sum('net_kontribusi'),
+            ]);
     }
 
 

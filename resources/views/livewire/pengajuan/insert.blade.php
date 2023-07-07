@@ -130,7 +130,7 @@
         channel.bind('generate', function(data) {
             Livewire.emit('set_calculate',false);
             console.log(data);
-            if(data.transaction_id=={{$transaction_id}}){
+            if(data.transaction_id=='{{$transaction_id}}'){
                 show_toast(data.message,'top-center');
             }
         });

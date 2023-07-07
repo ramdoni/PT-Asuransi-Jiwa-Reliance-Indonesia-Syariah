@@ -1,6 +1,73 @@
 @section('sub-title', 'Index')
 @section('title', 'Pengajuan')
 <div class="clearfix row">
+    <div class="col-lg-3 col-md-6">
+        <div class="card top_counter currency_state">
+            <div class="body">
+                <div class="icon">
+                    <i class="fa fa-database text-info"></i>
+                </div>
+                <div class="content">
+                    <div class="text">Total Pengajuan</div>
+                    <h5 class="number">{{format_idr($total_all)}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="col-lg-2 col-md-6">
+        <div class="card top_counter currency_state">
+            <div class="body">
+                <div class="icon">
+                    <i class="fa fa-check-circle text-success"></i>
+                </div>
+                <div class="content">
+                    <div class="text">Total DN</div>
+                    <h5 class="number">{{format_idr($total_dn_count)}}</h5>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="col-lg-3 col-md-6">
+        <div class="card top_counter currency_state">
+            <div class="body">
+                <div class="icon">
+                    <i class="fa fa-check text-warning"></i>
+                </div>
+                <div class="content">
+                    <div class="text">Total DN (Rp)</div>
+                    <h5 class="number">{{format_idr($total_dn)}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6">
+        <div class="card top_counter currency_state">
+            <div class="body">
+                <div class="icon">
+                    <i class="fa fa-check text-success"></i>
+                </div>
+                <div class="content">
+                    <div class="text">Total DN Paid (Rp)</div>
+                    <h5 class="number">{{format_idr($total_dn_paid)}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card top_counter currency_state">
+            <div class="body">
+                <div class="icon">
+                    <i class="fa fa-history text-danger"></i>
+                </div>
+                <div class="content">
+                    <div class="text">Total DN Unpaid (Rp)</div>
+                    <h5 class="number">{{format_idr($total_dn_unpaid)}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="col-lg-12">
         <div class="card">
             <div class="header pb-0">
@@ -74,9 +141,7 @@
                                 <th>No</th>
                                 <th class="text-center">Status Approval</th>
                                 <th>Nomor DN</th>
-                                <th class="text-right">Total DN<br/>
-                                    <span class="text-info">{{format_idr($total_dn)}}</span>
-                                </th>
+                                <th class="text-right">Total DN<br/> <span class="text-info">{{format_idr($total_dn)}}</span></th>
                                 <th>Status Pembayaran</th>
                                 <th>No Pengajuan</th>
                                 <th>No Pengajuan Reas</th>

@@ -15,7 +15,7 @@ class Index extends Component
     public function render()
     {
         $data = Polis::with(['produk','provinsi'])
-                        ->withCount(['rate_','uw_limit_'])
+                        // ->withCount(['rate_','uw_limit_'])
                         ->orderBy('id','desc');
         
         if($this->filter_keyword) $data->where(function($table){
