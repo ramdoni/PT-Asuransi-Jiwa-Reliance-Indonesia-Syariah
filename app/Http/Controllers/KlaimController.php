@@ -21,7 +21,7 @@ class KlaimController extends Controller
         }
 
         $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadView('livewire.klaim.print-persetujuan',['data'=>$id,'keputusa_arr'=>$keputusa_arr])->setPaper([0, 0, 210, 297], 'landscape');;
+        $pdf->loadView('livewire.klaim.print-persetujuan',['data'=>$id,'peserta'=>$id->kepesertaan,'keputusa_arr'=>$keputusa_arr])->setPaper([0, 0, 210, 297], 'landscape');;
 
         return $pdf->stream();
     }

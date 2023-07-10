@@ -145,11 +145,18 @@ class PersetujuanKlaim extends Component
             'direksi_1_status'=>'required'
         ]);
 
-        if($this->data->nilai_klaim_disetujui>200000000)
-            $this->data->status = 5;
-        else{
-            $this->data->status_pengajuan = $this->direksi_1_status;
-            $this->data->status = 3;
+        /**
+         * @exception
+         * @param 
+         * @description : jika sudah terlanjur di setujui oleh 
+         */
+        if($this->data->status!=3){
+            if($this->data->nilai_klaim_disetujui>200000000)
+                $this->data->status = 5;
+            else{
+                $this->data->status_pengajuan = $this->direksi_1_status;
+                $this->data->status = 3;
+            }
         }
         
         $name = "direksi_1.".$this->direksi_1_file->extension();

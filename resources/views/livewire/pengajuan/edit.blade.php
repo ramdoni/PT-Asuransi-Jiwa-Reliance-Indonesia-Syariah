@@ -51,7 +51,7 @@
                                                 <span class="badge badge-danger">Head Syariah</span>
                                             @endif
                                             @if($data->status==3)
-                                                <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
+                                                <span class="badge badge-success badge-active" wire:click="testCoa"><i class="fa fa-check-circle"></i> Selesai</span>
                                             @endif
                                             @if($data->status==4)
                                                 <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>

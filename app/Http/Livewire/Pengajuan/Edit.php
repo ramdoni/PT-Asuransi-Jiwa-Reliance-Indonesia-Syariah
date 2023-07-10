@@ -805,7 +805,7 @@ class Edit extends Component
             }
 
             $new->description = $this->data->polis->nama;
-            $new->saldo = replace_idr($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
+            $new->saldo = ($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
             $new->save();
         }
     }

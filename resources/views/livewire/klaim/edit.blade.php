@@ -8,41 +8,50 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h6><i class="fa fa-circle text-info"></i> Data Peserta</h6>
-                            <table class="table ml-2">
+                            <table class="table ml-2 no-padding">
                                 <tr>
-                                    <th style="width:30%">Nomor Polis</th>
-                                    <td style="width:70%"> : {{isset($peserta->polis->no_polis)?$peserta->polis->no_polis : '-'}}</td>
+                                    <td style="width:30%">Nomor Polis</td>
+                                    <td style="width: 5px;"> : </td>
+                                    <td style="width:70%">{{isset($peserta->polis->no_polis)?$peserta->polis->no_polis : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Pemegang Polis</th>
-                                    <td style="white-space: break-spaces"> :  {{isset($peserta->polis->nama)?$peserta->polis->nama : '-'}}</td>
+                                    <td>Pemegang Polis</td>
+                                    <td> : </td>
+                                    <td style="white-space: break-spaces">{{isset($peserta->polis->nama)?$peserta->polis->nama : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Produk As</th>
-                                    <td> :  {{isset($peserta->polis->produk->singkatan)?$peserta->polis->produk->singkatan : '-'}}</td>
+                                    <td>Produk As</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->polis->produk->singkatan)?$peserta->polis->produk->singkatan : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>No Peserta</th>
-                                    <td> : {{isset($peserta->no_peserta)?$peserta->no_peserta:'-'}}</td>
+                                    <td>No Peserta</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->no_peserta)?$peserta->no_peserta:'-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Nama Peserta</th>
-                                    <td> : {{isset($peserta->nama)?$peserta->nama:'-'}}</td>
+                                    <td>Nama Peserta</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->nama)?$peserta->nama:'-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Tanggal Lahir</th>
-                                    <td> : {{isset($peserta->tanggal_lahir)?date('d-F-Y',strtotime($peserta->tanggal_lahir)):'-'}}</td>
+                                    <td>Tanggal Lahir</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->tanggal_lahir)?date('d-F-Y',strtotime($peserta->tanggal_lahir)):'-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Usia Masuk As</th>
-                                    <td> : {{hitung_umur($data->kepesertaan->tanggal_lahir,1,$data->kepesertaan->tanggal_mulai)}}</td>
+                                    <td>Usia Masuk As</td>
+                                    <td> : </td>
+                                    <td>{{hitung_umur($data->kepesertaan->tanggal_lahir,1,$data->kepesertaan->tanggal_mulai)}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Masa Asuransi</th>
-                                    <td> : {{isset($peserta->masa_bulan)?$peserta->masa_bulan .' Bulan':'-'}}</td>
+                                    <td>Masa Asuransi</td>
+                                    <td> : </td>
+                                    <td>{{isset($peserta->masa_bulan)?$peserta->masa_bulan .' Bulan':'-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Periode As</th>
+                                    <td>Periode As</td>
+                                    <td> : </td>
                                     <td>
                                         @if(isset($peserta->tanggal_mulai))
                                             {{date('d F Y',strtotime($peserta->tanggal_mulai))}} sd {{date('d F Y',strtotime($peserta->tanggal_akhir))}}
@@ -52,11 +61,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Uang Asuransi</th>
+                                    <td>Uang Asuransi</td>
+                                    <td> : </td>
                                     <td>{{isset($peserta->basic) ? format_idr($peserta->basic) : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Status</th>
+                                    <td>Status</td>
+                                    <td> : </td>
                                     <td>
                                         @if($data->status==0)
                                             <span class="badge badge-warning">Klaim Analis</span>
@@ -82,9 +93,9 @@
                         </div>
                         <div class="col-md-4">
                             <h6><i class="fa fa-circle text-info"></i> Data Pembayaran</h6>
-                            <table class="table ml-2">
+                            <table class="table ml-2 no-padding">
                                 <tr>
-                                    <th style="width:30%">Nomor DN</th>
+                                    <td style="width:30%">Nomor DN</td>
                                     <td> : </td>
                                     <td style="width:70%;">
                                     @if(isset($peserta->pengajuan->no_pengajuan))
@@ -94,24 +105,24 @@
                                     @else - @endif</td>
                                 </tr>
                                 <tr>
-                                    <th>Kontribusi DN</th>
+                                    <td>Kontribusi DN</td>
                                     <td> : </td>
                                     <td>
                                         {{isset($peserta->pengajuan) ? format_idr($peserta->pengajuan->kontribusi+$peserta->pengajuan->extra_kontribusi+$peserta->pengajuan->extra_mortalita) : format_idr($peserta->kontribusi)}}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Tgl. Bayar Kontribusi</th>
+                                    <td>Tgl. Bayar Kontribusi</td>
                                     <td> : </td>
                                     <td>{{isset($peserta->pengajuan->payment_date) ? date('d-F-Y',strtotime($peserta->pengajuan->payment_date)) : '-' }} </td>
                                 </tr>
                                 <tr>
-                                    <th>Kontribusi Peserta</th>
+                                    <td>Kontribusi Peserta</td>
                                     <td> : </td>
                                     <td>{{isset($peserta->kontribusi) ? format_idr($peserta->kontribusi) : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Reasuradur</th>
+                                    <td>Reasuradur</td>
                                     <td> : </td>
                                     <td>
                                         @if($data->reasuradur_)
@@ -124,7 +135,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Type Reas</th>
+                                    <td>Type Reas</td>
                                     <td> : </td>
                                     <td>
                                         @if(isset($peserta->reas->type_reas))
@@ -137,7 +148,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Manfaat</th>
+                                    <td>Manfaat</td>
                                     <td> : </td>
                                     <td>
                                         @if($data->manfaat)
@@ -153,7 +164,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Model Reas</th>
+                                    <td>Model Reas</td>
                                     <td> : </td>
                                     <td>
                                         <select class="form-control" wire:model="model_reas">
@@ -174,7 +185,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Max OR</th>
+                                    <td>Max OR</td>
                                     <td> : </td>
                                     <td>
                                         @if($data->max_or)
@@ -190,7 +201,7 @@
                                     <td>{{isset($peserta->reas->manfaat_asuransi_ajri) ? format_idr($peserta->reas->manfaat_asuransi_ajri) : '-'}}</td>
                                 </tr> -->
                                 <tr>
-                                    <th>Kadaluarsa Reas</th>
+                                    <td>Kadaluarsa Reas</td>
                                     <td> : </td>
                                     <td>{{isset($peserta->polis->kadaluarsa_reas) ? $peserta->polis->kadaluarsa_reas .' Hari Kalender' : '-'}}</td>
                                 </tr>
@@ -198,25 +209,25 @@
                         </div>
                         <div class="col-md-4">
                             <h6><i class="fa fa-circle text-info"></i> Ketentuan Asuransi</h6>
-                            <table class="table ml-2">
+                            <table class="table ml-2 no-padding">
                                 <tr>
-                                    <th style="width:30%">Grace Periode</th>
+                                    <td style="width:30%">Grace Periode</td>
                                     <td style="width:70%"> : {{isset($peserta->polis->masa_leluasa) ? $peserta->polis->masa_leluasa .' Hari Kalender' : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Retroaktif/Waiting Periode</th>
+                                    <td>Retroaktif/Waiting Periode</td>
                                     <td> : {{isset($peserta->polis->retroaktif) ? $peserta->polis->retroaktif .' Hari Kalender' : '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Kadaluwarsa Klaim</th>
+                                    <td>Kadaluwarsa Klaim</td>
                                     <td> : {{$data->kadaluarsa_klaim_hari}} Hari Kalender</td>
                                 </tr>
                                 <tr>
-                                    <th>Tgl Kadaluwarsa Klaim</th>
+                                    <td>Tgl Kadaluwarsa Klaim</td>
                                     <td> : {{date('d-M-Y',strtotime($data->kadaluarsa_klaim_tanggal))}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Share OR (%)</th>
+                                    <td>Share OR (%)</td>
                                     <td>
                                         <input type="number" class="form-control" wire:model="share_or" max="100" min="0" style="width: 100px;" />
                                         <!-- @if($data->share_or)
@@ -227,7 +238,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Share Reas (%)</th>
+                                    <td>Share Reas (%)</td>
                                     <td>
                                         @if($share_reas>=0)
                                             {{$share_reas}}
@@ -237,23 +248,23 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Nilai Klaim OR</th>
+                                    <td>Nilai Klaim OR</td>
                                     <td> : {{isset($nilai_klaim_or) ? format_idr($nilai_klaim_or) : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Nilai Klaim Reas</th>
+                                    <td>Nilai Klaim Reas</td>
                                     <td> : {{isset($nilai_klaim_reas) ? format_idr($nilai_klaim_reas) : '-'}}</td>
                                 </tr>
                                 @if(isset($data->kepesertaan->reas->no_pengajuan))
                                     <tr>
-                                        <th>No Pengajuan Reas</th>
+                                        <td>No Pengajuan Reas</td>
                                         <td>
                                             <a href="{{route('reas.edit',$data->kepesertaan->reas_id)}}" target="_blank">{{$data->kepesertaan->reas->no_pengajuan}}</a>
                                         </td>
                                     </tr>
                                 @endif
                                 <tr>
-                                    <th>Tgl. Kadaluwarsa Reas </th>
+                                    <td>Tgl. Kadaluwarsa Reas </td>
                                     <td>
                                         <!-- {{isset($data->kadaluarsa_reas_tanggal) ? date('d-M-Y',strtotime($data->kadaluarsa_reas_tanggal)) : '-'}} -->
                                         <input type="date" class="form-control" wire:model="kadaluarsa_reas_tanggal" />
@@ -273,7 +284,7 @@
                         <div class="tab-pane active show" id="tab_data_klaim">
                             <div class="row">
                                 <div class="col-md-5">
-                                    <table class="table ml-2">
+                                    <table class="table ml-2 no-padding">
                                         <tr style="border-top:0">
                                             <th style="border-top:0">Tanggal Meninggal</th>
                                             <td style="border-top:0"> : </td>
@@ -352,7 +363,7 @@
                                     </table>
                                 </div>
                                 <div class="col-md-4">
-                                    <table class="table ml-2">
+                                    <table class="table ml-2 no-padding">
                                         <tr>
                                             <th>Tempat</th>
                                             <td> : </td>

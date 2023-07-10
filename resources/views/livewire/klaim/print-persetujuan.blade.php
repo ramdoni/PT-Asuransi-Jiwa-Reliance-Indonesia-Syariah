@@ -158,18 +158,36 @@
                     </tr>
                     <tr>
                         <td>Reasuradur</td>
-                        <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->reasuradur->name) ? $data->kepesertaan->reas->reasuradur->name : '-'}}</td>
+                        <td> : </td> 
+                        <td style="border-bottom:1px solid;">
+                            @if($data->reasuradur_)
+                                {{$data->reasuradur_}}
+                            @elseif(isset($peserta->reasuradur))
+                                {{$peserta->reasuradur}}
+                            @else
+                                {{isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-'}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Type Reas</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->type_reas) ? $data->kepesertaan->reas->type_reas : '-'}}</td>
+                        <td style="border-bottom:1px solid;">
+                            @if(isset($peserta->reas->type_reas))
+                                {{$peserta->reas->type_reas}}
+                            @elseif(isset($peserta->tipe_reas))
+                                {{$peserta->tipe_reas}}
+                            @else
+                                -
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Model Reas</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->reas->rate_uw->model_reas) ? $data->kepesertaan->reas->rate_uw->model_reas : '-'}}</td>
+                        <td style="border-bottom:1px solid;">
+                            {{$data->model_reas}}
+                        </td>
                     </tr>
                     <tr>
                         <td>Max OR</td>
@@ -185,7 +203,9 @@
                     <tr>
                         <td>Kadaluwarsa Reas</td>
                         <td> : </td>
-                        <td style="border-bottom:1px solid;">{{isset($data->kepesertaan->kadaluarsa_reas_hari) ? $data->kepesertaan->kadaluarsa_reas_hari .' Hari Kalender' : '-'}}</td>
+                        <td style="border-bottom:1px solid;">
+                            {{isset($peserta->polis->kadaluarsa_reas) ? $peserta->polis->kadaluarsa_reas .' Hari Kalender' : '-'}}
+                        </td>
                     </tr>
                 </table>
             </div>

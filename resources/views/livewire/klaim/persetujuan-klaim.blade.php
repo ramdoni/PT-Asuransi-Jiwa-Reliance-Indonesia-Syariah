@@ -184,7 +184,7 @@
         </tr>
         <tr>
             <td>
-                @if($data->nilai_klaim_disetujui>150000000 and $data->nilai_klaim_disetujui <=200000000)
+                @if($data->nilai_klaim_disetujui>150000000)
                     @if(\Auth::user()->user_access_id==4 and ($data->direksi_1_status=="" || $is_edit_direksi_1))
                         <div class="row">
                             <div class="form-group col-md-4">
