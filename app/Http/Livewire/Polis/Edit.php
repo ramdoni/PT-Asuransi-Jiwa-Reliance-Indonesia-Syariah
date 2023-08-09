@@ -168,6 +168,24 @@ class Edit extends Component
 
     public function submit_issued()
     {
+        /**
+         * Nomor Nota Penutupan
+         */
+        if($this->data->no_nota_penutupan==""){
+            $running_number_np = get_setting('running_number_nota_penutupan')+1;
+            update_setting('running_number_nota_penutupan',$running_number_np);
+            $this->data->no_nota_penutupan = "NP/AJRIUS-MKT/{$running_number_np}/".numberToRomawi(date('m'))."/".date('y');
+        }
+        
+        /**
+         * Nomor Nota Penutupan
+         */
+        if($this->data->no_sb==""){
+            $running_number_sb = get_setting('running_number_sb')+1;
+            update_setting('running_number_sb',$running_number_sb);
+            $this->data->no_sb = "PPA.AJRUS.".$running_number_sb.".".date('m').".".date('y');
+        }
+
         $this->data->status_approval = 1;
         $this->data->save();
 

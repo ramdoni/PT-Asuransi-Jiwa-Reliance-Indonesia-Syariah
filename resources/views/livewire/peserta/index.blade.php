@@ -1,6 +1,32 @@
 @section('sub-title', 'Index')
 @section('title', 'Peserta')
 <div class="clearfix row">
+    <div class="col-lg-3 col-md-6">
+        <div class="card top_counter currency_state">
+            <div class="body">
+                <div class="icon">
+                    <i class="fa fa-users text-warning"></i>
+                </div>
+                <div class="content">
+                    <div class="text">Total Peserta</div>
+                    <h5 class="number">{{format_idr($total_peserta)}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card top_counter currency_state">
+            <div class="body">
+                <div class="icon">
+                    <i class="fa fa-database text-info"></i>
+                </div>
+                <div class="content">
+                    <div class="text">Total Kontribusi</div>
+                    <h5 class="number">{{format_idr($total_kontribusi->sum('kontribusi'))}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-lg-12">
         <div class="card">
             <div class="header pb-0">
@@ -36,7 +62,7 @@
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        <h6 class="text-success">Total Kontribusi : {{format_idr($total_kontribusi->sum('kontribusi'))}}</h6>
+                        <a href="javascript:void(0)" class="btn btn-info" data-toggle="modal" data-target="#modal_custom_report"><i class="fa fa-download"></i> Generate Report</a>
                     </div>
                 </div>
             </div>
@@ -220,6 +246,9 @@
 </div>
 <div wire:ignore.self class="modal fade" id="modal_upload" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('peserta.upload')
+</div>
+<div wire:ignore.self class="modal fade" id="modal_custom_report" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('custom-report.upload')
 </div>
 @push('after-scripts')
     <script>

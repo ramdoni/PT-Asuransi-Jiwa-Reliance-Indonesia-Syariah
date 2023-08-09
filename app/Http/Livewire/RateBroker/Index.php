@@ -12,10 +12,10 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $insert=false,$polis_id,$period,$permintaan_bank,$ajri,$ari,$total=0,$polis,$packet;
-    public $filter_polis_id;
+    public $filter_polis_id,$filter_packet;
     public function render()
     {
-        $data = RateBroker::with('polis')->orderBy('id','DESC');
+        $data = RateBroker::with('polis')->orderBy('packet','ASC')->orderBy('period','ASC');
         $arr_packet = [
             '01' => 'Karyawan Bank Riaukepri (PA+ND)',
             '02' => 'Karyawan Bank Riaukepri (PA+ND+PHK)',
@@ -27,16 +27,20 @@ class Index extends Component
             '08' => 'CPNS, Pegawai Swasta, Pegawai Kontrak/Honorer (PA+ND+PHK)',
             '09' => 'CPNS, Pegawai Swasta, Pegawai Kontrak/Honorer (PA+ND+PHK+WP)',
             '10' => 'Wiraswasta Profesional (PA+ND)',
-            '11' => 'DPRD (PAW)','12' => 'PENSIUNAN'];
+            '11' => 'DPRD (PAW)',
+            '12' => 'PENSIUNAN',
+            '13' => 'PRAPENSIUN',
+        ];
 
         if($this->filter_polis_id) $data->where('polis_id',$this->filter_polis_id);
+        if($this->filter_packet) $data->where('packet',$this->filter_packet);
 
         return view('livewire.rate-broker.index')->with(['data'=>$data->paginate(100),'arr_packet'=>$arr_packet]);
     }
 
     public function mount()
     {
-        $this->polis = Polis::get();
+        $this->polis = Polis::orderBy('no_polis','ASC')->get();
     }
 
     public function delete($id)

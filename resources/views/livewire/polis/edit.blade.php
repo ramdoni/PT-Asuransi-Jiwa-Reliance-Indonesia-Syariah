@@ -615,8 +615,13 @@
                 </span>
                 <div class="form-group" wire:loading.remove wire:target="save,submit_draft,submit_issued">
                     <a href="javascript:void(0)" class="mr-3" onclick="history.back()"><i class="fa fa-arrow-left"></i> Kembali</a>
-                    <button type="button" class="btn btn-info" wire:click="submit_draft"><i class="fa fa-save"></i> Save as Draft</button>
-                    <button type="button" class="btn btn-success" wire:click="submit_issued"><i class="fa fa-arrow-right"></i> Issued</button>
+                    @if($data->status_approval==0)
+                        <button type="button" class="btn btn-info" wire:click="submit_draft"><i class="fa fa-save"></i> Save as Draft</button>
+                        <button type="button" class="btn btn-success" wire:click="submit_issued"><i class="fa fa-arrow-right"></i> Issued</button>
+                    @endif
+                    @if($data->status_approval==1)
+                        <button type="button" class="btn btn-success" wire:click="submit_issued"><i class="fa fa-save"></i> Update</button>
+                    @endif
                 </div>
             </div>
         </div>

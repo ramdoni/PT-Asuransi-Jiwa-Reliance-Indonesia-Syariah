@@ -44,8 +44,18 @@ class SinkronDnToJournal extends Command
      */
     public function handle()
     {   
+        return;
+        // foreach(Journal::get() as $new){
+        //     echo "Journal : {$new->transaction_number}\n";
+        //     $new->saldo = replace_idr($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
+        //     $new->save();
+        // }
+
+        // return;
+
         foreach(Pengajuan::where('status',3)->get() as $k => $data){
             echo "{$k}. No Pengajuan : {$data->no_pengajuan}\n";
+            echo "DN  : {$data->dn_number}\n";
             $this->data = $data;
             $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
                                         \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
@@ -126,65 +136,6 @@ class SinkronDnToJournal extends Command
             $manfaat_Kepesertaan_tertunda = $select_tertunda->total_nilai_manfaat;
             $kontribusi_kepesertaan_tertunda =  $select_tertunda->total_kontribusi;
 
-            SyariahUnderwriting::insert([
-                'bulan' => date('F'),
-                // 'user_memo' => \Auth::user()->name,
-                // 'user_akseptasi' => \Auth::user()->name,
-                'transaksi_id' => $this->data->no_pengajuan,
-                'tanggal_produksi'=> date('Y-m-d'),
-                'no_debit_note' => $this->data->dn_number,
-                'no_polis' => $this->data->polis->no_polis,
-                'pemegang_polis' => $this->data->polis->nama,
-                'alamat' => $this->data->polis->alamat,
-                'jenis_produk' => isset($this->data->polis->produk->nama) ? $this->data->polis->produk->nama : '-',
-                'jml_kepesertaan_tertunda' => $this->data->total_reject,
-                'manfaat_Kepesertaan_tertunda' => $manfaat_Kepesertaan_tertunda,
-                'kontribusi_kepesertaan_tertunda' => $kontribusi_kepesertaan_tertunda,
-                'jml_kepesertaan' => $this->data->total_approve,
-                // 'no_kepesertaan_awal' => $no_kepesertaan_awal,
-                // $data->no_kepesertaan_akhir = $no_kepesertaan_akhir;
-                // $data->masa_awal_asuransi = $masa_awal_asuransi;
-                // $data->masa_akhir_asuransi = $masa_akhir_asuransi;
-                'nilai_manfaat' => $nilai_manfaat,
-                'dana_tabbaru' => $dana_tabbaru,
-                'dana_ujrah' => $dana_ujrah,
-                'kontribusi' => $kontribusi,
-                'ektra_kontribusi' => $ektra_kontribusi,
-                'total_kontribusi' => $kontribusi,
-                'pot_langsung' => $this->data->potong_langsung_persen,
-                'jumlah_diskon' => $this->data->potong_langsung,
-                // $data->status_potongan = $status_potongan;
-                // $data->handling_fee = $handling_fee;
-                // $data->jumlah_fee = $jumlah_fee;
-                'pph' => $this->data->pph_persen,
-                'jumlah_pph' => $this->data->pph,
-                'ppn' => $this->data->ppn_persen,
-                'jumlah_ppn' => $this->data->ppn,
-                // $data->biaya_polis = $biaya_polis;
-                // $data->biaya_sertifikat = $biaya_sertifikat;
-                // $data->extpst = $extpst;
-                'net_kontribusi' => $total,
-                // $data->terbilang = $terbilang;
-                // if($tgl_update_database) $data->tgl_update_database = date('Y-m-d',($tgl_update_database));
-                'tgl_update_sistem' => date('Y-m-d'),
-                // $data->no_berkas_sistem = $no_berkas_sistem;
-                // if($tgl_posting_sistem) $data->tgl_posting_sistem = date('Y-m-d',($tgl_posting_sistem));
-                // $data->ket_posting = $ket_posting;
-                // $data->grace_periode = $grace_periode;
-                // $data->grace_periode_number = $grace_periode_number;
-                // if($tgl_jatuh_tempo) $data->tgl_jatuh_tempo = date('Y-m-d',($tgl_jatuh_tempo));
-                // if($tgl_lunas) $data->tgl_lunas = date('Y-m-d',($tgl_lunas));
-                // $data->pembayaran = $pembayaran;
-                // $data->piutang = $piutang;
-                'total_peserta' => $this->data->total_approve,
-                // $data->outstanding_peserta = $outstanding_peserta;
-                // $data->produksi_cash_basis = $produksi_cash_basis;
-                // $data->ket_lampiran = $ket_lampiran;
-                // $data->pengeluaran_ujroh = $pengeluaran_ujroh;
-                'status' => 1,
-                // 'user_id' => \Auth::user()->id
-            ]);
-
             // find polis
             $polis = Polis::where('no_polis',$this->data->polis->no_polis)->first();
             if(!$polis){
@@ -226,9 +177,10 @@ class SinkronDnToJournal extends Command
              * 5 = Management Fee - Ujrah (debit)
              * 6 = Pendapatan Administrasi Polis Ujrah (kredit)
              * 7 = Utang Pajak PPH 23 (kredit)
+             * 13  = Beban Komisi (debit)
              */
             $no_voucher = "";
-            foreach([7,5,6,4,3,2,1] as $k => $coa_id){
+            foreach([13,7,5,6,4,3,2,1] as $k => $coa_id){
                 if($no_voucher=="") $no_voucher = generate_no_voucher($coa_id);
 
                 $new  = new Journal();
@@ -237,22 +189,36 @@ class SinkronDnToJournal extends Command
                 $new->transaction_table = 'konven_underwriting'; 
                 $new->coa_id = $coa_id;
                 $new->no_voucher = $no_voucher;
-                $new->date_journal = date('Y-m-d',strtotime($this->data->head_syariah_submit));
+                if($this->data->head_syariah_submit) 
+                    $new->date_journal = date('Y-m-d',strtotime($this->data->head_syariah_submit));
+                else
+                    $new->date_journal = date('Y-m-d',strtotime($this->data->updated_at));
 
                 if($coa_id==4) $new->kredit = $dana_tabbaru;
                 if($coa_id==3) {
-                    $plus = 0;
+                    $plus = $dana_ujrah;
+
                     /**
                      * Jika ada potong langsung maka masuk ke dana ujrah kemudian dipotong di debit coa potong langsung
+                     * pengurangan brokerage ujrah
+                     * penambahan biaya sertifikat
+                     * penambahan biaya polis
+                     * penambahan pph
+                     * pengurang ppn
+                     * penambahan extra kontribusi
+                     * penambahan exta mortalita
                      */
-                    if($this->data->potong_langsung) $plus += $this->data->potong_langsung;
+                    if($this->data->potong_langsung) $plus -= $this->data->potong_langsung;
+                    if($this->data->brokerage_ujrah) $plus -= $this->data->brokerage_ujrah;
                     if($this->data->biaya_sertifikat) $plus += $this->data->biaya_sertifikat;
                     if($this->data->biaya_polis_materai) $plus += $this->data->biaya_polis_materai;
                     if($this->data->polis->pph) $plus += $this->data->polis->pph;
+                    if($this->data->polis->ppn) $plus -= $this->data->polis->ppn;
+                    if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
+                    if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
 
-                    $new->kredit = $dana_ujrah+$plus;
+                    $new->kredit = $plus;
                 }
-
                 if($coa_id==2) $new->debit = $dana_tabbaru;
                 if($coa_id==1) $new->debit = $dana_ujrah;
                 if($coa_id==5){
@@ -263,6 +229,11 @@ class SinkronDnToJournal extends Command
                     if($this->data->biaya_sertifikat=="" and $this->data->biaya_polis_materai=="") continue;
                     $new->debit = $this->data->biaya_sertifikat + $this->data->biaya_polis_materai;
                 }
+                if($coa_id==13){
+                    if($this->data->brokerage_ujrah=="") continue;
+                    $new->debit = $this->data->brokerage_ujrah;
+                }
+
                 if($coa_id==7){
                     if($this->data->pph)
                         $new->kredit = $this->data->pph;
@@ -271,7 +242,8 @@ class SinkronDnToJournal extends Command
                 }
 
                 $new->description = $this->data->polis->nama;
-                $new->saldo = ($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
+                $new->saldo = replace_idr($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
+                $new->is_manual = 2;
                 $new->save();
             }
         }

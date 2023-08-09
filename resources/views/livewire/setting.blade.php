@@ -7,8 +7,7 @@
             <div class="body">
                 <ul class="nav nav-tabs">                                
                     <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Settings">General</a></li>
-                    {{-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#email">Email</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#notification">Notification</a></li> --}}
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#polis">Polis</a></li>
                 </ul>
             </div>
             <div class="tab-content">
@@ -87,11 +86,29 @@
                         </form>
                     </div>
                 </div>
-
-                <div class="tab-pane" id="email">
-                </div>
-
-                <div class="tab-pane" id="notification">
+                <div class="tab-pane" id="polis">
+                    <div class="body">
+                        <form  wire:submit.prevent="updatePolis">
+                            <div class="row clearfix">
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Number Nota Penutupan</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_nota_penutupan">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Number SB</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_sb">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Surat</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_surat">
+                                </div>
+                                <div class="col-12">
+                                    <hr />
+                                    <button type="submit" class="btn btn-info">Simpan Perubahan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

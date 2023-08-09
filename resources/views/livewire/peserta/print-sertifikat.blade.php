@@ -261,10 +261,10 @@
                             <td class="pl-20">NAMA PEMEGANG POLIS</td>
                             <td> : {{isset($data->polis->nama) ? $data->polis->nama : '-'}}</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td class="pl-20">ALAMAT PEMEGANG POLIS</td>
                             <td> : </td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <th class="text-left" colspan="2">PEMEGANG POLIS</th>
                         </tr>
@@ -272,10 +272,10 @@
                             <td class="pl-20">NAMA</td>
                             <td> : {{$data->nama}}</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td class="pl-20">ALAMAT</td>
                             <td> : {{$data->alamat}}</td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td class="pl-20">NIK</td>
                             <td> : {{$data->no_ktp}}</td>
@@ -294,19 +294,20 @@
                         </tr>
                         <tr>
                             <th class="text-left">SUKU KONTRIBUSI</th>
-                            <td> : {{$data->rate}} s%</td>
+                            <td> : {{$data->ari_rate}} &permil;</td>
                         </tr>
                         <tr>
                             <th class="text-left">PERHITUNGAN KONTRIBUSI</th>
-                            <td> : Rp. {{format_idr($data->basic)}} x {{$data->rate}} % = Rp. {{format_idr($data_ari->PremiumAmount)}}</td>
+                            <td> : Rp. {{format_idr($data->basic)}} x {{$data->ari_rate}} &permil; = Rp. {{format_idr($data->basic*($data->ari_rate/1000))}}</td>
                         </tr>
                     </table>
                     <div style="width: 40%;float:right;margin-top: 10px;">
-                        <p>JAKARTA, {{date('d F Y',strtotime($data->created_at))}}</p>
-                        <p>PT ASURANSI RELIANCE INDONESIA</p>
-                        <!-- <br />
-                        <img src="assets/img/TTD-Sukarman-untuk-Polis-General.png" style="width: 100px;" />
-                        <p>TTD (JPG/PNG)</p> -->
+                        <p>JAKARTA, {{date('d F Y',strtotime($data->created_at))}}<br />
+                            PT ASURANSI RELIANCE INDONESIA</p>
+                        <p>
+                            <img src="assets/img/ttd-sukarman.jpeg" style="width: 200px;" />
+                        </p>
+                        <!-- <p>TTD (JPG/PNG)</p> -->
                     </p>
                 </div>
             </div>

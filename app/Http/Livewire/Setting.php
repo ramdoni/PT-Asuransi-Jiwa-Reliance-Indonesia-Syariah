@@ -19,7 +19,7 @@ class Setting extends Component
     public $email;
     public $phone;
     public $website;
-    public $address;
+    public $address,$running_number_nota_penutupan,$running_number_sb,$running_surat;
 
     public function render()
     {
@@ -35,9 +35,13 @@ class Setting extends Component
         $this->address = get_setting('address');
         $this->logoUrl = get_setting('logo');
         $this->faviconUrl = get_setting('favicon');
+        $this->running_number_nota_penutupan = get_setting('running_number_nota_penutupan');
+        $this->running_number_sb = get_setting('running_number_sb');
+        $this->running_surat = get_setting('running_surat');
 
         \LogActivity::add("Setting");
     }
+
     public function updateBasic()
     {
         update_setting('company',$this->company);
@@ -47,6 +51,19 @@ class Setting extends Component
         update_setting('address',$this->address);
 
         \LogActivity::add("Setting Update");
+    }
+
+    public function updatePolis()
+    {
+        update_setting('running_number_nota_penutupan',$this->running_number_nota_penutupan);
+        update_setting('running_number_sb',$this->running_number_sb);
+        update_setting('running_surat',$this->running_surat);
+
+        \LogActivity::add("Setting Update Polis");
+
+        session()->flash('message-success',__('Data saved successfully'));
+
+        return redirect()->to('setting');
     }
 
     public function save()

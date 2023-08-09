@@ -180,29 +180,40 @@ class Edit extends Component
         // $this->is_calculate = true;
         // PengajuanCalculate::dispatch($this->data->polis_id,$this->data->perhitungan_usia,$this->data->masa_asuransi,$this->transaction_id);
         foreach($this->data->kepesertaan as $data){
-            $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
-            $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
-            $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi);
 
-            if($data->is_double){
-                $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir,'status_polis'=>'Inforce'])->sum('basic');
-                $data->akumulasi_ganda = $sum+$data->basic;
-            }
+            // $data->usia = $data->tanggal_lahir ? hitung_umur($data->tanggal_lahir,$this->data->perhitungan_usia,$data->tanggal_mulai) : '0';
+            // $data->masa = hitung_masa($data->tanggal_mulai,$data->tanggal_akhir);
+            // $data->masa_bulan = hitung_masa_bulan($data->tanggal_mulai,$data->tanggal_akhir,$this->data->masa_asuransi);
+            
+            // $sum =  Kepesertaan::where(['nama'=>$data->nama,'tanggal_lahir'=>$data->tanggal_lahir])->where('id','<>',$data->id)
+            //     ->where(function($table){
+            //         $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
+            //     })->sum('basic');
+
+            // if($sum>0){
+            //     $data->is_double = 1;
+            //     $data->akumulasi_ganda = $sum+$data->basic;
+            // }else{
+            //     $data->is_double = 0;
+            // }
             $nilai_manfaat_asuransi = $data->basic;
 
             // find rate
-            $rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
+            //$rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
 
             //$rate = Rate::where(['tahun'=>$data->usia,'bulan'=>$data->masa_bulan,'polis_id'=>$this->data->polis_id])->first();
-            $data->rate = $rate ? $rate->rate : 0;
+            //$data->rate = $rate ? $rate->rate : 0;
+            // $rate = $data->rate;
             $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
+            $data->save();
+            continue;
 
             // find rate
-            if(!$rate || $rate->rate ==0 || $rate->rate ==""){
+            if(!$rate || $rate ==0 || $rate ==""){
                 $data->rate = 0;
                 $data->kontribusi = 0;
             }else{
-                $data->rate = $rate ? $rate->rate : 0;
+                $data->rate = $rate ? $rate : 0;
                 $data->kontribusi = $nilai_manfaat_asuransi * $data->rate/1000;
             }
 
@@ -277,6 +288,11 @@ class Edit extends Component
         $dn_number = $this->data->polis->no_polis ."/". str_pad($running_number_dn,4, '0', STR_PAD_LEFT)."/AJRIUS-DN/".numberToRomawi(date('m'))."/".date('Y');
         $this->data->dn_number = $dn_number;
 
+        ModelPolis::where('id',$this->data->polis->id)->update(
+        [
+            'running_number_dn' => $running_number_dn
+        ]);
+
         $running_no_surat = get_setting('running_surat')+1;
 
         $this->data->no_surat = str_pad($running_no_surat,6, '0', STR_PAD_LEFT).'/UWS-M/AJRI-US/'.numberToRomawi(date('m')).'/'.date('Y');
@@ -335,7 +351,7 @@ class Edit extends Component
         // save running number
         ModelPolis::where('id',$this->data->polis->id)->update(
             [
-                'running_number_dn' => $running_number_dn,
+                // 'running_number_dn' => $running_number_dn,
                 'running_number_peserta' => $running_number
             ]);
 
@@ -429,65 +445,6 @@ class Edit extends Component
         $manfaat_Kepesertaan_tertunda = $select_tertunda->total_nilai_manfaat;
         $kontribusi_kepesertaan_tertunda =  $select_tertunda->total_kontribusi;
 
-        SyariahUnderwriting::insert([
-            'bulan' => date('F'),
-            'user_memo' => \Auth::user()->name,
-            'user_akseptasi' => \Auth::user()->name,
-            'transaksi_id' => $this->data->no_pengajuan,
-            'tanggal_produksi'=> date('Y-m-d'),
-            'no_debit_note' => $this->data->dn_number,
-            'no_polis' => $this->data->polis->no_polis,
-            'pemegang_polis' => $this->data->polis->nama,
-            'alamat' => $this->data->polis->alamat,
-            'jenis_produk' => isset($this->data->polis->produk->nama) ? $this->data->polis->produk->nama : '-',
-            'jml_kepesertaan_tertunda' => $this->data->total_reject,
-            'manfaat_Kepesertaan_tertunda' => $manfaat_Kepesertaan_tertunda,
-            'kontribusi_kepesertaan_tertunda' => $kontribusi_kepesertaan_tertunda,
-            'jml_kepesertaan' => $this->data->total_approve,
-            // 'no_kepesertaan_awal' => $no_kepesertaan_awal,
-            // $data->no_kepesertaan_akhir = $no_kepesertaan_akhir;
-            // $data->masa_awal_asuransi = $masa_awal_asuransi;
-            // $data->masa_akhir_asuransi = $masa_akhir_asuransi;
-            'nilai_manfaat' => $nilai_manfaat,
-            'dana_tabbaru' => $dana_tabbaru,
-            'dana_ujrah' => $dana_ujrah,
-            'kontribusi' => $kontribusi,
-            'ektra_kontribusi' => $ektra_kontribusi,
-            'total_kontribusi' => $kontribusi,
-            'pot_langsung' => $this->data->potong_langsung_persen,
-            'jumlah_diskon' => $this->data->potong_langsung,
-            // $data->status_potongan = $status_potongan;
-            // $data->handling_fee = $handling_fee;
-            // $data->jumlah_fee = $jumlah_fee;
-            'pph' => $this->data->pph_persen,
-            'jumlah_pph' => $this->data->pph,
-            'ppn' => $this->data->ppn_persen,
-            'jumlah_ppn' => $this->data->ppn,
-            // $data->biaya_polis = $biaya_polis;
-            // $data->biaya_sertifikat = $biaya_sertifikat;
-            // $data->extpst = $extpst;
-            'net_kontribusi' => $total,
-            // $data->terbilang = $terbilang;
-            // if($tgl_update_database) $data->tgl_update_database = date('Y-m-d',($tgl_update_database));
-            'tgl_update_sistem' => date('Y-m-d'),
-            // $data->no_berkas_sistem = $no_berkas_sistem;
-            // if($tgl_posting_sistem) $data->tgl_posting_sistem = date('Y-m-d',($tgl_posting_sistem));
-            // $data->ket_posting = $ket_posting;
-            // $data->grace_periode = $grace_periode;
-            // $data->grace_periode_number = $grace_periode_number;
-            // if($tgl_jatuh_tempo) $data->tgl_jatuh_tempo = date('Y-m-d',($tgl_jatuh_tempo));
-            // if($tgl_lunas) $data->tgl_lunas = date('Y-m-d',($tgl_lunas));
-            // $data->pembayaran = $pembayaran;
-            // $data->piutang = $piutang;
-            'total_peserta' => $this->data->total_approve,
-            // $data->outstanding_peserta = $outstanding_peserta;
-            // $data->produksi_cash_basis = $produksi_cash_basis;
-            // $data->ket_lampiran = $ket_lampiran;
-            // $data->pengeluaran_ujroh = $pengeluaran_ujroh;
-            'status' => 1,
-            'user_id' => \Auth::user()->id
-        ]);
-
         // find polis
         $polis = Polis::where('no_polis',$this->data->polis->no_polis)->first();
         if(!$polis){
@@ -522,13 +479,14 @@ class Edit extends Component
         $income->save();
 
         /**
-         * 4 = Kontribusi Tab Baru (kredit)
-         * 3 = Kontribusi Ujrah (kredit)
-         * 2 = Tagihan Kontribusi (debit)
-         * 1 = Tagihan Kontribusi Ujrah (debit)
-         * 5 = Management Fee - Ujrah (debit)
-         * 6 = Pendapatan Administrasi Polis Ujrah (kredit)
-         * 7 = Utang Pajak PPH 23 (kredit)
+          4 = Kontribusi Tab Baru (kredit)
+          3 = Kontribusi Ujrah (kredit)
+          2 = Tagihan Kontribusi (debit)
+          1 = Tagihan Kontribusi Ujrah (debit)
+          5 = Management Fee - Ujrah (debit)
+          6 = Pendapatan Administrasi Polis Ujrah (kredit)
+          7 = Utang Pajak PPH 23 (kredit)
+          13  = Beban Komisi (debit)
          */
         $no_voucher = "";
         foreach([7,5,6,4,3,2,1] as $k => $coa_id){
@@ -552,6 +510,8 @@ class Edit extends Component
                 if($this->data->biaya_sertifikat) $plus += $this->data->biaya_sertifikat;
                 if($this->data->biaya_polis_materai) $plus += $this->data->biaya_polis_materai;
                 if($this->data->polis->pph) $plus += $this->data->polis->pph;
+                if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
+                if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
 
                 $new->kredit = $dana_ujrah+$plus;
             }

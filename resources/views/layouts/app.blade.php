@@ -38,7 +38,7 @@
     @livewireStyles
 </head>
 
-<body class="theme-blue   layout-fullwidth">
+<body class="theme-blue layout-fullwidth">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">

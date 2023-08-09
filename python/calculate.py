@@ -52,7 +52,7 @@ def calculate(polis_id,transaction_id,iuran_tabbaru,ujrah):
 
     #find double data
     tableFind = mydb.cursor()
-    tableFind.execute("SELECT sum(basic) FROM kepesertaan WHERE is_temp=1 AND (status_polis=%s OR status_polis=%s) AND tanggal_lahir=%s AND nama=%s",('Inforce','Akseptasi',tanggal_lahir,nama,))
+    tableFind.execute("SELECT sum(basic) FROM kepesertaan WHERE (status_polis=%s OR status_polis=%s) AND tanggal_lahir=%s AND nama=%s",('Inforce','Akseptasi',tanggal_lahir,nama,))
     rowDouble = tableFind.fetchone()
 
     if rowDouble[0]!=None:
@@ -80,7 +80,7 @@ def calculate(polis_id,transaction_id,iuran_tabbaru,ujrah):
       tableUw.execute("SELECT keterangan FROM underwriting_limit WHERE (%s BETWEEN min_amount AND max_amount) AND usia=%s AND polis_id=%s LIMIT 1",(nilai_manfaat_asuransi,usia,polis_id,))
     
     rowUw = tableUw.fetchone()
-    if rowUw[0]!=None:
+    if rowUw:
       uw = rowUw[0];
 
     updatePeserta = mydb.cursor()

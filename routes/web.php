@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('recovery-claim',App\Http\Livewire\RecoveryClaim\Index::class)->name('recovery-claim.index');
 
     Route::get('rate-broker',App\Http\Livewire\RateBroker\Index::class)->name('rate-broker.index');
+    Route::get('custom-report',App\Http\Livewire\CustomReport\Index::class)->name('custom-report.index');
 });
 
 Route::group(['middleware' => ['auth']], function(){

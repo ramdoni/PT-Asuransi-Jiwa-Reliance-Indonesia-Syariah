@@ -13,6 +13,14 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-md-2">
+                    <select class="form-control" wire:model="filter_packet">
+                        <option value=""> -- Packet -- </option>
+                        @foreach($arr_packet as $k => $val)
+                            <option value="{{$k}}">{{$val}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="col-md-3">
                     <a href="javascript:void(0)" class="btn btn-primary" wire:click="$set('insert',true)"><i class="fa fa-plus"></i> Rate</a>
                     <a href="javascript:void(0)" class="btn btn-warning" data-toggle="modal" data-target="#modal_upload"><i class="fa fa-upload"></i> Upload</a>

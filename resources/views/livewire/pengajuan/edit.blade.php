@@ -123,7 +123,7 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    @if($data->status==5)
+                                    @if($data->status==5 || $data->status==6)
                                         <td class="px-2">Tambah Peserta :</td>
                                         <td class="px-2">
                                             <input type="file" class="form-control" wire:model="file" />
@@ -448,7 +448,12 @@
                                                 <td class="text-right">{{format_idr($item->extra_mortalita+$item->kontribusi+$item->extra_kontribusi)}}</td>
                                                 <td>{{$item->tanggal_stnc ? date('d-M-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
                                                 <td>{{$item->ul}}</td>
-                                                <td>{{$item->keterangan}}</td>
+                                                <td>
+                                                    {{$item->keterangan}}
+                                                    @if($item->packet)
+                                                        <a href="{{route('print-sertifikasi',$item->id)}}" target="_blank"><i class="fa fa-download"></i></a>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                         @if($data->kepesertaan->count()==0)
@@ -459,7 +464,7 @@
                                     </tbody>
                                     <tfoot style="background: #eee;">
                                         <tr>
-                                            <th colspan="16" class="text-right">Total</th>
+                                            <th colspan="17" class="text-right">Total</th>
                                             <th class="text-right">{{format_idr($nilai_manfaat_approve)}}</th>
                                             <th class="text-right">{{format_idr($dana_tabbaru_approve)}}</th>
                                             <th class="text-right">{{format_idr($dana_ujrah_approve)}}</th>

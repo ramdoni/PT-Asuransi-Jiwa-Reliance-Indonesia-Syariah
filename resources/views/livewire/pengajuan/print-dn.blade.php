@@ -125,7 +125,7 @@
                     <td style="text-align: right;"><b>{{format_idr($total)}}</b></td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($total)}} Rupiah</td>
+                    <td colspan="2">Terbilang : {{terbilang((int)round($total))}} Rupiah</td>
                 </tr>
                 <tr>
                     <td colspan="2">Masa Tenggang Pembayaran sampai dengan : {{$data->tanggal_jatuh_tempo ? date('d F Y',strtotime($data->tanggal_jatuh_tempo)) : ''}}</td>

@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('polis:mature')->dailyAt('01:00')->timezone('Asia/Jakarta');
-
+        $schedule->command('disk-information')->dailyAt('06:00')->timezone('Asia/Jakarta');
     }
 
     /**

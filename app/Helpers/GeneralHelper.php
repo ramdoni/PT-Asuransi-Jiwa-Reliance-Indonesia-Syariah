@@ -9,8 +9,10 @@ function source_api($k){
 
 function terbilang($nilai) {
     $nilai = abs($nilai);
+    
     $huruf = array("", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas");
     $temp = "";
+    
     if ($nilai < 12) {
         $temp = " ". $huruf[$nilai];
     } else if ($nilai <20) {
@@ -34,6 +36,7 @@ function terbilang($nilai) {
     }     
     return $temp;
 }
+
 function numberToRomawi($number)
 {
     $solution = '';
@@ -188,7 +191,7 @@ function send_wa($param)
     $number = str_replace('-', '', $number);
     
     $curl = curl_init(); 
-    $token = "HioVXgQTselUx6alx9GmtfcJgpySCDnH3FCZh2tARb0C7vRtQon5shmOwx0KmGl1";
+    $token = "616OjtkJ55lPH4DXJa9UQ666HDATAC2QmOeKxOC99RQWeZUSTnq81mSoJFX5QrVZ";
     $data = [
         'phone' => $number,
         'message' => $message,
@@ -202,7 +205,7 @@ function send_wa($param)
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($curl, CURLOPT_URL, "https://console.wablas.com/api/send-message");
+    curl_setopt($curl, CURLOPT_URL, "https://solo.wablas.com/api/send-message");
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
     $result = curl_exec($curl);

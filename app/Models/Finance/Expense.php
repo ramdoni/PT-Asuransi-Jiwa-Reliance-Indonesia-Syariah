@@ -10,4 +10,6 @@ class Expense extends Model
     use HasFactory;
 
     protected $table = 'expenses';
+    
+    protected $connection = 'finance';
 }

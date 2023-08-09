@@ -26,7 +26,10 @@ class Upload extends Component
             '08' => 'CPNS, Pegawai Swasta, Pegawai Kontrak/Honorer (PA+ND+PHK)',
             '09' => 'CPNS, Pegawai Swasta, Pegawai Kontrak/Honorer (PA+ND+PHK+WP)',
             '10' => 'Wiraswasta Profesional (PA+ND)',
-            '11' => 'DPRD (PAW)','12' => 'PENSIUNAN'];
+            '11' => 'DPRD (PAW)',
+            '12' => 'PENSIUNAN',
+            '13' => 'PRAPENSIUN'
+        ];
 
         return view('livewire.rate-broker.upload')->with(['arr_packet'=>$arr_packet]);
     }
@@ -54,14 +57,14 @@ class Upload extends Component
             $num = 0;
 
             foreach($sheetData as $key => $item){
-                if($key<=1) continue;
+                if($key<=0) continue;
                 
                 $data = RateBroker::where(['polis_id'=>$this->polis_id,'period'=>$item[0],'packet'=>$this->packet])->first();
                 if(!$data) $data = new RateBroker();
                 $data->polis_id = $this->polis_id;
                 $data->period = $item[0];
-                $data->ari = $item[1];
-                $data->ajri = $item[2];
+                $data->ajri = $item[1];
+                $data->ari = $item[2];
                 $data->packet = $this->packet;
                 $data->save();
             }
