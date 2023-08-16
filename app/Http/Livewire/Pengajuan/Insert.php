@@ -13,7 +13,7 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis=[],$file,$polis_id,$no_pengajuan,$kepesertaan=[],$check_all=0,$check_id=[],$check_arr;
-    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '',$is_calculate=false,$transaction_id,$is_draft=false;
+    public $total_pengajuan=0,$perhitungan_usia,$masa_asuransi,$message_error = '',$is_calculate=false,$transaction_id,$is_draft=false,$error_upload;
     protected $listeners = ['set_calculate'=>'set_calculate'];
     public function render()
     {
@@ -138,6 +138,8 @@ class Insert extends Component
         $total_success = 0;
         Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->delete();
         $insert = [];
+        $check_double = [];
+        $this->error_upload = '';
         foreach($sheetData as $key => $item){
             if($key<=1) continue;
             /**
@@ -145,6 +147,7 @@ class Insert extends Component
              * Nama, Tanggal lahir
              */
             if($item[1]=="" || $item[10]=="") continue;
+
             $insert[$total_data]['polis_id'] = $this->polis_id;
             $insert[$total_data]['nama'] = $item[1];
             $insert[$total_data]['no_ktp'] = $item[2];
@@ -170,12 +173,22 @@ class Insert extends Component
             $insert[$total_data]['usia'] =  $insert[$total_data]['tanggal_lahir'] ? hitung_umur($insert[$total_data]['tanggal_lahir'],$this->perhitungan_usia,$insert[$total_data]['tanggal_mulai']) : '0';
             $insert[$total_data]['masa'] = hitung_masa($insert[$total_data]['tanggal_mulai'],$insert[$total_data]['tanggal_akhir']);
 
+            $check_double[] = $item[1];
+
             $total_data++;
         }
 
         if(count($insert)>0)  {
-            foreach (array_chunk($insert,1000) as $t)  {
-                Kepesertaan::insert($t);
+            $label_double = [];
+            foreach(array_count_values($check_double) as $label => $value){
+                if($value>1) $label_double[] = $label;
+            }
+            if(count($label_double)>0){
+                $this->emit('message-error', "Upload failed, double data : ". implode(", ",$label_double));
+            }else{
+                foreach (array_chunk($insert,1000) as $t)  {
+                    Kepesertaan::insert($t);
+                }    
             }
         }
 

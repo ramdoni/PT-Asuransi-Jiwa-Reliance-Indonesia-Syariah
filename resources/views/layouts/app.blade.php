@@ -144,8 +144,8 @@
             }, 0);
         });
         Livewire.on('message-error', (msg) => {
-            $('.alert-error').show();
-            $('.alert-error .message').html(msg);
+            $('.alert-danger').show();
+            $('.alert-danger .message').html(msg);
             $('html, body').animate({
                 scrollTop: $("#wrapper").offset().top
             }, 0);

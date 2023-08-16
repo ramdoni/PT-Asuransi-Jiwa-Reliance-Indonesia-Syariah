@@ -50,8 +50,9 @@ class PengajuanCalculate implements ShouldQueue
         ini_set('memory_limit', '-1');
         $polis = Polis::find($this->polis_id);
 
-        $command = escapeshellcmd("python /var/www/ajrius/python/calculate.py {$this->polis_id} {$this->transaction_id} {$polis->iuran_tabbaru} {$polis->ujrah_atas_pengelolaan}");
+        $command = escapeshellcmd("python /var/www/ajrius_demo/python/calculate.py {$this->polis_id} {$this->transaction_id} {$polis->iuran_tabbaru} {$polis->ujrah_atas_pengelolaan}");
         $output = shell_exec($command);
+        
         return;
 
         $iuran_tabbaru = $polis->iuran_tabbaru;

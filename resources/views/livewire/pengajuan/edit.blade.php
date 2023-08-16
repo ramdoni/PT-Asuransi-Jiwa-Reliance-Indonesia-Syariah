@@ -130,6 +130,9 @@
                                             @error('file')
                                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                             @enderror
+                                            @if($error_upload)
+                                                <span class="text-danger">{{$error_upload}}</span>
+                                            @endif
                                         </td>
                                         <td>
                                             @if($file)

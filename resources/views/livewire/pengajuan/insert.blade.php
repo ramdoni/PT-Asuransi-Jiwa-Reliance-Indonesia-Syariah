@@ -63,6 +63,9 @@
                                         <span class="sr-only">{{ __('Loading...') }}</span> Sedang upload...
                                     </span>
                                     <input type="file" wire:loading.remove wire:target="file" class="form-control" wire:model="file" />
+                                    @if($error_upload)
+                                        <span class="text-danger">{{$error_upload}}</span>
+                                    @endif
                                     @error('file')
                                         <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                     @enderror
