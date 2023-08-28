@@ -173,7 +173,7 @@ class Insert extends Component
             $insert[$total_data]['usia'] =  $insert[$total_data]['tanggal_lahir'] ? hitung_umur($insert[$total_data]['tanggal_lahir'],$this->perhitungan_usia,$insert[$total_data]['tanggal_mulai']) : '0';
             $insert[$total_data]['masa'] = hitung_masa($insert[$total_data]['tanggal_mulai'],$insert[$total_data]['tanggal_akhir']);
 
-            $check_double[] = $item[1];
+            $check_double[] = $item[2];
 
             $total_data++;
         }
@@ -184,7 +184,7 @@ class Insert extends Component
                 if($value>1) $label_double[] = $label;
             }
             if(count($label_double)>0){
-                $this->emit('message-error', "Upload failed, double data : ". implode(", ",$label_double));
+                $this->emit('message-error', "Upload failed, double data No KTP: ". implode(", ",$label_double));
             }else{
                 foreach (array_chunk($insert,1000) as $t)  {
                     Kepesertaan::insert($t);

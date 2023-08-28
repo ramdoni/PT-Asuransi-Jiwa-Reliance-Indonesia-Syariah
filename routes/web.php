@@ -161,9 +161,18 @@ Route::get('send-wa',function(){
 
 Route::post('wa',function(Illuminate\Http\Request $r){
 
+    header("Content-Type: text/plain");
+
     $data['message'] = 'success';
     
     \LogActivity::add('[webhook] Inbound WA');
+
+    // $content = json_decode(file_get_contents('php://input'), true);
+    // $find = explode(':',$content['message']);
+
+    // if($find[0]=='iot' and isset($find[1])){
+    //     send_wa(['phone'=>'628881264670','message'=>$find[1]]);
+    // }
 
     return response()->json($data,200);
     

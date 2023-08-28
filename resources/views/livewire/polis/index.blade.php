@@ -156,8 +156,12 @@
                                     <td>
                                         @if($item->status_approval==0)
                                             <span class="badge badge-warning">Draft</span>
+                                            <a href="javascript:void(0)" wire:click="$set('selected_id',{{$item->id}})" data-toggle="modal" data-target="#modal_delete"><i class="fa fa-trash text-danger"></i></a>
                                         @endif
                                         @if($item->status_approval==1)
+                                            @if(\Auth::user()->user_access_id==4)
+                                                <a href="javascript:void(0)" wire:click="$set('selected_id',{{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                            @endif
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Issued</span>
                                         @endif
                                     </td>
@@ -296,6 +300,36 @@
             </div>
         </div>
     </div>
+
+    <div wire:ignore.self class="modal fade" id="modal_delete" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog"  role="document">
+            <div class="modal-content">
+                <form wire:submit.prevent="delete">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-info"></i> Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true close-btn">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <p>Delete this data ?</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <span wire:loading>
+                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                            <span class="sr-only">{{ __('Loading...') }}</span>
+                        </span>
+                        <button type="submit" wire:loading.remove class="btn btn-info"><i class="fa fa-save"></i> Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 <div wire:ignore.self class="modal fade" id="modal_add_uw_limit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.underwriting-limit')

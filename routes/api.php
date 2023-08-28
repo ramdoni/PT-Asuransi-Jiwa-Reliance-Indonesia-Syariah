@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-// Route::group(['middleware' => 'auth'], function(){
-// 	Route::get('get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('get-kepesertaan');
-// });
+Route::get('/',function(){
+    return ['message'=>'oke'];
+});
+Route::post('auth-login',[\App\Http\Controllers\Api\UserController::class,'login']);
+Route::post('get-pengajuan',[\App\Http\Controllers\Api\PengajuanController::class,'data']);
+Route::post('get-pengajuan-peserta',[\App\Http\Controllers\Api\PengajuanController::class,'dataPeserta']);

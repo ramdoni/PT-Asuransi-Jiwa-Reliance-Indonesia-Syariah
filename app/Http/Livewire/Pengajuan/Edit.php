@@ -167,10 +167,10 @@ class Edit extends Component
             $insert[$total_data]['pengajuan_id'] = $this->data->id;
             $insert[$total_data]['status_polis'] = 'Akseptasi';
             $total_data++;
-            $check_double[] = $item[1];
+            $check_double[] = $item[2];
         }
 
-        $temp_ = Kepesertaan::whereIn('nama',$check_double)->where(['pengajuan_id'=>$this->data->id])->get();
+        $temp_ = Kepesertaan::whereIn('no_ktp',$check_double)->where(['pengajuan_id'=>$this->data->id])->get();
         $num_ = 0;
         $label_double = [];
         foreach($temp_ as $i){
@@ -181,7 +181,7 @@ class Edit extends Component
             if($value>1) $label_double[] = $label;
         }
         if(count($label_double)>0){
-            $this->emit('message-error', "Upload failed, double data : ". implode(", ",$label_double));
+            $this->emit('message-error', "Upload failed, double data No KTP : ". implode(", ",$label_double));
         }else{
             foreach (array_chunk($insert,1000) as $t)  {
                 Kepesertaan::insert($t);

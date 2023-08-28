@@ -41,7 +41,7 @@ class SinkronPengajuanPaid extends Command
     {
         return;
         ini_set('memory_limit', '-1');
-        $inputFileName = './public/migrasi/pengajuan-paid2.xlsx';
+        $inputFileName = './public/migrasi/2018.xlsx';
         /** Load $inputFileName to a Spreadsheet Object  **/
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
@@ -50,30 +50,36 @@ class SinkronPengajuanPaid extends Command
         $key=0;
         $num=0;
         $double=0;
+        $total_update = 0;
         foreach($sheetData as $k => $item){
             $num++;
             if($num<1) continue;
             
-            echo "No DN : {$item['B']} :".date('Y-m-d',strtotime($item['A']))."\n";
-            
-            // $pengajuan = Pengajuan::where('dn_number',$item['B'])->first();
-            // if($pengajuan){
-            //     $pengajuan->status_invoice = 1;
-            //     $pengajuan->payment_date = date('Y-m-d',strtotime($item['A']));
-            //     $pengajuan->save();   
-            // }
-            $income = Income::where("reference_type",'Premium Receivable')->where('reference_no',$item['B'])->first();
+            if($item['A']=="") continue;
+
+            echo "No DN : {$item['B']} :".$item['A']."\n";
+
+            $pengajuan = Pengajuan::where('dn_number',$item['B'])->first();
+            if($pengajuan){
+                $pengajuan->status_invoice = 1;
+                $pengajuan->payment_date = date('Y-m-d',strtotime($item['A']));
+                $pengajuan->save();   
+                $total_update++;
+            }
+            $income = Income::where("reference_type",'Premium Receivable')
+                                ->where('reference_no',$item['B'])->first();
             if($income){
-                $income->status = 2;
+                $income->status = 1;
                 $income->payment_amount = $income->nominal;
                 $income->total_payment_amount = $income->nominal;
                 $income->settle_date = date('Y-m-d',strtotime($item['A']));
                 $income->payment_date = date('Y-m-d',strtotime($item['A']));
                 $income->save();
+                $total_update++;
             }
-
-
         }
+
+        echo "Total update : {$total_update}\n";
         echo "\nSELESAI\n";
     }
 }
