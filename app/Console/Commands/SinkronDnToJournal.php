@@ -44,14 +44,21 @@ class SinkronDnToJournal extends Command
      */
     public function handle()
     {   
-        return;
-        // foreach(Journal::get() as $new){
-        //     echo "Journal : {$new->transaction_number}\n";
-        //     $new->saldo = replace_idr($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
-        //     $new->save();
-        // }
+        $num=1;
+        foreach(Pengajuan::where('status',3)->get() as $item){
+            if(isset($item->polis->fee_base_brokerage) and $item->polis->fee_base_brokerage >0){
 
-        // return;
+                $journal = Journal::where('transaction_number',$item->dn_number)->first();
+                if($journal) 
+                    echo "No Journal : {$journal->no_voucher}\n";
+                echo "{$num}. No Pengajuan : {$item->no_pengajuan}\n";
+                echo "-------------------------------------------------\n\n";
+
+                $num++;
+            }
+        }
+
+        return;
 
         foreach(Pengajuan::where('status',3)->get() as $k => $data){
             echo "{$k}. No Pengajuan : {$data->no_pengajuan}\n";

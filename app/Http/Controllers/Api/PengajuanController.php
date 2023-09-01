@@ -26,7 +26,7 @@ class PengajuanController extends Controller
         $data = Pengajuan::orderBy('id','DESC');
 
         $items = [];
-        foreach($data->paginate(100) as $k => $item){
+        foreach($data->paginate(400) as $k => $item){
             $items[$k]['id'] = $item->id;
             $items[$k]['no_pengajuan'] = $item->no_pengajuan;
         }

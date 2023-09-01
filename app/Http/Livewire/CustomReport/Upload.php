@@ -102,7 +102,7 @@ class Upload extends Component
                 ));
             }
 
-            dd($or_where);
+            // dd($or_where);
 
             $objPHPExcel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
             $objPHPExcel->getProperties()->setCreator("ENTIGI System")
@@ -173,12 +173,12 @@ class Upload extends Component
                     $query_where, 
                     array_keys($query_where)
                 ));
-                */
 
                 $query .=" WHERE {$query_where}";   
+                */
             }
 
-            dd($query);
+            // dd($query);
 
             $query .= " LIMIT 1000";
 

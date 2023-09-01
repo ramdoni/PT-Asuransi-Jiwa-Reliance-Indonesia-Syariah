@@ -172,8 +172,8 @@ class Insert extends Component
             $insert[$total_data]['masa_bulan'] =  hitung_masa_bulan($insert[$total_data]['tanggal_mulai'],$insert[$total_data]['tanggal_akhir'],$this->masa_asuransi);
             $insert[$total_data]['usia'] =  $insert[$total_data]['tanggal_lahir'] ? hitung_umur($insert[$total_data]['tanggal_lahir'],$this->perhitungan_usia,$insert[$total_data]['tanggal_mulai']) : '0';
             $insert[$total_data]['masa'] = hitung_masa($insert[$total_data]['tanggal_mulai'],$insert[$total_data]['tanggal_akhir']);
-
-            $check_double[] = $item[2];
+            
+            if($item[2]) $check_double[] = $item[2];
 
             $total_data++;
         }
