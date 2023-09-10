@@ -101,7 +101,7 @@ class Index extends Component
         return redirect()->route('pengajuan.index');
     }
 
-    public function downloadExcel( $data,$status=1)
+    public function downloadExcel($data,$status=1)
     {
         $data = Pengajuan::find($data);
         $objPHPExcel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
@@ -228,6 +228,48 @@ class Index extends Component
                     ]);
         }
 
+        if($status==3){
+            $activeSheet
+                    ->setCellValue('A8', 'NO')
+                    ->setCellValue('B8', 'NO PESERTA')
+                    ->setCellValue('C8', 'NAMA PESERTA')
+                    ->setCellValue('D8', 'NO KTP')
+                    ->setCellValue('E8', 'TGL. LAHIR')
+                    ->setCellValue('F8', 'USIA')
+                    ->setCellValue('G8', 'MULAI ASURANSI')
+                    ->setCellValue('H8', 'AKHIR ASURANSI')
+                    ->setCellValue('I8', 'NILAI MANFAAT ASURANSI')
+                    ->setCellValue('J8', 'DANA TABBARU')
+                    ->setCellValue('K8', 'DANA UJRAH')
+                    ->setCellValue('L8', 'KONTRIBUSI')
+                    ->setCellValue('M8', 'EXTRA MORTALITA')
+                    ->setCellValue('N8', 'EXTRA KONTRIBUSI')
+                    ->setCellValue('O8', 'TOTAL KONTRIBUSI')
+                    ->setCellValue('P8', 'TGL STNC')
+                    ->setCellValue('Q8', 'UL')
+                    ->setCellValue('R8', 'KET');
+
+            $activeSheet->getStyle("A8:R8")->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                        ],
+                        'borders' => [
+                            'top' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                            'bottom' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                        ],
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+                        ],
+                    ]);
+        }
+
         $activeSheet->getColumnDimension('A')->setWidth(5);
         $activeSheet->getColumnDimension('B')->setAutoSize(true);
         $activeSheet->getColumnDimension('C')->setAutoSize(true);
@@ -245,6 +287,7 @@ class Index extends Component
         $activeSheet->getColumnDimension('O')->setAutoSize(true);
         $activeSheet->getColumnDimension('P')->setAutoSize(true);
         $activeSheet->getColumnDimension('Q')->setAutoSize(true);
+        $activeSheet->getColumnDimension('R')->setAutoSize(true);
         $num=9;
 
         if($status==1){
@@ -384,6 +427,82 @@ class Index extends Component
                         ->setCellValue("M{$num}",$total_kontribusi+$total_em+$total_ek);
             $activeSheet->getStyle("G{$num}:M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
             $activeSheet->getStyle("A{$num}:P{$num}")->applyFromArray([
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => '000000'],
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => '000000'],
+                    ],
+                ],
+                'font' => [
+                    'bold' => true,
+                ],
+            ]);
+        }
+
+        if($status==3){
+            $k=0;
+            foreach($data->kepesertaan->where('status_akseptasi',1) as $k => $i){
+                $k++;
+                $activeSheet
+                    ->setCellValue('A'.$num,$k)
+                    ->setCellValue('B'.$num,$i->no_peserta)
+                    ->setCellValue('C'.$num,$i->nama)
+                    ->setCellValue('D'.$num,$i->no_ktp)
+                    ->setCellValue('E'.$num,$i->tanggal_lahir?date('d-M-Y',strtotime($i->tanggal_lahir)) : '-')
+                    ->setCellValue('F'.$num,$i->usia)
+                    ->setCellValue('G'.$num,$i->tanggal_mulai?date('d-M-Y',strtotime($i->tanggal_mulai)) : '-')
+                    ->setCellValue('H'.$num,$i->tanggal_akhir?date('d-M-Y',strtotime($i->tanggal_akhir)) : '-')
+                    ->setCellValue('I'.$num,$i->basic)
+                    ->setCellValue('J'.$num,$i->dana_tabarru)
+                    ->setCellValue('K'.$num,$i->dana_ujrah)
+                    ->setCellValue('L'.$num,$i->kontribusi)
+                    ->setCellValue('M'.$num,$i->extra_mortalita?$i->extra_mortalita:'-')
+                    ->setCellValue('N'.$num,$i->extra_kontribusi?$i->extra_kontribusi:'-')
+                    ->setCellValue('O'.$num,$i->extra_mortalita+$i->kontribusi+$i->extra_kontribusi)
+                    ->setCellValue('P'.$num,$i->tanggal_stnc?date('d-M-Y',strtotime($i->tanggal_stnc)) : '-')
+                    ->setCellValue('Q'.$num,$i->ul)
+                    ->setCellValue('R'.$num,$i->reason_reject);
+
+                    $activeSheet->getStyle("I{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+                    if($i->extra_mortalita) $activeSheet->getStyle("M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                    if($i->extra_kontribusi) $activeSheet->getStyle("N{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+                    $activeSheet->getStyle("N{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+                $activeSheet->getStyle("A{$num}:R{$num}")->applyFromArray([
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ]
+                    ],
+                ]);
+                $num++;
+            }
+
+            $total_basic = $data->kepesertaan->where('status_akseptasi',$status)->sum('basic');
+            $total_dana_tabarru = $data->kepesertaan->where('status_akseptasi',$status)->sum('dana_tabarru');
+            $total_dana_ujrah = $data->kepesertaan->where('status_akseptasi',$status)->sum('dana_ujrah');
+            $total_kontribusi = $data->kepesertaan->where('status_akseptasi',$status)->sum('kontribusi');
+            $total_em = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_mortalita');
+            $total_ek = $data->kepesertaan->where('status_akseptasi',$status)->sum('extra_kontribusi');
+
+            $activeSheet
+                        ->setCellValue("C{$num}",'TOTAL')
+                        ->setCellValue("I{$num}",$total_basic)
+                        ->setCellValue("J{$num}",$total_dana_tabarru)
+                        ->setCellValue("K{$num}",$total_dana_ujrah)
+                        ->setCellValue("L{$num}",$total_kontribusi)
+                        ->setCellValue("M{$num}",$total_em)
+                        ->setCellValue("N{$num}",$total_ek)
+                        ->setCellValue("O{$num}",$total_kontribusi+$total_em+$total_ek);
+            $activeSheet->getStyle("I{$num}:O{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+            $activeSheet->getStyle("A{$num}:R{$num}")->applyFromArray([
                 'borders' => [
                     'top' => [
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
