@@ -13,7 +13,20 @@ class Skip extends Component
     protected $paginationTheme = 'bootstrap',$listeners = ['reassign'=>'set_reassign','filter-ul'=>'filter_ul','filter-peserta'=>'filter_peserta_',
     'filter-polis_id'=>'filter_polis_id_','filter-keyword'=>'filter_keyword_'];
     public $check_id=[],$data,$extra_kontribusi,$reassign=false,$ul,$filter_peserta,$assign_id=[],$filter_polis_id,$filter_keyword;
+    public $check_all=0;
     public function render()
+    {
+        $kepesertaan = $this->get_data();
+        
+        return view('livewire.reas.skip')->with(['kepesertaan'=>$kepesertaan->get()]);
+    }
+
+    public function updated($propertName)
+    {
+        $this->emit('data_assign_or_',$this->assign_id);
+    }
+
+    public function get_data()
     {
         $kepesertaan = Kepesertaan::select('kepesertaan.*',
                                 'pengajuan.dn_number',
@@ -24,13 +37,8 @@ class Skip extends Component
         if($this->ul) $kepesertaan->where('ul_reas',$this->ul);
         if($this->filter_peserta) $kepesertaan->where('is_double_reas',$this->filter_peserta);
         if($this->filter_keyword)$kepesertaan->where('pengajuan.dn_number','LIKE',"%{$this->filter_keyword}%");
-        
-        return view('livewire.reas.skip')->with(['kepesertaan'=>$kepesertaan->get()]);
-    }
 
-    public function updated()
-    {
-        $this->emit('data_assign_or_',$this->assign_id);
+        return $kepesertaan;
     }
 
     public function filter_keyword_($keyword)
@@ -61,5 +69,18 @@ class Skip extends Component
     public function set_reassign($boolean)
     {
         $this->reassign = $boolean;
+    }
+
+    public function checked_all()
+    {
+        if($this->check_all==1){
+            $kepesertaan = $this->get_data(); 
+            foreach($this->get_data()->get() as $item){
+                $this->assign_id[$item->id] = $item->id;
+            }
+        }
+        if($this->check_all==0){
+            $this->assign_id = [];
+        }
     }
 }

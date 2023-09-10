@@ -117,15 +117,27 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <a href="{{route('pengajuan.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
-                        @if($is_pengajuan_reas==false)
-                            <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',true)" class="btn btn-warning"><i class="fa fa-plus"></i> Pengajuan Reas</a>
-                        @else
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <a href="{{route('pengajuan.insert')}}" class="dropdown-item"><i class="fa fa-plus"></i> Pengajuan</a>
+                                @if($is_pengajuan_reas==false)
+                                    <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',true)" class="dropdown-item"><i class="fa fa-plus"></i> Reas</a>
+                                @endif
+                                @if($is_pengajuan_memo_ujroh==false)
+                                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_memo_ujrah" class="dropdown-item"><i class="fa fa-plus"></i> Memo Ujroh</a>
+                                @endif
+                            </div>
+                        </div>
+                        @if($is_pengajuan_reas==true)
                             <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',false)" class="btn btn-danger"><i class="fa fa-close"></i> Cancel</a>
                             @if(count($check_id)>0)
                                 <a href="javascript:void(0)" wire:click="submit_reas" class="btn btn-success"><i class="fa fa-check"></i> ({{count($check_id)}}) Submit</a>
                             @endif
                         @endif
+                        
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
@@ -190,6 +202,9 @@
                                     <td>
                                         @if($item->status==3)
                                             @if($is_pengajuan_reas and $item->reas_id=="")
+                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                            @endif
+                                            @if($is_pengajuan_memo_ujroh)
                                                 <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                             @endif
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
@@ -267,6 +282,39 @@
             </div>
         </div>
     </div>
+
+    <div wire:ignore.self class="modal fade" id="modal_memo_ujrah" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-info"></i> Memo Ujroh</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true close-btn">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" wire:ignore>
+                        <label>Polis</label>
+                        <select class="form-control" wire:model="polis_id" id="memo_ujroh_polis_id">
+                            <option value=""> -- Select Polis -- </option>
+                            @foreach($polis_pengajuan as  $item)
+                                <option value="{{$item->id}}">{{$item->nama}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <span wire:loading wire:target="delete">
+                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                            <span class="sr-only">{{ __('Loading...') }}</span>
+                        </span>
+                        <button type="button" wire:loading.remove wire:target="" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div wire:ignore.self class="modal fade" id="modal_confirm_delete" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -297,10 +345,26 @@
     @livewire('pengajuan.submit-reas')
 </div>
 @push('after-scripts')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
+    <script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>
+    <style>
+        .select2-container .select2-selection--single {height:36px;padding-left:10px;}
+        .select2-container .select2-selection--single .select2-selection__rendered{padding-top:3px;}
+        .select2-container--default .select2-selection--single .select2-selection__arrow{top:4px;right:10px;}
+        .select2-container {width: 100% !important;}
+    </style>
     <script type="text/javascript" src="{{ asset('assets/vendor/daterange/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/vendor/daterange/daterangepicker.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterange/daterangepicker.css') }}" />
     <script>
+        select__2 = $('#memo_ujroh_polis_id').select2();
+        $('#memo_ujroh_polis_id').on('change', function (e) {
+            var data = $(this).select2("val");
+            @this.set('polis_id', data);
+        });
+        var selected__ = $('#memo_ujroh_polis_id').find(':selected').val();
+        if(selected__ !="") select__2.val(selected__);
+
         Livewire.on('modal_submit_reas',()=>{
             $("#modal_submit_reas").modal('show');
         });

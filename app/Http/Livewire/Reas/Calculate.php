@@ -13,6 +13,7 @@ class Calculate extends Component
     protected $paginationTheme = 'bootstrap',$listeners = ['reassign'=>'set_reassign','filter-ul'=>'filter_ul','filter-peserta'=>'filter_peserta_',
         'filter-polis_id'=>'filter_polis_id_','filter-keyword'=>'filter_keyword_'];
     public $check_id=[],$assign_id=[],$data,$extra_kontribusi,$reassign=false,$ul,$filter_peserta,$filter_polis_id,$filter_keyword;
+    public $check_all=0;
     public function render()
     {
         $kepesertaan = $this->getData();
@@ -70,5 +71,17 @@ class Calculate extends Component
     public function set_reassign($bol)
     {
         $this->reassign = $bol;
+    }
+
+    public function checked_all()
+    {
+        if($this->check_all==1){
+            foreach($this->getData()->get() as $item){
+                $this->assign_id[$item->id] = $item->id;
+            }
+        }
+        if($this->check_all==0){
+            $this->assign_id = [];
+        }
     }
 }

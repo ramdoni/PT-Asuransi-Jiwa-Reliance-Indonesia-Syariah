@@ -9,6 +9,11 @@
                             <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
+                        @if($reassign)
+                            <label>
+                                <input type="checkbox" value="1" wire:model="check_all" wire:click="checked_all" /> Check All
+                            </label>
+                        @endif
                     </th>
                     <th>No Pengajuan</th>
                     <th>No DN</th>
@@ -36,7 +41,7 @@
                         <td>{{$index_proses}}</td>
                         <td>
                             @if($reassign)
-                                <input type="checkbox" wire:model="assign_id.{{$k}}" value="{{$item->id}}" />
+                                <input type="checkbox" wire:model="assign_id.{{$item->id}}" value="{{$item->id}}" />
                             @endif
                         </td>
                         <td><a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a></td>

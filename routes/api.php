@@ -22,4 +22,5 @@ Route::get('/',function(){
 });
 Route::post('auth-login',[\App\Http\Controllers\Api\UserController::class,'login']);
 Route::post('get-pengajuan',[\App\Http\Controllers\Api\PengajuanController::class,'data']);
+Route::post('get-polis',[\App\Http\Controllers\Api\PolisController::class,'data']);
 Route::post('get-pengajuan-peserta',[\App\Http\Controllers\Api\PengajuanController::class,'dataPeserta']);

@@ -4,7 +4,13 @@
             <thead style="text-transform: uppercase;">
                 <tr>
                     <th>No</th>
-                    <th></th>
+                    <th>
+                        @if($reassign)
+                            <label>
+                                <input type="checkbox" value="1" wire:model="check_all" wire:click="checked_all" /> Check All
+                            </label>
+                        @endif
+                    </th>
                     <th>No Pengajuan</th>
                     <th>Nomor DN</th>
                     <th>No Polis</th>
@@ -48,7 +54,7 @@
                         <td>{{$index_proses}}</td>
                         <td>
                             @if($reassign)
-                                <input type="checkbox" wire:model="assign_id.{{$k}}" value="{{$item->id}}" />
+                                <input type="checkbox" wire:model="assign_id.{{$item->id}}" value="{{$item->id}}" />
                             @endif
                         </td>
                         <td>

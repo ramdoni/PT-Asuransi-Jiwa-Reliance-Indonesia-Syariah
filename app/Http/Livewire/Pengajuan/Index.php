@@ -13,9 +13,9 @@ class Index extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $selected,$check_id=[],$is_pengajuan_reas=false;
+    public $selected,$check_id=[],$is_pengajuan_reas=false,$is_pengajuan_memo_ujroh=false;
     public $filter_keyword,$filter_status_invoice,$filter_status,$start_tanggal_pengajuan,$end_tanggal_pengajuan,$start_tanggal_pembayaran,$end_tanggal_pembayaran;
-    public $start_tanggal_akseptasi,$end_tanggal_akseptasi;
+    public $start_tanggal_akseptasi,$end_tanggal_akseptasi,$polis_pengajuan,$polis_id;
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager','reas'])
@@ -48,11 +48,15 @@ class Index extends Component
             else
                 $data->whereBetween('head_syariah_submit',[$this->start_tanggal_akseptasi,$this->end_tanggal_akseptasi]);
         }
+        
+        if($this->polis_id) $data->where('polis_id',$this->polis_id);
 
         $total_all = clone $data;
         $total_paid = clone $data;
         $total_unpaid = clone $data;
 
+        // if($this->is_pengajuan_memo_ujroh) $data->where('status',3)->whereNull('');
+        
         return view('livewire.pengajuan.index')->with([
                 'data'=>$data->paginate(100),
                 'total_all'=>$total_all->count(),
@@ -63,6 +67,12 @@ class Index extends Component
             ]);
     }
 
+    public function mount()
+    {
+        $this->polis_pengajuan = Pengajuan::select('polis.id','polis.nama')
+                                    ->join('polis','polis.id','=','pengajuan.polis_id')
+                                    ->groupBy('polis.id')->get();
+    }
 
     public function clear_filter()
     {
