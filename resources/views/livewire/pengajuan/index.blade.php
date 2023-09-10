@@ -235,6 +235,7 @@
                                         @if($item->dn_number)
                                             <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
                                         @endif
+
                                     </td>
                                     <td class="text-center">
                                         {{$item->total_reject}}
