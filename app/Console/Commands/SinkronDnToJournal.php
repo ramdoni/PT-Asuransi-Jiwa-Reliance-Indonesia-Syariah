@@ -47,14 +47,41 @@ class SinkronDnToJournal extends Command
         $num=1;
         foreach(Pengajuan::where('status',3)->get() as $item){
             if(isset($item->polis->fee_base_brokerage) and $item->polis->fee_base_brokerage >0){
+                
+                $income = Income::where(['transaction_table'=>'syariah_underwriting','transaction_id'=>$item->id])->first();
+                
+                if(!$income) continue;
 
-                $journal = Journal::where('transaction_number',$item->dn_number)->first();
-                if($journal) 
-                    echo "No Journal : {$journal->no_voucher}\n";
-                echo "{$num}. No Pengajuan : {$item->no_pengajuan}\n";
-                echo "-------------------------------------------------\n\n";
+                // if($item->polis_id !=76) continue;
 
-                $num++;
+                $journal_old = Journal::where('transaction_id',$income->id)->where('coa_id',13)->first();
+                if(!$journal_old){
+                    $journal_old = Journal::where('transaction_id',$income->id)->first();
+                    
+                    if(!$journal_old) continue;
+
+                    echo "No Journal : {$journal_old->no_voucher}\n";
+                    echo "{$num}. No Pengajuan : {$item->no_pengajuan}\n";
+                    echo "-------------------------------------------------\n\n";
+                    
+                    $journal = new Journal;
+                    $journal->no_voucher = $journal_old->no_voucher;
+                    $journal->transaction_number = $journal_old->transaction_number;
+                    $journal->transaction_id = $journal_old->transaction_id;
+                    $journal->transaction_table = 'syariah_underwriting'; 
+                    $journal->coa_id = 13;
+                    $journal->date_journal = $journal_old->date_journal;
+                    $journal->debit = $item->brokerage_ujrah;
+                    $journal->kredit = 0;
+                    $journal->saldo = $item->brokerage_ujrah;
+                    $journal->is_auto = 2;
+                    $journal->description = $item->polis->nama;
+                    $journal->save();
+                    
+                    $this->error("Journal ID : {$journal->id}");
+                    
+                    $num++;
+                }
             }
         }
 

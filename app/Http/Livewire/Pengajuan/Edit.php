@@ -504,15 +504,15 @@ class Edit extends Component
           6 = Pendapatan Administrasi Polis Ujrah (kredit)
           7 = Utang Pajak PPH 23 (kredit)
           13  = Beban Komisi (debit)
-         */
+        */
         $no_voucher = "";
-        foreach([7,5,6,4,3,2,1] as $k => $coa_id){
+        foreach([13,7,5,6,4,3,2,1] as $k => $coa_id){
             if($no_voucher=="") $no_voucher = generate_no_voucher($coa_id);
 
             $new  = new Journal();
             $new->transaction_number = $this->data->dn_number;
             $new->transaction_id = $income->id;
-            $new->transaction_table = 'konven_underwriting'; 
+            $new->transaction_table = 'syariah_underwriting'; 
             $new->coa_id = $coa_id;
             $new->no_voucher = $no_voucher;
             $new->date_journal = date('Y-m-d');
@@ -529,8 +529,15 @@ class Edit extends Component
                 if($this->data->polis->pph) $plus += $this->data->polis->pph;
                 if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
                 if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
-
+                if($this->data->brokerage_ujrah) $plus += $this->data->brokerage_ujrah;
+                
                 $new->kredit = $dana_ujrah+$plus;
+            }
+
+            if($coa_id==13){
+                if($this->data->brokerage_ujrah)
+                    $new->debit = $this->data->brokerage_ujrah;
+                else continue;
             }
 
             if($coa_id==2) $new->debit = $dana_tabbaru;
@@ -760,6 +767,7 @@ class Edit extends Component
                 if($this->data->biaya_sertifikat) $plus += $this->data->biaya_sertifikat;
                 if($this->data->biaya_polis_materai) $plus += $this->data->biaya_polis_materai;
                 if($this->data->polis->pph) $plus += $this->data->polis->pph;
+                if($this->data->brokerage_ujrah) $plus += $this->data->brokerage_ujrah;
 
                 $new->kredit = $dana_ujrah+$plus;
             }
