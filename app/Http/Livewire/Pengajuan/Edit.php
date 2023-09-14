@@ -506,7 +506,7 @@ class Edit extends Component
           13  = Beban Komisi (debit)
          */
         $no_voucher = "";
-        foreach([7,5,6,4,3,2,1] as $k => $coa_id){
+        foreach([13,7,5,6,4,3,2,1] as $k => $coa_id){
             if($no_voucher=="") $no_voucher = generate_no_voucher($coa_id);
 
             $new  = new Journal();
@@ -529,8 +529,16 @@ class Edit extends Component
                 if($this->data->polis->pph) $plus += $this->data->polis->pph;
                 if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
                 if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
+                if($this->data->brokerage_ujrah) $plus += $this->data->brokerage_ujrah;
 
                 $new->kredit = $dana_ujrah+$plus;
+            }
+
+            if($coa_id==13){
+                if($this->data->brokerage_ujrah) 
+                    $new->debit = $this->data->brokerage_ujrah;
+                else
+                    continue;
             }
 
             if($coa_id==2) $new->debit = $dana_tabbaru;

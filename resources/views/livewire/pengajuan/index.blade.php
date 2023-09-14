@@ -305,11 +305,11 @@
                     </div>
                     <hr />
                     <div class="form-group">
-                        <span wire:loading wire:target="delete">
+                        <span wire:loading wire:target="set_memo_ujroh">
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        <button type="button" wire:loading.remove wire:target="" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit</button>
+                        <button type="button" wire:loading.remove wire:target="set_memo_ujroh" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit</button>
                     </div>
                 </div>
             </div>

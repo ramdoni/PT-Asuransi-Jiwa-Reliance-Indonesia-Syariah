@@ -82,7 +82,7 @@ class Index extends Component
     public function set_id($id)
     {
         $this->selected = Pengajuan::find($id);
-    }
+    } 
 
     public function submit_reas()
     {
@@ -99,6 +99,11 @@ class Index extends Component
         session()->flash('message-success',__('Pengajuan berhasil dihapus'));
 
         return redirect()->route('pengajuan.index');
+    }
+
+    public function set_memo_ujroh()
+    {
+        $this->is_pengajuan_memo_ujroh = true;
     }
 
     public function downloadExcel($data,$status=1)
