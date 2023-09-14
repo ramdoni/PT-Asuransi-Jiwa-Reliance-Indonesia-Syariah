@@ -21,9 +21,13 @@ class Index extends Component
         $data = Kepesertaan::orderBy('id','DESC')->with(['polis','polis.produk'])->whereNotNull('no_peserta');
 
         if($this->filter_keyword) $data->where(function($table){
-            foreach(\Illuminate\Support\Facades\Schema::getColumnListing('kepesertaan') as $column){
-                $table->orWhere($column,'LIKE',"%{$this->filter_keyword}%");
-            }
+            $table->where('nama','LIKE',"%{$this->filter_keyword}%")
+                    ->orWhere('no_ktp','LIKE',"%{$this->filter_keyword}%")
+                    ->orWhere('no_peserta','LIKE',"%{$this->filter_keyword}%")
+                ;
+            // foreach(\Illuminate\Support\Facades\Schema::getColumnListing('kepesertaan') as $column){
+            //     $table->orWhere($column,'LIKE',"%{$this->filter_keyword}%");
+            // }
         });
 
         if($this->filter_status_polis) $data->where('status_polis',$this->filter_status_polis);

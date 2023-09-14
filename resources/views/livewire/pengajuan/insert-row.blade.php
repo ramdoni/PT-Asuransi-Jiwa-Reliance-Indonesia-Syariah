@@ -7,6 +7,12 @@
                     <label>Check All <br /><input type="checkbox" wire:model="check_all" value="1" /></label>
                 </th>
                 <th>
+                    <select class="form-control" wire:model="filter_double">
+                        <option value=""> -- Filter -- </option>
+                        <option value="1">Double Sistem</option>
+                        <option value="2">Double Excel</option>
+                        <option value="3">Double Excel & Double Sistem</option>
+                    </select>
                     Double : {{$total_double}}<br />
                     Total : {{$total_pengajuan}}<br />
                 </th>
@@ -49,8 +55,16 @@
         </thead>
         <tbody>
             @php($num=$kepesertaan ? $kepesertaan->firstItem() : '')
+            @php($bg="")
             @foreach($kepesertaan as $k => $item)
-                <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
+                @php($bg="")
+                @if($item->total_double>1)
+                    @php($bg = "#ff00003b")
+                @endif
+                @if($item->is_double==1)
+                    @php($bg = "#17a2b854" )
+                @endif
+                <tr style="{{$bg!=''?'background:'.$bg:''}}">
                     <td>{{$num}}@php($num++)</td>
                     <td class="text-center">
                         <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />

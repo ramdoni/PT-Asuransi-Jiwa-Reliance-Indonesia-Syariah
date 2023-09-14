@@ -187,8 +187,19 @@
                                             <th class="text-center">
                                                 <label>Check All <br /><input type="checkbox" wire:model="check_all" value="1" /></label>
                                             </th>
-                                            <th></th>
                                             <th>
+                                            </th>
+                                            <th>
+                                                <select wire:loading.remove wire:target="filter_double" class="form-control" wire:model="filter_double">
+                                                    <option value=""> -- Filter -- </option>
+                                                    <option value="1">Double Sistem</option>
+                                                    <option value="2">Double Excel</option>
+                                                    <option value="3">Double Excel & Double Sistem</option>
+                                                </select>
+                                                <span wire:loading wire:target="filter_double">
+                                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                    <span class="sr-only">{{ __('Loading...') }}</span>
+                                                </span>
                                                 @if(count($check_id)>0)
                                                     <span wire:loading wire:target="approveAll,rejectAll">
                                                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -226,8 +237,15 @@
                                     <tbody>
                                         @php($index_proses = 0)
                                         @foreach($kepesertaan_proses as $k => $item)
+                                            @php($bg="")
+                                            @if($item->total_double>1)
+                                                @php($bg = "#ff00003b")
+                                            @endif
+                                            @if($item->is_double==1)
+                                                @php($bg = "#17a2b854" )
+                                            @endif
                                             @php($index_proses++)
-                                            <tr x-data="{selected_id:{{$item->id}},confirm_delete:false}" style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
+                                            <tr x-data="{selected_id:{{$item->id}},confirm_delete:false}" style="{{$bg!=''?'background:'.$bg:''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_proses}}</td>
                                                 <td class="text-center">
                                                     @if(($data->status==0 || $data->status==5 || $data->status==6) and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))
@@ -384,8 +402,15 @@
                                     <tbody>
                                         @php($index_approve = 0)
                                         @foreach($kepesertaan_approve as $k => $item)
+                                            @php($bg="")
+                                            @if($item->total_double>1)
+                                                @php($bg = "#ff00003b")
+                                            @endif
+                                            @if($item->is_double==1)
+                                                @php($bg = "#17a2b854" )
+                                            @endif
                                             @php($index_approve++)
-                                            <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
+                                            <tr style="{{$bg!=''?'background:'.$bg:''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_approve}}</td>
                                                 <td>
                                                     {{-- Underwriting --}}
@@ -536,7 +561,14 @@
                                         @php($index_reject = 0)
                                         @foreach($kepesertaan_reject as $k => $item)
                                             @php($index_reject++)
-                                            <tr style="{{$item->is_double==1?'background:#17a2b854':''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
+                                            @php($bg="")
+                                            @if($item->total_double>1)
+                                                @php($bg = "#ff00003b")
+                                            @endif
+                                            @if($item->is_double==1)
+                                                @php($bg = "#17a2b854" )
+                                            @endif
+                                            <tr style="{{$bg!=''?'background:'.$bg:''}}" title="{{$item->is_double==1?'Data Ganda':''}}">
                                                 <td>{{$index_reject}}</td>
                                                 <td class="text-center">
                                                     @if($data->status==0 and (\Auth::user()->user_access_id==1 || \Auth::user()->user_access_id==2))

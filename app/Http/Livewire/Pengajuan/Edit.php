@@ -24,11 +24,25 @@ class Edit extends Component
     protected $listeners = ['reload-page'=>'$refresh','set_calculate'=>'set_calculate'];
     public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0;
     public $show_peserta = 1,$filter_ul,$filter_ul_arr=[],$transaction_id,$file,$is_calculate=false,$is_draft=false,$error_upload;
+    public $filter_double;
     public function render()
     {
         $this->kepesertaan_proses = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>0])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
+            if($this->filter_double){
+                if($this->filter_double==1) {
+                    $table->where('is_double',1);
+                }
+                if($this->filter_double==2) {
+                    $table->where('total_double','>',1);  
+                }
+                if($this->filter_double==3) {
+                    $table->where(function($table){ 
+                                $table->where('total_double','>',1)->orWhere('is_double',1); 
+                            });
+                }
+            }
         })->orderBy('id','ASC')->get();
         $this->kepesertaan_approve = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
@@ -38,6 +52,7 @@ class Edit extends Component
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
         })->get();
+
         $this->data->total_akseptasi = $this->kepesertaan_proses->count();
         $this->data->total_approve = $this->kepesertaan_approve->count();
         $this->data->total_reject = $this->kepesertaan_reject->count();
@@ -512,44 +527,65 @@ class Edit extends Component
             $new  = new Journal();
             $new->transaction_number = $this->data->dn_number;
             $new->transaction_id = $income->id;
-            $new->transaction_table = 'syariah_underwriting'; 
+            $new->transaction_table = 'konven_underwriting'; 
             $new->coa_id = $coa_id;
             $new->no_voucher = $no_voucher;
-            $new->date_journal = date('Y-m-d');
+            if($this->data->head_syariah_submit) 
+                $new->date_journal = date('Y-m-d',strtotime($this->data->head_syariah_submit));
+            else
+                $new->date_journal = date('Y-m-d',strtotime($this->data->updated_at));
 
             if($coa_id==4) $new->kredit = $dana_tabbaru;
             if($coa_id==3) {
-                $plus = 0;
+                $plus = $dana_ujrah;
+
                 /**
                  * Jika ada potong langsung maka masuk ke dana ujrah kemudian dipotong di debit coa potong langsung
+                 * pengurangan brokerage ujrah
+                 * penambahan biaya sertifikat
+                 * penambahan biaya polis
+                 * penambahan pph
+                 * pengurang ppn
+                 * penambahan extra kontribusi
+                 * penambahan exta mortalita
                  */
-                if($this->data->potong_langsung) $plus += $this->data->potong_langsung;
-                if($this->data->biaya_sertifikat) $plus += $this->data->biaya_sertifikat;
-                if($this->data->biaya_polis_materai) $plus += $this->data->biaya_polis_materai;
-                if($this->data->polis->pph) $plus += $this->data->polis->pph;
-                if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
-                if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
-                if($this->data->brokerage_ujrah) $plus += $this->data->brokerage_ujrah;
-                
-                $new->kredit = $dana_ujrah+$plus;
-            }
+                // if($this->data->potong_langsung) $plus -= $this->data->potong_langsung;
+                // if($this->data->brokerage_ujrah) $plus -= $this->data->brokerage_ujrah;
+                // if($this->data->biaya_sertifikat) $plus += $this->data->biaya_sertifikat;
+                // if($this->data->biaya_polis_materai) $plus += $this->data->biaya_polis_materai;
+                // if($this->data->pph) $plus += $this->data->pph;
+                // if($this->data->ppn) $plus -= $this->data->ppn;
+                // if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
+                // if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
 
-            if($coa_id==13){
-                if($this->data->brokerage_ujrah)
-                    $new->debit = $this->data->brokerage_ujrah;
-                else continue;
+                $new->kredit = $plus;
             }
-
             if($coa_id==2) $new->debit = $dana_tabbaru;
-            if($coa_id==1) $new->debit = $dana_ujrah;
+            if($coa_id==1) {
+                $temp = $dana_ujrah;
+                
+                if($this->data->pph) $temp += $this->data->pph;
+                if($this->data->potong_langsung) $temp -= $this->data->potong_langsung;
+                if($this->data->brokerage_ujrah) $temp -= $this->data->brokerage_ujrah;
+                if($this->data->biaya_sertifikat) $temp -= $this->data->biaya_sertifikat;
+                if($this->data->biaya_polis_materai) $temp -= $this->data->biaya_polis_materai;
+
+                $new->debit = $temp; 
+
+            }
             if($coa_id==5){
                 if($this->data->potong_langsung=="") continue;
                 $new->debit = $this->data->potong_langsung;
             }
             if($coa_id==6){
-                if($this->data->biaya_sertifikat=="" || $this->data->biaya_polis_materai=="") continue;
+                if($this->data->biaya_sertifikat=="" and $this->data->biaya_polis_materai=="") continue;
                 $new->debit = $this->data->biaya_sertifikat + $this->data->biaya_polis_materai;
             }
+            if($coa_id==13){
+                if($this->data->brokerage_ujrah=="") continue;
+                $new->debit = $this->data->brokerage_ujrah;
+            }
+
             if($coa_id==7){
                 if($this->data->pph)
                     $new->kredit = $this->data->pph;
@@ -558,7 +594,8 @@ class Edit extends Component
             }
 
             $new->description = $this->data->polis->nama;
-            $new->saldo = replace_idr($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
+            $new->saldo = ($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
+            $new->is_manual = 2;
             $new->save();
         }
 

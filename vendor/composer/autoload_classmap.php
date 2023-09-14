@@ -40,6 +40,7 @@ return array(
     'App\\Http\\Controllers\\ApController' => $baseDir . '/app/Http/Controllers/ApController.php',
     'App\\Http\\Controllers\\Api\\KepesertaanController' => $baseDir . '/app/Http/Controllers/Api/KepesertaanController.php',
     'App\\Http\\Controllers\\Api\\PengajuanController' => $baseDir . '/app/Http/Controllers/Api/PengajuanController.php',
+    'App\\Http\\Controllers\\Api\\PolisController' => $baseDir . '/app/Http/Controllers/Api/PolisController.php',
     'App\\Http\\Controllers\\Api\\UserController' => $baseDir . '/app/Http/Controllers/Api/UserController.php',
     'App\\Http\\Controllers\\ClaimController' => $baseDir . '/app/Http/Controllers/ClaimController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',

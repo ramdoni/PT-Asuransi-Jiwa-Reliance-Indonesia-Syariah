@@ -715,6 +715,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Http\\Controllers\\ApController' => __DIR__ . '/../..' . '/app/Http/Controllers/ApController.php',
         'App\\Http\\Controllers\\Api\\KepesertaanController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/KepesertaanController.php',
         'App\\Http\\Controllers\\Api\\PengajuanController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PengajuanController.php',
+        'App\\Http\\Controllers\\Api\\PolisController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PolisController.php',
         'App\\Http\\Controllers\\Api\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/UserController.php',
         'App\\Http\\Controllers\\ClaimController' => __DIR__ . '/../..' . '/app/Http/Controllers/ClaimController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
