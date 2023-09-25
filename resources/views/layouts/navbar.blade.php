@@ -31,6 +31,8 @@
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
                             <li><a href="{{ route('recovery-claim.index') }}" class="text-info icon-menu px-1">Recovery Claim</a></li>
+                            <li><a href="{{ route('memo-ujroh.index') }}" class="text-info icon-menu px-1">Memo Ujroh</a></li>
+                            <li><a href="{{ route('memo-cancel.index') }}" class="text-info icon-menu px-1">Memo Cancel</a></li>
                         @endif
                         @if (\Auth::user()->user_access_id == 2)
                             <!-- Head Underwriting -->
@@ -39,6 +41,7 @@
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
+                            <li><a href="{{ route('memo-ujroh.index') }}" class="text-info icon-menu px-1">Memo Ujroh</a></li>
                         @endif
                         @if (\Auth::user()->user_access_id == 3)
                             <!-- Head Teknik -->
@@ -47,6 +50,7 @@
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
+                            <li><a href="{{ route('memo-ujroh.index') }}" class="text-info icon-menu px-1">Memo Ujroh</a></li>
                         @endif
                         @if (\Auth::user()->user_access_id == 4)
                             <!-- Head Syariah -->
@@ -64,6 +68,7 @@
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
+                            <li><a href="{{ route('memo-ujroh.index') }}" class="text-info icon-menu px-1">Memo Ujroh</a></li>
                         @endif
 
                     </ul>

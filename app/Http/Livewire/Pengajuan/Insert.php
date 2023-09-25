@@ -178,18 +178,33 @@ class Insert extends Component
             $total_data++;
         }
 
+        // check double
         if(count($insert)>0)  {
-            $label_double = [];
-            foreach(array_count_values($check_double) as $label => $value){
-                if($value>1) $label_double[] = $label;
+            // $label_double = [];
+            // foreach(array_count_values($check_double) as $label => $value){
+            //     if($value>1) $label_double[] = $label;
+            // }
+            // if(count($label_double)>0){
+            //     $this->emit('message-error', "Upload failed, double data No KTP: ". implode(", ",$label_double));
+            // }else{
+            //     foreach (array_chunk($insert,1000) as $t)  {
+            //         Kepesertaan::insert($t);
+            //     }    
+            // }
+
+            foreach($insert as $k => $item){
+                $double = 0;
+                foreach($insert as $item_check){
+                    if($item['nama']==$item_check['nama'] and $item['tanggal_lahir']==$item_check['tanggal_lahir']){
+                        $double++;
+                    }
+                }
+                $insert[$k]['total_double'] = $double;
             }
-            if(count($label_double)>0){
-                $this->emit('message-error', "Upload failed, double data No KTP: ". implode(", ",$label_double));
-            }else{
-                foreach (array_chunk($insert,1000) as $t)  {
-                    Kepesertaan::insert($t);
-                }    
-            }
+            
+            foreach (array_chunk($insert,1000) as $t)  {
+                Kepesertaan::insert($t);
+            } 
         }
 
         $this->emit('reload-row');

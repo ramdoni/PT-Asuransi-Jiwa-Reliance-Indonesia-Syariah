@@ -43,7 +43,7 @@ def calculate(polis_id,transaction_id,iuran_tabbaru,ujrah):
     is_double = 0
     akumulasi_ganda = 0
     uw = ""
-    no = no+1
+    no = no+1 
 
     print(str(no) +". "+nama)
 
@@ -52,7 +52,7 @@ def calculate(polis_id,transaction_id,iuran_tabbaru,ujrah):
 
     #find double data
     tableFind = mydb.cursor()
-    tableFind.execute("SELECT sum(basic) FROM kepesertaan WHERE (status_polis=%s OR status_polis=%s) AND tanggal_lahir=%s AND nama=%s",('Inforce','Akseptasi',tanggal_lahir,nama,))
+    tableFind.execute("SELECT sum(basic) FROM kepesertaan WHERE (status_polis=%s OR status_polis=%s OR status_akseptasi=%s) AND tanggal_lahir=%s AND nama=%s",('Inforce','Akseptasi',1,tanggal_lahir,nama,))
     rowDouble = tableFind.fetchone()
 
     if rowDouble[0]!=None:

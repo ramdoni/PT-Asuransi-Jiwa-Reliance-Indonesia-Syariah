@@ -44,24 +44,64 @@ class SinkronDnToJournal extends Command
      */
     public function handle()
     {   
-        $num=1;
-        foreach(Pengajuan::where('status',3)->get() as $item){
-            if(isset($item->polis->fee_base_brokerage) and $item->polis->fee_base_brokerage >0){
+        // $num=1;
+        // foreach(Pengajuan::where('status',3)->get() as $item){
+        //     if(isset($item->polis->fee_base_brokerage) and $item->polis->fee_base_brokerage >0){
+                
+        //         $income = Income::where(['transaction_table'=>'syariah_underwriting','transaction_id'=>$item->id])->first();
+                
+        //         if(!$income) continue;
 
-                $journal = Journal::where('transaction_number',$item->dn_number)->first();
-                if($journal) 
-                    echo "No Journal : {$journal->no_voucher}\n";
-                echo "{$num}. No Pengajuan : {$item->no_pengajuan}\n";
-                echo "-------------------------------------------------\n\n";
+        //         // if($item->polis_id !=76) continue;
 
-                $num++;
-            }
-        }
+        //         $journal_old = Journal::where('transaction_id',$income->id)->where('coa_id',13)->first();
+        //         if(!$journal_old){
+        //             $journal_old = Journal::where('transaction_id',$income->id)->first();
+                    
+        //             if(!$journal_old) continue;
 
-        return;
+        //             echo "No Journal : {$journal_old->no_voucher}\n";
+        //             echo "{$num}. No Pengajuan : {$item->no_pengajuan}\n";
+        //             echo "-------------------------------------------------\n\n";
+                    
+        //             $journal = new Journal;
+        //             $journal->no_voucher = $journal_old->no_voucher;
+        //             $journal->transaction_number = $journal_old->transaction_number;
+        //             $journal->transaction_id = $journal_old->transaction_id;
+        //             $journal->transaction_table = 'syariah_underwriting'; 
+        //             $journal->coa_id = 13;
+        //             $journal->date_journal = $journal_old->date_journal;
+        //             $journal->debit = $item->brokerage_ujrah;
+        //             $journal->kredit = 0;
+        //             $journal->saldo = $item->brokerage_ujrah;
+        //             $journal->is_auto = 2;
+        //             $journal->description = $item->polis->nama;
+        //             $journal->save();
+                    
+        //             $this->error("Journal ID : {$journal->id}");
+                    
+        //             $num++;
+        //         }
+        //     }
+        // }
+
+        // return;
 
         foreach(Pengajuan::where('status',3)->get() as $k => $data){
-            echo "{$k}. No Pengajuan : {$data->no_pengajuan}\n";
+
+            // $income = Income::where(['transaction_table'=>'syariah_underwriting','transaction_id' => $data->id])->first();
+            // if(!$income) continue;
+            // $this->warn("Income ID {$income->id}");
+
+            // $journal = Journal::where(['transaction_id' => $income->id,'transaction_table'=>'konven_underwriting'])->first();
+            // if($journal){
+            //     $this->warn("Journal ID {$journal->id}");
+            //     $journal->delete();
+            // }
+            // $income->delete();
+            // $this->warn("--------------------------------");
+
+            $this->error("{$k}. No Pengajuan : {$data->no_pengajuan}");
             echo "DN  : {$data->dn_number}\n";
             $this->data = $data;
             $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
@@ -187,6 +227,7 @@ class SinkronDnToJournal extends Command
              * 13  = Beban Komisi (debit)
              */
             $no_voucher = "";
+            
             foreach([13,7,5,6,4,3,2,1] as $k => $coa_id){
                 if($no_voucher=="") $no_voucher = generate_no_voucher($coa_id);
 
@@ -215,19 +256,30 @@ class SinkronDnToJournal extends Command
                      * penambahan extra kontribusi
                      * penambahan exta mortalita
                      */
-                    if($this->data->potong_langsung) $plus -= $this->data->potong_langsung;
-                    if($this->data->brokerage_ujrah) $plus -= $this->data->brokerage_ujrah;
-                    if($this->data->biaya_sertifikat) $plus += $this->data->biaya_sertifikat;
-                    if($this->data->biaya_polis_materai) $plus += $this->data->biaya_polis_materai;
-                    if($this->data->polis->pph) $plus += $this->data->polis->pph;
-                    if($this->data->polis->ppn) $plus -= $this->data->polis->ppn;
-                    if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
-                    if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
+                    // if($this->data->potong_langsung) $plus -= $this->data->potong_langsung;
+                    // if($this->data->brokerage_ujrah) $plus -= $this->data->brokerage_ujrah;
+                    // if($this->data->biaya_sertifikat) $plus += $this->data->biaya_sertifikat;
+                    // if($this->data->biaya_polis_materai) $plus += $this->data->biaya_polis_materai;
+                    // if($this->data->pph) $plus += $this->data->pph;
+                    // if($this->data->ppn) $plus -= $this->data->ppn;
+                    // if($this->data->extra_kontribusi) $plus += $this->data->extra_kontribusi;
+                    // if($this->data->extra_mortalita) $plus += $this->data->extra_mortalita;
 
                     $new->kredit = $plus;
                 }
                 if($coa_id==2) $new->debit = $dana_tabbaru;
-                if($coa_id==1) $new->debit = $dana_ujrah;
+                if($coa_id==1) {
+                    $temp = $dana_ujrah;
+                    
+                    if($this->data->pph) $temp += $this->data->pph;
+                    if($this->data->potong_langsung) $temp -= $this->data->potong_langsung;
+                    if($this->data->brokerage_ujrah) $temp -= $this->data->brokerage_ujrah;
+                    if($this->data->biaya_sertifikat) $temp -= $this->data->biaya_sertifikat;
+                    if($this->data->biaya_polis_materai) $temp -= $this->data->biaya_polis_materai;
+
+                    $new->debit = $temp; 
+
+                }
                 if($coa_id==5){
                     if($this->data->potong_langsung=="") continue;
                     $new->debit = $this->data->potong_langsung;
@@ -249,7 +301,7 @@ class SinkronDnToJournal extends Command
                 }
 
                 $new->description = $this->data->polis->nama;
-                $new->saldo = replace_idr($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
+                $new->saldo = ($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
                 $new->is_manual = 2;
                 $new->save();
             }

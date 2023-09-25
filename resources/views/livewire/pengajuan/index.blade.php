@@ -116,41 +116,73 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-9">
-                        <div class="btn-group" role="group">
-                            <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Action
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <a href="{{route('pengajuan.insert')}}" class="dropdown-item"><i class="fa fa-plus"></i> Pengajuan</a>
-                                @if($is_pengajuan_reas==false)
-                                    <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',true)" class="dropdown-item"><i class="fa fa-plus"></i> Reas</a>
+                    <div class="col-md-11">
+                        <div class="row">
+                            <div class="col-md-10">
+                                @if($is_pengajuan_reas==true)
+                                    <div class="col-md-2">
+                                        <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',false)" class="btn btn-danger"><i class="fa fa-close"></i> Cancel</a>
+                                        @if(count($check_id)>0)
+                                            <a href="javascript:void(0)" wire:click="submit_reas" class="btn btn-success"><i class="fa fa-check"></i> ({{count($check_id)}}) Submit</a>
+                                        @endif
+                                    </div>
                                 @endif
-                                @if($is_pengajuan_memo_ujroh==false)
-                                    <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_memo_ujrah" class="dropdown-item"><i class="fa fa-plus"></i> Memo Ujroh</a>
+                                @if($is_pengajuan_memo_ujroh)
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group" wire:ignore>
+                                                <select class="form-control" wire:model="polis_id" id="memo_ujroh_polis_id">
+                                                    <option value=""> -- Select Polis -- </option>
+                                                    @foreach($polis_pengajuan as  $item)
+                                                        @if(isset($item->polis->nama))
+                                                            <option value="{{$item->polis_id}}">{{$item->polis->nama}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a href="javascript:void(0)" class="btn btn-danger" wire:click="confirm_memo_ujroh"><i class="fa fa-check-circle"></i> Submit Memo Ujroh</a>
+                                            <a href="javascript:void(0)" class="text-danger" wire:click="$set('is_pengajuan_memo_ujroh',false)"><i class="fa fa-close"></i> Cancel</a>
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
+                            <div class="col-md-2  text-right" style="float:right;">
+                                <span wire:loading>
+                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                    <span class="sr-only">{{ __('Loading...') }}</span>
+                                </span>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a href="{{route('pengajuan.insert')}}" class="dropdown-item"><i class="fa fa-plus"></i> Pengajuan</a>
+                                        @if($is_pengajuan_reas==false)
+                                            <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',true)" class="dropdown-item"><i class="fa fa-plus"></i> Reas</a>
+                                        @endif
+                                        @if($is_pengajuan_memo_ujroh==false)
+                                            <a href="javascript:void(0)" class="dropdown-item" wire:click="$set('is_pengajuan_memo_ujroh',true)"><i class="fa fa-plus"></i> Memo Ujroh</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        @if($is_pengajuan_reas==true)
-                            <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',false)" class="btn btn-danger"><i class="fa fa-close"></i> Cancel</a>
-                            @if(count($check_id)>0)
-                                <a href="javascript:void(0)" wire:click="submit_reas" class="btn btn-success"><i class="fa fa-check"></i> ({{count($check_id)}}) Submit</a>
-                            @endif
-                        @endif
-                        
-                        <span wire:loading>
-                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                            <span class="sr-only">{{ __('Loading...') }}</span>
-                        </span>
                     </div>
                 </div>
             </div>
             <div class="body">
                 <div class="table-responsive">
                     <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="background: #eee;vertical-align:middle">
+                        <thead style="vertical-align:middle">
                             <tr>
-                                <th>No</th>
+                                <th>
+                                    No 
+                                    @if(count(array_filter($check_id))>0)
+                                        ({{count(array_filter($check_id))}})
+                                    @endif
+                                </th>
                                 <th class="text-center">Status Approval</th>
                                 <th>Nomor DN</th>
                                 <th class="text-right">Total DN<br/> <span class="text-info">{{format_idr($total_dn)}}</span></th>
@@ -173,7 +205,17 @@
                         <tbody>
                             @foreach ($data as $k => $item)
                                 <tr>
-                                    <td style="width: 50px;">{{$k+1}}</td>
+                                    <td style="width: 50px;">
+                                        {{$k+1}}
+                                        @if($item->status==3)
+                                            @if($is_pengajuan_reas and $item->reas_id=="")
+                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                            @endif
+                                            @if($is_pengajuan_memo_ujroh)
+                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
+                                            @endif
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         <a href="{{route('pengajuan.edit',$item->id)}}">
                                             @if($item->status==0)
@@ -201,12 +243,6 @@
                                     </td>
                                     <td>
                                         @if($item->status==3)
-                                            @if($is_pengajuan_reas and $item->reas_id=="")
-                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
-                                            @endif
-                                            @if($is_pengajuan_memo_ujroh)
-                                                <input type="checkbox" class="mx-2" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
-                                            @endif
                                             <a href="{{route('pengajuan.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
                                         @endif
                                         {{$item->dn_number?$item->dn_number:'-'}}
@@ -250,7 +286,6 @@
                                         @if($item->dn_number)
                                             <a href="javascript:void(0)" wire:click="downloadExcel({{$item->id}},1)"><i class="fa fa-download"></i></a>
                                         @endif
-
                                     </td>
                                     <td class="text-center">
                                         {{$item->total_reject}}
@@ -284,32 +319,47 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="modal_memo_ujrah" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div wire:ignore.self class="modal fade" id="modal_submit_memo_ujrah" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-info"></i> Memo Ujroh</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-warning"></i> Memo Ujroh</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true close-btn">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group" wire:ignore>
-                        <label>Polis</label>
-                        <select class="form-control" wire:model="polis_id" id="memo_ujroh_polis_id">
-                            <option value=""> -- Select Polis -- </option>
-                            @foreach($polis_pengajuan as  $item)
-                                <option value="{{$item->id}}">{{$item->nama}}</option>
-                            @endforeach
-                        </select>
+                    <div class="table-responsive">
+                        <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>No Debit Note</th>
+                                    <th class="text-right">Kontribusi Gross</th>
+                                    <th class="text-right">Kontribusi Nett</th>
+                                    <th>Tanggal Bayar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($memo_selected as $k=>$item)
+                                    <tr>
+                                        <td>{{$k+1}}</td>
+                                        <td>{{$item->dn_number}}</td>
+                                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                                        <td class="text-right">{{format_idr($item->net_kontribusi)}}</td>
+                                        <td>{{$item->payment_date?date('d-M-Y',strtotime($item->payment_date)):'-'}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                     <hr />
                     <div class="form-group">
-                        <span wire:loading wire:target="set_memo_ujroh">
+                        <span wire:loading wire:target="submit_memo_ujroh">
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        <button type="button" wire:loading.remove wire:target="set_memo_ujroh" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit</button>
+                        <button type="button" wire:loading.remove wire:target="submit_memo_ujroh" wire:click="submit_memo_ujroh" class="btn btn-info"><i class="fa fa-check-circle"></i> Submit</button>
                     </div>
                 </div>
             </div>
@@ -358,14 +408,21 @@
     <script type="text/javascript" src="{{ asset('assets/vendor/daterange/daterangepicker.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/daterange/daterangepicker.css') }}" />
     <script>
-        select__2 = $('#memo_ujroh_polis_id').select2();
-        $('#memo_ujroh_polis_id').on('change', function (e) {
-            var data = $(this).select2("val");
-            @this.set('polis_id', data);
-        });
-        var selected__ = $('#memo_ujroh_polis_id').find(':selected').val();
-        if(selected__ !="") select__2.val(selected__);
+        
+        Livewire.on('select-memo-ujroh',()=>{
+            select__2 = $('#memo_ujroh_polis_id').select2();
+            $('#memo_ujroh_polis_id').on('change', function (e) {
+                var data = $(this).select2("val");
+                @this.set('polis_id', data);
+            });
+            var selected__ = $('#memo_ujroh_polis_id').find(':selected').val();
+            if(selected__ !="") select__2.val(selected__);
+        })
 
+
+        Livewire.on('show-modal-submit-memo-ujroh',()=>{
+            $("#modal_submit_memo_ujrah").modal('show');
+        });
         Livewire.on('modal_submit_reas',()=>{
             $("#modal_submit_reas").modal('show');
         });

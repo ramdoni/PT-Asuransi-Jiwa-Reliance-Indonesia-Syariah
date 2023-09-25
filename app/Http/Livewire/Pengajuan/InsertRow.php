@@ -13,7 +13,7 @@ class InsertRow extends Component
 {
     protected $listeners = ['reload-row'=>'$refresh','set_polis_id'=>'set_polis_id','hitung'=>'hitung'];
     public $polis_id,$total_pengajuan,$perhitungan_usia=1,$masa_asuransi=1;
-    public $total_double=0;
+    public $total_double=0,$filter_double;
     public $total_nilai_manfaat=0,$total_dana_tabbaru=0,$total_dana_ujrah=0,$total_kontribusi=0,$total_em=0,$total_ek=0,$total_total_kontribusi=0,$check_all,$check_id=[],$total_selected=0;
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
@@ -22,6 +22,15 @@ class InsertRow extends Component
         $kepesertaan = [];
         if($this->polis_id){
             $kepesertaan = Kepesertaan::with(['parent'])->where(['polis_id'=>$this->polis_id,'is_temp'=>1]);
+
+            if($this->filter_double){
+                if($this->filter_double==1) $kepesertaan->where('is_double',1);
+                if($this->filter_double==2) $kepesertaan->where('total_double','>',1);  
+                if($this->filter_double==3) $kepesertaan->where(function($table){ 
+                                                                    $table->where('total_double','>',1)->orWhere('is_double',1); 
+                                                                });
+            }
+
             $this->total_double = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1,'is_double'=>1])->count();
 
             $total_pengajuan = clone $kepesertaan;
@@ -42,6 +51,19 @@ class InsertRow extends Component
             $find = Kepesertaan::find($id);
             if($find) $find->delete();
         }
+
+        $kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
+        foreach($kepesertaan as $k => $item){
+            $double = 0;
+            foreach($kepesertaan as $item_check){
+                if($item->nama==$item_check->nama and $item->tanggal_lahir==$item_check->tanggal_lahir){
+                    $double++;
+                }
+            }
+            $item->total_double = $double;
+            $item->save();
+        }
+        
         $this->total_selected=0;
         $this->check_id = [];
         $this->emit('reload-row');
@@ -67,6 +89,18 @@ class InsertRow extends Component
     public function delete(Kepesertaan $data)
     {
         $data->delete();
+        $kepesertaan = Kepesertaan::where(['polis_id'=>$this->polis_id,'is_temp'=>1])->get();
+        foreach($kepesertaan as $k => $item){
+            $double = 0;
+            foreach($kepesertaan as $item_check){
+                if($item->nama==$item_check->nama and $item->tanggal_lahir==$item_check->tanggal_lahir){
+                    $double++;
+                }
+            }
+            $item->total_double = $double;
+            $item->save();
+        }
+
         $this->check_id = [];
         $this->total_selected=0;
         $this->emit('reload-row');

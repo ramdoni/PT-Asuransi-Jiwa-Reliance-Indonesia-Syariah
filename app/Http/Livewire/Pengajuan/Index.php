@@ -8,6 +8,8 @@ use App\Models\Kepesertaan;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use Livewire\WithPagination;
+use App\Models\MemoUjroh;
+use App\Models\Polis;
 
 class Index extends Component
 {
@@ -15,7 +17,7 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
     public $selected,$check_id=[],$is_pengajuan_reas=false,$is_pengajuan_memo_ujroh=false;
     public $filter_keyword,$filter_status_invoice,$filter_status,$start_tanggal_pengajuan,$end_tanggal_pengajuan,$start_tanggal_pembayaran,$end_tanggal_pembayaran;
-    public $start_tanggal_akseptasi,$end_tanggal_akseptasi,$polis_pengajuan,$polis_id;
+    public $start_tanggal_akseptasi,$end_tanggal_akseptasi,$polis_pengajuan,$polis_id,$memo_selected=[];
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager','reas'])
@@ -55,7 +57,11 @@ class Index extends Component
         $total_paid = clone $data;
         $total_unpaid = clone $data;
 
-        // if($this->is_pengajuan_memo_ujroh) $data->where('status',3)->whereNull('');
+        if($this->is_pengajuan_memo_ujroh) {
+            $data->where('status',3)
+                ->whereNotNull('payment_date')
+                ->whereNull('memo_ujroh_id');
+        }
         
         return view('livewire.pengajuan.index')->with([
                 'data'=>$data->paginate(100),
@@ -69,9 +75,111 @@ class Index extends Component
 
     public function mount()
     {
-        $this->polis_pengajuan = Pengajuan::select('polis.id','polis.nama')
-                                    ->join('polis','polis.id','=','pengajuan.polis_id')
-                                    ->groupBy('polis.id')->get();
+        $this->polis_pengajuan = Pengajuan::with('polis')->where('pengajuan.status',3)
+                                    ->groupBy('polis_id')->get();
+    }
+
+    public function updated($propertyName)
+    {
+        if($propertyName =='is_pengajuan_memo_ujroh' and $this->is_pengajuan_memo_ujroh==true){
+            $this->emit('select-memo-ujroh');
+        }
+
+        if($propertyName =='is_pengajuan_memo_ujroh' and $this->is_pengajuan_memo_ujroh==false){
+            $this->check_id = [];
+        }
+    }
+
+    public function submit_memo_ujroh()
+    {
+        if(count(array_filter($this->check_id))==0){
+            $this->emit('message-error','Pengajuan harus di pilih.');
+        }elseif($this->polis_id==""){
+            $this->emit('message-error','Polis harus di pilih.');
+        }else{
+            $data = new MemoUjroh();
+            $data->polis_id = $this->polis_id;
+            $data->tanggal_pengajuan = date('Y-m-d');
+            $data->save();
+            
+            # 000646/UWS-M/AJRI-US/VIII/2023
+            $data->nomor = str_pad($data->id,6, '0', STR_PAD_LEFT) ."UWS-M/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
+            $data->save();
+            
+            foreach($this->memo_selected as $item){
+                $item->memo_ujroh_id = $data->id;
+                $item->save();                
+            }
+
+            $polis = Polis::find($data->polis_id);
+            $pengajuan = Pengajuan::where('memo_ujroh_id',$data->id)->get();
+            
+            $data->perkalian_biaya_penutupan = $polis->perkalian_biaya_penutupan;
+            $data->maintenance = $polis->maintenance;
+            $data->maintenance_penerima = $polis->maintenance_penerima;
+            $data->maintenance_nama_bank = $polis->maintenance_nama_bank;
+            $data->maintenance_no_rekening = $polis->maintenance_no_rekening;
+
+            $data->admin_agency = $polis->admin_agency;
+            $data->admin_agency_penerima = $polis->admin_agency_penerima;
+            $data->admin_agency_nama_bank = $polis->admin_agency_nama_bank;
+            $data->admin_agency_no_rekening = $polis->admin_agency_no_rekening;
+
+            $data->agen_penutup = $polis->agen_penutup;
+            $data->agen_penutup_penerima = $polis->agen_penutup_penerima;
+            $data->agen_penutup_nama_bank = $polis->agen_penutup_nama_bank;
+            $data->agen_penutup_no_rekening = $polis->agen_penutup_no_rekening;
+
+            $data->ujroh_handling_fee_broker = $polis->ujroh_handling_fee_broker;
+            $data->ujroh_handling_fee_broker_penerima = $polis->ujroh_handling_fee_broker_penerima;
+            $data->ujroh_handling_fee_broker_nama_bank = $polis->ujroh_handling_fee_broker_nama_bank;
+            $data->ujroh_handling_fee_broker_no_rekening = $polis->ujroh_handling_fee_broker_no_rekening;
+            
+            $data->referal_fee = $polis->referal_fee;
+            $data->referal_fee_penerima = $polis->referal_fee_penerima;
+            $data->referal_fee_nama_bank = $polis->referal_fee_nama_bank;
+            $data->referal_fee_no_rekening = $polis->referal_fee_no_rekening;
+            
+            $total_maintenance = 0;$total_agen_penutup=0;$total_admin_agency=0;$total_ujroh_handling_fee_broker=0;$total_referal_fee=0;
+            
+            $data->maintenance = str_replace(',','.',$data->maintenance);
+            $data->agen_penutup = str_replace(',','.',$data->agen_penutup);
+            $data->admin_agency = str_replace(',','.',$data->admin_agency);
+            $data->ujroh_handling_fee_broker = str_replace(',','.',$data->ujroh_handling_fee_broker);
+            $data->referal_fee = str_replace(',','.',$data->referal_fee);
+            $kontribusi_nett = 0;
+            foreach($pengajuan as $item){
+                $total_maintenance += ($data->maintenance>0 and $item->kontribusi>0)?($item->kontribusi *($data->maintenance/100)):0;    
+                $total_agen_penutup += ($data->agen_penutup>0 and $item->kontribusi>0)?($item->kontribusi *($data->agen_penutup/100)):0;    
+                $total_admin_agency += ($data->admin_agency>0 and $item->kontribusi>0)?($item->kontribusi *($data->admin_agency/100)):0;    
+                $total_ujroh_handling_fee_broker += ($data->ujroh_handling_fee_broker>0 and $item->kontribusi>0)?($item->net_kontribusi *($data->ujroh_handling_fee_broker/100)):0;    
+                $total_referal_fee += ($data->referal_fee>0 and $item->kontribusi>0)?($item->kontribusi *($data->referal_fee/100)):0; 
+                $kontribusi_nett += $item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah;
+            }
+
+            $data->total_maintenance = $total_maintenance;
+            $data->total_agen_penutup = $total_agen_penutup;
+            $data->total_admin_agency = $total_admin_agency;
+            $data->total_ujroh_handling_fee_broker = $total_ujroh_handling_fee_broker;
+            $data->total_referal_fee = $total_referal_fee;
+            $data->total_kontribusi_gross = Pengajuan::where('memo_ujroh_id',$data->id)->sum('kontribusi');
+            $data->total_kontribusi_nett = $kontribusi_nett;
+            $data->save();
+
+            session()->flash('message-success',__('Memo Ujroh berhasil disubmit'));
+
+            return redirect()->route('memo-ujroh.index');
+        }
+    }
+
+    public function confirm_memo_ujroh()
+    {
+        if(count(array_filter($this->check_id))==0){
+            $this->emit('message-error','Pengajuan harus di pilih.');
+        }else{
+            $this->memo_selected = Pengajuan::whereIn('id',$this->check_id)->get();
+            $this->emit('show-modal-submit-memo-ujroh');
+        }
     }
 
     public function clear_filter()
@@ -83,6 +191,11 @@ class Index extends Component
     {
         $this->selected = Pengajuan::find($id);
     } 
+
+    public function set_memo_ujroh()
+    {
+        $this->is_pengajuan_memo_ujroh = true;
+    }
 
     public function submit_reas()
     {
@@ -100,12 +213,7 @@ class Index extends Component
 
         return redirect()->route('pengajuan.index');
     }
-
-    public function set_memo_ujroh()
-    {
-        $this->is_pengajuan_memo_ujroh = true;
-    }
-
+    
     public function downloadExcel($data,$status=1)
     {
         $data = Pengajuan::find($data);

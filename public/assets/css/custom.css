@@ -37,6 +37,9 @@
     transform: rotate(360deg);
     }
 }
+.table td, .table th {
+    border-top: 0;
+}
 .table.no-padding tr td,.table.table.no-padding tr th{
     padding-top:3px;
     padding-bottom:3px;
@@ -67,7 +70,7 @@
 .badge.badge-warning.badge-active {background:#f3ad06;color:white}
 .badge.badge-info.badge-active {background:#3C89DA;color:white}
 .badge.badge-primary.badge-active {background:#007bff;color:white}
-.show-form-filter{
+.show-form-filter {
     position: absolute;
     transform: translate3d(15px, 35px, 0px);
     top: 0px;

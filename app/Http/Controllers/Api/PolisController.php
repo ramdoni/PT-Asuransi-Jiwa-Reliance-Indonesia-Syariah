@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Polis;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PolisController extends Controller
@@ -25,8 +26,10 @@ class PolisController extends Controller
 
         $items = [];
         foreach($data->paginate(400) as $k => $item){
+            // $items[] = $item->no_polis ." / ". $item->nama;
             $items[$k]['id'] = $item->id;
-            $items[$k]['no'] = $item->no_pengajuan;
+            $items[$k]['no_polis'] = $item->no_polis;
+            $items[$k]['nama'] = $item->nama;
         }
 
         return response()->json(['message'=>'success','items'=>$items], 200);

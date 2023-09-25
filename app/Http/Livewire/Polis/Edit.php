@@ -23,7 +23,14 @@ class Edit extends Component
     public $retroaktif,$waiting_period,$rate_single_usia,$total_bp,$no_sb,$uw_limit,$margin_rate,$ri_comm,$share_reinsurance,$lost_ratio,$profit_margin,$contingency_margin,$gae,$business_source;
     public $refund,$refund_to_pengalihan,$dana_tabbaru_reas,$dana_ujroh_reas,$stop_loss,$cut_loss,$refund_cut_loss,$running_number,$running_number_peserta,$running_number_dn;
     public $running_no_surat,$biaya_polis_materai,$biaya_sertifikat;
-    public $data;
+    
+    public $maintenance_penerima,$maintenance_nama_bank,$maintenance_no_rekening;
+    public $admin_agency_penerima,$admin_agency_nama_bank,$admin_agency_no_rekening;
+    public $agen_penutup_penerima,$agen_penutup_nama_bank,$agen_penutup_no_rekening;
+    public $ujroh_handling_fee_broker_penerima,$ujroh_handling_fee_broker_nama_bank,$ujroh_handling_fee_broker_no_rekening;
+    public $referal_fee_penerima,$referal_fee_nama_bank,$referal_fee_no_rekening;
+
+    public $data,$tab_active=1;
     protected $listeners = ['set-id'=>'set_id'];
     public function render()
     {
@@ -150,6 +157,26 @@ class Edit extends Component
         $this->running_no_surat = $this->data->running_no_surat;
         $this->biaya_polis_materai = $this->data->biaya_polis_materai;
         $this->biaya_sertifikat = $this->data->biaya_sertifikat;
+
+        $this->maintenance_penerima = $this->data->maintenance_penerima;
+        $this->maintenance_nama_bank = $this->data->maintenance_nama_bank;
+        $this->maintenance_no_rekening = $this->data->maintenance_no_rekening;
+
+        $this->admin_agency_penerima = $this->data->admin_agency_penerima;
+        $this->admin_agency_nama_bank = $this->data->admin_agency_nama_bank;
+        $this->admin_agency_no_rekening = $this->data->admin_agency_no_rekening;
+
+        $this->agen_penutup_penerima = $this->data->agen_penutup_penerima;
+        $this->agen_penutup_nama_bank = $this->data->agen_penutup_nama_bank;
+        $this->agen_penutup_no_rekening = $this->data->agen_penutup_no_rekening;
+
+        $this->ujroh_handling_fee_broker_penerima = $this->data->ujroh_handling_fee_broker_penerima;
+        $this->ujroh_handling_fee_broker_nama_bank = $this->data->ujroh_handling_fee_broker_nama_bank;
+        $this->ujroh_handling_fee_broker_no_rekening = $this->data->ujroh_handling_fee_broker_no_rekening;
+
+        $this->referal_fee_penerima = $this->data->referal_fee_penerima;
+        $this->referal_fee_nama_bank = $this->data->referal_fee_nama_bank;
+        $this->referal_fee_no_rekening = $this->data->referal_fee_no_rekening;
     }
     
     public function updated($propertyName)
@@ -322,10 +349,31 @@ class Edit extends Component
         $this->data->running_no_surat = $this->running_no_surat;
         $this->data->biaya_polis_materai = $this->biaya_polis_materai;
         $this->data->biaya_sertifikat = $this->biaya_sertifikat;
+
+        $this->data->maintenance_penerima = $this->maintenance_penerima;
+        $this->data->maintenance_nama_bank = $this->maintenance_nama_bank;
+        $this->data->maintenance_no_rekening = $this->maintenance_no_rekening;
+
+        $this->data->admin_agency_penerima = $this->admin_agency_penerima;
+        $this->data->admin_agency_nama_bank = $this->admin_agency_nama_bank;
+        $this->data->admin_agency_no_rekening = $this->admin_agency_no_rekening;
+
+        $this->data->agen_penutup_penerima = $this->agen_penutup_penerima;
+        $this->data->agen_penutup_nama_bank = $this->agen_penutup_nama_bank;
+        $this->data->agen_penutup_no_rekening = $this->agen_penutup_no_rekening;
+
+        $this->data->ujroh_handling_fee_broker_penerima = $this->ujroh_handling_fee_broker_penerima;
+        $this->data->ujroh_handling_fee_broker_nama_bank = $this->ujroh_handling_fee_broker_nama_bank;
+        $this->data->ujroh_handling_fee_broker_no_rekening = $this->ujroh_handling_fee_broker_no_rekening;
+
+        $this->data->referal_fee_penerima = $this->referal_fee_penerima;
+        $this->data->referal_fee_nama_bank = $this->referal_fee_nama_bank;
+        $this->data->referal_fee_no_rekening = $this->referal_fee_no_rekening;
+
         $this->data->save();  
 
-        session()->flash('message-success',__('Polis berhasil disubmit'));
+        session()->flash('message-success',__('Polis berhasil disimpan'));
 
-        return redirect()->route('polis.index');
+        return redirect()->route('polis.edit',$this->data->id);
     }
 }

@@ -76,9 +76,14 @@ Route::group(['middleware' => ['auth']], function(){
 
     Route::get('rate-broker',App\Http\Livewire\RateBroker\Index::class)->name('rate-broker.index');
     Route::get('custom-report',App\Http\Livewire\CustomReport\Index::class)->name('custom-report.index');
+    Route::get('memo-ujroh',App\Http\Livewire\MemoUjroh\Index::class)->name('memo-ujroh.index');
+    Route::get('memo-ujroh/edit/{id}',App\Http\Livewire\MemoUjroh\Edit::class)->name('memo-ujroh.edit');
+    
+    Route::get('memo-cancel',App\Http\Livewire\MemoCancel\Index::class)->name('memo-cancel.index');
 });
 
 Route::group(['middleware' => ['auth']], function(){
+    Route::get('memo-ujroh/print/{id}',[App\Http\Controllers\MemoUjrohController::class,'printPengajuan'])->name('memo-ujroh.print-pengajuan');
     Route::get('api/get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('api.get-kepesertaan');
 });
 

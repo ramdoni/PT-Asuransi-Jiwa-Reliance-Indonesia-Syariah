@@ -4,11 +4,120 @@
     <div class="col-lg-12">
         <div class="card">
             <ul class="nav nav-tabs-new2">
-                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#profil">{{ __('Polis') }}</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#kepesertaan">{{ __('Kepesertaan') }}</a></li>
+                <li class="nav-item"><a class="nav-link {{ $tab_active ==1 ? 'active show' : ''}}" wire:click="$set('tab_active',1)" href="#profil">{{ __('Polis') }}</a></li>
+                <li class="nav-item"><a class="nav-link {{ $tab_active ==2 ? 'active show' : ''}}" wire:click="$set('tab_active',2)" href="#kepesertaan">{{ __('Kepesertaan') }}</a></li>
+                <li class="nav-item"><a class="nav-link {{ $tab_active ==3 ? 'active show' : ''}}" wire:click="$set('tab_active',3)" href="#memo_ujroh">{{ __('Memo Ujroh') }}</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active show" id="profil">
+                <div class="tab-pane {{$tab_active==3?'active show':''}}" id="memo_ujroh">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Perkalian Biaya Penutupan</label>
+                                <select class="form-control" wire:model="perkalian_biaya_penutupan">
+                                    <option value=""> -- Pilih -- </option>
+                                    <option>Kontribusi Gross</option>
+                                    <option>Kontribusi Dibayar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12"></div>
+                        <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
+                            <div class="form-group">
+                                <label> Maintenance (%)</label>
+                                <input type="text" class="form-control" wire:model="maintenance" />
+                            </div>
+                            <div class="form-group">
+                                <label>Penerima Pembayaran</label>
+                                <input type="text" class="form-control" wire:model="maintenance_penerima" />
+                            </div>
+                            <div class="form-group">
+                                <label>Nama Bank</label>
+                                <input type="text" class="form-control" wire:model="maintenance_nama_bank" />
+                            </div>
+                            <div class="form-group">
+                                <label>No Rekening</label>
+                                <input type="text" class="form-control" wire:model="maintenance_no_rekening" />
+                            </div>
+                            <div class="col-md-12"><hr /></div>
+                        </div>
+                        <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
+                            <div class="form-group">
+                                <label>Admin Agency (%)</label>
+                                <input type="text" class="form-control" wire:model="admin_agency" />
+                            </div>
+                            <div class="form-group">
+                                <label>Penerima Pembayaran</label>
+                                <input type="text" class="form-control" wire:model="admin_agency_penerima" />
+                            </div>
+                            <div class="form-group">
+                                <label>Nama Bank</label>
+                                <input type="text" class="form-control" wire:model="admin_agency_nama_bank" />
+                            </div>
+                            <div class="form-group">
+                                <label>No Rekening</label>
+                                <input type="text" class="form-control" wire:model="admin_agency_no_rekening" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
+                            <div class="form-group">
+                                <label>Agen Penutup (%)</label>
+                                <input type="text" class="form-control" wire:model="agen_penutup" />
+                            </div>
+                            <div class="form-group">
+                                <label>Penerima Pembayaran</label>
+                                <input type="text" class="form-control" wire:model="agen_penutup_penerima" />
+                            </div>
+                            <div class="form-group">
+                                <label>Nama Bank</label>
+                                <input type="text" class="form-control" wire:model="agen_penutup_nama_bank" />
+                            </div>
+                            <div class="form-group">
+                                <label>No Rekening</label>
+                                <input type="text" class="form-control" wire:model="agen_penutup_no_rekening" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
+                            <div class="form-group">
+                                <label>Ujroh Handling Fee (%)</label>
+                                <input type="text" class="form-control" wire:model="ujroh_handling_fee_broker" />
+                            </div>
+                            <div class="form-group">
+                                <label>Penerima Pembayaran</label>
+                                <input type="text" class="form-control" wire:model="ujroh_handling_fee_broker_penerima" />
+                            </div>
+                            <div class="form-group">
+                                <label>Nama Bank</label>
+                                <input type="text" class="form-control" wire:model="ujroh_handling_fee_broker_nama_bank" />
+                            </div>
+                            <div class="form-group">
+                                <label>No Rekening</label>
+                                <input type="text" class="form-control" wire:model="ujroh_handling_fee_broker_no_rekening" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
+                            <div class="form-group">
+                                <label>Referal Fee (%)</label>
+                                <input type="text" class="form-control" wire:model="referal_fee" />
+                            </div>
+                            <div class="form-group">
+                                <label>Penerima Pembayaran</label>
+                                <input type="text" class="form-control" wire:model="referal_fee_penerima" />
+                            </div>
+                            <div class="form-group">
+                                <label>Nama Bank</label>
+                                <input type="text" class="form-control" wire:model="referal_fee_nama_bank" />
+                            </div>
+                            <div class="form-group">
+                                <label>No Rekening</label>
+                                <input type="text" class="form-control" wire:model="referal_fee_no_rekening" />
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+
+                <div class="tab-pane {{$tab_active==1?'active show':''}}" id="profil">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -200,14 +309,6 @@
                                 <input type="text" class="form-control" wire:model="no_perjanjian_reas" />
                             </div>
                             <div class="form-group">
-                                <label>Perkalian Biaya Penutupan</label>
-                                <select class="form-control" wire:model="perkalian_biaya_penutupan">
-                                    <option value=""> -- Pilih -- </option>
-                                    <option>Kontribusi Gross</option>
-                                    <option>Kontribusi Dibayar</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label>Potong Langsung (%)</label>
                                 <input type="text" class="form-control" wire:model="potong_langsung" />
                             </div>
@@ -217,35 +318,14 @@
                                 <label>Fee Base / Brokerage (%)</label>
                                 <input type="text" class="form-control" wire:model="fee_base_brokerage" />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label>Maintenance (%)</label>
-                                    <input type="text" class="form-control" wire:model="maintenance" />
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Admin Agency (%)</label>
-                                    <input type="text" class="form-control" wire:model="admin_agency" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label>Agen Penutup (%)</label>
-                                    <input type="text" class="form-control" wire:model="agen_penutup" />
-                                </div>
+                            
+                            <div class="row">    
                                 <div class="form-group col-md-6">
                                     <label>Operasional Agency (%)</label>
                                     <input type="text" class="form-control" wire:model="operasional_agency" />
                                 </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label>Ujroh Handling Fee (%)</label>
-                                <input type="text" class="form-control" wire:model="ujroh_handling_fee_broker" />
-                            </div>
-                            <div class="form-group">
-                                <label>Referal Fee (%)</label>
-                                <input type="text" class="form-control" wire:model="referal_fee" />
-                            </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label>PPh (%)</label>
@@ -599,7 +679,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="kepesertaan">
+                <div class="tab-pane {{$tab_active==1?'active show':''}}" id="kepesertaan">
                     @if(\Auth::user()->user_access_id==3)
                         @livewire('polis.kepesertaan-akseptasi',['data'=>$data])
                     @else
