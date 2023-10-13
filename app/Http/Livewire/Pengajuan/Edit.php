@@ -48,6 +48,7 @@ class Edit extends Component
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
         })->orderBy('id','ASC')->get();
+
         $this->kepesertaan_reject = Kepesertaan::where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->where(function($table){
             if($this->show_peserta==2) $table->where('is_double',1);
             if($this->filter_ul) $table->where('ul',$this->filter_ul);
@@ -403,7 +404,7 @@ class Edit extends Component
         $dana_tabbaru = $select->total_dana_tabbaru;
         $dana_ujrah = $select->total_dana_ujrah;
         $kontribusi = $select->total_kontribusi;
-        $ektra_kontribusi = $select->total_extract_kontribusi;
+        $ektra_kontribusi = $select->total_extra_kontribusi;
         $extra_mortalita = $select->total_extra_mortalita;
 
         $this->data->nilai_manfaat = $nilai_manfaat;

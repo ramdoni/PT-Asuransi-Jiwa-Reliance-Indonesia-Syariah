@@ -149,11 +149,36 @@ class Index extends Component
             $data->referal_fee = str_replace(',','.',$data->referal_fee);
             $kontribusi_nett = 0;
             foreach($pengajuan as $item){
-                $total_maintenance += ($data->maintenance>0 and $item->kontribusi>0)?($item->kontribusi *($data->maintenance/100)):0;    
-                $total_agen_penutup += ($data->agen_penutup>0 and $item->kontribusi>0)?($item->kontribusi *($data->agen_penutup/100)):0;    
-                $total_admin_agency += ($data->admin_agency>0 and $item->kontribusi>0)?($item->kontribusi *($data->admin_agency/100)):0;    
-                $total_ujroh_handling_fee_broker += ($data->ujroh_handling_fee_broker>0 and $item->kontribusi>0)?($item->net_kontribusi *($data->ujroh_handling_fee_broker/100)):0;    
-                $total_referal_fee += ($data->referal_fee>0 and $item->kontribusi>0)?($item->kontribusi *($data->referal_fee/100)):0; 
+                $kontribusi = Pengajuan::join('kepesertaan','kepesertaan.pengajuan_id','=','pengajuan.id')
+                                        ->where('pengajuan.id',$item->id)
+                                        ->where('kepesertaan.status_akseptasi',1)
+                                        ->sum('kepesertaan.kontribusi');
+            
+                $item->kontribusi = $kontribusi;
+                
+                $kontribusi_nett += ($kontribusi - $item->potong_langsung - $item->brokerage_ujrah);
+
+                if($data->perkalian_biaya_penutupan !='Kontribusi Gross')
+                    $kontribusi = $kontribusi - $item->potong_langsung - $item->brokerage_ujrah;
+                
+                $maintenance = ($data->maintenance>0 and $kontribusi>0)?($kontribusi *($data->maintenance/100)):0;
+                $agen_penutup = ($data->agen_penutup>0 and $kontribusi>0)?($kontribusi *($data->agen_penutup/100)):0;
+                $admin_agency = ($data->admin_agency>0 and $item->kontribusi>0)?($kontribusi *($data->admin_agency/100)):0;
+                $ujroh_handling_fee_broker = ($data->ujroh_handling_fee_broker>0 and $kontribusi>0)?($kontribusi *($data->ujroh_handling_fee_broker/100)):0;
+                $referal_fee = ($data->referal_fee>0 and $kontribusi>0)?($kontribusi *($data->referal_fee/100)):0;
+
+                $item->maintenance  = $maintenance;
+                $item->agen_penutup = $agen_penutup;
+                $item->admin_agency = $admin_agency;
+                $item->ujroh_handling_fee_broker = $ujroh_handling_fee_broker;
+                $item->referal_fee = $referal_fee;
+                $item->save();
+                
+                $total_maintenance += $maintenance;    
+                $total_agen_penutup += $agen_penutup;    
+                $total_admin_agency += $admin_agency;    
+                $total_ujroh_handling_fee_broker += $ujroh_handling_fee_broker;    
+                $total_referal_fee += $data->referal_fee; 
                 $kontribusi_nett += $item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah;
             }
 
@@ -162,7 +187,10 @@ class Index extends Component
             $data->total_admin_agency = $total_admin_agency;
             $data->total_ujroh_handling_fee_broker = $total_ujroh_handling_fee_broker;
             $data->total_referal_fee = $total_referal_fee;
-            $data->total_kontribusi_gross = Pengajuan::where('memo_ujroh_id',$data->id)->sum('kontribusi');
+            $data->total_kontribusi_gross = Pengajuan::join('kepesertaan','kepesertaan.pengajuan_id','=','pengajuan.id')
+                                                ->where('memo_ujroh_id',$data->id)
+                                                ->where('kepesertaan.status_akseptasi',1)
+                                                ->sum('kepesertaan.kontribusi');
             $data->total_kontribusi_nett = $kontribusi_nett;
             $data->save();
 

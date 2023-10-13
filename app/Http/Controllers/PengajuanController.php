@@ -12,8 +12,17 @@ class PengajuanController extends Controller
     {
         $user = User::where('user_access_id',3)->first();
         $head_teknik = $user ? $user->name : '-';
+        $kontribusi = 0;
+        if(!isset($_GET['is_calculate'])){
+            foreach($id->kepesertaan->where('status_akseptasi',1) as $item){
+                $kontribusi += round($item->kontribusi);
+            }
+        }else{
+            $kontribusi = $id->kontribusi;
+        }
+        // $kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('kontribusi');
+        
 
-        $kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('kontribusi');
         $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
         $extra_mortalita = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita');
         $nilai_manfaat = $id->kepesertaan->where('status_akseptasi',1)->sum('basic');

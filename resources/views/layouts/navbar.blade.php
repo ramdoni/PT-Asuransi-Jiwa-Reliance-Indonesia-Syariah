@@ -32,7 +32,7 @@
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
                             <li><a href="{{ route('recovery-claim.index') }}" class="text-info icon-menu px-1">Recovery Claim</a></li>
                             <li><a href="{{ route('memo-ujroh.index') }}" class="text-info icon-menu px-1">Memo Ujroh</a></li>
-                            <li><a href="{{ route('memo-cancel.index') }}" class="text-info icon-menu px-1">Memo Cancel</a></li>
+                            <!-- <li><a href="{{ route('memo-cancel.index') }}" class="text-info icon-menu px-1">Memo Cancel</a></li> -->
                         @endif
                         @if (\Auth::user()->user_access_id == 2)
                             <!-- Head Underwriting -->

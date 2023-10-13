@@ -10,7 +10,7 @@ use App\Models\UnderwritingLimit;
 
 class PengajuanUploadRaw extends Command
 {
-    public $pengajuan_id = 10451;
+    public $pengajuan_id = 10596;
     /**
      * The name and signature of the console command.
      *
@@ -44,8 +44,8 @@ class PengajuanUploadRaw extends Command
     {
         $pengajuan = Pengajuan::find($this->pengajuan_id);
 
-        ini_set('memory_limit', '-1');
-        $inputFileName = './public/migrasi/12-09-2023.xlsx';
+        ini_set('memory_limit', '-1'); 
+        $inputFileName = './public/migrasi/bank-bukopin-syariah-reguler.xlsx';
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
@@ -64,30 +64,32 @@ class PengajuanUploadRaw extends Command
             $usia = $item['E'];
             $mulai_asuransi = date('Y-m-d',strtotime($item['F']));
             $akhir_asuransi = date('Y-m-d',strtotime($item['G']));
-            $nilai_manfaat = $item['H'];
-            $dana_tabbaru = $item['I'];
-            $dana_ujrah = $item['J'];
-            $kontribusi = $item['K'];
+            $nilai_manfaat = str_replace(',','.',$item['H']);
+            $dana_tabbaru = str_replace(',','.',$item['I']);
+            $dana_ujrah = str_replace(',','.',$item['J']);
+            $kontribusi = str_replace(',','.',$item['K']);
             $extra_mortalita = $item['L'];
-            $total_kontribusi = $item['M'];
-            $stnc = date('Y-m-d',strtotime($item['N']));
+            $total_kontribusi = str_replace(',','.',$item['M']);
+            $uw = $item['N'];
+            $stnc = date('Y-m-d',strtotime($item['O']));
             
-            $peserta = Kepesertaan::where(['nama'=>$nama,'tanggal_lahir'=>$tanggal_lahir,'pengajuan_id'=>$pengajuan->id])->first();
+            // $peserta = Kepesertaan::where(['nama'=>$nama,'tanggal_lahir'=>$tanggal_lahir,'pengajuan_id'=>$pengajuan->id])->first();
             
-            if($peserta){
-                $peserta->no_peserta = $no_peserta;
-                $peserta->basic = $nilai_manfaat;
-                $peserta->dana_tabarru = $dana_tabbaru;
-                $peserta->dana_ujrah = $dana_ujrah;
-                $peserta->kontribusi = $kontribusi;
-                $peserta->extra_mortalita = $extra_mortalita;
-                $peserta->total_kontribusi_dibayar = $total_kontribusi;
-                $peserta->save();
-            }else{
-                return;
+            // if($peserta){
+            //     $peserta->no_peserta = $no_peserta;
+            //     $peserta->basic = $nilai_manfaat;
+            //     $peserta->dana_tabarru = $dana_tabbaru;
+            //     $peserta->dana_ujrah = $dana_ujrah;
+            //     $peserta->kontribusi = $kontribusi;
+            //     $peserta->extra_mortalita = $extra_mortalita;
+            //     $peserta->total_kontribusi_dibayar = $total_kontribusi;
+            //     $peserta->status_akseptasi = 1;
+            //     $peserta->save();
+            // }else{
                 $peserta = new Kepesertaan();
                 $peserta->pengajuan_id = $this->pengajuan_id;
                 $peserta->status_akseptasi = 1;
+                $peserta->polis_id = $pengajuan->polis_id;
                 // $peserta->no_ktp = $no_ktp;
                 // $peserta->cab = $cabang;
                 $peserta->no_peserta = $no_peserta;
@@ -101,6 +103,7 @@ class PengajuanUploadRaw extends Command
                 $peserta->kontribusi = $kontribusi;
                 $peserta->extra_mortalita = $extra_mortalita;
                 $peserta->total_kontribusi_dibayar = $total_kontribusi;
+                $peserta->ul = $uw;
                 $peserta->tanggal_stnc = $stnc;
                 $peserta->save();
 
@@ -108,7 +111,7 @@ class PengajuanUploadRaw extends Command
                 $peserta->masa = hitung_masa($peserta->tanggal_mulai,$peserta->tanggal_akhir);
                 $peserta->masa_bulan = hitung_masa_bulan($peserta->tanggal_mulai,$peserta->tanggal_akhir,$pengajuan->masa_asuransi);
                 $peserta->save();
-            }
+            //}
             echo "{$k}. No KTP : {$no_peserta}\n";
         }
 

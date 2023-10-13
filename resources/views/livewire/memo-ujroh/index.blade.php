@@ -84,6 +84,11 @@
                                     <td class="text-center">{{$item->agen_penutup?$item->agen_penutup:0}}%</td>
                                     <td class="text-center">{{$item->ujroh_handling_fee_broker?$item->ujroh_handling_fee_broker:0}}%</td>
                                     <td class="text-center">{{$item->referal_fee?$item->referal_fee:0}}%</td>
+                                    <td>
+                                        @if($item->status!=3)
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#modal_confirm_delete" wire:click="$set('selected_id',{{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
