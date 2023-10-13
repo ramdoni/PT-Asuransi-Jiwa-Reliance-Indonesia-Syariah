@@ -1,5 +1,5 @@
 @section('sub-title', 'Index')
-@section('title', 'Memo Ujroh')
+@section('title', 'Reas Cancel')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -25,7 +25,6 @@
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        <!-- <a href="{{route('klaim.pengaturan')}}" class="btn btn-warning float-right"><i class="fa fa-gear"></i> Pengaturan</a> -->
                     </div>
                 </div>
             </div>
@@ -36,17 +35,14 @@
                             <tr>
                                 <th>No</th>
                                 <th class="text-center">Status</th>
+                                <th>Reasuradur</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Pemegang Polis</th>
                                 <th>Date</th>
-                                <!-- <th>Kontribusi Gross</th> -->
-                                <!-- <th>Kontribusi Nett</th> -->
-                                <th>Maintenance</th>
-                                <th>Agen Penutup</th>
-                                <th>Admin Agency</th>
-                                <th>Ujroh (Handling Fee) Broker</th>
-                                <th>Referal Fee</th>
+                                <th class="text-center">Total Peserta</th>
+                                <th class="text-center">Total Manfaat Asuransi</th>
+                                <th class="text-center">Kontribusi Gross Cancel</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -69,7 +65,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{route('memo-ujroh.edit', $item->id)}}">{{$item->nomor}}</a></td>
+                                        <a href="{{route('reas-cancel.edit', $item->id)}}">{{$item->nomor}}</a></td>
                                     <td>
                                         @if(isset($item->polis_id))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">
@@ -79,11 +75,13 @@
                                     </td>
                                     <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
-                                    <td class="text-center">{{$item->maintenance?$item->maintenance:0}}%</td>
-                                    <td class="text-center">{{$item->admin_agency?$item->admin_agency:0}}%</td>
-                                    <td class="text-center">{{$item->agen_penutup?$item->agen_penutup:0}}%</td>
-                                    <td class="text-center">{{$item->ujroh_handling_fee_broker?$item->ujroh_handling_fee_broker:0}}%</td>
-                                    <td class="text-center">{{$item->referal_fee?$item->referal_fee:0}}%</td>
+                                    <td class="text-center">{{$item->total_peserta}}</td>
+                                    <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>
+                                    <td class="text-right">{{format_idr($item->total_kontribusi)}}</td>
+                                    <td>
+                                        <a href="{{route('memo-cancel.print-pengajuan',['id'=>$item->id])}}" target="_blank"><i class="fa fa-print"></i> Print</a>
+                                        <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
+                                    </td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)
@@ -102,7 +100,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-warning text-warning"></i> Confirm</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-info"></i> Confirm</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true close-btn">×</span>
                     </button>
@@ -124,5 +122,7 @@
         </div>
     </div>
 
-    
+</div>
+<div class="modal fade" id="modal_migrasi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @livewire('klaim.migrasi')
 </div>

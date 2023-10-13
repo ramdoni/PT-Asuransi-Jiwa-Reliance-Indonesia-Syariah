@@ -62,6 +62,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('reas',App\Http\Livewire\Reas\Index::class)->name('reas.index');
     Route::get('reas/edit/{id}',App\Http\Livewire\Reas\Edit::class)->name('reas.edit');
     Route::get('reas/download-report/{id}',[App\Http\Controllers\ReinsuranceController::class,'downloadReport'])->name('reas.download-report');
+    Route::get('reas-cancel',App\Http\Livewire\ReasCancel\Index::class)->name('reas-cancel.index');
+    Route::get('reas-cancel/edit/{id}',App\Http\Livewire\ReasCancel\Edit::class)->name('reas-cancel.edit');
 
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('klaim/insert',App\Http\Livewire\Klaim\Insert::class)->name('klaim.insert');
@@ -80,10 +82,13 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('memo-ujroh/edit/{id}',App\Http\Livewire\MemoUjroh\Edit::class)->name('memo-ujroh.edit');
     
     Route::get('memo-cancel',App\Http\Livewire\MemoCancel\Index::class)->name('memo-cancel.index');
+    Route::get('memo-cancel/insert',App\Http\Livewire\MemoCancel\Insert::class)->name('memo-cancel.insert');
+    Route::get('memo-cancel/edit/{id}',App\Http\Livewire\MemoCancel\Edit::class)->name('memo-cancel.edit');
 });
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('memo-ujroh/print/{id}',[App\Http\Controllers\MemoUjrohController::class,'printPengajuan'])->name('memo-ujroh.print-pengajuan');
+    Route::get('memo-cancel/print/{id}',[App\Http\Controllers\MemoCancelController::class,'printPengajuan'])->name('memo-cancel.print-pengajuan');
     Route::get('api/get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('api.get-kepesertaan');
 });
 
@@ -97,71 +102,6 @@ Route::group(['middleware' => ['auth','access:1']], function(){
     Route::get('users/edit/{id}',App\Http\Livewire\User\Edit::class)->name('users.edit');
     Route::post('users/autologin/{id}',[App\Http\Livewire\User\Index::class,'autologin'])->name('users.autologin');
     Route::get('log-activity',App\Http\Livewire\LogActivity\Index::class)->name('log-activity');
-});
-
-
-Route::get('send-wa',function(){
-    $token = "HioVXgQTselUx6alx9GmtfcJgpySCDnH3FCZh2tARb0C7vRtQon5shmOwx0KmGl1";
-
-    $curl = curl_init();
-    $data = [
-        // 'phone' => '628881264670',
-        'phone' => '6287889461000',
-        // 'phone' => '6281289992707',
-        // 'phone' => '6288224739153',
-        'title' => 'Approval',
-        'template_type' => 'text',
-        'message' => "We need your approval for new submissions on behalf of :\nName : Ramdoni\nBirthday : 13-03-1993\nAge : 30",
-        // 'url_display' => 'wablas.com',
-        // 'url_link' => 'https://wablas.com',
-        // 'contact_display' => 'contact us',
-        // 'contact_diplay' => '628881264670',
-        'reply1' => 'Approve',
-        'reply2' => 'Reject',
-        // 'footer' => 'Silahkan pilih salah satu',
-    ];
-
-    curl_setopt($curl, CURLOPT_HTTPHEADER,
-        array(
-            "Authorization: $token",
-        )
-    );
-    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($curl, CURLOPT_URL,  "https://solo.wablas.com/api/send-template-from-local");
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-    $result = curl_exec($curl);
-    curl_close($curl);
-
-    // $random = true;
-    // $payload = [
-    //     "data" => [
-    //         [
-    //             'phone' => '6281289992707-1515388137',
-    //             'message' => 'Test message to private message',
-    //             'isGroup' => 'true'
-    //         ]
-    //     ]
-    // ];
-    // curl_setopt($curl, CURLOPT_HTTPHEADER,
-    //     array(
-    //         "Authorization: $token",
-    //         "Content-Type: application/json"
-    //     )
-    // );
-    // curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload) );
-    // curl_setopt($curl, CURLOPT_URL,  "https://solo.wablas.com/api/v2/send-message");
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-    // curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-
-    // $result = curl_exec($curl);
-    // curl_close($curl);
-    return $result;
-    // return response()->jsons(['message'=>'success',$result],200);
 });
 
 Route::post('wa',function(Illuminate\Http\Request $r){

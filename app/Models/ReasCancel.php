@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Polis;
 use App\Models\Kepesertaan;
 
-class MemoCancel extends Model
+class ReasCancel extends Model
 {
     use HasFactory;
 
-    protected $table = 'memo_cancel';
+    protected $table = 'reas_cancel';
 
     public function polis()
     {
@@ -20,6 +20,8 @@ class MemoCancel extends Model
 
     public function kepesertaan()
     {
-        return $this->hasMany(Kepesertaan::class,'memo_cancel_id','id');
+        return $this->hasMany(Kepesertaan::class,'reas_cancel_id','id');
     }
+
+    
 }
