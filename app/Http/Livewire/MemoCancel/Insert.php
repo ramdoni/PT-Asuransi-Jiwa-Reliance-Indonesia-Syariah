@@ -188,6 +188,10 @@ class Insert extends Component
                 $reasuradur = Kepesertaan::select('kepesertaan.*')->where('kepesertaan.memo_cancel_id',$data->id)
                                 ->join('reas','reas.id','=','kepesertaan.reas_id')
                                 ->join('reasuradur','reasuradur.id','=','reas.reasuradur_id')
+                                ->where(function($table){
+                                    $table->where('reasuradur.name','<>','OR')
+                                            ->orWhere('reasuradur.name','<>','');
+                                })
                                 ->groupBy('reasuradur.id')
                                 ->get();
                 
@@ -197,12 +201,17 @@ class Insert extends Component
                     $reas_cancel->status = 0;
                     $reas_cancel->polis_id = $data->polis_id;
                     $reas_cancel->tanggal_pengajuan = $data->tanggal_pengajuan;
+                    $reas_cancel->reas_id = $item->reas_id;
                     $reas_cancel->save();
                     
                     $reas_cancel->nomor = str_pad($reas_cancel->id,6, '0', STR_PAD_LEFT) ."/REAS-C/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
-                    $reas_cancel->save();
-
+                    
                     Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->update(['reas_cancel_id'=>$reas_cancel->id]);
+                    
+                    $reas_cancel->total_peserta = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
+                    $reas_cancel->total_manfaat_asuransi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
+                    $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
+                    $reas_cancel->save();   
                 }
 
                 session()->flash('message-success',__('Memo Cancel berhasil disubmit'));

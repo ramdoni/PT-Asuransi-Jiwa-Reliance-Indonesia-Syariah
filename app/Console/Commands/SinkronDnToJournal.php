@@ -89,109 +89,57 @@ class SinkronDnToJournal extends Command
 
         foreach(Pengajuan::where('status',3)->get() as $k => $data){
 
-            // $income = Income::where(['transaction_table'=>'syariah_underwriting','transaction_id' => $data->id])->first();
-            // if(!$income) continue;
-            // $this->warn("Income ID {$income->id}");
+            $income = Income::where(['transaction_table'=>'syariah_underwriting','transaction_id' => $data->id])->first();
+            if(!$income) continue;
+            $this->warn("Income ID {$income->id}");
 
-            // $journal = Journal::where(['transaction_id' => $income->id,'transaction_table'=>'konven_underwriting'])->first();
-            // if($journal){
-            //     $this->warn("Journal ID {$journal->id}");
-            //     $journal->delete();
-            // }
-            // $income->delete();
-            // $this->warn("--------------------------------");
+            $journal = Journal::where(['transaction_id' => $income->id,'transaction_table'=>'konven_underwriting'])->first();
+            if($journal){
+                $this->warn("Journal ID {$journal->id}");
+                $journal->delete();
+            }
+            $income->delete();
+            $this->warn("--------------------------------");
 
             $this->error("{$k}. No Pengajuan : {$data->no_pengajuan}");
             echo "DN  : {$data->dn_number}\n";
             $this->data = $data;
-            $select = Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
-                                        \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
-                                        \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
-                                        \DB::raw("SUM(kontribusi) as total_kontribusi"),
-                                        \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
-                                        \DB::raw("SUM(extra_mortalita) as total_extra_mortalita")
-                                        )->where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>1])->first();
 
-            $nilai_manfaat = $select->total_nilai_manfaat;
-            $dana_tabbaru = $select->total_dana_tabbaru;
-            $dana_ujrah = $select->total_dana_ujrah;
-            $kontribusi = $select->total_kontribusi;
-            $ektra_kontribusi = $select->total_extract_kontribusi;
-            $extra_mortalita = $select->total_extra_mortalita;
+            $nilai_manfaat = $data->nilai_manfaat;
+            $dana_tabbaru = $data->dana_tabbaru;
+            $dana_ujrah = $data->dana_ujrah;
+            $kontribusi = $data->kontribusi;
+            $extra_kontribusi = $data->extra_kontribusi;
+            $extra_mortalita = $data->extra_mortalita;
             
             if($kontribusi <=0) continue;
 
-            $this->data->nilai_manfaat = $nilai_manfaat;
-            $this->data->dana_tabbaru = $dana_tabbaru;
-            $this->data->dana_ujrah = $dana_ujrah;
-            $this->data->kontribusi = $kontribusi;
-            $this->data->extra_kontribusi = $ektra_kontribusi;
-            $this->data->extra_mortalita = $extra_mortalita;
-
-            if($this->data->polis->potong_langsung){
-                $this->data->polis->potong_langsung = str_replace(",",".",$this->data->polis->potong_langsung);
-                $this->data->potong_langsung_persen = $this->data->polis->potong_langsung;
-                $this->data->potong_langsung = @$kontribusi*($this->data->polis->potong_langsung/100);
-            }
-            
-            if($this->data->polis->fee_base_brokerage){
-                $this->data->polis->fee_base_brokerage = str_replace(",",".",$this->data->polis->fee_base_brokerage);
-                $this->data->brokerage_ujrah_persen = $this->data->polis->fee_base_brokerage;
-                $this->data->brokerage_ujrah = @$kontribusi*($this->data->polis->fee_base_brokerage/100);
-            }
-
-            /**
-             * Hitung PPH
-             */
-            if($this->data->polis->pph){
-                $this->data->pph_persen =  $this->data->polis->pph;
-
-                if($this->data->polis->ket_diskon=='Potong Langsung + Brokerage Ujroh')
-                    $this->data->pph = $this->data->brokerage_ujrah*($this->data->polis->pph/100);
-                else
-                    $this->data->pph = $this->data->potong_langsung*($this->data->polis->pph/100);
-            }
-
-            /**
-             * Hitung PPN
-             */
-            if($this->data->polis->ppn){
-                $this->data->ppn_persen =  $this->data->polis->ppn;
-                if($this->data->potong_langsung)
-                    $this->data->ppn = (($this->data->polis->ppn/100) * $this->data->potong_langsung);
-                else
-                    $this->data->ppn = $kontribusi*($this->data->polis->ppn/100);
-            }
+            // $this->data->nilai_manfaat = $nilai_manfaat;
+            // $this->data->dana_tabbaru = $dana_tabbaru;
+            // $this->data->dana_ujrah = $dana_ujrah;
+            // $this->data->kontribusi = $kontribusi;
+            // $this->data->extra_kontribusi = $extra_kontribusi;
+            // $this->data->extra_mortalita = $extra_mortalita;
 
             $total = $kontribusi+
-                        $ektra_kontribusi+
+                        $extra_kontribusi+
                         $extra_mortalita+
                         $this->data->biaya_sertifikat+
                         $this->data->biaya_polis_materai+
                         $this->data->pph-($this->data->ppn+$this->data->potong_langsung+$this->data->brokerage_ujrah);
-                        
+
             $this->data->net_kontribusi = $total;
+            $this->data->save();
 
-            $select_tertunda =  Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
-                                            \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
-                                            \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
-                                            \DB::raw("SUM(kontribusi) as total_kontribusi"),
-                                            \DB::raw("SUM(extra_kontribusi) as total_extra_kontribusi"),
-                                            \DB::raw("SUM(extra_mortalita) as total_extra_mortalita")
-                                            )->where(['pengajuan_id'=>$this->data->id,'status_akseptasi'=>2])->first();
-
-            $manfaat_Kepesertaan_tertunda = $select_tertunda->total_nilai_manfaat;
-            $kontribusi_kepesertaan_tertunda =  $select_tertunda->total_kontribusi;
-
-            // find polis
+            // // find polis
             $polis = Polis::where('no_polis',$this->data->polis->no_polis)->first();
-            if(!$polis){
-                $polis = new Polis();
-                $polis->no_polis = $this->data->polis->no_polis;
-                $polis->pemegang_polis = $this->data->polis->nama;
-                $polis->alamat = $this->data->polis->alamat;
-                $polis->save();
-            }
+            // if(!$polis){
+            //     $polis = new Polis();
+            //     $polis->no_polis = $this->data->polis->no_polis;
+            //     $polis->pemegang_polis = $this->data->polis->nama;
+            //     $polis->alamat = $this->data->polis->alamat;
+            //     $polis->save();
+            // }
 
             // insert finance
             $income = new Income();
@@ -226,6 +174,9 @@ class SinkronDnToJournal extends Command
              * 7 = Utang Pajak PPH 23 (kredit)
              * 13  = Beban Komisi (debit)
              */
+
+            //  kontribusi tabarru = dana tabarru + extra kontribusi + extra mortalita
+            //  tagihan kontribusi = dana tabarru + extra kontribusi + extra mortalita
             $no_voucher = "";
             
             foreach([13,7,5,6,4,3,2,1] as $k => $coa_id){
@@ -242,7 +193,13 @@ class SinkronDnToJournal extends Command
                 else
                     $new->date_journal = date('Y-m-d',strtotime($this->data->updated_at));
 
-                if($coa_id==4) $new->kredit = $dana_tabbaru;
+                if($coa_id==4){
+                    $temp = $dana_tabbaru;
+                    if($this->data->extra_kontribusi) $temp += $this->data->extra_kontribusi;
+                    if($this->data->extra_mortalita) $temp += $this->data->extra_mortalita;
+                    $new->kredit = $temp;
+                } 
+                
                 if($coa_id==3) {
                     $plus = $dana_ujrah;
 
@@ -267,7 +224,13 @@ class SinkronDnToJournal extends Command
 
                     $new->kredit = $plus;
                 }
-                if($coa_id==2) $new->debit = $dana_tabbaru;
+                if($coa_id==2) {
+                    $temp = $dana_tabbaru;
+                    if($this->data->extra_kontribusi) $temp += $this->data->extra_kontribusi;
+                    if($this->data->extra_mortalita) $temp += $this->data->extra_mortalita;
+
+                    $new->debit = $temp;
+                }
                 if($coa_id==1) {
                     $temp = $dana_ujrah;
                     
@@ -277,8 +240,7 @@ class SinkronDnToJournal extends Command
                     if($this->data->biaya_sertifikat) $temp -= $this->data->biaya_sertifikat;
                     if($this->data->biaya_polis_materai) $temp -= $this->data->biaya_polis_materai;
 
-                    $new->debit = $temp; 
-
+                    $new->debit = $temp;
                 }
                 if($coa_id==5){
                     if($this->data->potong_langsung=="") continue;
@@ -286,7 +248,7 @@ class SinkronDnToJournal extends Command
                 }
                 if($coa_id==6){
                     if($this->data->biaya_sertifikat=="" and $this->data->biaya_polis_materai=="") continue;
-                    $new->debit = $this->data->biaya_sertifikat + $this->data->biaya_polis_materai;
+                    $new->kredit = $this->data->biaya_sertifikat + $this->data->biaya_polis_materai;
                 }
                 if($coa_id==13){
                     if($this->data->brokerage_ujrah=="") continue;

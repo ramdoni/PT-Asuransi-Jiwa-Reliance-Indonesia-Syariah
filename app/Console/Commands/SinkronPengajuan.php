@@ -8,37 +8,27 @@ use App\Models\Kepesertaan;
 class SinkronPengajuan extends Command
 {
     public $pengajuan_id = 10305;
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+
     protected $signature = 'sinkron:pengajuan';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Command description';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
     public function handle()
     {
+        $kepesertaan = Kepesertaan::where('pengajuan_id',10581)->where('status_akseptasi',1)->get();
+        $total = 0.00;
+        foreach($kepesertaan as $item){
+            $this->warn($item->kontribusi);
+            $total += $item->kontribusi;
+            $this->error($total);
+        }
+        $this->error("Total : ". $total);
+        return;
         ini_set('memory_limit', '-1');
         $inputFileName = './public/migrasi/05082023.xlsx';
         /** Load $inputFileName to a Spreadsheet Object  **/

@@ -109,11 +109,11 @@
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-center">{{$item['masa_bulan']}}</td>
-                                    <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                    <td class="text-right">{{format_idr($item->total_kontribusi_reas)}}</td>
+                                    <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
+                                    <td class="text-right">{{format_idr($item->net_kontribusi_reas)}}</td>
                                 </tr>
-                                @php($total_manfaat_asuransi += $item['basic'])
-                                @php($total_kontribusi += $item->total_kontribusi_reas)
+                                @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
+                                @php($total_kontribusi += $item->net_kontribusi_reas)
                             @endforeach
                             </tbody>
                             <tfoot style="border-top: 2px solid #dee2e6;">

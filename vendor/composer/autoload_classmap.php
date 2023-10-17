@@ -120,6 +120,7 @@ return array(
     'App\\Http\\Livewire\\Rate\\Index' => $baseDir . '/app/Http/Livewire/Rate/Index.php',
     'App\\Http\\Livewire\\Rate\\Insert' => $baseDir . '/app/Http/Livewire/Rate/Insert.php',
     'App\\Http\\Livewire\\Rate\\Upload' => $baseDir . '/app/Http/Livewire/Rate/Upload.php',
+    'App\\Http\\Livewire\\ReasCancel\\Edit' => $baseDir . '/app/Http/Livewire/ReasCancel/Edit.php',
     'App\\Http\\Livewire\\ReasCancel\\Index' => $baseDir . '/app/Http/Livewire/ReasCancel/Index.php',
     'App\\Http\\Livewire\\Reas\\AddExtraKontribusi' => $baseDir . '/app/Http/Livewire/Reas/AddExtraKontribusi.php',
     'App\\Http\\Livewire\\Reas\\Calculate' => $baseDir . '/app/Http/Livewire/Reas/Calculate.php',

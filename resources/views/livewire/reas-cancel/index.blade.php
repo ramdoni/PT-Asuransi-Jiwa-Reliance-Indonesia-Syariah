@@ -35,6 +35,7 @@
                             <tr>
                                 <th>No</th>
                                 <th class="text-center">Status</th>
+                                <th>Memo Cancel</th>
                                 <th>Reasuradur</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
@@ -43,7 +44,6 @@
                                 <th class="text-center">Total Peserta</th>
                                 <th class="text-center">Total Manfaat Asuransi</th>
                                 <th class="text-center">Kontribusi Gross Cancel</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +65,14 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{route('reas-cancel.edit', $item->id)}}">{{$item->nomor}}</a></td>
+                                        <a href="{{route('memo-cancel.edit', $item->memo_cancel_id)}}" target="_blank">{{$item->memo_cancel->nomor}}</a>
+                                    </td>
+                                    <td>
+                                        {{isset($item->reas->reasuradur->name) ? $item->reas->reasuradur->name : '-'}}
+                                    </td>
+                                    <td>
+                                        <a href="{{route('reas-cancel.edit', $item->id)}}">{{$item->nomor}}</a>
+                                    </td>
                                     <td>
                                         @if(isset($item->polis_id))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">
@@ -78,10 +85,6 @@
                                     <td class="text-center">{{$item->total_peserta}}</td>
                                     <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>
                                     <td class="text-right">{{format_idr($item->total_kontribusi)}}</td>
-                                    <td>
-                                        <a href="{{route('memo-cancel.print-pengajuan',['id'=>$item->id])}}" target="_blank"><i class="fa fa-print"></i> Print</a>
-                                        <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
-                                    </td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)

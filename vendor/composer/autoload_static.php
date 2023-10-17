@@ -795,6 +795,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Http\\Livewire\\Rate\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/Rate/Index.php',
         'App\\Http\\Livewire\\Rate\\Insert' => __DIR__ . '/../..' . '/app/Http/Livewire/Rate/Insert.php',
         'App\\Http\\Livewire\\Rate\\Upload' => __DIR__ . '/../..' . '/app/Http/Livewire/Rate/Upload.php',
+        'App\\Http\\Livewire\\ReasCancel\\Edit' => __DIR__ . '/../..' . '/app/Http/Livewire/ReasCancel/Edit.php',
         'App\\Http\\Livewire\\ReasCancel\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/ReasCancel/Index.php',
         'App\\Http\\Livewire\\Reas\\AddExtraKontribusi' => __DIR__ . '/../..' . '/app/Http/Livewire/Reas/AddExtraKontribusi.php',
         'App\\Http\\Livewire\\Reas\\Calculate' => __DIR__ . '/../..' . '/app/Http/Livewire/Reas/Calculate.php',

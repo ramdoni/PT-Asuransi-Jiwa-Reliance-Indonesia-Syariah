@@ -66,16 +66,16 @@
                                 <tr>
                                     <td>AGEN PENUTUP</td>
                                     <td>{{$data->perkalian_biaya_penutupan}}</td>
-                                    <td>{{$data->admin_agency_penerima}}</td>
-                                    <td>{{$data->admin_agency_nama_bank}}</td>
-                                    <td>{{$data->admin_agency_no_rekening}}</td>
+                                    <td>{{$data->agen_penutup_penerima}}</td>
+                                    <td>{{$data->agen_penutup_nama_bank}}</td>
+                                    <td>{{$data->agen_penutup_no_rekening}}</td>
                                 </tr>
                                 <tr>
                                     <td>ADMIN AGENCY</td>
                                     <td>{{$data->perkalian_biaya_penutupan}}</td>
-                                    <td>{{$data->agen_penutup_penerima}}</td>
-                                    <td>{{$data->agen_penutup_nama_bank}}</td>
-                                    <td>{{$data->agen_penutup_no_rekening}}</td>
+                                    <td>{{$data->admin_agency_penerima}}</td>
+                                    <td>{{$data->admin_agency_nama_bank}}</td>
+                                    <td>{{$data->admin_agency_no_rekening}}</td>
                                 </tr>
                                 <tr>
                                     <td>UJROH(Handling Fee) BROKERS</td>

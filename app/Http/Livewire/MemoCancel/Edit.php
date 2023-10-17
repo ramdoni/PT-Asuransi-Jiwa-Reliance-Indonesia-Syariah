@@ -4,6 +4,7 @@ namespace App\Http\Livewire\MemoCancel;
 
 use Livewire\Component;
 use App\Models\MemoCancel;
+use App\Models\ReasCancel;
 
 class Edit extends Component
 {
@@ -28,6 +29,9 @@ class Edit extends Component
         $this->data->status = 1;
         $this->data->save();
 
+        // find reas cancel
+        ReasCancel::where('memo_cancel_id',$this->data->id)->update(['status'=>1]);
+
         $this->emit('message-success','Memo Cancel berhasil disubmit');
     }
 
@@ -39,6 +43,9 @@ class Edit extends Component
         $this->data->head_syariah_note = $this->note;
         $this->data->status = 2;
         $this->data->save();
+
+        // find reas cancel
+        ReasCancel::where('memo_cancel_id',$this->data->id)->update(['status'=>2]);
 
         $this->emit('message-success','Memo Cancel berhasil disubmit');
     }

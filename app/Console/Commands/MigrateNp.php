@@ -62,6 +62,13 @@ class MigrateNp extends Command
             $ujroh = str_replace("%",'',$item['I']);
             $referal_fee = str_replace("%",'',$item['J']);
 
+            $maintenance = str_replace(",",'.',$maintenance);
+            $diskon_potong_langsung = str_replace(",",'.',$diskon_potong_langsung);
+            $agen_penutup = str_replace(",",'.',$agen_penutup);
+            $admin_agency = str_replace(",",'.',$admin_agency);
+            $ujroh = str_replace(",",'.',$ujroh);
+            $referal_fee = str_replace("referal_fee",'.',$referal_fee);
+
             $maintenance_penerima = $item['K'];
             $maintenance_nama_bank = $item['Q'];
             $maintenance_no_rekening = $item['W'];

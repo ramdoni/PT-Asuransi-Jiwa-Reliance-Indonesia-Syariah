@@ -364,9 +364,13 @@
                                 @php($nilai_manfaat_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('basic'))
                                 @php($dana_tabbaru_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_tabarru'))
                                 @php($dana_ujrah_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('dana_ujrah'))
-                                @php($kontribusi_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('kontribusi'))
                                 @php($extra_mortalita_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita'))
                                 @php($extra_kontribusi_approve = $data->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi'))
+                                
+                                @php($kontribusi_approve = 0)
+                                @foreach($kepesertaan_approve as $k => $item)
+                                    @php($kontribusi_approve += round($item->kontribusi))
+                                @endforeach
                                 <table class="table table-hover m-b-0 c_list table-nowrap" id="table_approve">
                                     <thead style="text-transform: uppercase;">
                                         <tr>
@@ -456,7 +460,7 @@
                                                 </td>
                                                 <td class="text-right">{{format_idr($item->dana_tabarru)}}</td>
                                                 <td class="text-right">{{format_idr($item->dana_ujrah)}}</td>
-                                                <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                                                <td class="text-right" title="{{$item->kontribusi}}">{{format_idr($item->kontribusi)}}</td>
                                                 <td class="text-right">
                                                     @if($item->use_em==0)
                                                         <a href="javascript:void(0)" class="text-center" wire:click="$emit('set_id',{{$item->id}})" data-toggle="modal" data-target="#modal_add_em"><i class="fa fa-plus"></i></a>
