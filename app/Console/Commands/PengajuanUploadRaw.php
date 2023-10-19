@@ -10,7 +10,7 @@ use App\Models\UnderwritingLimit;
 
 class PengajuanUploadRaw extends Command
 {
-    public $pengajuan_id = 10596;
+    public $pengajuan_id = 10356;
     /**
      * The name and signature of the console command.
      *
@@ -45,7 +45,7 @@ class PengajuanUploadRaw extends Command
         $pengajuan = Pengajuan::find($this->pengajuan_id);
 
         ini_set('memory_limit', '-1'); 
-        $inputFileName = './public/migrasi/bank-bukopin-syariah-reguler.xlsx';
+        $inputFileName = './public/migrasi/kerta-raharja.xlsx';
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
@@ -57,21 +57,23 @@ class PengajuanUploadRaw extends Command
         foreach($sheetData as $k => $item){
             $num++;
             if($num<=1 || $item['A']=='NO.') continue;
-            
-            $no_peserta = $item['B'];
-            $nama = $item['C'];
-            $tanggal_lahir = date('Y-m-d',strtotime($item['D']));
-            $usia = $item['E'];
-            $mulai_asuransi = date('Y-m-d',strtotime($item['F']));
-            $akhir_asuransi = date('Y-m-d',strtotime($item['G']));
-            $nilai_manfaat = str_replace(',','.',$item['H']);
-            $dana_tabbaru = str_replace(',','.',$item['I']);
-            $dana_ujrah = str_replace(',','.',$item['J']);
-            $kontribusi = str_replace(',','.',$item['K']);
-            $extra_mortalita = $item['L'];
-            $total_kontribusi = str_replace(',','.',$item['M']);
-            $uw = $item['N'];
-            $stnc = date('Y-m-d',strtotime($item['O']));
+            $no_ktp = $item['B'];
+            $cabang = $item['C'];
+            $jenis_kelamin = $item['D'];
+            $no_peserta = $item['E'];
+            $nama = $item['F'];
+            $tanggal_lahir = date('Y-m-d',strtotime($item['G']));
+            $usia = $item['H'];
+            $mulai_asuransi = date('Y-m-d',strtotime($item['I']));
+            $akhir_asuransi = date('Y-m-d',strtotime($item['J']));
+            $nilai_manfaat = str_replace(',','.',$item['K']);
+            $dana_tabbaru = str_replace(',','.',$item['L']);
+            $dana_ujrah = str_replace(',','.',$item['M']);
+            $kontribusi = str_replace(',','.',$item['N']);
+            $extra_mortalita = $item['O'];
+            $total_kontribusi = str_replace(',','.',$item['P']);
+            $uw = $item['Q'];
+            $stnc = date('Y-m-d',strtotime($item['R']));
             
             // $peserta = Kepesertaan::where(['nama'=>$nama,'tanggal_lahir'=>$tanggal_lahir,'pengajuan_id'=>$pengajuan->id])->first();
             
@@ -90,8 +92,9 @@ class PengajuanUploadRaw extends Command
                 $peserta->pengajuan_id = $this->pengajuan_id;
                 $peserta->status_akseptasi = 1;
                 $peserta->polis_id = $pengajuan->polis_id;
-                // $peserta->no_ktp = $no_ktp;
-                // $peserta->cab = $cabang;
+                $peserta->no_ktp = $no_ktp;
+                $peserta->cab = $cabang;
+                $peserta->jenis_kelamin = $jenis_kelamin;
                 $peserta->no_peserta = $no_peserta;
                 $peserta->nama = $nama;
                 $peserta->tanggal_lahir = $tanggal_lahir;
