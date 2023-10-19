@@ -81,6 +81,7 @@ return array(
     'App\\Http\\Livewire\\MemoCancel\\Edit' => $baseDir . '/app/Http/Livewire/MemoCancel/Edit.php',
     'App\\Http\\Livewire\\MemoCancel\\Index' => $baseDir . '/app/Http/Livewire/MemoCancel/Index.php',
     'App\\Http\\Livewire\\MemoCancel\\Insert' => $baseDir . '/app/Http/Livewire/MemoCancel/Insert.php',
+    'App\\Http\\Livewire\\MemoRefund\\Index' => $baseDir . '/app/Http/Livewire/MemoRefund/Index.php',
     'App\\Http\\Livewire\\MemoUjroh\\Edit' => $baseDir . '/app/Http/Livewire/MemoUjroh/Edit.php',
     'App\\Http\\Livewire\\MemoUjroh\\Index' => $baseDir . '/app/Http/Livewire/MemoUjroh/Index.php',
     'App\\Http\\Livewire\\Message' => $baseDir . '/app/Http/Livewire/Message.php',

@@ -12,12 +12,14 @@ class Index extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $selected_id;
+    public $selected_id,$filter_keyword;
 
     public function render()
     {
         $data = MemoCancel::orderBy('id','DESC');
-
+        
+        if($this->filter_keyword) $data->where('nomor',"LIKE","%{$this->filter_keyword}%");
+        
         return view('livewire.memo-cancel.index')->with(['data'=>$data->paginate(100)]);
     }
 

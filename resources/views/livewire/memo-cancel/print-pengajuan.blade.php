@@ -96,10 +96,39 @@
         </style>
     </head>
     <body>
+        @if(isset($_GET['is_finance']))
+            <div class="container">
+                <h1 class="text-center">INTERNAL MEMO</h1>
+                <hr />
+                <table>
+                    <tr>
+                        <td>Kepada</td>
+                        <td>Dept. Finance</td>
+                    </tr>
+                    <tr>
+                        <td>Dari</td>
+                        <td>Dept. Underwriting Syariah</td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal</td>
+                        <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor</td>
+                        <td>{{$data->nomor}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor</td>
+                        <td>{{$data->nomor_internal_memo}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="page-break"></div>
+        @endif
         <div class="container">
             <img src="{{asset('assets/img/surat-bg-top.png')}}?v=1" style="width: 100%;" />
-            <h1 class="text-center">CREDIT NOTE</h1>
             <hr style="margin-bottom: 5px;" />
+            <h1 class="text-center">CREDIT NOTE</h1>
             <hr />
             <table style="width: 100%;">
                 <tr>
@@ -121,7 +150,11 @@
                     <td style="border-right:1px solid;padding-left: 10px;">
                         <p>
                             Pembatalan Kepesertaan Asuransi produk <strong>RELIANCE PEMBIAYAAN SYARIAH</strong>
-                            dengan No Polis <strong>{{$data->polis->no_polis}}</strong> dan Jumlah Peserta 10 orang (No Peserta )
+                            dengan No Polis <strong>{{$data->polis->no_polis}}</strong> dan Jumlah Peserta {{$data->total_peserta}} orang (No Peserta 
+                            @if($data->total_peserta==1)) {{$no_peserta_awal}}
+                            @else
+                            {{$no_peserta_akhir}} - {{$no_peserta_akhir}}
+                            @endif
                         </p>
                         <table style="margin-left: 50px;">
                             <tr>
