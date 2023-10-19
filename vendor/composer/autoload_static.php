@@ -756,6 +756,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Http\\Livewire\\MemoCancel\\Edit' => __DIR__ . '/../..' . '/app/Http/Livewire/MemoCancel/Edit.php',
         'App\\Http\\Livewire\\MemoCancel\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/MemoCancel/Index.php',
         'App\\Http\\Livewire\\MemoCancel\\Insert' => __DIR__ . '/../..' . '/app/Http/Livewire/MemoCancel/Insert.php',
+        'App\\Http\\Livewire\\MemoRefund\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/MemoRefund/Index.php',
         'App\\Http\\Livewire\\MemoUjroh\\Edit' => __DIR__ . '/../..' . '/app/Http/Livewire/MemoUjroh/Edit.php',
         'App\\Http\\Livewire\\MemoUjroh\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/MemoUjroh/Index.php',
         'App\\Http\\Livewire\\Message' => __DIR__ . '/../..' . '/app/Http/Livewire/Message.php',

@@ -81,7 +81,8 @@
                                     <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>
                                     <td class="text-right">{{format_idr($item->total_kontribusi)}}</td>
                                     <td>
-                                        <a href="{{route('memo-cancel.print-pengajuan',['id'=>$item->id])}}" target="_blank"><i class="fa fa-print"></i> Print</a>
+                                        <a href="{{route('memo-cancel.print-pengajuan',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
+                                        <a href="{{route('memo-cancel.print-pengajuan',['id'=>$item->id,'is_finance'=>1])}}" target="_blank"><i class="fa fa-print"></i> Finance</a>
                                         <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
                                     </td>
                                 </tr>
