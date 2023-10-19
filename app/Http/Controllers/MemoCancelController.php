@@ -11,7 +11,9 @@ class MemoCancelController extends Controller
 {
     public function printPengajuan(MemoCancel $id)
     {
-        $param = [];
+        $param['no_peserta_awal'] = '-';
+        $param['no_peserta_akhir'] = '-';
+        
         foreach($id->kepesertaan as $k => $item){
             if($k==0) 
                 $param['no_peserta_awal'] = $item->no_peserta;

@@ -126,7 +126,8 @@
             <div class="page-break"></div>
         @endif
         <div class="container">
-            <img src="{{asset('assets/img/surat-bg-top.png')}}?v=1" style="width: 100%;" />
+            <img src="{{public_path('assets/img/surat-bg-top.png')}}?v=1" style="width: 100%;" />
+            <h1 class="text-center">CREDIT NOTE</h1>
             <hr style="margin-bottom: 5px;" />
             <h1 class="text-center">CREDIT NOTE</h1>
             <hr />
@@ -219,17 +220,17 @@
                 <br />
                 <br />
                 <br />
-                <img src="{{asset('assets/img/ttd-ahmad-syafei.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
+                <img src="{{public_path('assets/img/ttd-ahmad-syafei.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
                 <p>
                     <strong><u>Ahmad Syafei</u></strong><br />
                     Head Of Divisi Teknik Syariah
                 </p>
             </div>
-            <img src="{{asset('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
+            <img src="{{public_path('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
         </div>
         <div class="page-break"></div>
         <div class="container">
-            <img src="{{asset('assets/img/surat-bg-top.png')}}" style="width: 100%;" />
+            <img src="{{public_path('assets/img/surat-bg-top.png')}}" style="width: 100%;" />
             <table style="width: 100%">
                 <tr>
                     <td style="width: 50%;">Jakarta, {{date('d F Y',strtotime($data->created_at))}}</td>
@@ -336,16 +337,16 @@
                     <br />
                     <br />
                     <br />
-                    <img src="{{asset('assets/img/ttd-ahmad-syafei.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
+                    <img src="{{public_path('assets/img/ttd-ahmad-syafei.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
                     <strong><u>Ahmad Syafei</u></strong><br />
                     Head of Divisi Teknik Syariah
                 </p>
             </div>
-            <img src="{{asset('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
+            <img src="{{public_path('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
         </div>
         <div class="page-break"></div>
         <div class="container container-peserta">
-            <img src="{{asset('assets/img/surat-bg-top.png')}}" style="width: 100%;" />
+            <img src="{{public_path('assets/img/surat-bg-top.png')}}" style="width: 100%;" />
             <h3 style="text-align:center;">DAFTAR PEMBATALAN KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH</h3>
             <table>
                 <tr>
@@ -421,7 +422,7 @@
                     </tr>
                 </tfoot>
             </table>
-            <img src="{{asset('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
+            <img src="{{public_path('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
         </div>
     </body>
 </html>
