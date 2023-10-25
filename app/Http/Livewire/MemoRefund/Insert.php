@@ -1,24 +1,20 @@
 <?php
 
-namespace App\Http\Livewire\MemoCancel;
+namespace App\Http\Livewire\MemoRefund;
 
 use Livewire\Component;
-use App\Models\Polis;
-use App\Models\MemoCancel;
-use App\Models\MemoCancelPeserta;
-use App\Models\Kepesertaan;
-use App\Models\ReasCancel;
 use Livewire\WithFileUploads;
+use App\Models\Polis;
+use App\Models\Kepesertaan;
 
 class Insert extends Component
 {
     use WithFileUploads;
     public $polis,$polis_id,$file,$peserta=[],$is_insert=false,$kepesertaan_id,$tanggal_efektif,$tanggal_pengajuan,
             $perihal_internal_memo;
-    
     public function render()
     {
-        return view('livewire.memo-cancel.insert');
+        return view('livewire.memo-refund.insert');
     }
 
     public function mount()
@@ -124,7 +120,7 @@ class Insert extends Component
         try {
             \DB::transaction(function () {
                 $polis = Polis::find($this->polis_id);
-                $data = new MemoCancel;
+                $data = new Refund;
                 $data->tanggal_pengajuan = $this->tanggal_pengajuan;
                 $data->polis_id = $this->polis_id;
                 $data->tanggal_efektif = $this->tanggal_efektif;

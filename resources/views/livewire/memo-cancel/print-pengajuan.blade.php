@@ -118,8 +118,88 @@
                         <td>{{$data->nomor}}</td>
                     </tr>
                     <tr>
-                        <td>Nomor</td>
+                        <td>No. Credit Note</td>
                         <td>{{$data->nomor_internal_memo}}</td>
+                    </tr>
+                    <tr>
+                        <th>Perihal</th>
+                        <th>{{$data->perihal_internal_memo}}</th>
+                    </tr>
+                </table>
+                <hr />
+                <p>Dengan hormat,<br />
+                Bersama ini disampaikan Daftar Pembatalan Peserta dan Credit Note atas Pembatalan Peserta sejak awal sesuai dengan pengajuan melalui email pada tanggal 
+                {{date('d F Y',strtotime($data->tanggal_pengajuan))}}, mohon dapat dilakukan pembayaran dengan data sebagai berikut:
+                </p>
+                <table style="border:1px solid;padding:5px;width:100%;">
+                    <tr>
+                        <td>Pemegang Polis </td>
+                        <td> : </td>
+                        <td colspan="3">{{$data->polis->nama}}</td>
+                    </tr>
+                    <tr>
+                        <td>Jenis Asuransi </td>
+                        <td> : </td>
+                        <td>{{$data->polis->produk->nama}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor Polis </td>
+                        <td> : </td>
+                        <td>{{$data->polis->no_polis}}</td>
+                    </tr>
+                    <tr>
+                        <td>No Debit Note</td>
+                        <td> : </td>
+                        <td></td>
+                        <td>Total Kontribusi Gross Cancel</td>
+                        <td>Rp</td>
+                        <td>{{format_idr($data->total_kontribusi_gross)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Tgl Debit Note</td>
+                        <td> : </td>
+                        <td></td>
+                        <td>Kontribusi Tambahan</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Kontribusi DN</td>
+                        <td> : </td>
+                        <td></td>
+                        <td>Potongan Langsung</td>
+                        <td>{{$data->polis->potongan_langsung}}%</td>
+                        <td>{{format_idr($data->total_potongan_langsung)}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>PPn</td>
+                        <td>{{$data->polis->ppn ? $data->polis->ppn : 0}}%</td>
+                        <td>{{format_idr($data->pn)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Jumlah Peserta</td>
+                        <td> : </td>
+                        <td>{{$data->total_peserta}}</td>
+                        <td>PPh</td>
+                        <td>{{$data->polis->pph ? $data->polis->pph : 0}}%</td>
+                        <td>{{format_idr($data->pph_amount)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor Peserta</td>
+                        <td> : </td>
+                        <td>
+                            {{$no_peserta_awal}}
+                        </td>
+                        <td>s/d</td>
+                        <td>
+                            @if($data->total_peserta>1)
+                                {{$no_peserta_akhir}}
+                            @endif
+                        </td>
+                        <td></td>
                     </tr>
                 </table>
             </div>
@@ -127,7 +207,6 @@
         @endif
         <div class="container">
             <img src="{{public_path('assets/img/surat-bg-top.png')}}?v=1" style="width: 100%;" />
-            <h1 class="text-center">CREDIT NOTE</h1>
             <hr style="margin-bottom: 5px;" />
             <h1 class="text-center">CREDIT NOTE</h1>
             <hr />
@@ -206,7 +285,7 @@
                         <strong>Total Refund Kontribusi</strong>
                     </td>
                     <td style="border-top:1px solid;border-bottom: 1px solid;text-align:right;">
-                        {{format_idr($data->total_manfaat_asuransi)}}
+                        {{format_idr($data->total_manfaat_asuransi-$data->total_potongan_langsung)}}
                     </td>
                 </tr>
                 <tr>
@@ -231,6 +310,9 @@
         <div class="page-break"></div>
         <div class="container">
             <img src="{{public_path('assets/img/surat-bg-top.png')}}" style="width: 100%;" />
+            <h5 class="text-center">
+                BISMILLAAHIRAHMANIRRAHIM
+            </h5>
             <table style="width: 100%">
                 <tr>
                     <td style="width: 50%;">Jakarta, {{date('d F Y',strtotime($data->created_at))}}</td>

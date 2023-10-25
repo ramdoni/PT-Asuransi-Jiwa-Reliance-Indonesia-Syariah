@@ -82,6 +82,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('memo-ujroh/edit/{id}',App\Http\Livewire\MemoUjroh\Edit::class)->name('memo-ujroh.edit');
     
     Route::get('memo-refund',App\Http\Livewire\MemoRefund\Index::class)->name('memo-refund.index');
+    Route::get('memo-refund/insert',App\Http\Livewire\MemoRefund\Insert::class)->name('memo-refund.insert');
 
     Route::get('memo-cancel',App\Http\Livewire\MemoCancel\Index::class)->name('memo-cancel.index');
     Route::get('memo-cancel/insert',App\Http\Livewire\MemoCancel\Insert::class)->name('memo-cancel.insert');

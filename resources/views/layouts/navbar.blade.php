@@ -31,8 +31,7 @@
                                 <ul class="dropdown-menu user-menu menu-icon">
                                     <li><a href="{{ route('pengajuan.index') }}">Penambahan Kepesertaan</a></li>
                                     <li><a href="{{ route('memo-cancel.index') }}">Pembatalan Kepesertaan</a></li>
-                                    <li><a href="#">Pengurangan/Surender  Kepesertaan</a></li>
-                                    <li><a href="#">Perubahan Kepesertaan</a></li>
+                                    <li><a href="{{ route('memo-refund.index') }}">Pengurangan/Refund Kepesertaan</a></li>
                                     <li><a href="{{ route('reas.index') }}">Reas</a></li>
                                 </ul>
                             </li>
