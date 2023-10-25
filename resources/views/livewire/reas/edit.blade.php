@@ -6,7 +6,7 @@
             <div class="body">
                 <div class="row">
                     <div class="col-md-6">
-                        <table class="table">
+                        <table class="table no-padding">
                             <thead>
                                 @if($data->dn_number)
                                     <tr>
@@ -45,22 +45,22 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Reasuradur</th>
+                                    <td><strong>Reasuradur</strong></td>
                                     <td> : {{$data->reasuradur->name ? $data->reasuradur->name : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Rate & UW Limit</th>
+                                    <td><strong>Rate & UW Limit</strong></td>
                                     <td> :     
                                         {{isset($data->rate_uw->nama) ? $data->rate_uw->nama : '-'}}
                                         <a href="javascript:void(0)" class="badge badge-info badge-active" wire:click="$emit('edit-rate',{{$data->reasuradur_rate_id}})" data-toggle="modal" data-target="#modal_edit_rate"><i class="fa fa-edit"></i> edit</a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>OR</th>
+                                    <td><strong>OR</strong></td>
                                     <td> : {{$data->or}}%</td>
                                 </tr>
                                 <tr>
-                                    <th>Reas</th>
+                                    <td><strong>Reas</strong></td>
                                     <td>: {{$data->reas}}%</td>
                                 </tr>
                                 <tr>
@@ -70,40 +70,40 @@
                         </table>
                     </div>
                     <div class="col-md-6">
-                        <table class="table">
+                        <table class="table no-padding">
                             <thead>
                                 <tr>
-                                    <th>RI COM</th>
+                                    <td><strong>RI COM</strong></td>
                                     <td>: </td>
                                     <td>{{$data->ri_com}}%</td>
                                 </tr>
                                 <tr>
-                                    <th>Jumlah Peserta</th>
+                                    <td><strong>Jumlah Peserta</strong></td>
                                     <td> :  </td>
                                     <td>{{format_idr($data->jumlah_peserta)}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Uang Asuransi Ajri</th>
+                                    <td><strong>Uang Asuransi Ajri</strong></td>
                                     <td> :  </td>
                                     <td>{{format_idr($data->manfaat_asuransi_ajri)}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Uang Asuransi Reas</th>
+                                    <td><strong>Uang Asuransi Reas</strong></td>
                                     <td> :  </td>
                                     <td>{{format_idr($data->manfaat_asuransi_reas)}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Kontribusi Gross</th>
+                                    <td><strong>Kontribusi Gross</strong></td>
                                     <td> :  </td>
                                     <td>{{format_idr($data->kontribusi)}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Ujroh</th>
+                                    <td><strong>Ujroh</strong></td>
                                     <td> :  </td>
                                     <td>{{format_idr($data->ujroh)}}</td>
                                 </tr>
                                 <tr>
-                                    <th>Kontribusi Netto</th>
+                                    <td><strong>Kontribusi Netto</strong></td>
                                     <td> :  </td>
                                     <td>{{format_idr($data->kontribusi_netto)}}</td>
                                 </tr>
