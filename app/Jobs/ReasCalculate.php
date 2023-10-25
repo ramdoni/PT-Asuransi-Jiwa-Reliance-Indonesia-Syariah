@@ -159,19 +159,28 @@ class ReasCalculate implements ShouldQueue
             }
 
             if(isset($this->data->rate_uw->or)){
-                if($this->data->rate_uw->or==100.00)
+                if($this->data->rate_uw->or==100.00){
                     $item->status_reas = 2;
-                else
+                    $item->nilai_manfaat_asuransi_reas = 0;
+                    $item->total_kontribusi_reas = 0;
+                    $item->net_kontribusi_reas = 0;
+                }else
                     $item->status_reas = 1;
+            }
+
+            if(strtoupper($this->data->reasuradur->name) =='OR'){
+                $item->status_reas = 2;
+                $item->nilai_manfaat_asuransi_reas = 0;
+                $item->total_kontribusi_reas = 0;
+                $item->net_kontribusi_reas = 0;
             }
 
             $item->kadaluarsa_reas_tanggal =  date('Y-m-d',strtotime($this->data->created_at." +{$item->polis->kadaluarsa_reas} days"));
             $item->kadaluarsa_reas_hari =  $item->polis->kadaluarsa_reas;
             $item->save();
-            // echo "Net Kontribusi : {$item->net_kontribusi_reas}\n\n";
         }
 
-        $this->data->jumlah_peserta = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->count();
+        $this->data->jumlah_peserta = Kepesertaan::where(['reas_id'=>$this->data->id])->count();
         $this->data->extra_kontribusi = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('reas_extra_kontribusi');
         $this->data->manfaat_asuransi_reas = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('nilai_manfaat_asuransi_reas');
         $this->data->manfaat_asuransi_ajri = Kepesertaan::where(['reas_id'=>$this->data->id,'status_reas'=>1])->sum('reas_manfaat_asuransi_ajri');
