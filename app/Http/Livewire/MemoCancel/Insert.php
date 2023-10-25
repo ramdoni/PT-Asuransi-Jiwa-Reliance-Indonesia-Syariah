@@ -143,11 +143,15 @@ class Insert extends Component
                         $total++;
 
                         $total_kontribusi_gross += $peserta->kontribusi;
-                        $total_potongan_langsung += $peserta->jumlah_potongan_langsung;
+                        // $total_potongan_langsung += $peserta->jumlah_potongan_langsung;
                         $total_kontribusi_tambahan += $peserta->extra_kontribusi;
                         $total_kontribusi += $peserta->total_kontribusi_dibayar;
                         $total_manfaat_asuransi += $peserta->basic;
                     }
+                }
+
+                if($polis->potong_langsung){
+                    $total_potongan_langsung = $total_kontribusi_gross*($polis->potong_langsung/100);
                 }
 
                 if($polis->fee_base_brokerage){
