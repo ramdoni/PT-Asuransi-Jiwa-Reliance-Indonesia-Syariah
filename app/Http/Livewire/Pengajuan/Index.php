@@ -100,6 +100,7 @@ class Index extends Component
             $data = new MemoUjroh();
             $data->polis_id = $this->polis_id;
             $data->tanggal_pengajuan = date('Y-m-d');
+            $data->user_created_id = \Auth::user()->id;
             $data->save();
             
             # 000646/UWS-M/AJRI-US/VIII/2023

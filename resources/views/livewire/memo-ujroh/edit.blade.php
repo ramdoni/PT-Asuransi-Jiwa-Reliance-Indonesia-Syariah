@@ -119,20 +119,38 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($pengajuan as $k => $item)
-                                    <tr>
-                                        <td>{{$k+1}}</td>
-                                        <td><a href="{{route('pengajuan.edit',$item['id'])}}" target="_blank">{{$item->dn_number}}</a></td>
-                                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                                        <td class="text-right">{{format_idr($item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah)}}</td>
-                                        <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>
-                                        <td class="text-right">{{format_idr($item->maintenance)}}</td>
-                                        <td class="text-right">{{format_idr($item->agen_penutup)}}</td>
-                                        <td class="text-right">{{format_idr($item->admin_agency)}}</td>
-                                        <td class="text-right">{{format_idr($item->ujroh_handling_fee_broker)}}</td>
-                                        <td class="text-right">{{format_idr($item->referal_fee)}}</td>
-                                    </tr>
-                                @endforeach
+                                @if($data->is_migrate==0)
+                                    @foreach($pengajuan as $k => $item)
+                                        <tr>
+                                            <td>{{$k+1}}</td>
+                                            <td><a href="{{route('pengajuan.edit',$item['id'])}}" target="_blank">{{$item->dn_number}}</a></td>
+                                            <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                                            <td class="text-right">{{format_idr($item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah)}}</td>
+                                            <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>
+                                            <td class="text-right">{{format_idr($item->maintenance)}}</td>
+                                            <td class="text-right">{{format_idr($item->agen_penutup)}}</td>
+                                            <td class="text-right">{{format_idr($item->admin_agency)}}</td>
+                                            <td class="text-right">{{format_idr($item->ujroh_handling_fee_broker)}}</td>
+                                            <td class="text-right">{{format_idr($item->referal_fee)}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                @if($data->is_migrate==1)
+                                    @foreach($pengajuan_migrasi as $k => $item)
+                                        <tr>
+                                            <td>{{$k+1}}</td>
+                                            <td>{{$item->no_debit_note}}</td>
+                                            <td class="text-right">{{format_idr($item->kontribusi_gross)}}</td>
+                                            <td class="text-right">{{format_idr($item->kontribusi_nett)}}</td>
+                                            <td>{{$item->tanggal_bayar ? date('d-M-Y',strtotime($item->tanggal_bayar)) : '-'}}</td>
+                                            <td class="text-right">{{format_idr($item->maintenance)}}</td>
+                                            <td class="text-right">{{format_idr($item->agen_penutup)}}</td>
+                                            <td class="text-right">{{format_idr($item->admin_agency)}}</td>
+                                            <td class="text-right">{{format_idr($item->handling_fee)}}</td>
+                                            <td class="text-right">{{format_idr($item->referal_fee)}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                             <tfoot>
                                 <tr>

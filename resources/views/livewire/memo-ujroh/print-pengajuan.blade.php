@@ -175,21 +175,40 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($pengajuan as $k => $item)
-                        <tr>
-                            <td>{{$item->polis->no_polis}}</td>
-                            <td>{{$item->polis->nama}}</td>
-                            <td>{{$item->dn_number}}</td>
-                            <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                            <td class="text-right">{{format_idr($item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah)}}</td>
-                            <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>
-                            <td class="text-right">{{format_idr($item->maintenance)}}</td>
-                            <td class="text-right">{{format_idr($item->agen_penutup)}}</td>
-                            <td class="text-right">{{format_idr($item->admin_agency)}}</td>
-                            <td class="text-right">{{format_idr($item->ujroh_handling_fee_broker)}}</td>
-                            <td class="text-right">{{format_idr($item->referal_fee)}}</td>
-                        </tr>
-                    @endforeach
+                    @if($data->is_migrate==0)
+                        @foreach($pengajuan as $k => $item)
+                            <tr>
+                                <td>{{$item->polis->no_polis}}</td>
+                                <td>{{$item->polis->nama}}</td>
+                                <td>{{$item->dn_number}}</td>
+                                <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                                <td class="text-right">{{format_idr($item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah)}}</td>
+                                <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>
+                                <td class="text-right">{{format_idr($item->maintenance)}}</td>
+                                <td class="text-right">{{format_idr($item->agen_penutup)}}</td>
+                                <td class="text-right">{{format_idr($item->admin_agency)}}</td>
+                                <td class="text-right">{{format_idr($item->ujroh_handling_fee_broker)}}</td>
+                                <td class="text-right">{{format_idr($item->referal_fee)}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    @if($data->is_migrate==1)
+                        @foreach($pengajuan_migrasi as $k => $item)
+                            <tr>
+                                <td>{{$polis->no_polis}}</td>
+                                <td>{{$polis->nama}}</td>
+                                <td>{{$item->no_debit_note}}</td>
+                                <td class="text-right">{{format_idr($item->kontribusi_gross)}}</td>
+                                <td class="text-right">{{format_idr($item->kontribusi_nett)}}</td>
+                                <td>{{$item->tanggal_bayar ? date('d-M-Y',strtotime($item->tanggal_bayar)) : '-'}}</td>
+                                <td class="text-right">{{format_idr($item->maintenance)}}</td>
+                                <td class="text-right">{{format_idr($item->agen_penutup)}}</td>
+                                <td class="text-right">{{format_idr($item->admin_agency)}}</td>
+                                <td class="text-right">{{format_idr($item->handling_fee)}}</td>
+                                <td class="text-right">{{format_idr($item->referal_fee)}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
                 <tfoot>
                     <tr>
@@ -243,7 +262,13 @@
                     </td>
                     <td>
                         <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 70px;" />
-                        <p style="padding-bottom:0;margin-bottom:0;">Ahmad Syafei</p>
+                        <p style="padding-bottom:0;margin-bottom:0;">
+                            @if(isset($data->user_teknik->nama))
+                                {{$data->user_teknik->nama}}
+                            @else
+                                Ahmad Syafei
+                            @endif
+                        </p>
                         <p style="border-top:1px solid;width:90%;margin-top:0;padding-top:0;">Teknik Syariah</p>
                     </td>
                     <td style="vertical-align: text-bottom;">
