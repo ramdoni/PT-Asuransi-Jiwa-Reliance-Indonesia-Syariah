@@ -4,6 +4,7 @@ namespace App\Http\Livewire\MemoUjroh;
 
 use Livewire\Component;
 use App\Models\MemoUjroh;
+use App\Models\MemoUjrohMigrasi;
 use App\Models\Pengajuan;
 use App\Models\Polis;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -12,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 class Edit extends Component
 {
     public $data,$total_kontribusi,$total_net_kontribusi;
-    public $pengajuan,$polis,$pengajuan_arr=[];
+    public $pengajuan,$polis,$pengajuan_arr=[],$pengajuan_migrasi=[];
     public function render()
     {
         return view('livewire.memo-ujroh.edit');
@@ -22,6 +23,9 @@ class Edit extends Component
     {
         $this->data = MemoUjroh::find($id);
         $this->pengajuan = Pengajuan::where('memo_ujroh_id',$this->data->id)->get();
+        if($this->data->is_migrate==1){
+            $this->pengajuan_migrasi = MemoUjrohMigrasi::where('memo_ujroh_id',$this->data->id)->get();
+        }
         $this->polis = Polis::find($this->data->polis_id);
         //$this->reload();
     }
@@ -143,6 +147,8 @@ class Edit extends Component
 
         $this->emit('message-success','Memo Ujroh berhasil disubmit');
 
+        $this->data->user_teknik_id = \Auth::user()->id;
+        $this->data->user_teknik_approved_date = date('Y-m-d H:i:s');
         $this->data->status = 2; 
         $this->data->save();
     }
@@ -326,27 +332,54 @@ class Edit extends Component
         $activeSheet->mergeCells("F28:F29");
 
         $num=30;
-        foreach($this->pengajuan as $item){
-            $activeSheet->setCellValue('A'.$num, $item->polis->no_polis)
-                ->setCellValue('B'.$num, $item->polis->nama)
-                ->setCellValue('C'.$num, $item->dn_number)
-                ->setCellValue('D'.$num, $item->kontribusi)
-                ->setCellValue('E'.$num, $item->net_kontribusi)
-                ->setCellValue('F'.$num, ($item->tanggal_bayar ? date('d-M-Y',strtotime($item->tanggal_bayar)) : '-'))
-                ->setCellValue('G'.$num, $item->maintenance)
-                ->setCellValue('H'.$num, $item->agen_penutup)
-                ->setCellValue('I'.$num, $item->admin_agency)
-                ->setCellValue('J'.$num, $item->ujroh_handling_fee_broker)
-                ->setCellValue('K'.$num, $item->referal_fee);
-            $activeSheet->getStyle("A{$num}:K{$num}")
-                    ->getBorders()
-                    ->getAllBorders()
-                    ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
-                    ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('000000'));
-            $activeSheet->getStyle("D{$num}:E{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-            $activeSheet->getStyle("G{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-
-            $num++;
+        if($this->data->is_migrate==0){
+            foreach($this->pengajuan as $item){
+                $activeSheet->setCellValue('A'.$num, $item->polis->no_polis)
+                    ->setCellValue('B'.$num, $item->polis->nama)
+                    ->setCellValue('C'.$num, $item->dn_number)
+                    ->setCellValue('D'.$num, $item->kontribusi)
+                    ->setCellValue('E'.$num, $item->net_kontribusi)
+                    ->setCellValue('F'.$num, ($item->tanggal_bayar ? date('d-M-Y',strtotime($item->tanggal_bayar)) : '-'))
+                    ->setCellValue('G'.$num, $item->maintenance)
+                    ->setCellValue('H'.$num, $item->agen_penutup)
+                    ->setCellValue('I'.$num, $item->admin_agency)
+                    ->setCellValue('J'.$num, $item->ujroh_handling_fee_broker)
+                    ->setCellValue('K'.$num, $item->referal_fee);
+                $activeSheet->getStyle("A{$num}:K{$num}")
+                        ->getBorders()
+                        ->getAllBorders()
+                        ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
+                        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('000000'));
+                $activeSheet->getStyle("D{$num}:E{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("G{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+    
+                $num++;
+            }
+        }
+        
+        if($this->data->is_migrate==1){
+            foreach($this->pengajuan_migrasi as $item){
+                $activeSheet->setCellValue('A'.$num, $this->polis->no_polis)
+                    ->setCellValue('B'.$num, $this->polis->nama)
+                    ->setCellValue('C'.$num, $item->no_debit_note)
+                    ->setCellValue('D'.$num, $item->kontribusi_gross)
+                    ->setCellValue('E'.$num, $item->kontribusi_nett)
+                    ->setCellValue('F'.$num, ($item->tanggal_bayar ? date('d-M-Y',strtotime($item->tanggal_bayar)) : '-'))
+                    ->setCellValue('G'.$num, $item->maintenance)
+                    ->setCellValue('H'.$num, $item->agen_penutup)
+                    ->setCellValue('I'.$num, $item->admin_agency)
+                    ->setCellValue('J'.$num, $item->handling_fee)
+                    ->setCellValue('K'.$num, $item->referal_fee);
+                $activeSheet->getStyle("A{$num}:K{$num}")
+                        ->getBorders()
+                        ->getAllBorders()
+                        ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
+                        ->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('000000'));
+                $activeSheet->getStyle("D{$num}:E{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("G{$num}:K{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+    
+                $num++;
+            }
         }
 
         $num++;
