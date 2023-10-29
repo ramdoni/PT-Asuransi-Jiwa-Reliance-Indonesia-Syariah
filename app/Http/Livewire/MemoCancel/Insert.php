@@ -14,7 +14,7 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis,$polis_id,$file,$peserta=[],$is_insert=false,$kepesertaan_id,$tanggal_efektif,$tanggal_pengajuan,
-            $perihal_internal_memo;
+            $perihal_internal_memo,$memo_cancel,$tujuan_pembayaran,$nama_bank,$no_rekening,$tgl_jatuh_tempo;
     
     public function render()
     {
@@ -129,6 +129,10 @@ class Insert extends Component
                 $data->polis_id = $this->polis_id;
                 $data->tanggal_efektif = $this->tanggal_efektif;
                 $data->perihal_internal_memo = $this->perihal_internal_memo;
+                $data->tujuan_pembayaran = $this->tujuan_pembayaran;
+                $data->nama_bank = $this->nama_bank;
+                $data->no_rekening = $this->no_rekening;
+                $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
                 $data->save();
 
                 $data->nomor = $polis->no_polis . '/'. str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');

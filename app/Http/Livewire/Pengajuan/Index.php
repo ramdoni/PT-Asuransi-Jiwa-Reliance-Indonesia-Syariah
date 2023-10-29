@@ -179,7 +179,6 @@ class Index extends Component
                 $total_admin_agency += $admin_agency;    
                 $total_ujroh_handling_fee_broker += $ujroh_handling_fee_broker;    
                 $total_referal_fee += $data->referal_fee; 
-                $kontribusi_nett += $item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah;
             }
 
             $data->total_maintenance = $total_maintenance;

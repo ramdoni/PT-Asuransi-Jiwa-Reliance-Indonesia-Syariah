@@ -5,6 +5,7 @@ namespace App\Http\Livewire\MemoRefund;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Polis;
+use App\Models\Refund;
 use App\Models\Kepesertaan;
 
 class Insert extends Component
@@ -113,7 +114,6 @@ class Insert extends Component
     {
         $this->validate([
             'polis_id' => 'required',
-            // 'peserta.*'=>'required',
             'tanggal_efektif' => 'required',
             'tanggal_pengajuan' => 'required'
         ]);
@@ -189,34 +189,34 @@ class Insert extends Component
                 $data->total_peserta = $total;  
                 $data->save();
 
-                $reasuradur = Kepesertaan::select('kepesertaan.*')->where('kepesertaan.memo_cancel_id',$data->id)
-                                ->join('reas','reas.id','=','kepesertaan.reas_id')
-                                ->join('reasuradur','reasuradur.id','=','reas.reasuradur_id')
-                                ->where(function($table){
-                                    $table->where('reasuradur.name','<>','OR')
-                                            ->orWhere('reasuradur.name','<>','');
-                                })
-                                ->groupBy('reasuradur.id')
-                                ->get();
+                // $reasuradur = Kepesertaan::select('kepesertaan.*')->where('kepesertaan.memo_cancel_id',$data->id)
+                //                 ->join('reas','reas.id','=','kepesertaan.reas_id')
+                //                 ->join('reasuradur','reasuradur.id','=','reas.reasuradur_id')
+                //                 ->where(function($table){
+                //                     $table->where('reasuradur.name','<>','OR')
+                //                             ->orWhere('reasuradur.name','<>','');
+                //                 })
+                //                 ->groupBy('reasuradur.id')
+                //                 ->get();
                 
-                foreach($reasuradur as $item){
-                    $reas_cancel = new ReasCancel();
-                    $reas_cancel->memo_cancel_id = $data->id;
-                    $reas_cancel->status = 0;
-                    $reas_cancel->polis_id = $data->polis_id;
-                    $reas_cancel->tanggal_pengajuan = $data->tanggal_pengajuan;
-                    $reas_cancel->reas_id = $item->reas_id;
-                    $reas_cancel->save();
+                // foreach($reasuradur as $item){
+                //     $reas_cancel = new ReasCancel();
+                //     $reas_cancel->memo_cancel_id = $data->id;
+                //     $reas_cancel->status = 0;
+                //     $reas_cancel->polis_id = $data->polis_id;
+                //     $reas_cancel->tanggal_pengajuan = $data->tanggal_pengajuan;
+                //     $reas_cancel->reas_id = $item->reas_id;
+                //     $reas_cancel->save();
                     
-                    $reas_cancel->nomor = str_pad($reas_cancel->id,6, '0', STR_PAD_LEFT) ."/REAS-C/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
+                //     $reas_cancel->nomor = str_pad($reas_cancel->id,6, '0', STR_PAD_LEFT) ."/REAS-C/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
                     
-                    Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->update(['reas_cancel_id'=>$reas_cancel->id]);
+                //     Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->update(['reas_cancel_id'=>$reas_cancel->id]);
                     
-                    $reas_cancel->total_peserta = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
-                    $reas_cancel->total_manfaat_asuransi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
-                    $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
-                    $reas_cancel->save();   
-                }
+                //     $reas_cancel->total_peserta = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
+                //     $reas_cancel->total_manfaat_asuransi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
+                //     $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
+                //     $reas_cancel->save();   
+                // }
 
                 session()->flash('message-success',__('Memo Cancel berhasil disubmit'));
 

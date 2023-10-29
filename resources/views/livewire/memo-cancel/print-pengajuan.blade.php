@@ -103,26 +103,32 @@
                 <table>
                     <tr>
                         <td>Kepada</td>
+                        <td style="width: 10px;"> : </td>
                         <td>Dept. Finance</td>
                     </tr>
                     <tr>
                         <td>Dari</td>
+                        <td> : </td>
                         <td>Dept. Underwriting Syariah</td>
                     </tr>
                     <tr>
                         <td>Tanggal</td>
+                        <td> : </td>
                         <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
                     </tr>
                     <tr>
                         <td>Nomor</td>
+                        <td> : </td>
                         <td>{{$data->nomor}}</td>
                     </tr>
                     <tr>
-                        <td>No. Credit Note</td>
+                        <td style="padding-right: 10px;">No. Credit Note</td>
+                        <td> : </td>
                         <td>{{$data->nomor_internal_memo}}</td>
                     </tr>
                     <tr>
-                        <th>Perihal</th>
+                        <td>Perihal</td>
+                        <td> : </td>
                         <th>{{$data->perihal_internal_memo}}</th>
                     </tr>
                 </table>
@@ -200,6 +206,61 @@
                             @endif
                         </td>
                         <td></td>
+                    </tr>
+                    <tr>
+                        <td>Manfaat Asuransi</td>
+                        <td> : </td>
+                        <td>{{format_idr($data->total_manfaat_asuransi)}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tgl. Cancel</td>
+                        <td> : </td>
+                        <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tujuan Pembayaran</td>
+                        <td> : </td>
+                        <td>{{$data->tujuan_pembayaran}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Nama Bank</td>
+                        <td> : </td>
+                        <td>{{$data->nama_bank}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>No. Rekening</td>
+                        <td> : </td>
+                        <td>{{$data->no_rekening}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tgl. Jatuh Tempo</td>
+                        <td> : </td>
+                        <td>{{date('d F Y',strtotime($data->tgl_jatuh_tempo))}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"><i>*Note: Credit Note dapat dibayarkan setelah pembayaran tagihan kontribusi telah diterima oleh Reliance Life unit syariah</i></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="padding-top:20px;"><strong>TOTAL PEMBAYARAN CREDIT NOTE</strong></td>
+                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi_gross)}}</td>
                     </tr>
                 </table>
             </div>

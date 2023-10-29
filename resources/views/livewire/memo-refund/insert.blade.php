@@ -1,5 +1,5 @@
 @section('sub-title', 'Insert')
-@section('title', 'Memo Cancel')
+@section('title', 'Pengurangan / Refund')
 <div class="row clearfix">
     <div class="col-md-4">
         <div class="card">
