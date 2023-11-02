@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth']], function(){
     
     Route::get('memo-refund',App\Http\Livewire\MemoRefund\Index::class)->name('memo-refund.index');
     Route::get('memo-refund/insert',App\Http\Livewire\MemoRefund\Insert::class)->name('memo-refund.insert');
+    Route::get('memo-refund/edit/{id}',App\Http\Livewire\MemoRefund\Edit::class)->name('memo-refund.edit');
 
     Route::get('memo-cancel',App\Http\Livewire\MemoCancel\Index::class)->name('memo-cancel.index');
     Route::get('memo-cancel/insert',App\Http\Livewire\MemoCancel\Insert::class)->name('memo-cancel.insert');
@@ -92,6 +93,7 @@ Route::group(['middleware' => ['auth']], function(){
 Route::group(['middleware' => ['auth']], function(){
     Route::get('memo-ujroh/print/{id}',[App\Http\Controllers\MemoUjrohController::class,'printPengajuan'])->name('memo-ujroh.print-pengajuan');
     Route::get('memo-cancel/print/{id}',[App\Http\Controllers\MemoCancelController::class,'printPengajuan'])->name('memo-cancel.print-pengajuan');
+    Route::get('memo-refund/print/{id}',[App\Http\Controllers\MemoRefundController::class,'printPengajuan'])->name('memo-refund.print-pengajuan');
     Route::get('api/get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('api.get-kepesertaan');
 });
 

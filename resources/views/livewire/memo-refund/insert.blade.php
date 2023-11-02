@@ -19,23 +19,55 @@
                             <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label>Tanggal Pengajuan</label>
-                        <input type="date" class="form-control" wire:model="tanggal_pengajuan" />
-                        @error('tanggal_pengajuan')
-                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label>Tanggal Efektif</label>
-                        <input type="date" class="form-control" wire:model="tanggal_efektif" />
-                        @error('tanggal_efektif')
-                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                        @enderror
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Tanggal Pengajuan</label>
+                            <input type="date" class="form-control" wire:model="tanggal_pengajuan" />
+                            @error('tanggal_pengajuan')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Tanggal Efektif</label>
+                            <input type="date" class="form-control" wire:model="tanggal_efektif" />
+                            @error('tanggal_efektif')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Perihal Internal Memo</label>
-                        <textarea class="form-control" wire:model="perihal_internal_memo"></textarea>
+                        <input type="text" class="form-control" wire:model="perihal_internal_memo" />
+                    </div>
+                    <div class="form-group">
+                        <label>Tujuan Pembayaran</label>
+                        <input type="text" class="form-control" wire:model="tujuan_pembayaran" />
+                        @error('tujuan_pembayaran')
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                        @enderror
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Nama Bank</label>
+                            <input type="text" class="form-control" wire:model="nama_bank" />
+                            @error('nama_bank')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Nomor Rekening</label>
+                            <input type="text" class="form-control" wire:model="no_rekening" />
+                            @error('no_rekening')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Tgl Jatuh Tempo</label>
+                            <input type="date" class="form-control" wire:model="tgl_jatuh_tempo" />
+                            @error('tgl_jatuh_tempo')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
                     <hr>
                     <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
