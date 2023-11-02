@@ -72,7 +72,7 @@ class ReasCalculate implements ShouldQueue
 
         echo "\n\nOR : {$or}\n";
         echo "AJRI : {$ajri}\n";
-        echo "RI COM :{$ri_com}\n\n";
+        echo "RI COM :{$ri_com}";
 
         foreach($kepesertaan as $k => $item){
             $manfaat_asuransi = $item->basic;
@@ -80,7 +80,7 @@ class ReasCalculate implements ShouldQueue
             // check double
             $check_double = Kepesertaan::where(['tanggal_lahir'=>$item->tanggal_lahir,'nama'=>$item->nama,'polis_id'=>$item->polis_id,'status_polis'=>'Inforce'])->whereNotNull('reas_id');
             $count = clone $check_double;
-
+            echo "Kepesertaan : {$item->nama}\n";
             $is_double = false;
             if($count->get()->count() >= 2){
                 $check_double = $check_double->first();
@@ -133,11 +133,13 @@ class ReasCalculate implements ShouldQueue
             if($rate){
                 $item->rate_reas = $rate->rate;
                 $item->total_kontribusi_reas = ($rate->rate*$item->nilai_manfaat_asuransi_reas)/1000;
+
+                echo "Kontribusi Rate : {$rate->rate}\n";
+
             }else {
                 $item->rate_reas = 0;
                 $item->total_kontribusi_reas = 0;
             }
-
             if($ri_com)
                 $item->ujroh_reas = ($item->total_kontribusi_reas * $ri_com) / 100;
             else
@@ -153,9 +155,9 @@ class ReasCalculate implements ShouldQueue
             if($item->total_kontribusi_reas<=0){
                 $item->nilai_manfaat_asuransi_reas = 0;
                 $item->reas_manfaat_asuransi_ajri = $item->basic;
-                // $item->status_reas = 2; // tidak direaskan karna distribusinya 0
+                $item->status_reas = 2; // tidak direaskan karna distribusinya 0
             }else{
-                // $item->status_reas = 1;
+                $item->status_reas = 1;
             }
 
             if(isset($this->data->rate_uw->or)){
@@ -164,9 +166,12 @@ class ReasCalculate implements ShouldQueue
                     $item->nilai_manfaat_asuransi_reas = 0;
                     $item->total_kontribusi_reas = 0;
                     $item->net_kontribusi_reas = 0;
-                }else
-                    $item->status_reas = 1;
+                }
+                // else
+                //     $item->status_reas = 1;
             }
+            
+            echo "Reasuradur : ". strtoupper($this->data->reasuradur->name) ."\n";
 
             if(strtoupper($this->data->reasuradur->name) =='OR'){
                 $item->status_reas = 2;
