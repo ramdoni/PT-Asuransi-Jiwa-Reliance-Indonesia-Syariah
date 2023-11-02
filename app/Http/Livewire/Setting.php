@@ -19,7 +19,7 @@ class Setting extends Component
     public $email;
     public $phone;
     public $website;
-    public $address,$running_number_nota_penutupan,$running_number_sb,$running_surat;
+    public $address,$running_number_nota_penutupan,$running_number_sb,$running_surat,$running_number_memo_ujroh;
 
     public function render()
     {
@@ -38,6 +38,7 @@ class Setting extends Component
         $this->running_number_nota_penutupan = get_setting('running_number_nota_penutupan');
         $this->running_number_sb = get_setting('running_number_sb');
         $this->running_surat = get_setting('running_surat');
+        $this->running_number_memo_ujroh = get_setting('running_number_memo_ujroh');
 
         \LogActivity::add("Setting");
     }
@@ -58,6 +59,7 @@ class Setting extends Component
         update_setting('running_number_nota_penutupan',$this->running_number_nota_penutupan);
         update_setting('running_number_sb',$this->running_number_sb);
         update_setting('running_surat',$this->running_surat);
+        update_setting('running_number_memo_ujroh',$this->running_number_memo_ujroh);
 
         \LogActivity::add("Setting Update Polis");
 

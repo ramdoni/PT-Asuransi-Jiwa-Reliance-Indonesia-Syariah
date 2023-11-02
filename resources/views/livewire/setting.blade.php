@@ -102,6 +102,10 @@
                                     <label>Running Nomor Surat</label>
                                     <input type="text" class="form-control" placeholder="" wire:model="running_surat">
                                 </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Memo Ujroh</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_memo_ujroh">
+                                </div>
                                 <div class="col-12">
                                     <hr />
                                     <button type="submit" class="btn btn-info">Simpan Perubahan</button>

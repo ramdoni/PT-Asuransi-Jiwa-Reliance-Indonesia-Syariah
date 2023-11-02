@@ -101,11 +101,13 @@ class Index extends Component
             $data->polis_id = $this->polis_id;
             $data->tanggal_pengajuan = date('Y-m-d');
             $data->user_created_id = \Auth::user()->id;
+            // $data->save();
+            $increment = get_setting('running_number_memo_ujroh') + 1;
+            # 000646/UWS-M/AJRI-US/VIII/2023
+            $data->nomor = str_pad($increment,6, '0', STR_PAD_LEFT) ."/UWS-M/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
             $data->save();
             
-            # 000646/UWS-M/AJRI-US/VIII/2023
-            $data->nomor = str_pad($data->id,6, '0', STR_PAD_LEFT) ."UWS-M/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
-            $data->save();
+            update_setting('running_number_memo_ujroh',$increment);
             
             foreach($this->memo_selected as $item){
                 $item->memo_ujroh_id = $data->id;
@@ -180,7 +182,6 @@ class Index extends Component
                 $total_admin_agency += $admin_agency;    
                 $total_ujroh_handling_fee_broker += $ujroh_handling_fee_broker;    
                 $total_referal_fee += $data->referal_fee; 
-                $kontribusi_nett += $item->kontribusi - $item->potong_langsung - $item->brokerage_ujrah;
             }
 
             $data->total_maintenance = $total_maintenance;
