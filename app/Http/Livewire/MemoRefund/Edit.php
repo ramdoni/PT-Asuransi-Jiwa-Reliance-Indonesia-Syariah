@@ -4,7 +4,7 @@ namespace App\Http\Livewire\MemoRefund;
 
 use Livewire\Component;
 use App\Models\Refund;
-use App\Models\ReasCancel;
+use App\Models\ReasRefund;
 
 class Edit extends Component
 {
@@ -29,24 +29,24 @@ class Edit extends Component
         $this->data->status = 1;
         $this->data->save();
 
-        // find reas cancel
-        // ReasCancel::where('memo_cancel_id',$this->data->id)->update(['status'=>1]);
+        // find reas refund
+        ReasCancel::where('memo_refund_id',$this->data->id)->update(['status'=>1]);
 
-        $this->emit('message-success','Memo Cancel berhasil disubmit');
+        $this->emit('message-success','Memo Refund berhasil disubmit');
     }
 
     public function submit_head_syariah()
     {
-        \LogActivity::add("Memo Cancel Head Syariah #{$this->data->id}");
+        \LogActivity::add("Memo Refund Head Syariah #{$this->data->id}");
 
         $this->data->head_syariah_submitted = date('Y-m-d H:i:s');
         $this->data->head_syariah_note = $this->note;
         $this->data->status = 2;
         $this->data->save();
 
-        // find reas cancel
-        ReasCancel::where('memo_cancel_id',$this->data->id)->update(['status'=>2]);
+        // find reas refund
+        ReasRefund::where('memo_refund_id',$this->data->id)->update(['status'=>2]);
 
-        $this->emit('message-success','Memo Cancel berhasil disubmit');
+        $this->emit('message-success','Memo Refund berhasil disubmit');
     }
 }

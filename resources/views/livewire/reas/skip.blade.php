@@ -50,7 +50,9 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->p_no_pengajuan) ? $item->p_no_pengajuan : '-'}}</a>
+                            @if(isset($item->pengajuan_id))
+                                <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a>
+                            @endif
                         </td>
                         <td>
                             @if(isset($item->dn_number))

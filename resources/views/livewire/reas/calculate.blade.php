@@ -59,7 +59,7 @@
                         </td>
                         <td>
                             @if(isset($item->pengajuan_id))
-                                <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->no_pengajuan) ? $item->no_pengajuan : '-'}}</a>
+                                <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">{{isset($item->pengajuan->no_pengajuan) ? $item->pengajuan->no_pengajuan : '-'}}</a>
                             @endif
                         </td>
                         <td>

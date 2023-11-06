@@ -69,6 +69,16 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>No Peserta Awal</label>
+                            <input type="text" class="form-control" wire:model="nama_bank" />
+                            @error('nama_bank')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        
+                    </div>
                     <hr>
                     <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <button type="submit" class="btn btn-primary ml-3"><i class="fa fa-save"></i> {{ __('Submit') }}</button>

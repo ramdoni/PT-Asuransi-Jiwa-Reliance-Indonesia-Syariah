@@ -64,6 +64,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('reas/download-report/{id}',[App\Http\Controllers\ReinsuranceController::class,'downloadReport'])->name('reas.download-report');
     Route::get('reas-cancel',App\Http\Livewire\ReasCancel\Index::class)->name('reas-cancel.index');
     Route::get('reas-cancel/edit/{id}',App\Http\Livewire\ReasCancel\Edit::class)->name('reas-cancel.edit');
+    Route::get('reas-refund',App\Http\Livewire\ReasRefund\Index::class)->name('reas-refund.index');
+    Route::get('reas-refund/edit/{id}',App\Http\Livewire\ReasRefund\Edit::class)->name('reas-refund.edit');
 
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('klaim/insert',App\Http\Livewire\Klaim\Insert::class)->name('klaim.insert');

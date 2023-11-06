@@ -106,6 +106,14 @@
                                     <label>Running Nomor Memo Ujroh</label>
                                     <input type="text" class="form-control" placeholder="" wire:model="running_number_memo_ujroh">
                                 </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Refund</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_refund">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Refund CN</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_refund_cn">
+                                </div>
                                 <div class="col-12">
                                     <hr />
                                     <button type="submit" class="btn btn-info">Simpan Perubahan</button>

@@ -1,5 +1,5 @@
 @section('sub-title', 'Index')
-@section('title', 'Pengurangan / Refund')
+@section('title', 'Reas Refund')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -25,7 +25,6 @@
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        <a href="{{route('memo-refund.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Refund</a>
                     </div>
                 </div>
             </div>
@@ -36,15 +35,15 @@
                             <tr>
                                 <th>No</th>
                                 <th class="text-center">Status</th>
+                                <th>Memo Refund</th>
+                                <th>Reasuradur</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Pemegang Polis</th>
-                                <th>Jenis Produk</th>
                                 <th>Date</th>
                                 <th class="text-center">Total Peserta</th>
                                 <th class="text-center">Total Manfaat Asuransi</th>
                                 <th class="text-center">Kontribusi Gross</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,7 +65,14 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{route('memo-refund.edit', $item->id)}}">{{$item->nomor}}</a></td>
+                                        <a href="{{route('memo-refund.edit', $item->memo_refund_id)}}" target="_blank">{{$item->memo_refund->nomor}}</a>
+                                    </td>
+                                    <td>
+                                        {{isset($item->reas->reasuradur->name) ? $item->reas->reasuradur->name : '-'}}
+                                    </td>
+                                    <td>
+                                        <a href="{{route('reas-refund.edit', $item->id)}}">{{$item->nomor}}</a>
+                                    </td>
                                     <td>
                                         @if(isset($item->polis_id))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">
@@ -75,16 +81,10 @@
                                         @endif
                                     </td>
                                     <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
-                                    <td>{{isset($item->polis->produk->nama) ? $item->polis->produk->nama : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>
                                     <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>
                                     <td class="text-right">{{format_idr($item->total_kontribusi)}}</td>
-                                    <td>
-                                        <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
-                                        <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id,'is_finance'=>1])}}" target="_blank"><i class="fa fa-print"></i> Finance</a>
-                                        <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
-                                    </td>
                                 </tr>
                             @endforeach
                             @if($data->count()==0)

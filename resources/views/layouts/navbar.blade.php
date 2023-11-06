@@ -42,6 +42,7 @@
                                 <ul class="dropdown-menu user-menu menu-icon">
                                     <li><a href="{{ route('reas.index') }}">Pengajuan</a></li>
                                     <li><a href="{{ route('reas-cancel.index') }}">Cancel</a></li>
+                                    <li><a href="{{ route('reas-refund.index') }}">Refund</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ route('recovery-claim.index') }}" class="text-info icon-menu px-1">Recovery Claim</a></li>

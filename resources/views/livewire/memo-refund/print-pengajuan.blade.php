@@ -124,18 +124,18 @@
                     <tr>
                         <td style="padding-right: 10px;">No. Credit Note</td>
                         <td> : </td>
-                        <td>{{$data->nomor_internal_memo}}</td>
+                        <td>{{$data->nomor_cn}}</td>
                     </tr>
                     <tr>
                         <td>Perihal</td>
                         <td> : </td>
-                        <th>{{$data->perihal_internal_memo}}</th>
+                        <td>{{$data->perihal_internal_memo}}</td>
                     </tr>
                 </table>
                 <hr />
-                <p>Dengan hormat,<br />
-                Bersama ini disampaikan Daftar Pembatalan Peserta dan Credit Note atas Pembatalan Peserta sejak awal sesuai dengan pengajuan melalui email pada tanggal 
-                {{date('d F Y',strtotime($data->tanggal_pengajuan))}}, mohon dapat dilakukan pembayaran dengan data sebagai berikut:
+                <p>Dengan hormat,<br /><br />
+                    Bersama ini disampaikan Daftar Pengurangan Peserta dan Credit Note atas Pengurangan Peserta sesuai dengan pengajuan
+                    melalui email pada tanggal {{date('d F Y',strtotime($data->tanggal_pengajuan))}}, mohon dapat dilakukan pembayaran dengan data sebagai berikut:
                 </p>
                 <table style="border:1px solid;padding:5px;width:100%;">
                     <tr>
@@ -153,6 +153,19 @@
                         <td> : </td>
                         <td>{{$data->polis->no_polis}}</td>
                     </tr>
+                    <tr>
+                        <td>Jumlah Peserta </td>
+                        <td> : </td>
+                        <td>{{$data->total_peserta}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor Peserta </td>
+                        <td> : </td>
+                        <td>{{$data->start_nomor_peserta}}</td>
+                    </tr>
+
+
+
                     <tr>
                         <td>No Debit Note</td>
                         <td> : </td>

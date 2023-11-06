@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Polis;
 use App\Models\Refund;
+use App\Models\ReasRefund;
 use App\Models\Kepesertaan;
 
 class Insert extends Component
@@ -129,18 +130,23 @@ class Insert extends Component
                 $data->nama_bank = $this->nama_bank;
                 $data->no_rekening = $this->no_rekening;
                 $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
+                
+                $running_number = get_setting('running_number_refund')+1;
+                $running_number_cn = get_setting('running_number_refund')+1;
+
+                $data->nomor = str_pad($running_number,4, '0', STR_PAD_LEFT) ."/UW-RFND-CN-R/".numberToRomawi(date('m')).'/'.date('Y');
+                $data->nomor_cn = $polis->no_polis . '/'. str_pad($running_number_cn,4, '0', STR_PAD_LEFT) ."/AJRIUS-CN-R/".numberToRomawi(date('m')).'/'.date('Y');
                 $data->save();
 
-                $data->nomor = $polis->no_polis . '/'. str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-RFND/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
-                // 036/UW-M-CNCL/AJRIUS/X/2023
-                $data->no_internal_memo = str_pad($data->id,6, '0', STR_PAD_LEFT) ."UWS-M-RFND/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                update_setting('running_number_refund',$running_number);
 
+                // 036/UW-M-CNCL/AJRIUS/X/2023
                 $total = 0;$total_kontribusi=0;$total_manfaat_asuransi = 0;$total_kontribusi_gross=0;$total_kontribusi_tambahan=0;
                 $total_potongan_langsung = 0;$total_ujroh_brokerage=0;$total_ppn=0;$total_pph=0;
                 foreach($this->peserta as $k => $item){
                     $peserta = Kepesertaan::find($item['id']);
                     if($peserta){
-                        $peserta->memo_cancel_id = $data->id;
+                        $peserta->memo_refund_id = $data->id;
                         $peserta->save();
                         $total++;
 
@@ -193,34 +199,34 @@ class Insert extends Component
                 $data->total_peserta = $total;  
                 $data->save();
 
-                // $reasuradur = Kepesertaan::select('kepesertaan.*')->where('kepesertaan.memo_cancel_id',$data->id)
-                //                 ->join('reas','reas.id','=','kepesertaan.reas_id')
-                //                 ->join('reasuradur','reasuradur.id','=','reas.reasuradur_id')
-                //                 ->where(function($table){
-                //                     $table->where('reasuradur.name','<>','OR')
-                //                             ->orWhere('reasuradur.name','<>','');
-                //                 })
-                //                 ->groupBy('reasuradur.id')
-                //                 ->get();
+                $reasuradur = Kepesertaan::select('kepesertaan.*')->where('kepesertaan.memo_refund_id',$data->id)
+                                ->join('reas','reas.id','=','kepesertaan.reas_id')
+                                ->join('reasuradur','reasuradur.id','=','reas.reasuradur_id')
+                                ->where(function($table){
+                                    $table->where('reasuradur.name','<>','OR')
+                                            ->orWhere('reasuradur.name','<>','');
+                                })
+                                ->groupBy('reasuradur.id')
+                                ->get();
                 
-                // foreach($reasuradur as $item){
-                //     $reas_cancel = new ReasCancel();
-                //     $reas_cancel->memo_cancel_id = $data->id;
-                //     $reas_cancel->status = 0;
-                //     $reas_cancel->polis_id = $data->polis_id;
-                //     $reas_cancel->tanggal_pengajuan = $data->tanggal_pengajuan;
-                //     $reas_cancel->reas_id = $item->reas_id;
-                //     $reas_cancel->save();
+                foreach($reasuradur as $item){
+                    $reas_refund = new ReasRefund();
+                    $reas_refund->memo_refund_id = $data->id;
+                    $reas_refund->status = 0;
+                    $reas_refund->polis_id = $data->polis_id;
+                    $reas_refund->tanggal_pengajuan = $data->tanggal_pengajuan;
+                    $reas_refund->reas_id = $item->reas_id;
+                    $reas_refund->save();
                     
-                //     $reas_cancel->nomor = str_pad($reas_cancel->id,6, '0', STR_PAD_LEFT) ."/REAS-C/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
+                    $reas_refund->nomor = str_pad($reas_refund->id,6, '0', STR_PAD_LEFT) ."/RFND-C/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
                     
-                //     Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->update(['reas_cancel_id'=>$reas_cancel->id]);
+                    Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->update(['reas_refund_id'=>$reas_refund->id]);
                     
-                //     $reas_cancel->total_peserta = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
-                //     $reas_cancel->total_manfaat_asuransi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
-                //     $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
-                //     $reas_cancel->save();   
-                // }
+                    $reas_refund->total_peserta = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
+                    $reas_refund->total_manfaat_asuransi = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
+                    $reas_refund->total_kontribusi = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
+                    $reas_refund->save();   
+                }
 
                 session()->flash('message-success',__('Memo Cancel berhasil disubmit'));
 
@@ -234,7 +240,7 @@ class Insert extends Component
 
     public function delete_peserta($k)
     {
-        unset($this->peserta_temp[$k]);
+        unset($this->peserta[$k]);
     }
 
     public function downloadTemplate()
