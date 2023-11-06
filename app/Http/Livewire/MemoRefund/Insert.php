@@ -140,7 +140,7 @@ class Insert extends Component
                 foreach($this->peserta as $k => $item){
                     $peserta = Kepesertaan::find($item['id']);
                     if($peserta){
-                        $peserta->memo_cancel_id = $data->id;
+                        $peserta->memo_refund_id = $data->id;
                         $peserta->save();
                         $total++;
 

@@ -154,6 +154,69 @@
                         <td>{{$data->polis->no_polis}}</td>
                     </tr>
                     <tr>
+                        <td>Jumlah Peserta </td>
+                        <td> : </td>
+                        <td>{{$data->total_peserta}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor Peserta </td>
+                        <td> : </td>
+                        <td>
+                            @if($data->nomor_peserta_awal)
+                                {{$data->nomor_peserta_awal}}
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->nomor_peserta_akhir)
+                                s/d
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->nomor_peserta_akhir)
+                                {{$data->nomor_peserta_akhir}}
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Periode Asuransi </td>
+                        <td> : </td>
+                        <td>
+                            @if($data->periode_awal)
+                                {{date('d M Y',strtotime($data->periode_awal))}}
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->periode_akhir)
+                                s/d
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->periode_akhir)
+                                {{date('d M Y',strtotime($data->periode_akhir))}}
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manfaat Asuransi</td>
+                        <td> : </td>
+                        <td>{{format_idr($data->total_manfaat_asuransi)}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal Pengurangan</td>
+                        <td> : </td>
+                        <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+
+
+
+                    <tr>
                         <td>No Debit Note</td>
                         <td> : </td>
                         <td></td>
@@ -205,22 +268,6 @@
                                 {{$no_peserta_akhir}}
                             @endif
                         </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Manfaat Asuransi</td>
-                        <td> : </td>
-                        <td>{{format_idr($data->total_manfaat_asuransi)}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Tgl. Cancel</td>
-                        <td> : </td>
-                        <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
-                        <td></td>
-                        <td></td>
                         <td></td>
                     </tr>
                     <tr>
