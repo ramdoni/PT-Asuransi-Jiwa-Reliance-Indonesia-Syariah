@@ -9,28 +9,28 @@
                         <label>{{ __('Name') }}</label>
                         <input type="text" class="form-control" wire:model="name" >
                         @error('name')
-                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>{{ __('Email') }}</label>
                         <input type="text" class="form-control"  wire:model="email" >
                         @error('email')
-                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>{{ __('Telepon') }}</label>
                         <input type="text" class="form-control"  wire:model="telepon" >
                         @error('telepon')
-                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>{{ __('Address') }}</label>
                         <textarea class="form-control" wire:model="address"></textarea>
                         @error('address')
-                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
                     <div class="form-group">
@@ -42,14 +42,14 @@
                             @endforeach
                         </select>
                         @error('password')
-                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label>{{ __('Password') }}</label>
                         <input type="password" class="form-control"  wire:model="password" >
                         @error('password')
-                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
                     </div>
                     <label class="fancy-checkbox">
@@ -60,6 +60,33 @@
                     <a href="{{route('users.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <button type="submit" class="btn btn-primary ml-3"><i class="fa fa-save"></i> {{ __('Save') }}</button>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="body">
+                <div class="form-group">
+                    <label>{{ __('Jabatan') }}</label>
+                    <input type="text" class="form-control" wire:model="jabatan" >
+                    @error('password')
+                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                    @enderror
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>{{ __('Tanda Tangan') }}</label>
+                        <input type="file" class="form-control" wire:model="ttd" >
+                        @error('password')
+                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        @if($data->ttd)
+                            <img src="{{asset($data->ttd)}}" style="width: 100px;" />
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>

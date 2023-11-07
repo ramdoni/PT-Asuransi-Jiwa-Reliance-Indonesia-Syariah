@@ -13,7 +13,7 @@ class Insert extends Component
 {
     use WithFileUploads;
     public $polis,$polis_id,$file,$peserta=[],$is_insert=false,$kepesertaan_id,$tanggal_efektif,$tanggal_pengajuan,
-            $perihal_internal_memo,$tujuan_pembayaran,$nama_bank,$no_rekening,$tgl_jatuh_tempo;
+            $perihal_internal_memo,$tujuan_pembayaran,$nama_bank,$no_rekening,$tgl_jatuh_tempo,$no_peserta_awal,$no_peserta_akhir;
     public function render()
     {
         return view('livewire.memo-refund.insert');
@@ -128,9 +128,11 @@ class Insert extends Component
                 $data->perihal_internal_memo = $this->perihal_internal_memo;
                 $data->tujuan_pembayaran = $this->tujuan_pembayaran;
                 $data->nama_bank = $this->nama_bank;
+                $data->no_peserta_awal = $this->no_peserta_awal;
+                $data->no_peserta_akhir = $this->no_peserta_akhir;
                 $data->no_rekening = $this->no_rekening;
                 $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
-                
+                $data->user_created_id = \Auth::user()->id;
                 $running_number = get_setting('running_number_refund')+1;
                 $running_number_cn = get_setting('running_number_refund')+1;
 
@@ -147,13 +149,22 @@ class Insert extends Component
                     $peserta = Kepesertaan::find($item['id']);
                     if($peserta){
                         $peserta->memo_refund_id = $data->id;
+                        $peserta->refund_sisa_masa_asuransi = hitung_masa_bulan(date('Y-m-d'),$peserta->tanggal_akhir,$peserta->pengajuan->masa_asuransi);
                         $peserta->save();
                         $total++;
+                        /**
+                            Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross
+                            t             = sisa masa asuransi (dalam bulan)
+                            n            = masa asuransi (dalam bulan)
+                            %            = persentase pengembalian asuransi (sesuai yang tercantum di Polis)
+                         */
+                        $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar) ;
+                        $peserta->save();
 
                         $total_kontribusi_gross += $peserta->kontribusi;
                         // $total_potongan_langsung += $peserta->jumlah_potongan_langsung;
                         $total_kontribusi_tambahan += $peserta->extra_kontribusi;
-                        $total_kontribusi += $peserta->total_kontribusi_dibayar;
+                        $total_kontribusi += $peserta->refund_kontribusi;
                         $total_manfaat_asuransi += $peserta->basic;
                     }
                 }

@@ -104,6 +104,7 @@
                         </thead>
                         <tbody>
                             @if(isset($data->kepesertaan))
+                                @php($total_refund_kontribusi = 0)
                                 @foreach($data->kepesertaan as $k=>$item)
                                     <tr wire:key="{{$k}}">
                                         <td>
@@ -123,8 +124,9 @@
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                        <td class="text-right">{{format_idr($item->refund_kontribusi)}}</td>
                                     </tr>
+                                    @php($total_refund_kontribusi += $item->refund_kontribusi)
                                 @endforeach
                             @endif
                         </tbody>
@@ -132,7 +134,7 @@
                             <tr>
                                 <th colspan="8" class="text-right">Total</th>
                                 <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                                <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_refund_kontribusi)}}</th>
                             </tr>
                         </tfoot>
                     </table>

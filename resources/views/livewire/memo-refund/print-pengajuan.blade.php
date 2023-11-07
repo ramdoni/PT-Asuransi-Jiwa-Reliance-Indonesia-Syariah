@@ -38,6 +38,7 @@
                 padding:2px 5px;
                 margin:0;
             }
+            
             /* table.border tr{
                 border:1px solid #000;
             } */
@@ -161,64 +162,40 @@
                     <tr>
                         <td>Nomor Peserta </td>
                         <td> : </td>
-                        <td>{{$data->start_nomor_peserta}}</td>
-                    </tr>
-
-
-
-                    <tr>
-                        <td>No Debit Note</td>
-                        <td> : </td>
-                        <td></td>
-                        <td>Total Kontribusi Gross Cancel</td>
-                        <td>Rp</td>
-                        <td>{{format_idr($data->total_kontribusi_gross)}}</td>
-                    </tr>
-                    <tr>
-                        <td>Tgl Debit Note</td>
-                        <td> : </td>
-                        <td></td>
-                        <td>Kontribusi Tambahan</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Kontribusi DN</td>
-                        <td> : </td>
-                        <td></td>
-                        <td>Potongan Langsung</td>
-                        <td>{{$data->polis->potongan_langsung}}%</td>
-                        <td>{{format_idr($data->total_potongan_langsung)}}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>PPn</td>
-                        <td>{{$data->polis->ppn ? $data->polis->ppn : 0}}%</td>
-                        <td>{{format_idr($data->pn)}}</td>
-                    </tr>
-                    <tr>
-                        <td>Jumlah Peserta</td>
-                        <td> : </td>
-                        <td>{{$data->total_peserta}}</td>
-                        <td>PPh</td>
-                        <td>{{$data->polis->pph ? $data->polis->pph : 0}}%</td>
-                        <td>{{format_idr($data->pph_amount)}}</td>
-                    </tr>
-                    <tr>
-                        <td>Nomor Peserta</td>
-                        <td> : </td>
                         <td>
-                            {{$no_peserta_awal}}
-                        </td>
-                        <td>s/d</td>
-                        <td>
-                            @if($data->total_peserta>1)
-                                {{$no_peserta_akhir}}
+                            @if($data->nomor_peserta_awal)
+                                {{$data->nomor_peserta_awal}}
                             @endif
                         </td>
-                        <td></td>
+                        <td>
+                            @if($data->nomor_peserta_akhir)
+                                s/d
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->nomor_peserta_akhir)
+                                {{$data->nomor_peserta_akhir}}
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Periode Asuransi </td>
+                        <td> : </td>
+                        <td>
+                            @if($data->periode_awal)
+                                {{date('d M Y',strtotime($data->periode_awal))}}
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->periode_akhir)
+                                s/d
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->periode_akhir)
+                                {{date('d M Y',strtotime($data->periode_akhir))}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Manfaat Asuransi</td>
@@ -229,11 +206,29 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Tgl. Cancel</td>
+                        <td>Tanggal Pengurangan</td>
                         <td> : </td>
                         <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
                         <td></td>
                         <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"><br /></td>
+                    </tr>
+                    <tr>
+                        <td>No Debit Note</td>
+                        <td> : </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Tgl Debit Note</td>
+                        <td> : </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Kontribusi DN</td>
+                        <td> : </td>
                         <td></td>
                     </tr>
                     <tr>
@@ -269,11 +264,45 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="6"><i>*Note: Credit Note dapat dibayarkan setelah pembayaran tagihan kontribusi telah diterima oleh Reliance Life unit syariah</i></td>
+                        <td colspan="6"><i>*Note: Credit Note dapat dibayarkan setelah pembayaran tagihan premi telah diterima oleh Reliance Life</i></td>
                     </tr>
                     <tr>
                         <td colspan="3" style="padding-top:20px;"><strong>TOTAL PEMBAYARAN CREDIT NOTE</strong></td>
                         <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi_gross)}}</td>
+                    </tr>
+                </table>
+                <br />
+                <br />
+                <table style="width:95%;margin:auto;">
+                    <tr>
+                        <td colspan="2"><p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terima kasih</p></td>
+                    </tr>
+                    <tr>
+                        <td style="width:65%;">
+                            <p>
+                                <br />
+                                <br />
+                                <br />
+                                @if(isset($data->user_created->name))
+                                    @if($data->user_created->ttd)
+                                        <img src="{{asset($data->user_created->ttd)}}" style="height: 50px;" />
+                                    @endif
+                                @endif
+                                <u>{{isset($data->user_created->name) ? $data->user_created->name : ''}}</u>
+                                <p>Dep. Underwriting Syariah</p>
+                            </p>
+                        </td>
+                        <td style="width:35%;">
+                            <p>Diterima oleh,
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            (..................................)<br />
+                            Dept. Finance
+                            </p>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -286,7 +315,7 @@
             <hr />
             <table style="width: 100%;">
                 <tr>
-                    <td width="70%">No : {{$data->nomor}}</td>
+                    <td width="70%">No : {{$data->nomor_cn}}</td>
                     <td width="30%;">Jakarta, {{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
                 </tr>
             </table>
@@ -298,74 +327,32 @@
             <table style="border:1px solid">
                 <tr>
                     <th style="border-bottom: 1px solid;border-right:1px solid;padding-top:10px;padding-bottom:10px;">KETERANGAN</th>
-                    <th style="border-bottom: 1px solid;">JUMLAH (Rp)</th>
+                    <th style="border-bottom: 1px solid;">  REFUND KONTRIBUSI (Rp)</th>
                 </tr>
                 <tr>
-                    <td style="border-right:1px solid;padding-left: 10px;">
+                    <td style="border-right:1px solid;padding-left:10px;padding-top:50px;padding-bottom:40px;">
                         <p>
-                            Pembatalan Kepesertaan Asuransi produk <strong>RELIANCE PEMBIAYAAN SYARIAH</strong>
+                            Pengurangan Kepesertaan Asuransi Unit Syariah produk <strong>{{isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-'}}</strong>
                             dengan No Polis <strong>{{$data->polis->no_polis}}</strong> dan Jumlah Peserta {{$data->total_peserta}} orang (No Peserta 
-                            @if($data->total_peserta==1)) {{$no_peserta_awal}}
-                            @else
-                            {{$no_peserta_akhir}} - {{$no_peserta_akhir}}
+                            @if($data->no_peserta_awal and $data->no_peserta_akhir=="")  
+                                {{$data->no_peserta_awal}}
+                            @endif
+                            @if($data->no_peserta_awal and $data->no_peserta_akhir)  
+                                {{$data->no_peserta_awal}} - {{$data->no_peserta_akhir}}
                             @endif
                         </p>
-                        <table style="margin-left: 50px;">
-                            <tr>
-                                <td>Kontribusi Standar</td>
-                            </tr>
-                            <tr>
-                                <td>Kontribusi Tambahan</td>
-                            </tr>
-                            <tr>
-                                <td>Potongan Langsung</td>
-                            </tr>
-                            <tr>
-                                <td>Ujroh Brokerage</td>
-                            </tr>
-                            <tr>
-                                <td>PPN</td>
-                            </tr>
-                            <tr>
-                                <td>PPH</td>
-                            </tr>
-                        </table>
                     </td>
-                    <td style="width: 180px;">
-                        <table style="width:100%;margin-top: 45px;">
-                            <tr>
-                                <td class="text-right">{{format_idr($data->total_kontribusi_gross)}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">{{format_idr($data->total_kontribusi_tambahan)}}</td>
-                            </tr>
-                            <tr>    
-                                <td class="text-right">{{format_idr($data->total_potongan_langsung)}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">{{format_idr($data->total_ujroh_brokerage)}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">{{format_idr($data->total_ppn)}}</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">{{format_idr($data->total_pph)}}</td>
-                            </tr>
-                        </table>
+                    <td style="width: 180px;padding-top:40px;padding-bottom:40px;" class="text-right">
+                        <strong>{{format_idr($data->total_kontribusi_gross)}}</strong>
                     </td>
                 </tr>
                 <tr>
-                    <td style="border-right:1px solid;border-top:1px solid;border-bottom:1px solid;">
-                        <strong>Total Refund Kontribusi</strong>
-                    </td>
-                    <td style="border-top:1px solid;border-bottom: 1px solid;text-align:right;">
-                        {{format_idr($data->total_manfaat_asuransi-$data->total_potongan_langsung)}}
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">Terbilang : {{terbilang($data->total_manfaat_asuransi)}}</td>
+                    <td colspan="2">Terbilang : {{terbilang($data->total_kontribusi_gross)}}</td>
                 </tr>
             </table>
+            <br />
+            <br />
+            <br />
             <div style="position: relative;">
                 <p style="z-index:1">Hormat Kami,<br />
                     <strong>PT ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>
@@ -398,7 +385,7 @@
                             </tr>
                             <tr>
                                 <td>Perihal </td>
-                                <td> : Pembatalan Kepesertaan Asuransi</td>
+                                <td> : Pengurangan Kepesertaan Asuransi</td>
                             </tr>
                             <tr>
                                 <td>Lamp </td>
@@ -417,7 +404,7 @@
                 Dengan hormat,<br /><br />
                 Terimakasih atas kepercayaan yang telah diberikan kepada kami sebagai mitra untuk memberikan perlindungan
                 kepada nasabah Anda.<br />
-                Sehubungan dengan pengajuan Pembatalan Data Peserta yang diterima atas Penutupan Asuransi Jiwa, sebagai berikut.
+                Sehubungan dengan pengajuan Pengurangan Data Peserta yang diterima atas Penutupan Asuransi Jiwa Unit Syariah, sebagai berikut.
                 <table>
                     <tr>
                         <td>Nomor Polis</td>
@@ -437,7 +424,7 @@
             <table style="width: 100%;">
                 <tr>
                     <th>1. </th>
-                    <th class="text-left">Daftar Pembatalan Peserta Asuransi Kumpulan</th>
+                    <th class="text-left">Daftar Pengurangan Peserta Asuransi Kumpulan</th>
                 </tr>
                 <tr>
                     <td></td>
@@ -453,19 +440,19 @@
                             <tr>
                                 <td>No. Peserta</td>
                                 <td> : </td>
-                                <td class="text-right"> {{$no_peserta_awal}}</td>
-                                <td>s/d</td>
-                                <td>{{$no_peserta_akhir}}</td>
+                                <td class="text-right"> {{$data->no_peserta_awal}}</td>
+                                <td>@if($data->no_peserta_akhir) s/d @endif</td>
+                                <td>{{$data->no_peserta_akhir}}</td>
                             </tr>
                             <tr>
-                                <td>Total Manfaat Asuransi</td>
+                                <td>Manfaat Asuransi</td>
                                 <td> : Rp.</td>
                                 <td class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>Kontribusi Gross Cancel</td>
+                                <td>Pengembalian Kontribusi</td>
                                 <td> : Rp. </td>
                                 <td class="text-right">{{format_idr($data->total_kontribusi_gross)}}</td>
                                 <td></td>
@@ -476,13 +463,38 @@
                 </tr>
                 <tr>
                     <th>2.</th>
+                    <th class="text-left">Daftar Kepesertaan Tertunda Asuransi Syariah</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>Total Peserta </td>
+                                <td> : </td>
+                                <td class="text-right"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Total Manfaat Asuransi </td>
+                                <td> : </td>
+                                <td class="text-right"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <th>3.</th>
                     <th class="text-left">Credit Note</th>
                 </tr>
             </table>
             <p>
-                Dapat diinformasikan bahwa seluruh peserta dalam daftar pembatalan peserta asuransi kumpulan diberlakukan efektif pembatalan per tanggal 
-                {{$data->tanggal_efektif ? date('d F Y',strtotime($data->tanggal_efektif)) : '-'}}.<br />
-                Apabila terdapat pertanyaan, silahkan menghubungi kami pada hotline 021-5793 0008, di hari Senin - Jumat pukul 09:00 - 17:00 WIB dengan DIV. Underwriting Unit Syariah
+                Dapat diinformasikan bahwa seluruh peserta dalam Daftar Pengurangan Kepesertaan asuransi Asuransi Syariah diberlakukan efektif pembatalan per tanggal 
+                sesuai dengan Daftar Pengurangan Peserta terlampir.<br />
+                Apabila terdapat pertanyaan, silahkan menghubungi kami pada hotline 021-5793 0008, di hari Senin - Jumat pukul 09:00 - 17:00 WIB dengan Dept. Underwriting Unit Syariah
             </p>
             <p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terima kasih.</p>
             <div style="position:relative;">
@@ -503,7 +515,7 @@
         <div class="page-break"></div>
         <div class="container container-peserta">
             <img src="{{public_path('assets/img/surat-bg-top.png')}}" style="width: 100%;" />
-            <h3 style="text-align:center;">DAFTAR PEMBATALAN KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH</h3>
+            <h3 style="text-align:center;">DAFTAR REFUND KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH</h3>
             <table>
                 <tr>
                     <td>NOMOR POLIS</td>
@@ -535,12 +547,9 @@
                     <th>USIA</th>
                     <th>MULAI ASURANSI</th>
                     <th>AKHIR ASURANSI</th>
+                    <th>TLG. EFEKTIF</th>
                     <th>NILAI MANFAAT ASURANSI</th>
-                    <th>TOTAL KONTRIBUSI</th>
-                    <th>PENGEMBALIAN KONTRIBUSI</th>
-                    <th>PENGEMBALIAN KONTRIBUSI NETTO</th>
-                    <th>UW LIMIT</th>
-                    <th>KETERANGAN</th>
+                    <th>PENGEMBALIAN ASURANSI</th>
                 </tr>
                 @foreach($data->kepesertaan as $k => $item)
                     <tr>
@@ -553,10 +562,6 @@
                         <td>{{date('d-m-y',strtotime($item->tanggal_akhir))}}</td>
                         <td class="text-right">{{format_idr($item->basic)}}</td>
                         <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
-                        <td class="text-right">{{format_idr($item->total_kontribusi_dibayar)}}</td>
-                        <td>{{$item->uw}}</td>
-                        <td>{{$item->keterangan}}</td>
                     </tr>
                 @endforeach
                 <tfoot>
@@ -568,13 +573,9 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                         <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                        <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
-                        <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
                         <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </tfoot>
             </table>

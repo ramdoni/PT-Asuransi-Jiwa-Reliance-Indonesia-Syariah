@@ -6,9 +6,11 @@ use Livewire\Component;
 use App\Models\UserAccess;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
+    use WithFileUploads;
     public $data;
     public $name;
     public $email;
@@ -16,7 +18,7 @@ class Edit extends Component
     public $telepon;
     public $address;
     public $user_access_id;
-    public $message,$is_supervisor;
+    public $message,$is_supervisor,$ttd;
 
     protected $rules = [
         'name' => 'required|string',
@@ -47,6 +49,11 @@ class Edit extends Component
     }
 
     public function save(){
+
+        if($this->ttd){
+            $this->rules['ttd'] = 'image|max:1024';
+        }
+
         $this->validate();
         
         $this->data->name = $this->name;
@@ -58,8 +65,15 @@ class Edit extends Component
         $this->data->is_supervisor = $this->is_supervisor;
         $this->data->save();
 
+        if($this->ttd){
+            $ttd = 'ttd.'.$this->ttd->extension();
+            $this->ttd->storePubliclyAs("public/ttd/{$this->data->id}",$ttd);
+            $this->data->ttd ="storage/ttd/{$this->data->id}/{$ttd}";
+            $this->data->save();
+        }
+
         session()->flash('message-success',__('Data saved successfully'));
         
-        return redirect()->to('users');
+        return redirect()->route('users.edit',['id'=>$this->data->id]);
     }
 }

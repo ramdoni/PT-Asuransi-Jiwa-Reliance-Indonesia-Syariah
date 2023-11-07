@@ -72,12 +72,18 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>No Peserta Awal</label>
-                            <input type="text" class="form-control" wire:model="nama_bank" />
-                            @error('nama_bank')
+                            <input type="text" class="form-control" wire:model="no_peserta_awal" />
+                            @error('no_peserta_awal')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                             @enderror
                         </div>
-                        
+                        <div class="form-group col-md-6">
+                            <label>No Peserta Akhir</label>
+                            <input type="text" class="form-control" wire:model="no_peserta_akhir" />
+                            @error('no_peserta_awal')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
                     <hr>
                     <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
