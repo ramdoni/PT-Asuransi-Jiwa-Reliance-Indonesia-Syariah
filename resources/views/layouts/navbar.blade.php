@@ -56,7 +56,15 @@
                         @if (\Auth::user()->user_access_id == 2)
                             <!-- Head Underwriting -->
                             <li><a href="{{ route('polis.index') }}" class="text-info">Pemegang Polis</a></li>
-                            <li><a href="{{ route('pengajuan.index') }}" class="text-info icon-menu px-1">Pengajuan</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Pengajuan</a>
+                                <ul class="dropdown-menu user-menu menu-icon">
+                                    <li><a href="{{ route('pengajuan.index') }}">Penambahan Kepesertaan</a></li>
+                                    <li><a href="{{ route('memo-cancel.index') }}">Pembatalan Kepesertaan</a></li>
+                                    <li><a href="{{ route('memo-refund.index') }}">Pengurangan / Refund</a></li>
+                                    <li><a href="{{ route('reas.index') }}">Reas</a></li>
+                                </ul>
+                            </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
@@ -71,7 +79,15 @@
                         @if (\Auth::user()->user_access_id == 3)
                             <!-- Head Teknik -->
                             <li><a href="{{ route('polis.index') }}" class="text-info px-1 icon-menu" class="text-info icon-menu px-1"> Pemegang Polis </a></li>
-                            <li><a href="{{ route('pengajuan.index') }}" class="text-info icon-menu px-1">Pengajuan</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Pengajuan</a>
+                                <ul class="dropdown-menu user-menu menu-icon">
+                                    <li><a href="{{ route('pengajuan.index') }}">Penambahan Kepesertaan</a></li>
+                                    <li><a href="{{ route('memo-cancel.index') }}">Pembatalan Kepesertaan</a></li>
+                                    <li><a href="{{ route('memo-refund.index') }}">Pengurangan / Refund</a></li>
+                                    <li><a href="{{ route('reas.index') }}">Reas</a></li>
+                                </ul>
+                            </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
                             <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
@@ -100,6 +116,8 @@
                                 <ul class="dropdown-menu user-menu menu-icon">
                                     <li><a href="{{ route('pengajuan.index') }}">Penambahan Kepesertaan</a></li>
                                     <li><a href="{{ route('memo-cancel.index') }}">Pembatalan Kepesertaan</a></li>
+                                    <li><a href="{{ route('memo-refund.index') }}">Pengurangan / Refund</a></li>
+                                    <li><a href="{{ route('reas.index') }}">Reas</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>

@@ -104,7 +104,7 @@ class Index extends Component
             // $data->save();
             $increment = get_setting('running_number_memo_ujroh') + 1;
             # 000646/UWS-M/AJRI-US/VIII/2023
-            $data->nomor = str_pad($increment,6, '0', STR_PAD_LEFT) ."/UWS-M/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
+            $data->nomor = str_pad($increment,6, '0', STR_PAD_LEFT) ."/UWS-M/AJRI-US/".numberToRomawi(date('m')).'/'.date('Y');
             $data->save();
             
             update_setting('running_number_memo_ujroh',$increment);
