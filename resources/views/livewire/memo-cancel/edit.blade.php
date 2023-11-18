@@ -11,28 +11,54 @@
                             {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}</p>
                     </div>
                     <div class="form-group border-bottom">
-                        <p>    
-                            <strong>Tanggal Pengajuan</strong><br />
-                            {{date('d M Y',strtotime($data->tanggal_pengajuan))}}
-                        </p>
+                        <div class="row mb-2">
+                            <div class="col-md-6">    
+                                <strong>Tanggal Pengajuan</strong><br />
+                                {{date('d M Y',strtotime($data->tanggal_pengajuan))}}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Tanggal Efektif</strong><br />
+                                {{date('d M Y',strtotime($data->tanggal_efektif))}}
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group border-bottom">
-                        <p>
-                            <strong>Tanggal Efektif</strong><br />
-                            {{date('d M Y',strtotime($data->tanggal_efektif))}}
-                        </p>
+                        <label for="">Perihal</label><br />
+                        {{$data->perihal_internal_memo}}
+                    </div>
+                    <div class="row border-bottom">
+                        <div class="form-group col-md-6">
+                            <label>Tujuan Pembayaran</label><br />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Nama Bank</label><br />
+                            {{$data->tujuan_pembayaran}}
+                        </div>
+                    </div>
+                    <div class="row  border-bottom">
+                        <div class="form-group col-md-6">
+                            <label>Nomor Rekening</label><br />
+                            {{$data->no_rekening}}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Tgl Jatuh Tempo</label><br />
+                            {{date('d M Y',strtotime($data->tgl_jatuh_tempo))}}
+                        </div>
                     </div>
                     <div class="form-group border-bottom">
                         <p>
                             <strong>Status : </strong>
                             @if($data->status==0)
-                                <span class="badge badge-warning">Head Teknik</span>
+                                <span class="badge badge-warning">Undewriting</span>
                             @endif
                             @if($data->status==1)
-                                <span class="badge badge-warning">Head Syariah</span>
+                                <span class="badge badge-info">Head Teknik</span>
                             @endif
                             @if($data->status==2)
-                                <span class="badge badge-success">Selesai</span>
+                                <span class="badge badge-danger">Head Syariah</span>
+                            @endif
+                            @if($data->status==3)
+                                <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                             @endif
                         </p>
                     </div>
@@ -64,7 +90,6 @@
                             <textarea class="form-control" wire:model="note"></textarea>
                         </div>
                     @endif
-                    <hr>
                     <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <span wire:loading wire:target="submit_head_teknik,submit_head_syariah">
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -91,15 +116,17 @@
                             <tr>
                                 <th></th>
                                 <th>No</th>
-                                <th>Status</th>
-                                <th>No Peserta</th>
-                                <th>Nama</th>
-                                <th>Mulai Asuransi</th>
-                                <th>Akhir Asuransi</th>
-                                <th class="text-center">Masa Asuransi</th>
-                                <th class="text-right">Nilai Manfaat Asuransi</th>
-                                <th class="text-right">Pengembalian Kontribusi</th>
-                                <th></th>
+                                <th>NO PESERTA</th>
+                                <th>NAMA PESERTA</th>
+                                <th>TGL. LAHIR</th>
+                                <th>USIA</th>
+                                <th>MULAI ASURANSI</th>
+                                <th>AKHIR ASURANSI</th>
+                                <th class="text-right">NILAI MANFAAT ASURANSI</th>
+                                <th class="text-right">TOTAL KONTRIBUSI</th>
+                                <th class="text-right">PENGEMBALIAN KONTRIBUSI</th>
+                                <th class="text-right">PENGEMBALIAN KONTRIBUSI NETTO</th>
+                                <th class="text-center">UW LIMIT</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,15 +141,15 @@
                                             <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
                                         </td>
                                         <td>{{$k+1}}</td>
-                                        <td>
-                                            {{$item['status_polis']}}
-                                        </td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
+                                        <td>{{$item->usia}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
-                                        <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                         <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
                                     </tr>
                                 @endforeach
@@ -132,6 +159,7 @@
                             <tr>
                                 <th colspan="8" class="text-right">Total</th>
                                 <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
+                                <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
                                 <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
                             </tr>
                         </tfoot>

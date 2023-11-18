@@ -33,6 +33,7 @@ class Draft extends Component
     {
         $this->reassign = $bol;
     }
+    
     public function checked_all()
     {
         if($this->check_all==1){
@@ -40,6 +41,7 @@ class Draft extends Component
                 $this->assign_id[$item->id] = $item->id;
             }
         }
+
         if($this->check_all==0){
             $this->assign_id = [];
         }

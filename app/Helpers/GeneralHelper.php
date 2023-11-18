@@ -9,6 +9,11 @@ function rc_reas_status($status)
     return @$arr[$status];
 }
 
+function get_user($id)
+{
+    return \App\Models\User::find($id);
+}
+
 function source_api($k){
     $source  = [1=>'PAN'];
     return @$source[$k];

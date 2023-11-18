@@ -124,16 +124,16 @@
                     <tr>
                         <td style="padding-right: 10px;">No. Credit Note</td>
                         <td> : </td>
-                        <td>{{$data->nomor_internal_memo}}</td>
+                        <td>{{$data->nomor_cn}}</td>
                     </tr>
                     <tr>
                         <td>Perihal</td>
                         <td> : </td>
-                        <th>{{$data->perihal_internal_memo}}</th>
+                        <td>{{$data->perihal_internal_memo}}</td>
                     </tr>
                 </table>
                 <hr />
-                <p>Dengan hormat,<br />
+                <p style="text-align:justify;">Dengan hormat,<br />
                 Bersama ini disampaikan Daftar Pembatalan Peserta dan Credit Note atas Pembatalan Peserta sejak awal sesuai dengan pengajuan melalui email pada tanggal 
                 {{date('d F Y',strtotime($data->tanggal_pengajuan))}}, mohon dapat dilakukan pembayaran dengan data sebagai berikut:
                 </p>
@@ -156,7 +156,9 @@
                     <tr>
                         <td>No Debit Note</td>
                         <td> : </td>
-                        <td></td>
+                        <td>
+                            {{implode(",", $no_dn)}}
+                        </td>
                         <td>Total Kontribusi Gross Cancel</td>
                         <td>Rp</td>
                         <td>{{format_idr($data->total_kontribusi_gross)}}</td>
@@ -164,7 +166,9 @@
                     <tr>
                         <td>Tgl Debit Note</td>
                         <td> : </td>
-                        <td></td>
+                        <td>
+                            {{implode(",", $tanggal_dn)}}
+                        </td>
                         <td>Kontribusi Tambahan</td>
                         <td></td>
                         <td></td>
@@ -172,9 +176,9 @@
                     <tr>
                         <td>Kontribusi DN</td>
                         <td> : </td>
-                        <td></td>
+                        <td>{{format_idr($kontribusi_dn)}}</td>
                         <td>Potongan Langsung</td>
-                        <td>{{$data->polis->potongan_langsung}}%</td>
+                        <td>{{$data->polis->potong_langsung}}%</td>
                         <td>{{format_idr($data->total_potongan_langsung)}}</td>
                     </tr>
                     <tr>
@@ -199,7 +203,11 @@
                         <td>
                             {{$no_peserta_awal}}
                         </td>
-                        <td>s/d</td>
+                        <td>
+                            @if($data->total_peserta>1)
+                                s/d
+                            @endif
+                        </td>
                         <td>
                             @if($data->total_peserta>1)
                                 {{$no_peserta_akhir}}
@@ -260,7 +268,34 @@
                     </tr>
                     <tr>
                         <td colspan="3" style="padding-top:20px;"><strong>TOTAL PEMBAYARAN CREDIT NOTE</strong></td>
-                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi_gross)}}</td>
+                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi)}}</td>
+                    </tr>
+                </table>
+                <p>Demikian disampaikan,atas perhatian dan kerjasamanya diucapkan terima kasih.</p>
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="position:relative;width:70%;">
+                            Hormat kami
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <img src="{{public_path('assets/img/ttd-arif.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
+                            <br>
+                            <br>
+                            <strong style="z-index: 3">Muhammad Arif</strong>
+                            <br>
+                            <span style="z-index: 3">Dept. Underwriting Syariah</span>
+                        </td>
+                        <td style="width:30%;">
+                            Diterima oleh,<br />
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            (.....................................) <br>
+                            Div. Finance
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -317,6 +352,7 @@
                                 <td>PPH</td>
                             </tr>
                         </table>
+                        <br>
                     </td>
                     <td style="width: 180px;">
                         <table style="width:100%;margin-top: 45px;">
@@ -342,15 +378,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="border-right:1px solid;border-top:1px solid;border-bottom:1px solid;">
+                    <td style="border-right:1px solid;border-top:1px solid;border-bottom:1px solid;text-align:center">
                         <strong>Total Refund Kontribusi</strong>
                     </td>
-                    <td style="border-top:1px solid;border-bottom: 1px solid;text-align:right;">
-                        {{format_idr($data->total_manfaat_asuransi-$data->total_potongan_langsung)}}
+                    <td style="border-top:1px solid;border-bottom: 1px solid;text-align:right;font-weight:bold;">
+                        {{format_idr($data->total_kontribusi)}}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($data->total_manfaat_asuransi)}}</td>
+                    <td colspan="2" style="text-align:center">Terbilang : {{terbilang($data->total_kontribusi)}}</td>
                 </tr>
             </table>
             <div style="position: relative;">
@@ -441,7 +477,7 @@
                                 <td>No. Peserta</td>
                                 <td> : </td>
                                 <td class="text-right"> {{$no_peserta_awal}}</td>
-                                <td>s/d</td>
+                                <td>@if($no_peserta_akhir) s/d @endif</td>
                                 <td>{{$no_peserta_akhir}}</td>
                             </tr>
                             <tr>
@@ -466,11 +502,11 @@
                     <th class="text-left">Credit Note</th>
                 </tr>
             </table>
-            <p>
+            <p style="text-align:justify">
                 Dapat diinformasikan bahwa seluruh peserta dalam daftar pembatalan peserta asuransi kumpulan diberlakukan efektif pembatalan per tanggal 
-                {{$data->tanggal_efektif ? date('d F Y',strtotime($data->tanggal_efektif)) : '-'}}.<br />
-                Apabila terdapat pertanyaan, silahkan menghubungi kami pada hotline 021-5793 0008, di hari Senin - Jumat pukul 09:00 - 17:00 WIB dengan DIV. Underwriting Unit Syariah
+                {{$data->tanggal_efektif ? date('d F Y',strtotime($data->tanggal_efektif)) : '-'}}.
             </p>
+            <p>Apabila terdapat pertanyaan, silahkan menghubungi kami pada hotline 021-5793 0008, di hari Senin - Jumat pukul 09:00 - 17:00 WIB dengan DIV. Underwriting Unit Syariah</p>
             <p>Demikian disampaikan, atas perhatian dan kerjasamanya diucapkan terima kasih.</p>
             <div style="position:relative;">
                 <p>
@@ -527,7 +563,6 @@
                     <th>PENGEMBALIAN KONTRIBUSI</th>
                     <th>PENGEMBALIAN KONTRIBUSI NETTO</th>
                     <th>UW LIMIT</th>
-                    <th>KETERANGAN</th>
                 </tr>
                 @foreach($data->kepesertaan as $k => $item)
                     <tr>
@@ -543,7 +578,6 @@
                         <td class="text-right">{{format_idr($item->kontribusi)}}</td>
                         <td class="text-right">{{format_idr($item->total_kontribusi_dibayar)}}</td>
                         <td>{{$item->uw}}</td>
-                        <td>{{$item->keterangan}}</td>
                     </tr>
                 @endforeach
                 <tfoot>
@@ -561,10 +595,26 @@
                         <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
                         <th></th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </tfoot>
             </table>
+            <br /><br /><br />
+
+            <div class="text-center" style="position:relative;float: right;width:200px;">
+                <p>
+                    <span style="z-index:3;">Jakarta {{date('d F Y',strtotime($data->tanggal_pengajuan))}},</span> <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <img src="{{public_path('assets/img/ttd-underwriting.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
+                    <p>
+                        <hr />
+                        Underwriting
+                    </p>
+                    <br />
+                </p>
+            </div>
             <img src="{{public_path('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
         </div>
     </body>
