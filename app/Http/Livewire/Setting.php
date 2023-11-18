@@ -20,7 +20,7 @@ class Setting extends Component
     public $phone;
     public $website;
     public $address,$running_number_nota_penutupan,$running_number_sb,$running_surat,$running_number_memo_ujroh,
-            $running_number_refund,$running_number_refund_cn;
+            $running_number_refund,$running_number_refund_cn,$running_number_dn_recovery_claim;
     public function render()
     {
         return view('livewire.setting')->with(['title'=>'General']);
@@ -41,6 +41,8 @@ class Setting extends Component
         $this->running_number_memo_ujroh = get_setting('running_number_memo_ujroh');
         $this->running_number_refund = get_setting('running_number_refund');
         $this->running_number_refund_cn = get_setting('running_number_refund_cn');
+        $this->running_number_recovery_claim = get_setting('running_number_recovery_claim');
+        $this->running_number_dn_recovery_claim = get_setting('running_number_dn_recovery_claim');
 
         \LogActivity::add("Setting");
     }
@@ -64,7 +66,9 @@ class Setting extends Component
         update_setting('running_number_memo_ujroh',$this->running_number_memo_ujroh);
         update_setting('running_number_refund',$this->running_number_refund);
         update_setting('running_number_refund_cn',$this->running_number_refund_cn);
-
+        update_setting('running_number_recovery_claim',$this->running_number_recovery_claim);
+        update_setting('running_number_dn_recovery_claim',$this->running_number_dn_recovery_claim);
+        
         \LogActivity::add("Setting Update Polis");
 
         session()->flash('message-success',__('Data saved successfully'));

@@ -1,5 +1,5 @@
 @section('sub-title', 'Index')
-@section('title', 'Recovery Klaim')
+@section('title', 'Klaim Reasuransi')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -13,25 +13,23 @@
                             <div class="dropdown-menu show-form-filter" x-show="open_dropdown">
                                 <form class="p-2">
                                     <div class="from-group my-2">
-                                        <input type="text" class="form-control" wire:model="filter_keyword" placeholder="Keyword" />
-                                    </div>
-                                    {{-- <div class="from-group my-2">
-                                        <select class="form-control" wire:model="filter_status">
-                                            <option value=""> -- Status -- </option>
-                                            <option value="0"> Underwriting</option>
-                                            <option value="1"> Head Teknik</option>
-                                            <option value="2"> Head Syariah</option>
-                                            <option value="3"> Selesai</option>
-                                            <option value="4"> Migrasi</option>
+                                        <select class="form-control" wire:model="filter.reas_status">
+                                            <option value="">-- Status -- </option>
+                                            <option value="0">Submitted</option>
+                                            <option value="1">Terkirim</option>
+                                            <option value="2">Batal</option>
+                                            <option value="3">Pending</option>
+                                            <option value="4">Tolak</option>
                                         </select>
-                                    </div> --}}
+                                    </div>
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <a href="{{route('klaim.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
+                        <a href="{{route('recovery-claim.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
+                        <a href="javascript:void(0)" class="btn btn-warning" wire:click="downloadExcel"><i class="fa fa-download"></i> Download</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
@@ -42,61 +40,60 @@
             <div class="body">
                 <div class="table-responsive">
                     <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="background: #eee;vertical-align:middle">
+                        <thead style="vertical-align:middle;background: #eeeeee54">
                             <tr>
-                                <th>No</th>
-                                <th class="text-center">Status</th>
-                                <th>No Pengajuan</th>
-                                <th>No Klaim</th>
-                                <th>No Reas</th>
-                                <th>No Polis</th>
-                                <th>Pemegang Polis</th>
-                                <th>No Peserta</th>
-                                <th>Nama Peserta</th>
-                                <th>Masa Asuransi</th>
-                                <th>Tanggal Klaim</th>
-                                <th>Tanggal Meninggal</th>
-                                <th class="text-right">Nilai Klaim</th>
-                                <th></th>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Status</th>
+                                <th colspan="3" class="text-center">Kirim Reas</th>
+                                <th rowspan="2">No Pengajuan</th>
+                                <th rowspan="2">No Polis</th>
+                                <th rowspan="2">Pemegang Polis</th>
+                                <th rowspan="2">No Peserta</th>
+                                <th rowspan="2">Nama Peserta</th>
+                                <th rowspan="2" class="text-right">Nilai Klaim</th>
+                                <th rowspan="2"></th>
+                            </tr>
+                            <tr>
+                                <th>Tanggal Kirim</th>
+                                <th>Tanggal Jawaban</th>
+                                <th>Tanggal Penerimaan</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $k => $item)
                                 <tr>
-                                    <td style="width: 50px;">{{$k+1}}</td>
-                                    <td class="text-center">
-                                        @if($item->status==1)
-                                            <span class="badge badge-warning">Unpaid</span>
-                                        @endif
-                                        @if($item->status==2)
-                                            <span class="badge badge-success">Paid</span>
-                                        @endif
-                                    </td>
-                                    <td><a href="{{route('klaim.edit', $item->id)}}" target="_blank">{{$item->no_pengajuan}}</a></td>
+                                    <td style="width: 50px;">{{$k+1}}</td>  
                                     <td>
-                                        @if(isset($item->klaim->no_pengajuan))
-                                            <a href="{{route('klaim.edit',$item->klaim_id)}}" target="_blank">{{ $item->klaim->no_pengajuan }}</a>
-                                        @else
-                                            -
+                                        @if($item->reas_status==0)
+                                            <span class="badge badge-default">Submitted</span>
+                                        @endif
+                                        @if($item->reas_status==1)
+                                            <span class="badge badge-success">Terima</span>
+                                        @endif
+                                        @if($item->reas_status==2)
+                                            <span class="badge badge-info">Batal</span>
+                                        @endif
+                                        @if($item->reas_status==3)
+                                            <span class="badge badge-warning">Pending</span>
+                                        @endif
+                                        @if($item->reas_status==4)
+                                            <span class="badge badge-danger">Tolak</span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if(isset($item->reas->no_pengajuan))
-                                            <a href="{{route('reas.edit',$item->reas_id)}}" target="_blank">{{ $item->reas->no_pengajuan }}</a>
-                                        @else
-                                            -
-                                        @endif
+                                        {{$item->reas_tanggal_kirim ? date('d M Y',strtotime($item->reas_tanggal_kirim)) : '-'}}
                                     </td>
-                                    <td><a href="{{route('polis.edit',$item->polis_id)}}" target="_blank">{{isset($item->polis->no_polis) ? $item->polis->no_polis : '-'}}</a></td>
-                                    <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
-                                    <td>{{isset($item->kepesertaan->no_peserta) ? $item->kepesertaan->no_peserta : '-'}}</td>
-                                    <td>{{isset($item->kepesertaan->nama) ? $item->kepesertaan->nama : '-'}}</td>
-                                    <td class="text-center">{{isset($item->kepesertaan->masa_bulan) ? $item->kepesertaan->masa_bulan : '-'}}</td>
-                                    <td>{{date('d-F-Y',strtotime($item->created_at))}}</td>
-                                    <td>{{isset($item->klaim->tanggal_meninggal) ? date('d-F-Y',strtotime($item->klaim->tanggal_meninggal)) : '-'}}</td>
+                                    <td>{{$item->reas_tanggal_jawaban ? date('d M Y',strtotime($item->reas_tanggal_jawaban)) : '-'}}</td>
+                                    <td>{{$item->reas_tanggal_penerimaan ? date('d M Y',strtotime($item->reas_tanggal_penerimaan)) : '-'}}</td>
+                                    <td><a href="{{route('recovery-claim.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
+                                    <td><a href="{{route('polis.edit',$item->polis_id)}}" target="_blank">{{isset($item->polis->no_polis) ? Str::limit($item->polis->no_polis,50) : '-'}}</a></td>
+                                    <td>{{isset($item->polis->nama) ? Str::limit($item->polis->nama,25) : '-'}}</td>
+                                    <td>{{ isset($item->kepesertaan->no_peserta) ? $item->kepesertaan->no_peserta : '-' }}</td>
+                                    <td>{{ isset($item->kepesertaan->nama) ? $item->kepesertaan->nama : '-' }}</td>
                                     <td class="text-right">{{format_idr($item->nilai_klaim)}}</td>
                                     <td>
-
+                                        <a href="{{route('recovery-claim.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i> Print DN</a>
+                                        <a href="javacript:void(0)" class="ml-2" data-target="#modal_confirm_delete" wire:click="$set('selected_id',{{$item->id}})" data-toggle="modal"><i class="fa fa-trash text-danger"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

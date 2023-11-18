@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Income;
+use App\Models\RecoveryClaim;
 
 class RecoveryController extends Controller
 {
@@ -52,4 +53,15 @@ class RecoveryController extends Controller
         }
         return response()->json($temp, 200);
     }
+
+    public function printDN(RecoveryClaim $id)
+    {
+        $param['data'] = $id;
+        $pdf = \App::make('dompdf.wrapper');
+        
+        $pdf->loadView('livewire.recovery-claim.print-dn',$param)->setPaper('a4', 'portrait');;
+
+        return $pdf->stream();
+    }
+
 }

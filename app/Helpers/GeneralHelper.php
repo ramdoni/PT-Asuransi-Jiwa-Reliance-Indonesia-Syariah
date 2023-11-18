@@ -2,6 +2,13 @@
 use App\Models\User;
 use App\Models\UserOtp;
 
+function rc_reas_status($status)
+{
+    $arr = [0=>'Kirim',1=>'Terima',2=>'Batal',3=>'Pending',4=>'Tolak'];
+
+    return @$arr[$status];
+}
+
 function source_api($k){
     $source  = [1=>'PAN'];
     return @$source[$k];

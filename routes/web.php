@@ -76,7 +76,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('klaim/print-memo/{id}',[App\Http\Controllers\KlaimController::class,'printMemo'])->name('klaim.print-memo');
     Route::get('klaim-reason',App\Http\Livewire\KlaimReason\Index::class)->name('klaim-reason.index');
     Route::get('klaim/pengaturan',App\Http\Livewire\Klaim\Pengaturan::class)->name('klaim.pengaturan');
+    
     Route::get('recovery-claim',App\Http\Livewire\RecoveryClaim\Index::class)->name('recovery-claim.index');
+    Route::get('recovery-claim/insert',App\Http\Livewire\RecoveryClaim\Insert::class)->name('recovery-claim.insert');
+    Route::get('recovery-claim/edit/{id}',App\Http\Livewire\RecoveryClaim\Edit::class)->name('recovery-claim.edit');
 
     Route::get('rate-broker',App\Http\Livewire\RateBroker\Index::class)->name('rate-broker.index');
     Route::get('custom-report',App\Http\Livewire\CustomReport\Index::class)->name('custom-report.index');
@@ -96,7 +99,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('memo-ujroh/print/{id}',[App\Http\Controllers\MemoUjrohController::class,'printPengajuan'])->name('memo-ujroh.print-pengajuan');
     Route::get('memo-cancel/print/{id}',[App\Http\Controllers\MemoCancelController::class,'printPengajuan'])->name('memo-cancel.print-pengajuan');
     Route::get('memo-refund/print/{id}',[App\Http\Controllers\MemoRefundController::class,'printPengajuan'])->name('memo-refund.print-pengajuan');
+    Route::get('recovery-claim/print-dn/{id}',[App\Http\Controllers\RecoveryController::class,'printDN'])->name('recovery-claim.print-dn');
     Route::get('api/get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('api.get-kepesertaan');
+    Route::get('api/get-klaim-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'klaimKepesertaan'])->name('api.get-klaim-kepesertaan');
 });
 
 // Administrator
@@ -109,63 +114,4 @@ Route::group(['middleware' => ['auth','access:1']], function(){
     Route::get('users/edit/{id}',App\Http\Livewire\User\Edit::class)->name('users.edit');
     Route::post('users/autologin/{id}',[App\Http\Livewire\User\Index::class,'autologin'])->name('users.autologin');
     Route::get('log-activity',App\Http\Livewire\LogActivity\Index::class)->name('log-activity');
-});
-
-Route::post('wa',function(Illuminate\Http\Request $r){
-
-    header("Content-Type: text/plain");
-
-    $data['message'] = 'success';
-    
-    \LogActivity::add('[webhook] Inbound WA');
-
-    // $content = json_decode(file_get_contents('php://input'), true);
-    // $find = explode(':',$content['message']);
-
-    // if($find[0]=='iot' and isset($find[1])){
-    //     send_wa(['phone'=>'628881264670','message'=>$find[1]]);
-    // }
-
-    return response()->json($data,200);
-    
-    // header("Content-Type: text/plain");
-    /**
-    * all data POST sent from  https://solo.wablas.com
-    * you must create URL what can receive POST data
-    * we will sent data like this:
-
-    * id = message ID - string
-    * phone = sender phone - string
-    * message = content of message - string
-    * pushName = Sender Name like contact name - string (optional)
-    * groupSubject = Group Name - string (optional)
-    * timestamp = time send message
-    * file = name of the file when receiving media message (optional)
-    * url = url file media message (optional)
-    * messageType = text/image/document/video/audio/location - string
-    * mimeType = type file (optional)
-    * deviceId = unix ID device
-    * sender = phone number device - integer
-    */
-    // $content = json_decode(file_get_contents('php://input'), true);
-
-    // $id = $content['id'];
-    // $pushName = $content['pushName'];
-    // $isGroup = $content['isGroup'];
-    // if ($isGroup == true) {
-    //     $subjectGroup = $content['group']['subject'];
-    //     $ownerGroup = $content['group']['owner'];
-    //     $decriptionGroup = $content['group']['desc'];
-    //     $partisipanGroup = $content['group']['participants'];
-    // }
-    // $message = $content['message'];
-    // $phone = $content['phone'];
-    // $messageType = $content['messageType'];
-    // $file = $content['file'];
-    // $mimeType = $content['mimeType'];
-    // $deviceId = $content['deviceId'];
-    // $sender = $content['sender'];
-    // $timestamp = $content['timestamp'];
-
-    // return $message;
 });

@@ -14,6 +14,7 @@ class Klaim extends Model
     use HasFactory;
 
     protected $table = 'klaim';
+    protected $guarded = [];  
 
     public function polis()
     {

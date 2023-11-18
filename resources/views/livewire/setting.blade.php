@@ -114,6 +114,14 @@
                                     <label>Running Nomor Refund CN</label>
                                     <input type="text" class="form-control" placeholder="" wire:model="running_number_refund_cn">
                                 </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Recovery Claim</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_recovery_claim">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor DN Recovery Claim</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_dn_recovery_claim">
+                                </div>
                                 <div class="col-12">
                                     <hr />
                                     <button type="submit" class="btn btn-info">Simpan Perubahan</button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kepesertaan;
+use App\Models\Klaim;
 use Illuminate\Http\Request;
 
 class KepesertaanController extends Controller
@@ -13,7 +14,7 @@ class KepesertaanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   
         $keyword = isset($_GET['search']) ? $_GET['search'] : '';
         
@@ -43,5 +44,26 @@ class KepesertaanController extends Controller
         }
 
         return response()->json(['message'=>'success','items'=>$items,'total_count'=>count($items)], 200);
+    }
+
+    public function klaimKepesertaan(Request $request)
+    {   
+        if(!isset($request->polis_id)) return response()->json(['message'=>'success','items'=>[],'total_count'=>0], 200);
+
+        $data = Klaim::selectRaw("klaim.id,kepesertaan.nama as name,CONCAT(kepesertaan.no_peserta,' / ', kepesertaan.nama) as text")
+                        ->where([
+                            'klaim.polis_id'=>$request->polis_id,
+                            'status_pengajuan'=>1
+                        ])->with(['polis'])
+                        ->where(function($table) use($request){
+                            if(isset($request->search)){
+                                $table->where('kepesertaan.no_peserta','LIKE',"%{$request->search}%")->orWhere('kepesertaan.nama','LIKE',"%{$request->search}%");
+                            }
+                        })
+                        ->whereNull('kepesertaan.recovery_claim_id')
+                        ->join('kepesertaan','kepesertaan.id','=','klaim.kepesertaan_id')->get()
+                        ->toArray();
+
+        return response()->json(['message'=>'success','items'=>$data,'total_count'=>count($data)], 200);
     }
 }
