@@ -18,7 +18,7 @@ class Edit extends Component
     public $telepon;
     public $address;
     public $user_access_id;
-    public $message,$is_supervisor,$ttd;
+    public $message,$is_supervisor,$ttd,$jabatan;
 
     protected $rules = [
         'name' => 'required|string',
@@ -46,6 +46,7 @@ class Edit extends Component
         $this->address = $this->data->address;
         $this->user_access_id = $this->data->user_access_id;
         $this->is_supervisor = $this->data->is_supervisor;
+        $this->jabatan = $this->data->jabatan;
     }
 
     public function save(){
@@ -63,6 +64,7 @@ class Edit extends Component
         $this->data->address = $this->address;
         $this->data->user_access_id = $this->user_access_id;
         $this->data->is_supervisor = $this->is_supervisor;
+        $this->data->jabatan = $this->jabatan;
         $this->data->save();
 
         if($this->ttd){

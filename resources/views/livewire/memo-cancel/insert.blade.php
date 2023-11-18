@@ -83,6 +83,9 @@
         <div class="card">
             <div class="body">
                 <div class="table-responsive">
+                    @error('peserta')
+                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                    @enderror
                     <table class="table m-b-0 c_list table-nowrap" id="data_table">
                         <thead style="vertical-align:middle">
                             <tr>

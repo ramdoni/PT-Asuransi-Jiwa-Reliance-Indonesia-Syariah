@@ -82,5 +82,7 @@ class Skip extends Component
         if($this->check_all==0){
             $this->assign_id = [];
         }
+
+        $this->emit('data_assign_or_',$this->assign_id);
     }
 }

@@ -2,6 +2,12 @@
 use App\Models\User;
 use App\Models\UserOtp;
 
+
+function get_user($id)
+{
+    return \App\Models\User::find($id);
+}
+
 function source_api($k){
     $source  = [1=>'PAN'];
     return @$source[$k];

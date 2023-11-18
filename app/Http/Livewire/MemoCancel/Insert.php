@@ -118,8 +118,15 @@ class Insert extends Component
         $this->validate([
             'polis_id' => 'required',
             // 'peserta.*'=>'required',
+            "peserta"    => "required|array",
+            "peserta.*"  => "required",
             'tanggal_efektif' => 'required',
-            'tanggal_pengajuan' => 'required'
+            'tanggal_pengajuan' => 'required',
+            'perihal_internal_memo' => 'required',
+            'tujuan_pembayaran' => 'required',
+            'nama_bank' => 'required',
+            'no_rekening' => 'required',
+            'tgl_jatuh_tempo' => 'required'
         ]);
         try {
             \DB::transaction(function () {
@@ -135,23 +142,24 @@ class Insert extends Component
                 $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
                 $data->save();
 
-                $data->nomor = $polis->no_polis . '/'. str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                $data->nomor_cn = $polis->no_polis . '/'. str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
                 // 036/UW-M-CNCL/AJRIUS/X/2023
-                $data->no_internal_memo = str_pad($data->id,6, '0', STR_PAD_LEFT) ."UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
-
+                $data->nomor = str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+               
                 $total = 0;$total_kontribusi=0;$total_manfaat_asuransi = 0;$total_kontribusi_gross=0;$total_kontribusi_tambahan=0;
                 $total_potongan_langsung = 0;$total_ujroh_brokerage=0;$total_ppn=0;$total_pph=0;
                 foreach($this->peserta as $k => $item){
                     $peserta = Kepesertaan::find($item['id']);
                     if($peserta){
                         $peserta->memo_cancel_id = $data->id;
+                        $peserta->total_kontribusi_dibayar = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita;
                         $peserta->save();
                         $total++;
 
                         $total_kontribusi_gross += $peserta->kontribusi;
                         // $total_potongan_langsung += $peserta->jumlah_potongan_langsung;
                         $total_kontribusi_tambahan += $peserta->extra_kontribusi;
-                        $total_kontribusi += $peserta->total_kontribusi_dibayar;
+                        $total_kontribusi += $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita;;
                         $total_manfaat_asuransi += $peserta->basic;
                     }
                 }

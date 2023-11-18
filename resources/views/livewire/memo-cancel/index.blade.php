@@ -43,6 +43,7 @@
                                 <th>Date</th>
                                 <th class="text-center">Total Peserta</th>
                                 <th class="text-center">Total Manfaat Asuransi</th>
+                                <th class="text-center">Kontribusi</th>
                                 <th class="text-center">Kontribusi Gross Cancel</th>
                                 <th></th>
                             </tr>
@@ -79,6 +80,7 @@
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>
                                     <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>
+                                    <td class="text-right">{{format_idr($item->total_kontribusi_gross)}}</td>
                                     <td class="text-right">{{format_idr($item->total_kontribusi)}}</td>
                                     <td>
                                         <a href="{{route('memo-cancel.print-pengajuan',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
