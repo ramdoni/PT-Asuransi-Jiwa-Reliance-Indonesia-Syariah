@@ -83,7 +83,7 @@ class Insert extends Component
                 $running_number_dn = get_setting('running_number_dn_recovery_claim')+1;
     
                 update_setting('running_number_recovery_claim',$running_number);
-                update_setting('running_number_dn_recovery_claim',$running_number);
+                update_setting('running_number_dn_recovery_claim',$running_number_dn);
     
                 $no_pengajuan = "RC".date('dmy') .str_pad($running_number,6, '0', STR_PAD_LEFT);
                 // 0062/AJRIUS-DN-KLRS/XI/2023

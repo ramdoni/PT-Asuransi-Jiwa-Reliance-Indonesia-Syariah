@@ -129,7 +129,7 @@
                     <tr>
                         <td>Perihal</td>
                         <td> : </td>
-                        <td>{{$data->perihal_internal_memo}}</td>
+                        <td>Pembayaran Credit Note atas Pembatalan Peserta {{isset($data->polis->nama) ? $data->polis->nama : ''}}</td>
                     </tr>
                 </table>
                 <hr />

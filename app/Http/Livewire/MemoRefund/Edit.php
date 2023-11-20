@@ -8,7 +8,7 @@ use App\Models\ReasRefund;
 
 class Edit extends Component
 {
-    public $note;
+    public $note,$tujuan_pembayaran,$nama_bank,$tgl_jatuh_tempo;
     
     public function render()
     {
@@ -18,6 +18,25 @@ class Edit extends Component
     public function mount(Refund $id)
     {
         $this->data = $id;
+        $this->tujuan_pembayaran = $id->tujuan_pembayaran;
+        $this->nama_bank = $id->nama_bank;
+        $this->no_rekening = $id->no_rekening;
+        $this->tgl_jatuh_tempo = $id->tgl_jatuh_tempo;
+    }
+
+    public function update_data()
+    {
+        $this->validate([
+            'tujuan_pembayaran' => 'required'
+        ]);
+
+        $this->data->tujuan_pembayaran = $this->tujuan_pembayaran;
+        $this->data->nama_bank = $this->nama_bank;
+        $this->data->no_rekening = $this->no_rekening;
+        $this->data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
+        $this->data->save();
+
+        $this->emit('message-success','Data Updated.');
     }
 
     public function submit_head_teknik()

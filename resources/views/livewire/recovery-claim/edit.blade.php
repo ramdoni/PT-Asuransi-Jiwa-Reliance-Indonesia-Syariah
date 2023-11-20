@@ -5,69 +5,92 @@
         <div class="card">
             <div class="body">
                 <form id="basic-form" method="post" wire:submit.prevent="submit">
-                    <div class="form-group border-bottom">
-                        <p>
+                    <div class="form-group border-bottom row">
+                        <div class="col-md-6">
                             <strong>{{ __('Polis') }}</strong><br />
-                            {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}</p>
+                            {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>No Klaim</strong><br />
+                            @if($data->klaim->no_pengajuan)
+                                <a href="{{route('klaim.edit',$data->klaim->id)}}" target="_blank">{{isset($data->klaim->no_pengajuan) ? $data->klaim->no_pengajuan : '-'}}</a>
+                            @endif
+                        </div>
                     </div>
                     <div class="form-group border-bottom row">
-                        <p class="col-md-6">    
-                            <strong>Tanggal Pengajuan</strong><br />
-                            {{date('d M Y',strtotime($data->tanggal_pengajuan))}}
+                        <p class="col-md-6">
+                            <strong>No Peserta</strong><br />
+                            {{isset($data->kepesertaan->no_peserta) ? $data->kepesertaan->no_peserta : '-'}}
                         </p>
-                        <p class="col-md-6">    
-                            <strong>Tujuan Pembayaran</strong><br />
-                            {{$data->tujuan_pembayaran}}
+                        <p class="col-md-6">
+                            <strong>Nama Peserta</strong><br />
+                            {{isset($data->kepesertaan->nama) ? $data->kepesertaan->nama : '-'}}
                         </p>
                     </div>
                     <div class="form-group border-bottom row">
-                        <p class="col-md-6">    
-                            <strong>Nama Bank</strong><br />
-                            {{$data->nama_bank}}
-                        </p>
-                        <p class="col-md-6">    
-                            <strong>No Rekening</strong><br />
-                            {{$data->no_rekening}}
-                        </p>
+                        <div class="col-md-6">
+                            <strong>Mulai Asuransi</strong><br />
+                            {{isset($data->kepesertaan->tanggal_mulai) ? date('d M Y',strtotime($data->kepesertaan->tanggal_mulai)) : '-'}}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Akhir Asuransi</strong><br />
+                            {{isset($data->kepesertaan->tanggal_akhir) ? date('d M Y',strtotime($data->kepesertaan->tanggal_akhir)) : '-'}}
+                        </div>
                     </div>
-                    <div class="form-group border-bottom">
-                    <p>
-                        <strong>No Klaim</strong><br />
-                        {{isset($data->klaim->no_pengajuan) ? $data->klaim->no_pengajuan : '-'}}
-                    </p>
-                </div>
-                <div class="form-group border-bottom row">
-                    <p class="col-md-6">
-                        <strong>No Peserta</strong><br />
-                        {{isset($data->kepesertaan->no_peserta) ? $data->kepesertaan->no_peserta : '-'}}
-                    </p>
-                    <p class="col-md-6">
-                        <strong>Nama Peserta</strong><br />
-                        {{isset($data->kepesertaan->nama) ? $data->kepesertaan->nama : '-'}}
-                    </p>
-                </div>
-                <div class="form-group border-bottom row">
-                    <div class="col-md-6">
-                        <strong>Mulai Asuransi</strong><br />
-                        {{isset($data->kepesertaan->tanggal_mulai) ? date('d M Y',strtotime($data->kepesertaan->tanggal_mulai)) : '-'}}
+                    <div class="form-group border-bottom row">
+                        <div class="col-md-6">
+                            <strong>Masa Asuransi</strong><br />
+                            {{isset($data->kepesertaan->masa_bulan) ? $data->kepesertaan->masa_bulan : '-'}}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Nilai Klaim</strong><br />
+                            {{format_idr($data->nilai_klaim)}}
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <strong>Akhir Asuransi</strong><br />
-                        {{isset($data->kepesertaan->tanggal_akhir) ? date('d M Y',strtotime($data->kepesertaan->tanggal_akhir)) : '-'}}
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Tanggal Pengajuan</label>
+                            <input type="date" class="form-control" wire:model="tanggal_pengajuan" />
+                            @error('tanggal_pengajuan')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Tgl Jatuh Tempo</label>
+                            <input type="date" class="form-control" wire:model="tgl_jatuh_tempo" />
+                            @error('tgl_jatuh_tempo')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
-                </div>
-                <div class="form-group border-bottom row">
-                    <div class="col-md-6">
-                        <strong>Masa Asuransi</strong><br />
-                        {{isset($data->kepesertaan->masa_bulan) ? $data->kepesertaan->masa_bulan : '-'}}
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Tujuan Pembayaran</label>
+                            <input type="text" class="form-control" wire:model="tujuan_pembayaran" />
+                            @error('tujuan_pembayaran')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Nama Bank</label>
+                            <input type="text" class="form-control" wire:model="nama_bank" />
+                            @error('nama_bank')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <strong>Nilai Klaim</strong><br />
-                        {{format_idr($data->nilai_klaim)}}
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Nomor Rekening</label>
+                            <input type="text" class="form-control" wire:model="no_rekening" />
+                            @error('no_rekening')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
-                </div>
                     <a href="{{route('recovery-claim.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
-                    <span wire:loading wire:target="submit_head_teknik,submit_head_syariah">
+                    <a href="javascript:void(0)" class="btn btn-info ml-2" wire:click="update_data"><i class="fa fa-save"></i> {{ __('Update') }}</a>
+                    <span wire:loading wire:target="submit_head_teknik,submit_head_syariah,update_data">
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <span class="sr-only">{{ __('Loading...') }}</span>
                     </span>
@@ -98,45 +121,41 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group border-bottom">
-                    <p>    
-                        <label>Tanggal Jawaban</label><br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="date" class="form-control" wire:model="reas_tanggal_jawaban" />
-                            </div>
-                            <div class="col-md-6">
-                                <input type="file" class="form-control" wire:model="reas_file_jawaban" />
-                                @if($data->reas_file_jawaban)
-                                    <a href="{{asset($data->reas_file_jawaban)}}" target="_blank"><i class="fa fa-download"></i> Download</a>
-                                @endif
-                            </div>
+                <div class="form-group border-bottom pb-2">
+                    <label>Tanggal Jawaban</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" wire:model="reas_tanggal_jawaban" />
                         </div>
-                        <input type="text" class="form-control mt-2" wire:model="reas_note_jawaban" placeholder="Note" />
-                    </p>
+                        <div class="col-md-6">
+                            <input type="file" class="form-control" wire:model="reas_file_jawaban" />
+                            @if($data->reas_file_jawaban)
+                                <a href="{{asset($data->reas_file_jawaban)}}" target="_blank"><i class="fa fa-download"></i> Download</a>
+                            @endif
+                        </div>
+                    </div>
+                    <input type="text" class="form-control mt-2" wire:model="reas_note_jawaban" placeholder="Note" />
                 </div>
-                <div class="form-group border-bottom">
-                    <p>    
-                        <label>Tanggal Penerimaan</label><br />
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="date" class="form-control" wire:model="reas_tanggal_penerimaan" />
-                            </div>
-                            <div class="col-md-6">
-                                <input type="file" class="form-control" wire:model="reas_file_penerimaan" />
-                                @if($data->reas_file_penerimaan)
-                                    <a href="{{asset($data->reas_file_penerimaan)}}" target="_blank"><i class="fa fa-download"></i> Download</a>
-                                @endif
-                            </div>
+                <div class="form-group">  
+                    <label>Tanggal Penerimaan</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" wire:model="reas_tanggal_penerimaan" />
                         </div>
-                        <input type="text" class="form-control mt-2" wire:model="reas_note_penerimaan" placeholder="Note" />
-                    </p>
+                        <div class="col-md-6">
+                            <input type="file" class="form-control" wire:model="reas_file_penerimaan" />
+                            @if($data->reas_file_penerimaan)
+                                <a href="{{asset($data->reas_file_penerimaan)}}" target="_blank"><i class="fa fa-download"></i> Download</a>
+                            @endif
+                        </div>
+                    </div>
+                    <input type="text" class="form-control mt-2" wire:model="reas_note_penerimaan" placeholder="Note" />
                 </div>
                 <span wire:loading wire:target="update">
                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                     <span class="sr-only">{{ __('Loading...') }}</span>
                 </span>
-                <a href="javascript:void(0)" wire:loading.remove wire:target="update" wire:click="update" class="btn btn-info">
+                <a href="javascript:void(0)" wire:loading.remove wire:target="update" wire:click="update" class="btn btn-warning">
                 <i class="fa fa-save"></i> Update Status</a>
             </div>
         </div>
@@ -162,10 +181,21 @@
                         </tr>
                     @endforeach
                     @if($payments->count()>0)
-                        <tfoot style="border-top:1px solid #eee;">
+                        <tfoot style="border-top:1px solid #eee;background: #eee;">
                             <tr>
                                 <th class="text-right">Total</th>
-                                <th class="text-right">{{format_idr($payments->sum('payment_amount'))}}</th>
+                                <td class="text-right">{{format_idr($payments->sum('payment_amount'))}}</td>
+                                <td></td>
+                            <tr>
+                            <tr>
+                                <th class="text-right">Nilai Klaim</th>
+                                <td class="text-right">{{format_idr($data->nilai_klaim)}}</td>
+                                <td></td>
+                            <tr>
+                            <tr>
+                                <th class="text-right">Outstanding</th>
+                                <td class="text-right">{{format_idr($data->nilai_klaim - $payments->sum('payment_amount'))}}</td>
+                                <td></td>
                             <tr>
                         </tfoot>
                     @endif

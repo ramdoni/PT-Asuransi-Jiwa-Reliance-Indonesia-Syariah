@@ -10,17 +10,47 @@
                             <strong>{{ __('Polis') }}</strong><br />
                             {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}</p>
                     </div>
-                    <div class="form-group border-bottom">
-                        <p>    
+                    <div class="form-group border-bottom row">
+                        <p class="col-md-6">    
                             <strong>Tanggal Pengajuan</strong><br />
                             {{date('d M Y',strtotime($data->tanggal_pengajuan))}}
                         </p>
-                    </div>
-                    <div class="form-group border-bottom">
-                        <p>
+                        <p class="col-md-6">
                             <strong>Tanggal Efektif</strong><br />
                             {{date('d M Y',strtotime($data->tanggal_efektif))}}
                         </p>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Tujuan Pembayaran</label>
+                            <input type="text" class="form-control" wire:model="tujuan_pembayaran" />
+                            @error('tujuan_pembayaran')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Nama Bank</label>
+                            <input type="text" class="form-control" wire:model="nama_bank" />
+                            @error('nama_bank')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Nomor Rekening</label>
+                            <input type="text" class="form-control" wire:model="no_rekening" />
+                            @error('no_rekening')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Tgl Jatuh Tempo</label>
+                            <input type="date" class="form-control" wire:model="tgl_jatuh_tempo" />
+                            @error('tgl_jatuh_tempo')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
                     <div class="form-group border-bottom">
                         <p>
@@ -78,6 +108,7 @@
                     @if($data->status==1 and \Auth::user()->user_access_id==4)
                         <button type="button" class="btn btn-warning ml-3" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
                     @endif
+                    <button type="button" class="btn btn-info ml-3" wire:loading.remove wire:target="update_data" wire:click="update_data" wire:loading.remove><i class="fa fa-save"></i> {{ __('Update') }}</button>
                 </form>
             </div>
         </div>

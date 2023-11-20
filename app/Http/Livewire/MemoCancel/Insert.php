@@ -122,7 +122,6 @@ class Insert extends Component
             "peserta.*"  => "required",
             'tanggal_efektif' => 'required',
             'tanggal_pengajuan' => 'required',
-            'perihal_internal_memo' => 'required',
             'tujuan_pembayaran' => 'required',
             'nama_bank' => 'required',
             'no_rekening' => 'required',
@@ -135,7 +134,6 @@ class Insert extends Component
                 $data->tanggal_pengajuan = $this->tanggal_pengajuan;
                 $data->polis_id = $this->polis_id;
                 $data->tanggal_efektif = $this->tanggal_efektif;
-                $data->perihal_internal_memo = $this->perihal_internal_memo;
                 $data->tujuan_pembayaran = $this->tujuan_pembayaran;
                 $data->nama_bank = $this->nama_bank;
                 $data->no_rekening = $this->no_rekening;
@@ -145,7 +143,8 @@ class Insert extends Component
                 $data->nomor_cn = $polis->no_polis . '/'. str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
                 // 036/UW-M-CNCL/AJRIUS/X/2023
                 $data->nomor = str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
-               
+                $data->save();
+                
                 $total = 0;$total_kontribusi=0;$total_manfaat_asuransi = 0;$total_kontribusi_gross=0;$total_kontribusi_tambahan=0;
                 $total_potongan_langsung = 0;$total_ujroh_brokerage=0;$total_ppn=0;$total_pph=0;
                 foreach($this->peserta as $k => $item){

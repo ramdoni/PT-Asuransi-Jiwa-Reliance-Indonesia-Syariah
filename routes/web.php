@@ -93,6 +93,11 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('memo-cancel',App\Http\Livewire\MemoCancel\Index::class)->name('memo-cancel.index');
     Route::get('memo-cancel/insert',App\Http\Livewire\MemoCancel\Insert::class)->name('memo-cancel.insert');
     Route::get('memo-cancel/edit/{id}',App\Http\Livewire\MemoCancel\Edit::class)->name('memo-cancel.edit');
+
+    Route::get('endorsement',App\Http\Livewire\Endorsement\Index::class)->name('endorsement.index');
+    Route::get('endorsement/insert',App\Http\Livewire\Endorsement\Insert::class)->name('endorsement.insert');
+    Route::get('endorsement/edit/{id}',App\Http\Livewire\Endorsement\Edit::class)->name('endorsement.edit');
+
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -100,6 +105,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('memo-cancel/print/{id}',[App\Http\Controllers\MemoCancelController::class,'printPengajuan'])->name('memo-cancel.print-pengajuan');
     Route::get('memo-refund/print/{id}',[App\Http\Controllers\MemoRefundController::class,'printPengajuan'])->name('memo-refund.print-pengajuan');
     Route::get('recovery-claim/print-dn/{id}',[App\Http\Controllers\RecoveryController::class,'printDN'])->name('recovery-claim.print-dn');
+    Route::get('recovery-claim/print-dn-rekon/{id}',[App\Http\Controllers\RecoveryController::class,'printDNRekon'])->name('recovery-claim.print-dn-rekon');
     Route::get('api/get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('api.get-kepesertaan');
     Route::get('api/get-klaim-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'klaimKepesertaan'])->name('api.get-klaim-kepesertaan');
 });

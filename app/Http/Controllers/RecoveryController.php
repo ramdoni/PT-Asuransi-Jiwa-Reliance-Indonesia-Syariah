@@ -64,4 +64,25 @@ class RecoveryController extends Controller
         return $pdf->stream();
     }
 
+    public function printDNRekon(RecoveryClaim $id)
+    {
+        $param['data'] = $id;
+        $pdf = \App::make('dompdf.wrapper');
+        
+        $group = RecoveryClaim::where('rekon_dn',$id->rekon_dn)->get();
+        $param['nilai_klaim'] = 0;$param['total_peserta'] = 0;$param['no_peserta_awal'] = '';$param['no_peserta_akhir'] = '';
+        foreach($group as $k => $item){
+            $param['nilai_klaim'] += $item->nilai_klaim;
+            $param['total_peserta']++;
+            
+            if($k==0)
+                $param['no_peserta_awal'] = $item->kepesertaan->no_peserta;
+            else
+                $param['no_peserta_akhir'] = $item->kepesertaan->no_peserta;
+        }
+
+        $pdf->loadView('livewire.recovery-claim.print-dn-rekon',$param)->setPaper('a4', 'portrait');;
+
+        return $pdf->stream();
+    }
 }

@@ -1,5 +1,5 @@
 @section('sub-title', 'Index')
-@section('title', 'Pengurangan / Refund')
+@section('title', 'Endorse')
 <div class="clearfix row">
     <div class="col-lg-12">
         <div class="card">
@@ -25,7 +25,7 @@
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                        <a href="{{route('memo-refund.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Refund</a>
+                        <a href="{{route('endorsement.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Endorse</a>
                     </div>
                 </div>
             </div>
@@ -39,11 +39,9 @@
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Pemegang Polis</th>
-                                <th>Jenis Produk</th>
-                                <th>Date</th>
+                                <th>Jenis Pengajuan</th>
+                                <th>Tanggal Pengajuan</th>
                                 <th class="text-center">Total Peserta</th>
-                                <th class="text-center">Total Manfaat Asuransi</th>
-                                <th class="text-center">Kontribusi Gross</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -66,7 +64,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{route('memo-refund.edit', $item->id)}}">{{$item->nomor}}</a></td>
+                                        <a href="{{route('endorsement.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td>
                                         @if(isset($item->polis_id))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">
@@ -78,12 +76,10 @@
                                     <td>{{isset($item->polis->produk->nama) ? $item->polis->produk->nama : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>
-                                    <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>
-                                    <td class="text-right">{{format_idr($item->total_kontribusi)}}</td>
                                     <td>
-                                        <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
+                                        <!-- <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
                                         <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id,'is_finance'=>1])}}" target="_blank"><i class="fa fa-print"></i> Finance</a>
-                                        <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
+                                        <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a> -->
                                     </td>
                                 </tr>
                             @endforeach

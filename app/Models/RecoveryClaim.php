@@ -13,6 +13,7 @@ class RecoveryClaim extends Model
     use HasFactory;
 
     protected $table = 'recovery_claim';
+    protected $guarded = [];  
 
     public function polis()
     {

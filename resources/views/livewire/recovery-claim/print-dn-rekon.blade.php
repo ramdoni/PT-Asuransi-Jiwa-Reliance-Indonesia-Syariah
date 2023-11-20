@@ -122,19 +122,18 @@
                     <td style="border-right:1px solid;padding-left:10px;padding-top:50px;padding-bottom:40px;">
                         <p>
                             Klaim Reasuransi Kepesertaan Asuransi Unit Syariah produk <b>{{isset($data->polis->produk->nama) ? $data->polis->produk->nama : '' }}</b>
-                            dengan No Polis <strong>{{$data->polis->no_polis}}</strong> dan Jumlah Peserta 1 orang (No Peserta 
-                                {{isset($data->kepesertaan->no_peserta) ? $data->kepesertaan->no_peserta : '-'}})
+                            dengan No Polis <strong>{{$data->polis->no_polis}}</strong> dan Jumlah Peserta {{$total_peserta}} orang (No Peserta {{$no_peserta_awal}} sd {{$no_peserta_akhir}})
                         </p>
                     </td>
                     <td style="width: 180px;padding-top:40px;padding-bottom:40px;" class="text-right">
-                        <strong>{{format_idr($data->nilai_klaim)}}</strong>
+                        <strong>{{format_idr($nilai_klaim)}}</strong>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($data->nilai_klaim)}}</td>
+                    <td colspan="2">Terbilang : {{terbilang($nilai_klaim)}}</td>
                 </tr>
                 <tr>
-                    <td colspan="2">Masa Tenggang Pembayaran sampain dengan : {{date('d F Y',strtotime($data->tgl_jatuh_tempo))}}</td>
+                    <td colspan="2">Masa Tenggang Pembayaran sampai dengan : {{date('d F Y',strtotime($data->tgl_jatuh_tempo))}}</td>
                 </tr>
             </table>
             <br />

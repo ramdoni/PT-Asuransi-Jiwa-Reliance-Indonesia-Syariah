@@ -11,13 +11,25 @@ class Index extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $selected_id,$is_download=false,$filter=[];
+    public $selected_id,$is_download=false,$filter=[],$is_rekon=false,$check_id=[],$polis=[],$filter_polis_id;
 
     public function render()
     {
         $data = $this->get_data();
 
         return view('livewire.recovery-claim.index')->with(['data'=>$data->paginate(100)]);
+    }
+
+    public function mount()
+    {
+        $this->polis = RecoveryClaim::with('polis')->groupBy('polis_id')->get();
+    }
+
+    public function updated($propertyName)
+    {
+        if($propertyName=='filter_polis_id'){
+            $this->check_id = [];
+        }
     }
 
     public function delete()
@@ -35,7 +47,32 @@ class Index extends Component
         foreach($this->filter as $k=>$v){
             $data->where($k,$v);
         }
+        
+        if($this->filter_polis_id) $data->where('polis_id',$this->filter_polis_id);
+
         return $data;
+    }
+
+    public function generateDn()
+    {
+        $this->validate([
+            'check_id' => 'required'
+        ]);
+
+        $date = date('Y-m-d H:i:s');
+        $running_number_dn = get_setting('running_number_dn_recovery_claim')+1;
+        update_setting('running_number_dn_recovery_claim',$running_number_dn);
+        $nomor_dn = str_pad($running_number_dn,4, '0', STR_PAD_LEFT) ."/AJRIUS-DN-KLRS/".numberToRomawi(date('m'))."/".date('Y');
+                
+        foreach($this->check_id as $k => $id){
+            RecoveryClaim::find($id)->update([
+                'rekon_status'=>1,
+                'rekon_date'=>$date,
+                'rekon_dn'=>$nomor_dn
+            ]);
+        }
+
+        $this->emit('message-success','Rekon updated');$this->check_id = [];$this->is_rekon = false;
     }
 
     public function clear_filter()

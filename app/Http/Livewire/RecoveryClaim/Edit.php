@@ -12,6 +12,7 @@ class Edit extends Component
     use WithFileUploads;
     public $data,$reas_tanggal_kirim,$reas_tanggal_jawaban,$reas_note_jawaban,$reas_status,$reas_tanggal_penerimaan,$reas_note_penerimaan;
     public $form_payment=false,$payment_amount,$payment_date,$payment_file,$payments,$reas_file_penerimaan,$reas_file_jawaban;
+    public $tanggal_pengajuan,$tgl_jatuh_tempo,$tujuan_pembayaran,$nama_bank,$no_rekening;
     public function render()
     {
         return view('livewire.recovery-claim.edit');
@@ -26,8 +27,25 @@ class Edit extends Component
         $this->reas_tanggal_penerimaan = $id->reas_tanggal_penerimaan;
         $this->reas_note_penerimaan = $id->reas_note_penerimaan;
         $this->reas_status = $id->reas_status;
+        $this->tanggal_pengajuan = $id->tanggal_pengajuan;
+        $this->tgl_jatuh_tempo = $id->tgl_jatuh_tempo;
+        $this->tujuan_pembayaran = $id->tujuan_pembayaran;
+        $this->nama_bank = $id->nama_bank;
+        $this->no_rekening = $id->no_rekening;
         $this->payment_date = date('Y-m-d');
         $this->payments = RecoveryClaimPayment::where('recovery_claim_id',$id->id)->get();
+    }
+
+    public function update_data()
+    {
+        $this->data->tanggal_pengajuan = $this->tanggal_pengajuan;
+        $this->data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
+        $this->data->tujuan_pembayaran = $this->tujuan_pembayaran;
+        $this->data->nama_bank = $this->nama_bank;
+        $this->data->no_rekening = $this->no_rekening;
+        $this->data->save();
+
+        $this->emit('message-success','Updated');
     }
 
     public function update()
