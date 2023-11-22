@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldIsRateToPolis extends Migration
+class AddFieldRequesterIdToMemoCancel extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddFieldIsRateToPolis extends Migration
      */
     public function up()
     {
-        Schema::table('polis', function (Blueprint $table) {
-            $table->boolean('is_rate')->default(0)->nullable();
-            $table->boolean('is_uw')->default(0)->nullable();
+        Schema::table('memo_cancel', function (Blueprint $table) {
+            $table->unsignedBigInteger('requester_id')->nullable();
+            $table->foreign('requester_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -26,7 +26,7 @@ class AddFieldIsRateToPolis extends Migration
      */
     public function down()
     {
-        Schema::table('polis', function (Blueprint $table) {
+        Schema::table('memo_cancel', function (Blueprint $table) {
             //
         });
     }

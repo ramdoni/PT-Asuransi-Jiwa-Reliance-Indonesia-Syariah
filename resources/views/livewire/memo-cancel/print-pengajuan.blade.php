@@ -154,29 +154,25 @@
                         <td>{{$data->polis->no_polis}}</td>
                     </tr>
                     <tr>
-                        <td>No Debit Note</td>
+                        <td>Kontribusi DN</td>
                         <td> : </td>
-                        <td>
-                            {{implode(",", $no_dn)}}
-                        </td>
+                        <td>{{format_idr($kontribusi_dn)}}</td>
                         <td>Total Kontribusi Gross Cancel</td>
                         <td>Rp</td>
                         <td>{{format_idr($data->total_kontribusi_gross)}}</td>
                     </tr>
                     <tr>
-                        <td>Tgl Debit Note</td>
+                        <td>Jumlah Peserta</td>
                         <td> : </td>
-                        <td>
-                            {{implode(",", $tanggal_dn)}}
-                        </td>
+                        <td>{{$data->total_peserta}}</td>
                         <td>Kontribusi Tambahan</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Kontribusi DN</td>
+                        <td></td>
                         <td> : </td>
-                        <td>{{format_idr($kontribusi_dn)}}</td>
+                        <td></td>
                         <td>Potongan Langsung</td>
                         <td>{{$data->polis->potong_langsung}}%</td>
                         <td>{{format_idr($data->total_potongan_langsung)}}</td>
@@ -190,9 +186,9 @@
                         <td>{{format_idr($data->pn)}}</td>
                     </tr>
                     <tr>
-                        <td>Jumlah Peserta</td>
+                        <td></td>
                         <td> : </td>
-                        <td>{{$data->total_peserta}}</td>
+                        <td></td>
                         <td>PPh</td>
                         <td>{{$data->polis->pph ? $data->polis->pph : 0}}%</td>
                         <td>{{format_idr($data->pph_amount)}}</td>
@@ -297,6 +293,25 @@
                             Div. Finance
                         </td>
                     </tr>
+                </table>
+                <br />
+                <table style="width:100%" class="border">
+                    <tr>
+                        <th>No</th>
+                        <th class="text-left">Nomor Peserta</th>
+                        <th class="text-left">Nomor DN</th>
+                        <th class="text-left">Tanggal DN</th>
+                        <th class="text-right">Kontribusi DN</th>
+                    </tr>
+                    @foreach($data->kepesertaan as $k => $i)
+                        <tr>
+                            <td class="text-center">{{$k+1}}</td>
+                            <td>{{$i->no_peserta}}</td>
+                            <td>{{$i->pengajuan->dn_number}}</td>
+                            <td>{{$i->pengajuan->head_syariah_submit ? date('d-M-Y',strtotime($i->pengajuan->head_syariah_submit)) : date('d-M-Y',strtotime($i->pengajuan->created_at))}}</td>
+                            <td class="text-right">{{format_idr($i->total_kontribusi_dibayar)}}</td>
+                        </tr>
+                    @endforeach
                 </table>
             </div>
             <div class="page-break"></div>

@@ -138,6 +138,7 @@ class Insert extends Component
                 $data->nama_bank = $this->nama_bank;
                 $data->no_rekening = $this->no_rekening;
                 $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
+                $data->requester_id = \Auth::user()->id;
                 $data->save();
 
                 $data->nomor_cn = $polis->no_polis . '/'. str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
