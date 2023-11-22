@@ -41,7 +41,7 @@ class PolisMature extends Command
         ini_set('memory_limit', '200M');
         // $polis =  Kepesertaan::where('status_polis','Mature')->whereRaw('tanggal_akhir > curdate()')->get();
         $polis =  Kepesertaan::select('id','status_polis','tanggal_akhir','no_peserta','nama')->where('status_polis','Inforce')->get();
-        $total = '';
+        $total = 0;
         $peserta = '';
         foreach($polis as $num=> $item){
             if($item->tanggal_akhir < date('Y-m-d')){
@@ -50,7 +50,7 @@ class PolisMature extends Command
                 $find->save();
 
                 echo "{$total}. Peserta : {$item->no_peserta} \ {$item->nama} \n";
-                $peserta .= "{$total}. Peserta : {$item->no_peserta} \ {$item->nama} \n"
+                $peserta .= "{$total}. Peserta : {$item->no_peserta} \ {$item->nama} \n";
                 $total++;
             }
         }
