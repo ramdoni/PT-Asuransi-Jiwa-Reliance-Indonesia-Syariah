@@ -28,25 +28,21 @@
                             @enderror
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Tanggal Efektif</label>
+                            <label>Tanggal Efektif Pengurangan</label>
                             <input type="date" class="form-control" wire:model="tanggal_efektif" />
                             @error('tanggal_efektif')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                             @enderror
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Perihal Internal Memo</label>
-                        <input type="text" class="form-control" wire:model="perihal_internal_memo" />
-                    </div>
-                    <div class="form-group">
-                        <label>Tujuan Pembayaran</label>
-                        <input type="text" class="form-control" wire:model="tujuan_pembayaran" />
-                        @error('tujuan_pembayaran')
-                            <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                        @enderror
-                    </div>
                     <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Tujuan Pembayaran</label>
+                            <input type="text" class="form-control" wire:model="tujuan_pembayaran" />
+                            @error('tujuan_pembayaran')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                         <div class="form-group col-md-6">
                             <label>Nama Bank</label>
                             <input type="text" class="form-control" wire:model="nama_bank" />
@@ -101,9 +97,8 @@
                             <tr>
                                 <th></th>
                                 <th>No</th>
-                                <th>Status</th>
-                                <th>No Reas</th>
-                                <th>Reasuradur</th>
+                                <th>Tanggal Efektif</th>
+                                <th>Sisa Masa Asuransi</th>
                                 <th>No Peserta</th>
                                 <th>Nama</th>
                                 <th>Mulai Asuransi</th>
@@ -126,10 +121,9 @@
                                     </td>
                                     <td>{{$k+1}}</td>
                                     <td>
-                                        {{$item['status_polis']}}
+                                        <input type="date" class="form-control" wire:model="peserta.{{$k}}.refund_tanggal_efektif" />
                                     </td>
-                                    <td>{{$item['reas']}}</td>
-                                    <td>{{$item['reasuradur']}}</td>
+                                    <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
                                     <td>{{$item['no_peserta']}}</td>
                                     <td>{{$item['nama']}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>

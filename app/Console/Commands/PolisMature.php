@@ -38,17 +38,28 @@ class PolisMature extends Command
      */
     public function handle()
     {
+        ini_set('memory_limit', '200M');
         // $polis =  Kepesertaan::where('status_polis','Mature')->whereRaw('tanggal_akhir > curdate()')->get();
-        $polis =  Kepesertaan::where('status_polis','Inforce')->get();
+        $polis =  Kepesertaan::select('id','status_polis','tanggal_akhir','no_peserta','nama')->where('status_polis','Inforce')->get();
+        $total = '';
+        $peserta = '';
         foreach($polis as $num=> $item){
             if($item->tanggal_akhir < date('Y-m-d')){
                 $find = Kepesertaan::find($item->id);
                 $find->status_polis = 'Mature';
                 $find->save();
 
-                echo "{$num}. Peserta : {$item->no_peserta} \ {$item->nama} \n";
+                echo "{$total}. Peserta : {$item->no_peserta} \ {$item->nama} \n";
+                $peserta .= "{$total}. Peserta : {$item->no_peserta} \ {$item->nama} \n"
+                $total++;
             }
         }
+        
+        $msg = "Total Peserta Mature : {$total}\n";
+        $msg .= $peserta;
+
+        send_wa(['phone'=>'08881264670','message'=> $msg]);
+
 
         return 0;
     }
