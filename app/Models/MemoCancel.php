@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Polis;
 use App\Models\Kepesertaan;
+use App\Models\User;
 
 class MemoCancel extends Model
 {
@@ -16,6 +17,11 @@ class MemoCancel extends Model
     public function polis()
     {
         return $this->belongsTo(Polis::class,'polis_id','id');
+    }
+
+    public function requester()
+    {
+        return $this->belongsTo(User::class,'requester_id');
     }
 
     public function kepesertaan()

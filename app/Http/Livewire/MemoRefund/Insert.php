@@ -154,7 +154,7 @@ class Insert extends Component
                         $total++;
                         /**
                             Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross
-                            t             = sisa masa asuransi (dalam bulan)
+                            t            = sisa masa asuransi (dalam bulan)
                             n            = masa asuransi (dalam bulan)
                             %            = persentase pengembalian asuransi (sesuai yang tercantum di Polis)
                          */

@@ -181,17 +181,41 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>PPn</td>
-                        <td>{{$data->polis->ppn ? $data->polis->ppn : 0}}%</td>
-                        <td>{{format_idr($data->pn)}}</td>
+                        <td>
+                            @if($data->polis->ppn)
+                                PPn
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->polis->ppn)
+                                {{$data->polis->ppn ? $data->polis->ppn : 0}}%
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->polis->ppn)
+                                {{format_idr($data->ppn)}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td> : </td>
                         <td></td>
-                        <td>PPh</td>
-                        <td>{{$data->polis->pph ? $data->polis->pph : 0}}%</td>
-                        <td>{{format_idr($data->pph_amount)}}</td>
+                        <td>
+                            @if($data->polis->pph)
+                                PPh
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->polis->pph)
+                                {{$data->polis->pph ? $data->polis->pph : 0}}%
+                            @endif
+                        </td>
+                        <td>
+                            @if($data->polis->pph)
+                                {{format_idr($data->pph_amount)}}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td>Nomor Peserta</td>
@@ -264,7 +288,7 @@
                     </tr>
                     <tr>
                         <td colspan="3" style="padding-top:20px;"><strong>TOTAL PEMBAYARAN CREDIT NOTE</strong></td>
-                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi)}}</td>
+                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi-$data->total_potongan_langsung)}}</td>
                     </tr>
                 </table>
                 <p>Demikian disampaikan,atas perhatian dan kerjasamanya diucapkan terima kasih.</p>
@@ -276,10 +300,12 @@
                             <br />
                             <br />
                             <br />
-                            <img src="{{public_path('assets/img/ttd-arif.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
+                            @if(isset($data->requester->ttd))
+                                <img src="{{public_path($data->requester->ttd)}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
+                            @endif
                             <br>
                             <br>
-                            <strong style="z-index: 3">Muhammad Arif</strong>
+                            <strong style="z-index: 3">{{isset($data->requester->name) ? $data->requester->name : '-'}}</strong>
                             <br>
                             <span style="z-index: 3">Dept. Underwriting Syariah</span>
                         </td>
@@ -294,6 +320,7 @@
                         </td>
                     </tr>
                 </table>
+                <br />
                 <br />
                 <table style="width:100%" class="border">
                     <tr>
@@ -397,11 +424,11 @@
                         <strong>Total Refund Kontribusi</strong>
                     </td>
                     <td style="border-top:1px solid;border-bottom: 1px solid;text-align:right;font-weight:bold;">
-                        {{format_idr($data->total_kontribusi)}}
+                        {{format_idr($data->total_kontribusi - $data->total_potongan_langsung)}}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align:center">Terbilang : {{terbilang($data->total_kontribusi)}}</td>
+                    <td colspan="2" style="text-align:center">Terbilang : {{terbilang($data->total_kontribusi - $data->total_potongan_langsung)}}</td>
                 </tr>
             </table>
             <div style="position: relative;">
