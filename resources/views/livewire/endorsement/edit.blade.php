@@ -5,23 +5,31 @@
         <div class="card">
             <div class="body">
                 <form id="basic-form" method="post" wire:submit.prevent="submit">
-                    <div class="form-group border-bottom">
-                        <p>
+                    <div class="row form-group border-bottom pb-2">
+                        <div class="col-md-12">
                             <strong>{{ __('Polis') }}</strong><br />
-                            {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}</p>
+                            {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
+                    <div class="row form-group border-bottom pb-2">
+                        <div class="col-md-6">
                             <label>Tanggal Pengajuan</label><br />
                             {{$data->tanggal_pengajuan}}
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="col-md-6">
                             <label>Jenis Pengajuan</label>
                             {{($data->jenis_pengajuan==1 ? 'Mempengaruhi Premi' : 'Tidak Mempengaruhi Premi')}}
                         </div>
                     </div>
-                    <hr>
-                    <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
+                    <div class="row border-bottom form-group pb-2">
+                        @if($data->jenis_pengajuan==1)
+                            <div class="col-md-6">
+                                <label>Metode Endorse</label><br />
+                                {{$data->metode_endorse==1?'Refund' : 'Cancel'}}
+                            </div>
+                        @endif
+                    </div>
+                    <a href="{{route('endorsement.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                 </form>
             </div>
         </div>
@@ -30,41 +38,79 @@
         <div class="card">
             <div class="body">
                 <div class="table-responsive">
-                    <table class="table m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="vertical-align:middle">
-                            <tr>
-                                <th>No</th>
-                                <th>No Peserta</th>
-                                <th>Nama</th>
-                                <th>No KTP</th>
-                                <th>Jenis Kelamin</th>
-                                <th>No Telepon</th>
-                                <th>Mulai Asuransi</th>
-                                <th>Akhir Asuransi</th>
-                                <th class="text-center">Masa Asuransi</th>
-                                <th class="text-right">Nilai Manfaat Asuransi</th>
-                                <th class="text-right">Kontribusi</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($peserta as $k=>$item)
-                                <tr wire:key="{{$k}}">
-                                    <td>{{$k+1}}</td>
-                                    <td>{{$item['no_peserta']}}</td>
-                                    <td>{{$item['nama']}}</td>
-                                    <td>{{$item->no_ktp}}</td>
-                                    <td>{{$item->jenis_kelamin}}</td>
-                                    <td>{{$item->no_telepon}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
-                                    <td class="text-center">{{$item['masa_bulan']}}</td>
-                                    <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                    @if($data->metode_endorse==1)
+                        <table class="table m-b-0 c_list table-nowrap" id="data_table">
+                            <thead style="vertical-align:middle">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal Efektif</th>
+                                    <th>Sisa Masa Asuransi</th>
+                                    <th>No Peserta</th>
+                                    <th>Nama</th>
+                                    <th>Mulai Asuransi</th>
+                                    <th>Akhir Asuransi</th>
+                                    <th class="text-center">Masa Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th></th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($peserta as $k=>$item)
+                                    <tr wire:key="{{$k}}">
+                                        <td>{{$k+1}}</td>
+                                        <td>{{$item['refund_tanggal_efektif']}}</td>
+                                        <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
+                                        <td>{{$item['no_peserta']}}</td>
+                                        <td>{{$item['nama']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                        <td class="text-center">{{$item['masa_bulan']}}</td>
+                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @elseif($data->metode_endorse==2)
+    
+                    @else
+                        <table class="table m-b-0 c_list table-nowrap" id="data_table">
+                            <thead style="vertical-align:middle">
+                                <tr>
+                                    <th>No</th>
+                                    <th>No Peserta</th>
+                                    <th>Nama</th>
+                                    <th>No KTP</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>No Telepon</th>
+                                    <th>Mulai Asuransi</th>
+                                    <th>Akhir Asuransi</th>
+                                    <th class="text-center">Masa Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Kontribusi</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($peserta as $k=>$item)
+                                    <tr wire:key="{{$k}}">
+                                        <td>{{$k+1}}</td>
+                                        <td>{{$item['no_peserta']}}</td>
+                                        <td>{{$item['nama']}}</td>
+                                        <td>{{$item->no_ktp}}</td>
+                                        <td>{{$item->jenis_kelamin}}</td>
+                                        <td>{{$item->no_telepon}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                        <td class="text-center">{{$item['masa_bulan']}}</td>
+                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div>
                 <!-- <a href="javscript:void(0)" wire:click="$set('is_insert',true)" class="mr-2"><i class="fa fa-plus"></i> Add Peserta</a> -->
                 <!-- <a href="javscript:void(0)" data-toggle="modal" data-target="#modal_upload"><i class="fa fa-upload"></i> Upload Peserta</a> -->

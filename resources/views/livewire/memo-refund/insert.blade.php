@@ -65,22 +65,6 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label>No Peserta Awal</label>
-                            <input type="text" class="form-control" wire:model="no_peserta_awal" />
-                            @error('no_peserta_awal')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>No Peserta Akhir</label>
-                            <input type="text" class="form-control" wire:model="no_peserta_akhir" />
-                            @error('no_peserta_awal')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                    </div>
                     <hr>
                     <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <button type="submit" class="btn btn-primary ml-3"><i class="fa fa-save"></i> {{ __('Submit') }}</button>
@@ -123,14 +107,30 @@
                                     <td>
                                         <input type="date" class="form-control" wire:model="peserta.{{$k}}.refund_tanggal_efektif" />
                                     </td>
-                                    <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
+                                    <td class="text-center">
+                                        <span wire:loading wire:target="peserta.{{$k}}.refund_tanggal_efektif">
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                        </span>
+                                        <span wire:loading.remove wire:target="peserta.{{$k}}.refund_tanggal_efektif">
+                                            {{$item['refund_sisa_masa_asuransi']}}
+                                        </span>
+                                    </td>
                                     <td>{{$item['no_peserta']}}</td>
                                     <td>{{$item['nama']}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-center">{{$item['masa_bulan']}}</td>
                                     <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    <td class="text-right">
+                                        <span wire:loading wire:target="peserta.{{$k}}.refund_tanggal_efektif">
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                        </span>
+                                        <span wire:loading.remove wire:target="peserta.{{$k}}.refund_tanggal_efektif">
+                                            {{format_idr($item['refund_kontribusi'])}}  
+                                        </span>
+                                    </td>
                                 </tr>
                             @endforeach
                             

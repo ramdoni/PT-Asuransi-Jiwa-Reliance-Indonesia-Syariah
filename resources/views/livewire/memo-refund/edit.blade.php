@@ -122,7 +122,8 @@
                             <tr>
                                 <th></th>
                                 <th>No</th>
-                                <th>Status</th>
+                                <th>Tanggal Efektif</th>
+                                <th>Sisa Masa Asuransi</th>
                                 <th>No Peserta</th>
                                 <th>Nama</th>
                                 <th>Mulai Asuransi</th>
@@ -146,9 +147,8 @@
                                             <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
                                         </td>
                                         <td>{{$k+1}}</td>
-                                        <td>
-                                            {{$item['status_polis']}}
-                                        </td>
+                                        <td>{{date('d-M-Y',strtotime($item['refund_tanggal_efektif']))}}</td>
+                                        <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
@@ -163,7 +163,7 @@
                         </tbody>
                         <tfoot style="border-top: 2px solid #dee2e6;">
                             <tr>
-                                <th colspan="8" class="text-right">Total</th>
+                                <th colspan="9" class="text-right">Total</th>
                                 <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
                                 <th class="text-right">{{format_idr($total_refund_kontribusi)}}</th>
                             </tr>

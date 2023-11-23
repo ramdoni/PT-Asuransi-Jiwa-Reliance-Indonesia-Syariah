@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldRefundTanggalEfektifToKepesertaan extends Migration
+class AddFieldMetodeEndorseToEndorsement extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddFieldRefundTanggalEfektifToKepesertaan extends Migration
      */
     public function up()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
-            $table->date('refund_tanggal_efektif')->nullable();
+        Schema::table('endorsement', function (Blueprint $table) {
+            $table->boolean('metode_endorse')->default(1)->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddFieldRefundTanggalEfektifToKepesertaan extends Migration
      */
     public function down()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
+        Schema::table('endorsement', function (Blueprint $table) {
             //
         });
     }

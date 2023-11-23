@@ -43,7 +43,7 @@
                                 <th>Date</th>
                                 <th class="text-center">Total Peserta</th>
                                 <th class="text-center">Total Manfaat Asuransi</th>
-                                <th class="text-center">Kontribusi Gross</th>
+                                <th class="text-center">Pengembalian Kontribusi</th>
                                 <th></th>
                             </tr>
                         </thead>

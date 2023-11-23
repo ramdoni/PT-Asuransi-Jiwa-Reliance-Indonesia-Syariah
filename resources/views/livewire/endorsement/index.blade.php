@@ -39,6 +39,7 @@
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Pemegang Polis</th>
+                                <th>Produk</th>
                                 <th>Jenis Pengajuan</th>
                                 <th>Tanggal Pengajuan</th>
                                 <th class="text-center">Total Peserta</th>
@@ -74,12 +75,13 @@
                                     </td>
                                     <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
                                     <td>{{isset($item->polis->produk->nama) ? $item->polis->produk->nama : '-'}}</td>
+                                    <td>{{isset($item->jenis_pengajuan) ? endorse_jenis_pengajuan($item->jenis_pengajuan) : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>
                                     <td>
                                         <!-- <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
-                                        <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id,'is_finance'=>1])}}" target="_blank"><i class="fa fa-print"></i> Finance</a>
-                                        <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a> -->
+                                        <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id,'is_finance'=>1])}}" target="_blank"><i class="fa fa-print"></i> Finance</a>-->
+                                        <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

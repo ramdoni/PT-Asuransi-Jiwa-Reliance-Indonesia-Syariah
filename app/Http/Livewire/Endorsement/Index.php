@@ -27,6 +27,5 @@ class Index extends Component
         Kepesertaan::where('endorsement_id',$this->selected_id)->update(['endorsement_id'=>null]);
 
         $this->emit('message-success','Deleted');$this->emit('modal','hide');
-
     }
 }
