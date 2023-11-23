@@ -618,9 +618,9 @@
                                 <label>Business Source (Man Risk Recommendation) & UW Guideline</label>
                                 <input type="text" class="form-control" wire:model="business_source" />
                             </div>
-                            <div class="form-group">
-                                <label>Refund %</label>
-                                <input type="text" class="form-control" wire:model="refund" />
+                            <div class="form-group" id="refund">
+                                <label ref="input-refund">Refund %</label>
+                                <input type="text" class="form-control" id="input-refund" wire:model="refund" />
                             </div>
                             <div class="form-group">
                                 <label>Refund to Pengalihan %</label>
@@ -679,7 +679,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane {{$tab_active==1?'active show':''}}" id="kepesertaan">
+                <div class="tab-pane {{$tab_active==2?'active show':''}}" id="kepesertaan">
                     @if(\Auth::user()->user_access_id==3)
                         @livewire('polis.kepesertaan-akseptasi',['data'=>$data])
                     @else

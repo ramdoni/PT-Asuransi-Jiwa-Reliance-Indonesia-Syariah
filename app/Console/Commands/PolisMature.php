@@ -60,7 +60,6 @@ class PolisMature extends Command
 
         send_wa(['phone'=>'08881264670','message'=> $msg]);
 
-
         return 0;
     }
 }

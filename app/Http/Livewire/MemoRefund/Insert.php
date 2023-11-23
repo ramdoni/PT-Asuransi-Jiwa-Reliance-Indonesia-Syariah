@@ -31,11 +31,12 @@ class Insert extends Component
         if($propertyName=='polis_id'){
             $this->peserta = [];
         }
-        if($propertyName=='peserta'){
-            foreach($this->peserta as $k => $i){
-                $peserta = Kepesertaan::find($i['id']);
-                if($peserta)
-                    $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan($i['refund_tanggal_efektif'],$peserta->tanggal_akhir,$peserta->pengajuan->masa_asuransi);
+
+        foreach($this->peserta as $k => $i){
+            $peserta = Kepesertaan::find($i['id']);
+            if($peserta){
+                $this->peserta[$k]['refund_sisa_masa_asuransi'] = hitung_masa_bulan($i['refund_tanggal_efektif'],$peserta->tanggal_akhir,3);
+                $this->peserta[$k]['refund_kontribusi'] = ($this->peserta[$k]['refund_sisa_masa_asuransi'] / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $i['total_kontribusi_dibayar']);
             }
         }
     }
@@ -57,7 +58,8 @@ class Insert extends Component
             $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
             $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
             $this->peserta[$index]['refund_tanggal_efektif'] = date('Y-m-d');
-            $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta->tanggal_akhir,$peserta->pengajuan->masa_asuransi);
+            $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta->tanggal_akhir,3);
+            $this->peserta[$index]['refund_kontribusi'] = ($this->peserta[$index]['refund_sisa_masa_asuransi'] / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $this->peserta[$index]['total_kontribusi_dibayar']);
 
             $ids = [];
             foreach($this->peserta as $item){
@@ -106,7 +108,8 @@ class Insert extends Component
                 $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
                 $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
                 $this->peserta[$index]['refund_tanggal_efektif'] = date('Y-m-d');
-                $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta->tanggal_akhir,$peserta->pengajuan->masa_asuransi);
+                $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta->tanggal_akhir,3);
+                $this->peserta[$index]['refund_kontribusi'] = ($this->peserta[$index]['refund_sisa_masa_asuransi'] / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $this->peserta[$index]['total_kontribusi_dibayar']);
                 
                 $index++;
             }
@@ -162,7 +165,8 @@ class Insert extends Component
                     if($peserta){
                         $peserta->memo_refund_id = $data->id;
                         $peserta->refund_tanggal_efektif = $item['refund_tanggal_efektif'];
-                        $peserta->refund_sisa_masa_asuransi = hitung_masa_bulan($item['refund_tanggal_efektif'],$peserta->tanggal_akhir,$peserta->pengajuan->masa_asuransi);
+                        $peserta->refund_sisa_masa_asuransi = hitung_masa_bulan($item['refund_tanggal_efektif'],$peserta->tanggal_akhir,3);
+                        $peserta->total_kontribusi_dibayar = $item['total_kontribusi_dibayar'];
                         $peserta->save();
                         $total++;
                         /**
