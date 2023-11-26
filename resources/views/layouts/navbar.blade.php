@@ -65,6 +65,7 @@
                                     <li><a href="{{ route('memo-cancel.index') }}">Pembatalan Kepesertaan</a></li>
                                     <li><a href="{{ route('memo-refund.index') }}">Pengurangan / Refund</a></li>
                                     <li><a href="{{ route('reas.index') }}">Reas</a></li>
+                                    <li><a href="{{ route('endorsement.index') }}">Endorse</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
@@ -88,6 +89,7 @@
                                     <li><a href="{{ route('memo-cancel.index') }}">Pembatalan Kepesertaan</a></li>
                                     <li><a href="{{ route('memo-refund.index') }}">Pengurangan / Refund</a></li>
                                     <li><a href="{{ route('reas.index') }}">Reas</a></li>
+                                    <li><a href="{{ route('endorsement.index') }}">Endorse</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
@@ -120,6 +122,7 @@
                                     <li><a href="{{ route('memo-cancel.index') }}">Pembatalan Kepesertaan</a></li>
                                     <li><a href="{{ route('memo-refund.index') }}">Pengurangan / Refund</a></li>
                                     <li><a href="{{ route('reas.index') }}">Reas</a></li>
+                                    <li><a href="{{ route('endorsement.index') }}">Endorse</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>

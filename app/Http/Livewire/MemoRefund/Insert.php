@@ -148,6 +148,7 @@ class Insert extends Component
                 $data->no_rekening = $this->no_rekening;
                 $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
                 $data->user_created_id = \Auth::user()->id;
+                $data->status = 0;
                 $running_number = get_setting('running_number_refund')+1;
                 $running_number_cn = get_setting('running_number_refund')+1;
 

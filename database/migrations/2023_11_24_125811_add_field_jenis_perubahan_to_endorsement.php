@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldEndorsementIdToKepesertaan extends Migration
+class AddFieldJenisPerubahanToEndorsement extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddFieldEndorsementIdToKepesertaan extends Migration
      */
     public function up()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
-            $table->integer('endorsement_id')->nullable();
+        Schema::table('endorsement', function (Blueprint $table) {
+            $table->integer('jenis_perubahan_id')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddFieldEndorsementIdToKepesertaan extends Migration
      */
     public function down()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
+        Schema::table('endorsement', function (Blueprint $table) {
             //
         });
     }

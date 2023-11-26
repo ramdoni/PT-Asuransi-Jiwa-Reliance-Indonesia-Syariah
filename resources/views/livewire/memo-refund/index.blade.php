@@ -53,16 +53,16 @@
                                     <td style="width: 50px;">{{$k+1}}</td>
                                     <td class="text-center">
                                         @if($item->status==0)
-                                            <span class="badge badge-warning">Undewriting</span>
-                                        @endif
-                                        @if($item->status==1)
                                             <span class="badge badge-info">Head Teknik</span>
                                         @endif
-                                        @if($item->status==2)
-                                            <span class="badge badge-danger">Head Syariah</span>
+                                        @if($item->status==1)
+                                            <span class="badge badge-info">Head Syariah</span>
                                         @endif
-                                        @if($item->status==3)
+                                        @if($item->status==2)
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
+                                        @endif
+                                        @if($item->status==4)
+                                            <span class="badge badge-danger"><i class="fa fa-times"></i> Reject</span>
                                         @endif
                                     </td>
                                     <td>

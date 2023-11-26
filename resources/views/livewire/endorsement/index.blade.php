@@ -26,6 +26,8 @@
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
                         <a href="{{route('endorsement.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Endorse</a>
+                        <a href="#" class="float-right" data-toggle="modal" data-target="#modal_jenis_perubahan"><i class="fa fa-database"></i> Jenis Perubahan</a>
+
                     </div>
                 </div>
             </div>
@@ -36,6 +38,7 @@
                             <tr>
                                 <th>No</th>
                                 <th class="text-center">Status</th>
+                                <th>Requester</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
                                 <th>Pemegang Polis</th>
@@ -60,10 +63,14 @@
                                         @if($item->status==2)
                                             <span class="badge badge-danger">Head Syariah</span>
                                         @endif
+                                        @if($item->status==4)
+                                            <span class="badge badge-danger badge-active">Reject</span>
+                                        @endif
                                         @if($item->status==3)
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif
                                     </td>
+                                    <td>{{isset($item->requester->name) ? $item->requester->name : '-'}}</td>
                                     <td>
                                         <a href="{{route('endorsement.edit', $item->id)}}">{{$item->no_pengajuan}}</a></td>
                                     <td>
@@ -73,14 +80,13 @@
                                             </a>
                                         @endif
                                     </td>
-                                    <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
+                                    <td>{{isset($item->polis->nama) ? Str::limit($item->polis->nama,50) : '-'}}</td>
                                     <td>{{isset($item->polis->produk->nama) ? $item->polis->produk->nama : '-'}}</td>
                                     <td>{{isset($item->jenis_pengajuan) ? endorse_jenis_pengajuan($item->jenis_pengajuan) : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>
                                     <td>
-                                        <!-- <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
-                                        <a href="{{route('memo-refund.print-pengajuan',['id'=>$item->id,'is_finance'=>1])}}" target="_blank"><i class="fa fa-print"></i> Finance</a>-->
+                                        <a href="{{route('endorsement.print-dn',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
                                         <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>
                                     </td>
                                 </tr>
@@ -122,8 +128,8 @@
             </div>
         </div>
     </div>
-
 </div>
+@livewire('endorsement.jenis-perubahan')
 <div class="modal fade" id="modal_migrasi" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('klaim.migrasi')
 </div>

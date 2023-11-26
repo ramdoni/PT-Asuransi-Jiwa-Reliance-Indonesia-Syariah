@@ -15,8 +15,7 @@ class CreateTableEndorsementPeserta extends Migration
     {
         Schema::create('endorsement_pesertas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('endorsement_id')->nullable();
-            $table->foreign('endorsement_id')->references('id')->on('endorsement')->onDelete('cascade');
+            $table->integer('endorsement_id')->nullable();
             $table->text('before_data')->nullable();
             $table->text('after_data')->nullable();
             $table->timestamps();

@@ -47,7 +47,7 @@
                                 </td>
                                 <td>{{$item->telepon}}</td> 
                                 <td>{{$item->email}}</td>                                   
-                                <td>{{$item->address}}</td>
+                                <td>{{Str::limit($item->address,50)}}</td>
                                 <td>{{isset($item->access->name)?$item->access->name:''}}</td>
                                 <td>{{$item->updated_at}}</td>
                                 <td>  

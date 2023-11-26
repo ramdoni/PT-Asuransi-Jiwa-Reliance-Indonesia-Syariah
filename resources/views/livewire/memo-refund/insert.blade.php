@@ -15,6 +15,9 @@
                                 @endforeach
                             </select>
                         </div>
+                        @if($polis_id)
+                         Refund : <a href="{{route('polis.edit',$polis_id)}}" target="_blank">{{\App\Models\Polis::find($polis_id)->refund?\App\Models\Polis::find($polis_id)->refund : 0}}%</a>
+                        @endif
                         @error('polis_id')
                             <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
@@ -138,19 +141,20 @@
                     </table>
                     <table style="width:100%;" class="my-3" wire:ignore>
                         <tr>
+                            <td style="width:50px;">
+                                <a href="javascript:void(0)" wire:click="add_peserta" class="btn btn-info"><i class="fa fa-plus"></i></a>
+                            </td>
                             <td>
                                 <select class="form-control" id="kepesertaan_id" wire:model="kepesertaan_id">
                                     <option value=""> -- Select Peserta -- </option>
                                 </select>
                             </td>
-                            <td>
-                                <a href="javascript:void(0)" wire:click="add_peserta" class="badge badge-info badge-active"><i class="fa fa-plus"></i> add </a>
-                            </td>
+                            
                         </tr>
                     </table>
                 </div>
                 <!-- <a href="javscript:void(0)" wire:click="$set('is_insert',true)" class="mr-2"><i class="fa fa-plus"></i> Add Peserta</a> -->
-                <a href="javscript:void(0)" data-toggle="modal" data-target="#modal_upload"><i class="fa fa-upload"></i> Upload Peserta</a>
+                <!-- <a href="javscript:void(0)" data-toggle="modal" data-target="#modal_upload"><i class="fa fa-upload"></i> Upload Peserta</a> -->
             </div>
         </div>
     </div>

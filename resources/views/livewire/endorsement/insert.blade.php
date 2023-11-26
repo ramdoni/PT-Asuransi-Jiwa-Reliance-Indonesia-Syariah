@@ -28,9 +28,22 @@
                             @enderror
                         </div>
                         <div class="form-group col-md-6">
+                            <label>Jenis Perubahan 
+                                <a href="#" class="ml-2 float-right" data-toggle="modal" data-target="#modal_jenis_perubahan" title="Add "><i class="fa fa-plus"></i></a>
+                            </label>
+                            <select class="form-control" wire:model="jenis_perubahan_id">
+                                <option value=""> -- Select -- </option>
+                                @foreach(\App\Models\JenisPerubahan::orderBy('name','ASC')->get() as $i)
+                                    <option value="{{$i->id}}">{{$i->name}}</option>
+                                @endforeach
+                            </select>
+                            @error('jenis_pengajuan')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
                             <label>Jenis Pengajuan</label>
                             <select class="form-control" wire:model="jenis_pengajuan">
-                                <option value=""> -- Select -- </option>
                                 <option value="1">Mempengaruhi Premi</option>
                                 <option value="2">Tidak Mempengaruhi Premi</option>
                             </select>
@@ -60,7 +73,7 @@
                         @endif
                     </div>
                     <hr>
-                    <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
+                    <a href="{{route('endorsement.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <button type="submit" class="btn btn-primary ml-3"><i class="fa fa-save"></i> {{ __('Submit') }}</button>
                 </form>
             </div>
@@ -146,11 +159,17 @@
                                     <th>No</th>
                                     <th>No Peserta</th>
                                     <th>Nama</th>
+                                    <th>Tgl Lahir</th>
+                                    <th>Usia</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
                                     <th class="text-right">Nilai Manfaat Asuransi</th>
-                                    <th class="text-right">Pengembalian Kontribusi</th>
+                                    <th class="text-right">Rate</th>
+                                    <th class="text-right">Kontribusi</th>
+                                    <th class="text-right">Extra Mortality</th>
+                                    <th class="text-right">Extra Kontribusi</th>
+                                    <th class="text-right">Total Kontribusi</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -167,11 +186,34 @@
                                         <td>{{$k+1}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                        <td>
+                                            {{date('d-M-Y',strtotime($item['tanggal_lahir']))}}
+                                        </td>
+                                        <td>{{$item['usia']}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_mulai','{{$item['tanggal_mulai']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{date('d-M-Y',strtotime($item['tanggal_mulai']))}}
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_akhir','{{$item['tanggal_akhir']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{date('d-M-Y',strtotime($item['tanggal_akhir']))}}
+                                        </td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
-                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                        <td class="text-right">
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'basic','{{$item['basic']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{format_idr($item['basic'])}}
+                                        </td>
+                                        <td class="text-right">{{format_idr($item['rate'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                        <td class="text-right">
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'extra_mortalita','{{$item['extra_mortalita']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{format_idr($item['extra_mortalita'])}}
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'extra_kontribusi','{{$item['extra_kontribusi']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{format_idr($item['extra_kontribusi'])}}
+                                        </td>
+                                        <td class="text-right">{{format_idr($item['total_kontribusi'])}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -256,6 +298,7 @@
 
     <div wire:ignore.self class="modal fade" id="modal_edit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
+          <form id="basic-form" method="post" wire:submit.prevent="update_peserta">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-edit"></i> Edit</h5>
@@ -265,12 +308,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>{{$field_selected}}</label>
-                        <input type="text" wire:model="value_selected" class="form-control" />
+                        <label>{{@$label_update_peserta[$field_selected]}}</label>
+                        @if(in_array($field_selected,['tanggal_akhir','tanggal_mulai']))
+                            <input type="date" wire:model="value_selected" class="form-control" />
+                        @else
+                            <input type="text" wire:model="value_selected" class="form-control" />
+                        @endif
                     </div>
                     <hr />
                     <div class="form-group">
-                        <button type="button" wire:loading.remove wire:target="update_peserta" wire:click="update_peserta" class="btn btn-info mr-3"><i class="fa fa-upload"></i> Update</button>
+                        <button type="submit" wire:loading.remove wire:target="update_peserta" wire:click="update_peserta" class="btn btn-info mr-3"><i class="fa fa-upload"></i> Update</button>
                         <span wire:loading wire:target="update_peserta">
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
@@ -278,10 +325,12 @@
                     </div>
                 </div>
             </div>
+          </form>
         </div>
     </div>
-
 </div>
+
+@livewire('endorsement.jenis-perubahan')
 
 @push('after-scripts')
     <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>

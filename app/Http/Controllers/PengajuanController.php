@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use App\Models\Endorsement;
 use App\Models\User;
 
 class PengajuanController extends Controller
@@ -34,4 +35,20 @@ class PengajuanController extends Controller
 
         return $pdf->stream();
     }
+
+    public function printDNEndorsement(Endorsement $id)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+
+        $list_no_peserta = [];$list_nama_peserta = [];
+        foreach($id->kepesertaan as $k=>$item){
+            $list_no_peserta[] = $item->no_peserta;
+            $list_nama_peserta[] = $item->nama;
+        }
+
+        $pdf->loadView('livewire.endorsement.print-dn',['data'=>$id,'list_no_peserta'=>$list_no_peserta,'list_nama_peserta'=>$list_nama_peserta]);
+
+        return $pdf->stream();
+    }
+
 }

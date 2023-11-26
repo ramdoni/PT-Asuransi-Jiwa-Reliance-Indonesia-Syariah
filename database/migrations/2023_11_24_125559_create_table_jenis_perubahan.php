@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldEndorsementIdToKepesertaan extends Migration
+class CreateTableJenisPerubahan extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddFieldEndorsementIdToKepesertaan extends Migration
      */
     public function up()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
-            $table->integer('endorsement_id')->nullable();
+        Schema::create('jenis_perubahans', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AddFieldEndorsementIdToKepesertaan extends Migration
      */
     public function down()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('jenis_perubahans');
     }
 }

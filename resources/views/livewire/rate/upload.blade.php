@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table table-hover m-b-0 c_list">
+                    <table class="table table-hover m-b-0 c_list no_padding">
                         <thead style="background: #eee;">
                             <tr>
                                 <th rowspan="2">Usia / Masa Asuransi</th>
@@ -22,7 +22,7 @@
                             <tr>
                                 @if(isset($get_bulan))
                                     @foreach($get_bulan as $bulan)
-                                        <td>{{$bulan->bulan}}</td>
+                                        <td class="text-right">{{$bulan->bulan}}</td>
                                     @endforeach
                                 @endif
                             </tr>
@@ -31,9 +31,9 @@
                             @if($data)
                                 @foreach ($data as $k => $item)
                                     <tr>
-                                        <td>{{$item->tahun}}</td>
+                                        <td class="text-right">{{$item->tahun}}</td>
                                         @foreach($get_bulan as $bulan)
-                                            <td>{{isset($raw_data[$item->tahun][$bulan->bulan]) ? $raw_data[$item->tahun][$bulan->bulan] : '-'}}</td>
+                                            <td class="text-right">{{isset($raw_data[$item->tahun][$bulan->bulan]) ? $raw_data[$item->tahun][$bulan->bulan] : '-'}}</td>
                                         @endforeach
                                     </tr>
                                 @endforeach

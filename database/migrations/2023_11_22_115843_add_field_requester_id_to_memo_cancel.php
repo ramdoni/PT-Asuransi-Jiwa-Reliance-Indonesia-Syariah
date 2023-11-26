@@ -15,7 +15,6 @@ class AddFieldRequesterIdToMemoCancel extends Migration
     {
         Schema::table('memo_cancel', function (Blueprint $table) {
             $table->unsignedBigInteger('requester_id')->nullable();
-            $table->foreign('requester_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

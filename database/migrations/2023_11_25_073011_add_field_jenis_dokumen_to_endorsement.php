@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldEndorsementIdToKepesertaan extends Migration
+class AddFieldJenisDokumenToEndorsement extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddFieldEndorsementIdToKepesertaan extends Migration
      */
     public function up()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
-            $table->integer('endorsement_id')->nullable();
+        Schema::table('endorsement', function (Blueprint $table) {
+            $table->string('no_cn_or_dn',200)->nullable();
+            $table->boolean('jenis_dokumen')->nullable();
+            $table->bigInteger('selisih')->nullable();
         });
     }
 
@@ -25,7 +27,7 @@ class AddFieldEndorsementIdToKepesertaan extends Migration
      */
     public function down()
     {
-        Schema::table('kepesertaan', function (Blueprint $table) {
+        Schema::table('endorsement', function (Blueprint $table) {
             //
         });
     }

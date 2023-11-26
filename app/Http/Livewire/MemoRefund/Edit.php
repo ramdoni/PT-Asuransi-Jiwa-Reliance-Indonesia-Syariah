@@ -39,17 +39,22 @@ class Edit extends Component
         $this->emit('message-success','Data Updated.');
     }
 
-    public function submit_head_teknik()
+    public function submit_head_teknik($status)
     {
         \LogActivity::add("Memo Refund Head Teknik #{$this->data->id}");
 
         $this->data->head_teknik_submitted = date('Y-m-d H:i:s');
         $this->data->head_teknik_note = $this->note;
-        $this->data->status = 1;
+
+        if($status==1)
+            $this->data->status = 1;
+        else
+            $this->data->status = 4;
+
         $this->data->save();
 
         // find reas refund
-        ReasCancel::where('memo_refund_id',$this->data->id)->update(['status'=>1]);
+        ReasRefund::where('memo_refund_id',$this->data->id)->update(['status'=>1]);
 
         $this->emit('message-success','Memo Refund berhasil disubmit');
     }

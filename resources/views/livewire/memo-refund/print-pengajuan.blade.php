@@ -141,8 +141,8 @@
                 <table style="border:1px solid;padding:5px;width:100%;">
                     <tr>
                         <td>Pemegang Polis </td>
-                        <td> : </td>
-                        <td colspan="3">{{$data->polis->nama}}</td>
+                        <td style="width: 10px;"> : </td>
+                        <td>{{$data->polis->nama}}</td>
                     </tr>
                     <tr>
                         <td>Jenis Asuransi </td>
@@ -162,64 +162,30 @@
                     <tr>
                         <td>Nomor Peserta </td>
                         <td> : </td>
-                        <td>
-                            @if($data->nomor_peserta_awal)
-                                {{$data->nomor_peserta_awal}}
-                            @endif
-                        </td>
-                        <td>
-                            @if($data->nomor_peserta_akhir)
-                                s/d
-                            @endif
-                        </td>
-                        <td>
-                            @if($data->nomor_peserta_akhir)
-                                {{$data->nomor_peserta_akhir}}
-                            @endif
-                        </td>
+                        <td>{{implode(", ",$list_peserta)}}</td>
                     </tr>
                     <tr>
                         <td>Periode Asuransi </td>
                         <td> : </td>
-                        <td>
-                            @if($data->periode_awal)
-                                {{date('d M Y',strtotime($data->periode_awal))}}
-                            @endif
-                        </td>
-                        <td>
-                            @if($data->periode_akhir)
-                                s/d
-                            @endif
-                        </td>
-                        <td>
-                            @if($data->periode_akhir)
-                                {{date('d M Y',strtotime($data->periode_akhir))}}
-                            @endif
-                        </td>
+                        <td>{{implode(", ",$periode_asuransi)}}</td>
                     </tr>
                     <tr>
                         <td>Manfaat Asuransi</td>
                         <td> : </td>
                         <td>{{format_idr($data->total_manfaat_asuransi)}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td>Tanggal Pengurangan</td>
                         <td> : </td>
                         <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     <tr>
-                        <td colspan="5"><br /></td>
+                        <td colspan="3"><br /></td>
                     </tr>
                     <tr>
                         <td>No Debit Note</td>
                         <td> : </td>
-                        <td></td>
+                        <td>{{implode(", ",$no_debit_notes)}}</td>
                     </tr>
                     <tr>
                         <td>Tgl Debit Note</td>
@@ -235,40 +201,31 @@
                         <td>Tujuan Pembayaran</td>
                         <td> : </td>
                         <td>{{$data->tujuan_pembayaran}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td>Nama Bank</td>
                         <td> : </td>
                         <td>{{$data->nama_bank}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td>No. Rekening</td>
                         <td> : </td>
                         <td>{{$data->no_rekening}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td>Tgl. Jatuh Tempo</td>
                         <td> : </td>
                         <td>{{date('d F Y',strtotime($data->tgl_jatuh_tempo))}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     <tr>
-                        <td colspan="6"><i>*Note: Credit Note dapat dibayarkan setelah pembayaran tagihan premi telah diterima oleh Reliance Life</i></td>
+                        <td colspan="3"><i>*Note: Credit Note dapat dibayarkan setelah pembayaran tagihan premi telah diterima oleh Reliance Life</i></td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="padding-top:20px;"><strong>TOTAL PEMBAYARAN CREDIT NOTE</strong></td>
-                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi_gross)}}</td>
+                        <td colspan="3" style="padding-top:20px;">
+                            <p style="float:left;font-weight:bold;">TOTAL PEMBAYARAN CREDIT NOTE</p>
+                            <p style="float:right;font-weight:bold;">Rp. {{format_idr($data->total_kontribusi)}}</p>
+                            <div style="clear:both"></div>
+                        </td>
                     </tr>
                 </table>
                 <br />
@@ -324,7 +281,7 @@
                 <strong>{{$data->polis->nama}}</strong><br />
                 {{$data->polis->alamat}}
             </p>
-            <table style="border:1px solid">
+            <table style="border:1px solid" border="1">
                 <tr>
                     <th style="border-bottom: 1px solid;border-right:1px solid;padding-top:10px;padding-bottom:10px;">KETERANGAN</th>
                     <th style="border-bottom: 1px solid;">  REFUND KONTRIBUSI (Rp)</th>
@@ -333,21 +290,15 @@
                     <td style="border-right:1px solid;padding-left:10px;padding-top:50px;padding-bottom:40px;">
                         <p>
                             Pengurangan Kepesertaan Asuransi Unit Syariah produk <strong>{{isset($data->polis->produk->nama) ? $data->polis->produk->nama : '-'}}</strong>
-                            dengan No Polis <strong>{{$data->polis->no_polis}}</strong> dan Jumlah Peserta {{$data->total_peserta}} orang (No Peserta 
-                            @if($data->no_peserta_awal and $data->no_peserta_akhir=="")  
-                                {{$data->no_peserta_awal}}
-                            @endif
-                            @if($data->no_peserta_awal and $data->no_peserta_akhir)  
-                                {{$data->no_peserta_awal}} - {{$data->no_peserta_akhir}}
-                            @endif
+                            dengan No Polis <strong>{{$data->polis->no_polis}}</strong> dan Jumlah Peserta {{$data->total_peserta}} orang (No Peserta {{implode(", ",$list_peserta)}} )
                         </p>
                     </td>
                     <td style="width: 180px;padding-top:40px;padding-bottom:40px;" class="text-right">
-                        <strong>{{format_idr($data->total_kontribusi_gross)}}</strong>
+                        <strong>{{format_idr($data->total_kontribusi)}}</strong>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($data->total_kontribusi_gross)}}</td>
+                    <td colspan="2">Terbilang : {{terbilang($data->total_kontribusi)}}</td>
                 </tr>
             </table>
             <br />
@@ -407,7 +358,7 @@
                 Sehubungan dengan pengajuan Pengurangan Data Peserta yang diterima atas Penutupan Asuransi Jiwa Unit Syariah, sebagai berikut.
                 <table>
                     <tr>
-                        <td>Nomor Polis</td>
+                        <td style="width: 180px;">Nomor Polis</td>
                         <td> : {{$data->polis->no_polis}}</td>
                     </tr>
                     <tr>
@@ -440,9 +391,7 @@
                             <tr>
                                 <td>No. Peserta</td>
                                 <td> : </td>
-                                <td class="text-right"> {{$data->no_peserta_awal}}</td>
-                                <td>@if($data->no_peserta_akhir) s/d @endif</td>
-                                <td>{{$data->no_peserta_akhir}}</td>
+                                <td class="text-right"> {{implode(", ", $list_peserta)}}</td>
                             </tr>
                             <tr>
                                 <td>Manfaat Asuransi</td>
@@ -452,9 +401,9 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>Pengembalian Kontribusi</td>
+                                <td style="width: 40%;">Pengembalian Kontribusi</td>
                                 <td> : Rp. </td>
-                                <td class="text-right">{{format_idr($data->total_kontribusi_gross)}}</td>
+                                <td class="text-right">{{format_idr($data->total_kontribusi)}}</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -470,16 +419,16 @@
                     <td>
                         <table style="width: 100%;">
                             <tr>
-                                <td>Total Peserta </td>
-                                <td> : </td>
-                                <td class="text-right"></td>
+                                <td style="width: 40%;">Total Peserta </td>
+                                <td style="width: 10px;"> : </td>
+                                <td class="text-right">-</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <td>Total Manfaat Asuransi </td>
-                                <td> : </td>
-                                <td class="text-right"></td>
+                                <td style="width: 10px;"> : </td>
+                                <td class="text-right">-</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -491,7 +440,7 @@
                     <th class="text-left">Credit Note</th>
                 </tr>
             </table>
-            <p>
+            <p style="text-align:justify;">
                 Dapat diinformasikan bahwa seluruh peserta dalam Daftar Pengurangan Kepesertaan asuransi Asuransi Syariah diberlakukan efektif pembatalan per tanggal 
                 sesuai dengan Daftar Pengurangan Peserta terlampir.<br />
                 Apabila terdapat pertanyaan, silahkan menghubungi kami pada hotline 021-5793 0008, di hari Senin - Jumat pukul 09:00 - 17:00 WIB dengan Dept. Underwriting Unit Syariah

@@ -11,15 +11,12 @@ class MemoRefundController extends Controller
 {
     public function printPengajuan(Refund $id)
     {
-        // $param['no_peserta_awal'] = '-';
-        // $param['no_peserta_akhir'] = '-';
-        
-        // foreach($id->kepesertaan as $k => $item){
-        //     if($k==0) 
-        //         $param['no_peserta_awal'] = $item->no_peserta;
-        //     else
-        //         $param['no_peserta_akhir'] = $item->no_peserta;
-        // }
+        $param['list_peserta'] = [];$param['periode_asuransi'] = [];$param['no_debit_notes'] = [];
+        foreach($id->kepesertaan as $k => $item){
+            $param['list_peserta'][] = $item->no_peserta;
+            $param['periode_asuransi'][] = date("d-M-Y",strtotime($item->tanggal_mulai)) . " sd ". date("d-M-Y",strtotime($item->tanggal_akhir));
+            $param['no_debit_notes'][] = $item->pengajuan->dn_number;
+        }
 
         $param['data'] = $id;
         $pdf = \App::make('dompdf.wrapper');

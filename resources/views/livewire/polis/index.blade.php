@@ -155,8 +155,8 @@
                                     <td style="width: 50px;">{{ $k + 1 }}</td>
                                     <td>
                                         @if($item->status_approval==0)
-                                            <span class="badge badge-warning">Draft</span>
                                             <a href="javascript:void(0)" wire:click="$set('selected_id',{{$item->id}})" data-toggle="modal" data-target="#modal_delete"><i class="fa fa-trash text-danger"></i></a>
+                                            <span class="badge badge-warning">Draft</span>
                                         @endif
                                         @if($item->status_approval==1)
                                             @if(\Auth::user()->user_access_id==4)
@@ -166,7 +166,7 @@
                                         @endif
                                     </td>
                                     <td><a href="{{route('polis.edit',$item->id)}}">{{$item->no_polis}}</a></td>
-                                    <td>{{$item->nama}}</td>
+                                    <td>{{Str::limit($item->nama,50)}}</td>
                                     <td>{{isset($item->provinsi->nama) ? $item->provinsi->nama : '-'}}</td>
                                     <td>{{$item->terbit_polis ? date('d-M-Y',strtotime($item->terbit_polis)) : '-'}}</td>
                                     <td>{{$item->tahun_terbit_polis}}</td>

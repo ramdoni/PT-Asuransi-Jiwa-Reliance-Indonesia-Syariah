@@ -56,13 +56,16 @@
                         <p>
                             <strong>Status : </strong>
                             @if($data->status==0)
-                                <span class="badge badge-warning">Head Teknik</span>
+                                <span class="badge badge-info">Head Teknik</span>
                             @endif
                             @if($data->status==1)
-                                <span class="badge badge-warning">Head Syariah</span>
+                                <span class="badge badge-info">Head Syariah</span>
                             @endif
                             @if($data->status==2)
                                 <span class="badge badge-success">Selesai</span>
+                            @endif
+                            @if($data->status==4)
+                                <span class="badge badge-danger">Reject</span>
                             @endif
                         </p>
                     </div>
@@ -94,21 +97,23 @@
                             <textarea class="form-control" wire:model="note"></textarea>
                         </div>
                     @endif
-                    <hr>
-                    <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
+                    <a href="{{route('memo-refund.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <span wire:loading wire:target="submit_head_teknik,submit_head_syariah">
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <span class="sr-only">{{ __('Loading...') }}</span>
                     </span>
+                    <button type="button" class="btn btn-info ml-3" wire:loading.remove wire:target="update_data" wire:click="update_data" wire:loading.remove><i class="fa fa-save"></i> {{ __('Update') }}</button>
+
                     <!-- Approval Head Teknik -->
                     @if($data->status==0 and \Auth::user()->user_access_id==3)
-                        <button type="button" class="btn btn-warning ml-3" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
+                        <button type="button" class="btn btn-success ml-5" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik(1)" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Approve') }}</button>
+                        <button type="button" class="btn btn-danger" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik(0)" wire:loading.remove><i class="fa fa-close"></i> {{ __('Reject') }}</button>
                     @endif
                     <!-- Approval Head Syariah -->
                     @if($data->status==1 and \Auth::user()->user_access_id==4)
-                        <button type="button" class="btn btn-warning ml-3" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
+                        <button type="button" class="btn btn-success ml-5" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah(1)" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Approve') }}</button>
+                        <button type="button" class="btn btn-danger" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah(0)" wire:loading.remove><i class="fa fa-close"></i> {{ __('Reject') }}</button>
                     @endif
-                    <button type="button" class="btn btn-info ml-3" wire:loading.remove wire:target="update_data" wire:click="update_data" wire:loading.remove><i class="fa fa-save"></i> {{ __('Update') }}</button>
                 </form>
             </div>
         </div>

@@ -88,3 +88,6 @@ table#table_postpone thead tr th,
 table#table_approve thead tr th
 {color:#689a37 !important}
 table thead .sub_total {color: orange;font-size: 13px}
+table.no_padding tr td {
+    padding:0 3px 3px 0;
+}

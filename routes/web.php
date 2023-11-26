@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 Route::group(['middleware' => ['auth']], function(){
+    Route::get('endorsement/print/{id}',[App\Http\Controllers\PengajuanController::class,'printDNEndorsement'])->name('endorsement.print-dn');
     Route::get('memo-ujroh/print/{id}',[App\Http\Controllers\MemoUjrohController::class,'printPengajuan'])->name('memo-ujroh.print-pengajuan');
     Route::get('memo-cancel/print/{id}',[App\Http\Controllers\MemoCancelController::class,'printPengajuan'])->name('memo-cancel.print-pengajuan');
     Route::get('memo-refund/print/{id}',[App\Http\Controllers\MemoRefundController::class,'printPengajuan'])->name('memo-refund.print-pengajuan');
