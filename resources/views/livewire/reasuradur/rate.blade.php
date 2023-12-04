@@ -26,6 +26,7 @@
                             <th>UW Limit</th>
                             <th>Model Reas</th>
                             <th>Max OR</th>
+                            <th>Refund(%)</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -57,7 +58,8 @@
                                     </a>
                                 </td>
                                 <td>{{$item->model_reas}}</td>
-                                <td>{{$item->max_or}}</td>
+                                <td>{{format_idr($item->max_or)}}</td>
+                                <td>{{$item->persentase_refund}}</td>
                                 <td>
                                     <a href="javascript:void(0)" wire:loading.remove wire:target="delete({{$item->id}})" wire:click="delete({{$item->id}})"><i class="fa fa-trash text-danger"></i></a>
                                     <span wire:loading wire:target="delete({{$item->id}})">

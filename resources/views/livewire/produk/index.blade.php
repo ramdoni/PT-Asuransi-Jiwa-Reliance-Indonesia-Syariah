@@ -40,6 +40,7 @@
                                 <th>Nama Produk</th>
                                 <th>Klasifikasi</th>
                                 <th>Running Number</th>
+                                <th>Manfaat Asuransi</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -52,6 +53,7 @@
                                     <td>{{$item->nama}}</td>
                                     <td>{{$item->klasifikasi}}</td>
                                     <td>{{$item->running_number}}</td>
+                                    <td><a href="#" data-target="#modal_manfaat_asuransi" data-toggle="modal" wire:click="$emit('set_id',{{$item->id}})"><i class="fa fa-edit"></i> View</a></td>
                                     <td><a href="javascript:void(0)" class="text-danger" wire:click="delete({{$item->id}})"><i class="fa fa-trash"></i></a></td>
                                 </tr>
                             @endforeach
@@ -67,6 +69,8 @@
         </div>
     </div>
 </div>
+
+@livewire('polis.manfaat-asuransi')
 
 <div wire:ignore.self class="modal fade" id="modal_add" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('produk.insert')

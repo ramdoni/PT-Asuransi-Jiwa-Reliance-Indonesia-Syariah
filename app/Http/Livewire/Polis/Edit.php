@@ -28,7 +28,7 @@ class Edit extends Component
     public $admin_agency_penerima,$admin_agency_nama_bank,$admin_agency_no_rekening;
     public $agen_penutup_penerima,$agen_penutup_nama_bank,$agen_penutup_no_rekening;
     public $ujroh_handling_fee_broker_penerima,$ujroh_handling_fee_broker_nama_bank,$ujroh_handling_fee_broker_no_rekening;
-    public $referal_fee_penerima,$referal_fee_nama_bank,$referal_fee_no_rekening;
+    public $referal_fee_penerima,$referal_fee_nama_bank,$referal_fee_no_rekening,$peserta,$manfaat_asuransi,$terbit_polis;
 
     public $data,$tab_active=1;
     protected $listeners = ['set-id'=>'set_id'];
@@ -177,6 +177,9 @@ class Edit extends Component
         $this->referal_fee_penerima = $this->data->referal_fee_penerima;
         $this->referal_fee_nama_bank = $this->data->referal_fee_nama_bank;
         $this->referal_fee_no_rekening = $this->data->referal_fee_no_rekening;
+        $this->peserta = $this->data->peserta;
+        $this->manfaat_asuransi = $this->data->manfaat_asuransi;
+        $this->terbit_polis = $this->data->terbit_polis;
     }
     
     public function updated($propertyName)
@@ -212,6 +215,8 @@ class Edit extends Component
             update_setting('running_number_sb',$running_number_sb);
             $this->data->no_sb = "PPA.AJRUS.".$running_number_sb.".".date('m').".".date('y');
         }
+        
+        if($this->data->terbit_polis=="") $this->data->terbit_polis = date('Y-m-d');
 
         $this->data->status_approval = 1;
         $this->data->save();
@@ -239,6 +244,8 @@ class Edit extends Component
             'masa_leluasa' => 'required'
         ]);
 
+        $this->data->peserta = $this->peserta;
+        $this->data->manfaat_asuransi = $this->manfaat_asuransi;
         $this->data->nama = $this->nama;
         $this->data->provinsi_id = $this->provinsi_id;
         $this->data->alamat = $this->alamat;
@@ -369,7 +376,7 @@ class Edit extends Component
         $this->data->referal_fee_penerima = $this->referal_fee_penerima;
         $this->data->referal_fee_nama_bank = $this->referal_fee_nama_bank;
         $this->data->referal_fee_no_rekening = $this->referal_fee_no_rekening;
-
+        $this->data->terbit_polis = $this->terbit_polis;
         $this->data->save();  
 
         session()->flash('message-success',__('Polis berhasil disimpan'));

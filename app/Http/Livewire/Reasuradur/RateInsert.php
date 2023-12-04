@@ -9,7 +9,7 @@ use App\Models\ReasuradurRateUw;
 
 class RateInsert extends Component
 {
-    public $reasuradur_id,$nama,$or,$reas,$rate,$uw_limit,$ri_com,$model_reas,$max_or;
+    public $reasuradur_id,$nama,$or,$reas,$rate,$uw_limit,$ri_com,$model_reas,$max_or,$persentase_refund;
     public function render()
     {
         return view('livewire.reasuradur.rate-insert');
@@ -38,9 +38,9 @@ class RateInsert extends Component
         $rate->ri_com = $this->ri_com;
         $rate->model_reas = $this->model_reas;
         $rate->max_or = $this->max_or;
+        $rate->persentase_refund = $this->persentase_refund;
         $rate->save();
 
-        $this->emit('modal','hide');
-        $this->emit('reload-rate');
+        $this->emit('modal','hide');$this->emit('reload-rate');
     }
 }

@@ -27,28 +27,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-10">
                         <a href="{{route('recovery-claim.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
-                        <a href="javascript:void(0)" class="btn btn-warning" wire:click="downloadExcel"><i class="fa fa-download"></i> Download</a>
+                        @if($is_download==false)
+                            <a href="javascript:void(0)" class="btn btn-warning" wire:click="$set('is_download',true)"><i class="fa fa-download"></i> Download</a>
+                        @endif
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-                    </div>
-                    <div class="col-md-4 text-right">
+
                         @if($is_rekon==false)
-                            <a href="javascript:void(0)" class="btn btn-danger float-right" wire:click="$set('is_rekon',true)"><i class="fa fa-check"></i> Rekon</a>
-                        @else
-                            <select class="form-control" wire:model="filter_polis_id" style="width: 200px;float:right;">
-                                <option value=""> -- Polis -- </option>
-                                @foreach($polis as $item)
-                                    <option value="{{$item->polis_id}}">{{$item->polis->no_polis}} / {{$item->polis->nama}}</option>
-                                @endforeach
-                            </select>
-                            @if(count(array_filter($check_id))>0)
-                                <a href="javacript:void(0)" wire:click="generateDn" class="btn btn-danger ml-2">Generate DN</a>
-                            @endif
-                            <a href="javascript:void(0)" class="text-danger ml-2 mr-3 float-right mt-2" wire:click="$set('is_rekon',false)"><i class="fa fa-close"></i> Cancel</a>
+                            <!-- <a href="javascript:void(0)" class="btn btn-danger" wire:click="$set('is_rekon',true)"><i class="fa fa-check"></i> Rekon</a>                             -->
                         @endif
                     </div>
                 </div>
@@ -59,8 +49,34 @@
                         <thead style="vertical-align:middle;background: #eeeeee54">
                             <tr>
                                 <th rowspan="2">No</th>
-                                <th rowspan="2">Status</th>
-                                <th rowspan="2">Status Rekon</th>
+                                <th rowspan="2">
+                                @if($is_rekon || $is_download)
+                                    <select class="form-control" wire:model="filter_polis_id" style="width: 200px;">
+                                        <option value=""> -- Polis -- </option>
+                                        @foreach($polis as $item)
+                                            <option value="{{$item->polis_id}}">{{$item->polis->no_polis}} / {{$item->polis->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                @endif    
+                                Status
+                                </th>
+                                <th rowspan="2">
+                                    @if($is_rekon || $is_download)
+                                        @if(count(array_filter($check_id))>0 and $is_download)
+                                            <a href="javacript:void(0)" wire:click="downloadExcel" class="btn btn-success ml-2"><i class="fa fa-download"></i> Submit</a>
+                                            <a href="#" class="text-danger" wire:click="$set('is_download',false)"><i class="fa fa-times"></i></a>
+                                            <br />
+                                        @endif  
+
+                                        <!-- @if(count(array_filter($check_id))>0 and $is_rekon)
+                                            <a href="javacript:void(0)" wire:click="generateDn" class="btn btn-danger ml-2">Submit Rekon</a>
+                                            <a href="javascript:void(0)" class="text-danger ml-2 mr-3 mt-2" wire:click="$set('is_rekon',false)"><i class="fa fa-close"></i></a>
+                                            <br />
+                                        @endif -->
+                                        
+                                    @endif
+                                    Status Rekon
+                                </th>
                                 <th colspan="3" class="text-center">Kirim Reas</th>
                                 <th rowspan="2">No Pengajuan</th>
                                 <th rowspan="2">No Polis</th>
@@ -80,10 +96,10 @@
                             @foreach ($data as $k => $item)
                                 <tr>
                                     <td style="width: 50px;">
-                                        @if($is_rekon==false)
+                                        @if($is_rekon==false and $is_download==false)
                                             {{$k+1}}
                                         @else
-                                            @if($item->reas_status==1 and $item->rekon_status==0 and $filter_polis_id!="")
+                                            @if($filter_polis_id!="")
                                                 <input type="checkbox" wire:model="check_id.{{$k}}" value="{{$item->id}}" />
                                             @endif
                                         @endif
@@ -125,7 +141,7 @@
                                     <td class="text-right">{{format_idr($item->nilai_klaim)}}</td>
                                     <td>
                                         <a href="{{route('recovery-claim.print-dn',$item->id)}}" target="_blank"><i class="fa fa-print"></i> DN</a>
-                                        <a href="{{route('recovery-claim.print-dn-rekon',$item->id)}}" target="_blank" class="ml-2"><i class="fa fa-print"></i> DN Rekon</a>
+                                        <!-- <a href="{{route('recovery-claim.print-dn-rekon',$item->id)}}" target="_blank" class="ml-2"><i class="fa fa-print"></i> DN Rekon</a> -->
                                         <a href="javacript:void(0)" class="ml-2" data-target="#modal_confirm_delete" wire:click="$set('selected_id',{{$item->id}})" data-toggle="modal"><i class="fa fa-trash text-danger"></i></a>
                                     </td>
                                 </tr>

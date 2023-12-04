@@ -27,39 +27,6 @@
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                             @enderror
                         </div>
-                        <div class="form-group col-md-6">
-                            <label>Tgl Jatuh Tempo</label>
-                            <input type="date" class="form-control" wire:model="tgl_jatuh_tempo" />
-                            @error('tgl_jatuh_tempo')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label>Tujuan Pembayaran</label>
-                            <input type="text" class="form-control" wire:model="tujuan_pembayaran" />
-                            @error('tujuan_pembayaran')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Nama Bank</label>
-                            <input type="text" class="form-control" wire:model="nama_bank" />
-                            @error('nama_bank')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label>Nomor Rekening</label>
-                            <input type="text" class="form-control" wire:model="no_rekening" />
-                            @error('no_rekening')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                        
                     </div>
                     <hr>
                     <a href="{{route('recovery-claim.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
@@ -87,6 +54,7 @@
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Manfaat Asuransi</th>
                                 <th class="text-right">Nilai Klaim</th>
+                                <th>Status Klaim</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -113,6 +81,26 @@
                                     <td class="text-center">{{$item['masa_bulan']}}</td>
                                     <td class="text-right">{{format_idr($item['basic'])}}</td>
                                     <td class="text-right">{{format_idr($item['nilai_klaim'])}}</td>
+                                    <td>
+                                        @if($item['status_klaim']==0)
+                                            <span class="badge badge-warning">Klaim Analis</span>
+                                        @endif
+                                        @if($item['status_klaim']==1)
+                                            <span class="badge badge-info">Head Teknik</span>
+                                        @endif
+                                        @if($item['status_klaim']==2)
+                                            <span class="badge badge-danger">Head Syariah</span>
+                                        @endif
+                                        @if($item['status_klaim']==5)
+                                            <span class="badge badge-default">Direksi</span>
+                                        @endif
+                                        @if($item['status_klaim']==3)
+                                            <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
+                                        @endif
+                                        @if($item['status_klaim']==4)
+                                            <span class="badge badge-default badge-active" title="Data migrasi"><i class="fa fa-upload"></i> Migrasi</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             

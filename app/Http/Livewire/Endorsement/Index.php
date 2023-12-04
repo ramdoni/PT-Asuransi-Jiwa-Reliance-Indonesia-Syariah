@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Endorsement;
 
 use Livewire\Component;
 use App\Models\Endorsement;
+use App\Models\EndorsementPeserta;
 use App\Models\Kepesertaan;
 use Livewire\WithPagination;
 
@@ -25,7 +26,8 @@ class Index extends Component
         Endorsement::find($this->selected_id)->delete();
 
         Kepesertaan::where('endorsement_id',$this->selected_id)->update(['endorsement_id'=>null]);
-
+        EndorsementPeserta::where('endorsement_id', $this->selected_id)->delete();
+        
         $this->emit('message-success','Deleted');$this->emit('modal','hide');
     }
 }

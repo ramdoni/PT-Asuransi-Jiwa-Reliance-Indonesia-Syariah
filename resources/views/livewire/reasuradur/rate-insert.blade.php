@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-4 form-group">
                         <label>Model Reas</label>
                         <select class="form-control" wire:model="model_reas">
                             <option value=""> -- Pilih -- </option>
@@ -61,9 +61,13 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-6 form-group">
+                    <div class="col-md-4 form-group">
                         <label>Max OR</label>
                         <input type="text"  class="form-control" wire:model="max_or" />
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Refund(%)</label>
+                        <input type="number" min=0 class="form-control" wire:model="persentase_refund" />
                     </div>
                 </div>
             </div>

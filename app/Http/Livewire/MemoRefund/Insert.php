@@ -44,22 +44,19 @@ class Insert extends Component
     public function add_peserta()
     {
         $index = count($this->peserta);
-        $peserta = Kepesertaan::find($this->kepesertaan_id);
+        $peserta = Kepesertaan::find($this->kepesertaan_id)->toArray();
         if($peserta){
-            $this->peserta[$index]['id'] = $peserta->id;
-            $this->peserta[$index]['status_polis'] = $peserta->status_polis;
-            $this->peserta[$index]['no_peserta'] = $peserta->no_peserta;
-            $this->peserta[$index]['nama'] = $peserta->nama;
-            $this->peserta[$index]['tanggal_mulai'] = $peserta->tanggal_mulai;
-            $this->peserta[$index]['tanggal_akhir'] = $peserta->tanggal_akhir;
-            $this->peserta[$index]['basic'] = $peserta->basic;
-            $this->peserta[$index]['masa_bulan'] = $peserta->masa_bulan;
-            $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita ;
-            $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
-            $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
+            $polis = Polis::find($this->polis_id);
+            foreach($peserta as $field => $val){
+                $this->peserta[$index][$field] = $val;
+            }
+           
+            $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta['kontribusi'] + $peserta['extra_kontribusi'] + $peserta['extra_mortalita'] ;
+            // $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
+            // $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
             $this->peserta[$index]['refund_tanggal_efektif'] = date('Y-m-d');
-            $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta->tanggal_akhir,3);
-            $this->peserta[$index]['refund_kontribusi'] = ($this->peserta[$index]['refund_sisa_masa_asuransi'] / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $this->peserta[$index]['total_kontribusi_dibayar']);
+            $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta['tanggal_akhir'],3);
+            $this->peserta[$index]['refund_kontribusi'] = ($this->peserta[$index]['refund_sisa_masa_asuransi'] / $peserta['masa_bulan']) * (($polis->refund / 100) * $this->peserta[$index]['total_kontribusi_dibayar']);
 
             $ids = [];
             foreach($this->peserta as $item){
@@ -96,14 +93,10 @@ class Insert extends Component
 
             $peserta = Kepesertaan::where('no_peserta',$no_peserta)->first();
             if($peserta){
-                $this->peserta[$index]['id'] = $peserta->id;
-                $this->peserta[$index]['status_polis'] = $peserta->status_polis;
-                $this->peserta[$index]['no_peserta'] = $peserta->no_peserta;
-                $this->peserta[$index]['nama'] = $peserta->nama;
-                $this->peserta[$index]['tanggal_mulai'] = $peserta->tanggal_mulai;
-                $this->peserta[$index]['tanggal_akhir'] = $peserta->tanggal_akhir;
-                $this->peserta[$index]['basic'] = $peserta->basic;
-                $this->peserta[$index]['masa_bulan'] = $peserta->masa_bulan;
+                foreach($peserta as $field => $val){
+                    $this->peserta[$index][$field] = $val;
+                }
+
                 $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita ;
                 $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
                 $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
@@ -176,7 +169,13 @@ class Insert extends Component
                             n            = masa asuransi (dalam bulan)
                             %            = persentase pengembalian asuransi (sesuai yang tercantum di Polis)
                          */
-                        $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar) ;
+                        $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar);
+                        
+                        if($peserta->net_kontribusi_reas>0 and $peserta->reas_id>0) {
+                            $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? $peserta->reas->rate_uw->persentase_refund : 0; 
+                            $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
+                        }
+
                         $peserta->save();
 
                         $total_kontribusi_gross += $peserta->kontribusi;
@@ -215,9 +214,9 @@ class Insert extends Component
                 if($polis->ppn){
                     $data->ppn =  $polis->ppn;
                     if($data->potong_langsung)
-                        $data->ppn = (($polis->ppn/100) * $data->potong_langsung);
+                        $data->ppn_amount = (($polis->ppn/100) * $data->potong_langsung);
                     else
-                        $data->ppn = $kontribusi*($polis->ppn/100);
+                        $data->ppn_amount = $kontribusi*($polis->ppn/100);
                 }
 
                 $data->total_kontribusi_gross = $total_kontribusi_gross;
@@ -253,7 +252,8 @@ class Insert extends Component
                     
                     $reas_refund->total_peserta = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
                     $reas_refund->total_manfaat_asuransi = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
-                    $reas_refund->total_kontribusi = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
+                    // $reas_refund->total_kontribusi = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
+                    $reas_refund->total_kontribusi = Kepesertaan::where(['memo_refund_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('refund_kontribusi_reas');
                     $reas_refund->save();   
                 }
 

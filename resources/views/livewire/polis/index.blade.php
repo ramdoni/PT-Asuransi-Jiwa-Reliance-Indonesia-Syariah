@@ -20,13 +20,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-11">
                         <a href="{{route('polis.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pemegang Polis</a>
                         <a href="javascript:void(0)" class="btn btn-danger" data-target="#modal_upload" data-toggle="modal"><i class="fa fa-upload"></i> Upload</a>
+                        <a href="{{asset('ketum.docx')}}" class="ml-2"><i class="fa fa-download"></i> Download KETUM</a>
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
+                        <!-- <a href="#" class="float-right" data-toggle="modal" data-target="#modal_manfaat_asuransi"><i class="fa fa-database"></i> Manfaat Asuransi</a> -->
                     </div>
                 </div>
             </div>
@@ -165,7 +167,10 @@
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Issued</span>
                                         @endif
                                     </td>
-                                    <td><a href="{{route('polis.edit',$item->id)}}">{{$item->no_polis}}</a></td>
+                                    <td>
+                                        <a href="{{route('polis.print-epolicy',$item->id)}}" target="_blank"><i class="fa fa-print"></i></a>
+                                        <a href="{{route('polis.edit',$item->id)}}">{{$item->no_polis}}</a>
+                                    </td>
                                     <td>{{Str::limit($item->nama,50)}}</td>
                                     <td>{{isset($item->provinsi->nama) ? $item->provinsi->nama : '-'}}</td>
                                     <td>{{$item->terbit_polis ? date('d-M-Y',strtotime($item->terbit_polis)) : '-'}}</td>
@@ -328,8 +333,6 @@
         </div>
     </div>
 
-
-
 </div>
 <div wire:ignore.self class="modal fade" id="modal_add_uw_limit" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.underwriting-limit')
@@ -342,7 +345,7 @@
 <div wire:ignore.self class="modal fade" id="modal_upload" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('polis.upload')
 </div>
-
+@livewire('polis.manfaat-asuransi')
 @push('after-scripts')
     <script>
         $(document).ready(function() { 

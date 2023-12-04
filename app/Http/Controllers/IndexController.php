@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Klaim;
+use App\Models\Polis;
 
 class IndexController extends Controller
 {
@@ -33,7 +34,15 @@ class IndexController extends Controller
         //$sheetData->setPreCalculateFormulas(false);
         $sheetData = $sheetData->toArray(null, true, true, true);
         dd($sheetData);
+    }
 
+    public function printEpolicy(Polis $id)
+    {
+        $param['data'] = $id;
+        $pdf = \App::make('dompdf.wrapper');
+        
+        $pdf->loadView('livewire.polis.print-epolicy',$param)->setPaper('a4', 'portrait');;
 
+        return $pdf->stream();
     }
 }

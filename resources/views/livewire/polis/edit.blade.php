@@ -61,6 +61,10 @@
                         </div>
                         <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
                             <div class="form-group">
+                                <label>Terbit Polis</label>
+                                <input type="date" class="form-control" wire:model="terbit_polis" />
+                            </div>
+                            <div class="form-group">
                                 <label>Agen Penutup (%)</label>
                                 <input type="text" class="form-control" wire:model="agen_penutup" />
                             </div>
@@ -196,32 +200,29 @@
                                         <option value="Inforce">Inforce</option>
                                     </select>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Masa Leluasa (Grace Periode) *hari</label>
-                                <input type="text" class="form-control" wire:model="masa_leluasa" placeholder="Hari Kalender" />
-                                @error('masa_leluasa')
-                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label>Kelengkapan Berkas Manfaat Asuransi</label>
-                                <input type="text" class="form-control" wire:model="kelengkapan_berkas" placeholder="Hari Kalender" />
-                            </div>
-                            <div class="form-group">
-                                <label>Kadaluarsa Klaim *hari</label>
-                                <input type="text" class="form-control" wire:model="kadaluarsa_klaim" placeholder="Hari Kalender" />
-                            </div>
-                            <div class="form-group">
-                                <label>Pemulihan Kepesertaan Asuransi *hari</label>
-                                <input type="text" class="form-control" wire:model="pemulihan_kepesertaan" placeholder="Hari Kalender" />
-                            </div>
-                            <div class="form-group">
-                                <label>Penyelesaian Perselisihan *hari</label>
-                                <input type="text" class="form-control" wire:model="penyelesaian_perselisihan" placeholder="Hari Kalender" />
-                            </div>
-                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Masa Leluasa (Grace Periode) *hari</label>
+                                    <input type="text" class="form-control" wire:model="masa_leluasa" placeholder="Hari Kalender" />
+                                    @error('masa_leluasa')
+                                        <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Kelengkapan Berkas Manfaat Asuransi</label>
+                                    <input type="text" class="form-control" wire:model="kelengkapan_berkas" placeholder="Hari Kalender" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Kadaluarsa Klaim *hari</label>
+                                    <input type="text" class="form-control" wire:model="kadaluarsa_klaim" placeholder="Hari Kalender" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Pemulihan Kepesertaan Asuransi *hari</label>
+                                    <input type="text" class="form-control" wire:model="pemulihan_kepesertaan" placeholder="Hari Kalender" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Penyelesaian Perselisihan *hari</label>
+                                    <input type="text" class="form-control" wire:model="penyelesaian_perselisihan" placeholder="Hari Kalender" />
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label>Iuran Tabbaru <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" wire:model="iuran_tabbaru" />
@@ -233,32 +234,30 @@
                                     <label>Ujrah <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" wire:model="ujrah_atas_pengelolaan" placeholder="Ujrah Atas Pengelolaan Polis untuk Pengelola" readonly />    
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Nisbah Hasil Investasi (Peserta)</label>
-                                <input type="text" class="form-control" wire:model="nisbah_hasil_investasi_peserta" />
-                            </div>
-                            <div class="form-group">
-                                <label>Nisbah Hasil Investasi (Pengelolaan)</label>
-                                <input type="text" class="form-control" wire:model="nisbah_hasil_investasi_pengelolaan" />
-                            </div>
-                            <div class="form-group">
-                                <label>Surplus Underwriting (Dana Tabbaru)</label>
-                                <input type="text" class="form-control" wire:model="surplus_uw_tabbaru" />
-                            </div>
-                            <div class="form-group">
-                                <label>Surplus Underwriting (Peserta)</label>
-                                <input type="text" class="form-control" wire:model="surplus_uw_peserta" />
-                            </div>
-                            <div class="form-group">
-                                <label>Surplus Underwriting (Pengelola)</label>
-                                <input type="text" class="form-control" wire:model="surplus_uw_pengelola" />
-                            </div>
-                            <div class="form-group">
-                                <label>Usia Minimal Kepesertaan Asuransi</label>
-                                <input type="number" class="form-control" wire:model="usia_minimal" />
-                            </div>
-                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Nisbah Hasil Investasi (Peserta)</label>
+                                    <input type="text" class="form-control" wire:model="nisbah_hasil_investasi_peserta" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Nisbah Hasil Investasi (Pengelolaan)</label>
+                                    <input type="text" class="form-control" wire:model="nisbah_hasil_investasi_pengelolaan" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Surplus Underwriting (Dana Tabbaru)</label>
+                                    <input type="text" class="form-control" wire:model="surplus_uw_tabbaru" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Surplus Underwriting (Peserta)</label>
+                                    <input type="text" class="form-control" wire:model="surplus_uw_peserta" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Surplus Underwriting (Pengelola)</label>
+                                    <input type="text" class="form-control" wire:model="surplus_uw_pengelola" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Usia Minimal Kepesertaan Asuransi</label>
+                                    <input type="number" class="form-control" wire:model="usia_minimal" />
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label>Reasuradur</label>
                                     <select class="form-control" wire:model="reasuradur_id">
@@ -296,36 +295,39 @@
                                 <label>Ketentuan UW Reas</label>
                                 <input type="file" class="form-control" wire:model="ketentuan_uw_reas" />
                             </div>
-                            <div class="form-group">
-                                <label>STNC</label>
-                                <input type="text" class="form-control" wire:model="stnc" />
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>STNC</label>
+                                    <input type="text" class="form-control" wire:model="stnc" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Kadaluarsa Reas</label>
+                                    <input type="number" class="form-control" wire:model="kadaluarsa_reas" />
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Kadaluarsa Reas</label>
-                                <input type="number" class="form-control" wire:model="kadaluarsa_reas" />
-                            </div>
-                            <div class="form-group">
-                                <label>No Perjanjian Reas</label>
-                                <input type="text" class="form-control" wire:model="no_perjanjian_reas" />
-                            </div>
-                            <div class="form-group">
-                                <label>Potong Langsung (%)</label>
-                                <input type="text" class="form-control" wire:model="potong_langsung" />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>Fee Base / Brokerage (%)</label>
-                                <input type="text" class="form-control" wire:model="fee_base_brokerage" />
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>No Perjanjian Reas</label>
+                                    <input type="text" class="form-control" wire:model="no_perjanjian_reas" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Potong Langsung (%)</label>
+                                    <input type="number" class="form-control" wire:model="potong_langsung" />
+                                </div>
                             </div>
                             
-                            <div class="row">    
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Fee Base / Brokerage (%)</label>
+                                    <input type="text" class="form-control" wire:model="fee_base_brokerage" />
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label>Operasional Agency (%)</label>
                                     <input type="text" class="form-control" wire:model="operasional_agency" />
                                 </div>
                             </div>
-                            
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label>PPh (%)</label>
@@ -674,6 +676,19 @@
                                 <div class="form-group col-md-6">
                                     <label>Biaya Sertifikat</label>
                                     <input type="text" class="form-control" wire:model="biaya_sertifikat" />
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>E-Policy : Peserta</label>
+                                    <input type="text" class="form-control" wire:model="peserta" />
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>E-Policy : Manfaat Asuransi</label>
+                                    <select class="form-control" wire:model="manfaat_asuransi">
+                                        <option value=""> -- Pilih -- </option>
+                                        @foreach(\App\Models\ManfaatAsuransi::where('product_id',$data->produk_id)->get() as $i)
+                                            <option>{{$i->nama}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

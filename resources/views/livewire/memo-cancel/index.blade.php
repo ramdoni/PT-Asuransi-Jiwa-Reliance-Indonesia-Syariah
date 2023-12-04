@@ -66,8 +66,7 @@
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <a href="{{route('memo-cancel.edit', $item->id)}}">{{$item->nomor}}</a></td>
+                                    <td><a href="{{route('memo-cancel.edit', $item->id)}}">{{$item->nomor}}</a></td>
                                     <td>
                                         @if(isset($item->polis_id))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">
@@ -76,7 +75,7 @@
                                         @endif
                                     </td>
                                     <td>{{isset($item->polis->nama) ? $item->polis->nama : '-'}}</td>
-                                    <td>{{isset($item->polis->produk->nama) ? $item->polis->produk->nama : '-'}}</td>
+                                    <td>{{isset($item->polis->produk->nama) ? Str::limit($item->polis->produk->nama,50) : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>
                                     <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>

@@ -21,7 +21,7 @@
                                     <li><a href="{{ route('produk.index') }}">Produk</a></li>
                                     <li><a href="{{ route('reasuradur.index') }}">Reasuradur</a></li>
                                     <li><a href="{{ route('users.index') }}">Users</a></li>
-                                    <li><a href="{{ route('klaim-reason.index') }}">Klaim Reason</a></li>
+                                    <!-- <li><a href="{{ route('klaim-reason.index') }}">Klaim Reason</a></li> -->
                                     <li><a href="{{ route('rate-broker.index') }}">Rate Broker</a></li>
                                 </ul>
                             </li>
@@ -34,6 +34,7 @@
                                     <li><a href="{{ route('memo-refund.index') }}">Pengurangan / Refund</a></li>
                                     <li><a href="{{ route('reas.index') }}">Reas</a></li>
                                     <li><a href="{{ route('endorsement.index') }}">Endorse</a></li>
+                                    <!-- <li><a href="{{ route('epolicy.index') }}">E-Policy</a></li> -->
                                 </ul>
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
@@ -44,6 +45,8 @@
                                     <li><a href="{{ route('reas.index') }}">Pengajuan</a></li>
                                     <li><a href="{{ route('reas-cancel.index') }}">Cancel</a></li>
                                     <li><a href="{{ route('reas-refund.index') }}">Refund</a></li>
+                                    <li><a href="{{ route('reas-endorse.index') }}">Endorse</a></li>
+                                    <li><a href="{{ route('tagihan-soa.index') }}">Tagihan SOA</a></li>
                                 </ul>
                             </li>
                             <li><a class="text-info icon-menu px-1" href="{{ route('recovery-claim.index') }}">Recovery Claim</a></li>

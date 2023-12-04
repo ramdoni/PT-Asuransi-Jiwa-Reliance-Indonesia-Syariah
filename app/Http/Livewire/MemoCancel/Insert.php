@@ -38,19 +38,15 @@ class Insert extends Component
     public function add_peserta()
     {
         $index = count($this->peserta);
-        $peserta = Kepesertaan::find($this->kepesertaan_id);
+        $peserta = Kepesertaan::find($this->kepesertaan_id)->toArray();
+        $polis = Polis::find($this->polis_id);
         if($peserta){
-            $this->peserta[$index]['id'] = $peserta->id;
-            $this->peserta[$index]['status_polis'] = $peserta->status_polis;
-            $this->peserta[$index]['no_peserta'] = $peserta->no_peserta;
-            $this->peserta[$index]['nama'] = $peserta->nama;
-            $this->peserta[$index]['tanggal_mulai'] = $peserta->tanggal_mulai;
-            $this->peserta[$index]['tanggal_akhir'] = $peserta->tanggal_akhir;
-            $this->peserta[$index]['basic'] = $peserta->basic;
-            $this->peserta[$index]['masa_bulan'] = $peserta->masa_bulan;
-            $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita ;
-            $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
-            $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
+            foreach($peserta as $field => $val){
+                $this->peserta[$index][$field] = $val;
+            }
+            
+            $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta['kontribusi'] + $peserta['extra_kontribusi'] + $peserta['extra_mortalita'];
+            $this->peserta[$index]['cancel_kontribusi_netto'] = round($this->peserta[$index]['total_kontribusi_dibayar'] * ($polis->refund / 100));
 
             $ids = [];
             foreach($this->peserta as $item){
@@ -98,7 +94,7 @@ class Insert extends Component
                 $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita ;
                 $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
                 $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
-                
+                $this->peserta[$index]['cancel_kontribusi_netto'] = $this->peserta[$index]['total_kontribusi_dibayar'] * ($polis->refund / 100);
                 $index++;
             }
         }
@@ -127,7 +123,7 @@ class Insert extends Component
             'no_rekening' => 'required',
             'tgl_jatuh_tempo' => 'required'
         ]);
-        try {
+        // try {
             \DB::transaction(function () {
                 $polis = Polis::find($this->polis_id);
                 $data = new MemoCancel;
@@ -157,51 +153,80 @@ class Insert extends Component
                         $total++;
 
                         $total_kontribusi_gross += $peserta->kontribusi;
-                        // $total_potongan_langsung += $peserta->jumlah_potongan_langsung;
                         $total_kontribusi_tambahan += $peserta->extra_kontribusi;
-                        $total_kontribusi += $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita;;
                         $total_manfaat_asuransi += $peserta->basic;
+
+                        if($polis->potong_langsung){
+                            $peserta->jumlah_potongan_langsung = $total_kontribusi_gross*($polis->potong_langsung/100);
+                            $item['jumlah_potongan_langsung'] = $item['kontribusi']*($polis->potong_langsung/100);
+                            $total_potongan_langsung += $peserta->jumlah_potongan_langsung;
+                        }
+                        
+                        if($polis->fee_base_brokerage){
+                            $polis->fee_base_brokerage = str_replace(",",".",$polis->fee_base_brokerage);
+                            
+                            $peserta->brokerage_ujrah_persen = $polis->fee_base_brokerage;
+                            $peserta->brokerage_ujrah = @$peserta->kontribusi*($polis->fee_base_brokerage/100);
+        
+                            $item['brokerage_ujrah_persen'] = $polis->fee_base_brokerage;
+                            $item['brokerage_ujrah'] = @$item['kontribusi']*($polis->fee_base_brokerage/100);
+
+                            $total_ujroh_brokerage += $item['brokerage_ujrah'];
+                        }
+                
+                        if($polis->pph){
+                            $peserta->pph_amount = $polis->pph;
+                            $item['pph'] =  $polis->pph;
+                
+                            if($polis->ket_diskon=='Potong Langsung + Brokerage Ujroh'){
+                                $peserta->pph_amount = $peserta->brokerage_ujrah*($polis->pph/100);
+                                $item['pph_amount'] = $item['brokerage_ujrah']*($polis->pph/100);
+                            }else{
+                                $peserta->pph_amount = $peserta->jumlah_potongan_langsung*($polis->pph/100);
+                                $item['pph_amount'] = $item['jumlah_potongan_langsung']*($polis->pph/100);
+                            }
+                            $total_pph += $item['pph_amount'];
+                        }
+                
+                        if($polis->ppn){
+                            $peserta->ppn = $polis->ppn; 
+                            $item['ppn'] =  $polis->ppn;
+        
+                            if(isset($peserta->jumlah_potongan_langsung))
+                                $peserta->ppn = (($polis->ppn/100) * $peserta->jumlah_potongan_langsung);
+                            else
+                                $peserta->ppn = $peserta->kontribusi*($polis->ppn/100);
+        
+                            if(isset($item['jumlah_potongan_langsung']))
+                                $item['ppn'] = (($polis->ppn/100) * $item['jumlah_potongan_langsung']);
+                            else
+                                $item['ppn'] = $item['kontribusi']*($polis->ppn/100);
+                            
+                            $total_ppn += $peserta->ppn;
+                        }
+                        
+                        $peserta->total_kontribusi_dibayar = (int)$peserta->kontribusi+
+                                    (int)$peserta->extra_kontribusi + (int)$peserta->extra_mortalita+
+                                    ((int)$peserta->pph_amount??0)-(
+                                        ((int)$peserta->ppn??0)+
+                                        ((int)$peserta->jumlah_potongan_langsung??0)+
+                                        ((int)$peserta->brokerage_ujrah??0)
+                                    );
+
+                        $total_kontribusi += $peserta->total_kontribusi_dibayar;
+                        $peserta->cancel_kontribusi_netto = $item['cancel_kontribusi_netto'];//($polis->refund / 100) * $peserta->total_kontribusi_dibayar;
+                        $peserta->save();
                     }
                 }
 
-                if($polis->potong_langsung){
-                    $total_potongan_langsung = $total_kontribusi_gross*($polis->potong_langsung/100);
-                }
-
-                if($polis->fee_base_brokerage){
-                    $polis->fee_base_brokerage = str_replace(",",".",$polis->fee_base_brokerage);
-                    $data->brokerage_ujrah_persen = $polis->fee_base_brokerage;
-                    $data->brokerage_ujrah = @$total_kontribusi*($polis->fee_base_brokerage/100);
-                }
-
-                /**
-                 * Hitung PPH
-                 */
-                if($polis->pph){
-                    $data->pph =  $polis->pph;
-
-                    if($polis->ket_diskon=='Potong Langsung + Brokerage Ujroh')
-                        $data->pph_amount = $data->brokerage_ujrah*($polis->pph/100);
-                    else
-                        $data->pph_amount = $data->potong_langsung*($polis->pph/100);
-                }
-
-                /**
-                 * Hitung PPN
-                 */
-                if($polis->ppn){
-                    $data->ppn =  $polis->ppn;
-                    if($data->potong_langsung)
-                        $data->ppn = (($polis->ppn/100) * $data->potong_langsung);
-                    else
-                        $data->ppn = $kontribusi*($polis->ppn/100);
-                }
-
+                $data->fee_base_brokerage = $total_ujroh_brokerage ;
+                $data->pph_amount = $total_pph;
+                $data->ppn_amount = $total_ppn;
                 $data->total_kontribusi_gross = $total_kontribusi_gross;
                 $data->total_potongan_langsung = $total_potongan_langsung;
                 $data->total_kontribusi_tambahan = $total_kontribusi_tambahan;
+                $data->total_kontribusi = Kepesertaan::where('kepesertaan.memo_cancel_id',$data->id)->sum('cancel_kontribusi_netto');
                 $data->total_manfaat_asuransi = $total_manfaat_asuransi;
-                $data->total_kontribusi = $total_kontribusi;
                 $data->total_peserta = $total;  
                 $data->save();
 
@@ -230,7 +255,7 @@ class Insert extends Component
                     
                     $reas_cancel->total_peserta = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
                     $reas_cancel->total_manfaat_asuransi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
-                    $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
+                    $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('cancel_kontribusi_netto');
                     $reas_cancel->save();   
                 }
 
@@ -238,15 +263,15 @@ class Insert extends Component
 
                 return redirect()->route('memo-cancel.index');
             });
-        }
-        catch (\Throwable $e) {
-            $this->emit('message-error', json_encode($e));
-        }
+        // }
+        // catch (\Throwable $e) {
+        //     $this->emit('message-error', json_encode($e));
+        // }
     }
 
     public function delete_peserta($k)
     {
-        unset($this->peserta_temp[$k]);
+        unset($this->peserta[$k]);
     }
 
     public function downloadTemplate()

@@ -15,6 +15,18 @@
                                 @endforeach
                             </select>
                         </div>
+                        @if($polis_selected)
+                            <p>Persentase Refund :
+                                <a href="{{route('polis.edit',$polis_id)}}#refund" target="_blank"> 
+                                    {{$polis_selected->refund ? $polis_selected->refund .'%' : '0'}}
+                                </a>
+                                <br />
+                                Rate :
+                                <a href="{{route('polis.edit',$polis_id)}}" target="_blank"> 
+                                    {{$polis_selected->rate_single_usia}}
+                                </a>
+                            </p>
+                        @endif
                         @error('polis_id')
                             <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                         @enderror
@@ -28,9 +40,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-md-6">
-                            <label>Jenis Perubahan 
-                                <a href="#" class="ml-2 float-right" data-toggle="modal" data-target="#modal_jenis_perubahan" title="Add "><i class="fa fa-plus"></i></a>
-                            </label>
+                            <label>Jenis Perubahan <a href="#" class="ml-2 float-right" data-toggle="modal" data-target="#modal_jenis_perubahan" title="Add "><i class="fa fa-plus"></i></a></label>
                             <select class="form-control" wire:model="jenis_perubahan_id">
                                 <option value=""> -- Select -- </option>
                                 @foreach(\App\Models\JenisPerubahan::orderBy('name','ASC')->get() as $i)
@@ -44,8 +54,8 @@
                         <div class="form-group col-md-6">
                             <label>Jenis Pengajuan</label>
                             <select class="form-control" wire:model="jenis_pengajuan">
-                                <option value="1">Mempengaruhi Premi</option>
-                                <option value="2">Tidak Mempengaruhi Premi</option>
+                                <option value="1">Mempengaruhi Kontribusi</option>
+                                <option value="2">Tidak Mempengaruhi Kontribusi</option>
                             </select>
                             @error('jenis_pengajuan')
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
@@ -62,13 +72,6 @@
                                 @error('metode_endorse')
                                     <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                                 @enderror
-                                @if($metode_endorse==1)
-                                    <p>Rate Refund :
-                                        <a href="{{route('polis.edit',$polis_id)}}#refund" target="_blank"> 
-                                            {{isset($polis_id) ? \App\Models\Polis::find($polis_id)->first()->refund .'%' : '0'}}
-                                        </a>
-                                    </p>
-                                @endif
                             </div>
                         @endif
                     </div>
@@ -92,9 +95,11 @@
                                     <th>No</th>
                                     <th>Tanggal Efektif</th>
                                     <th>Sisa Masa Asuransi</th>
+                                    <th class="text-right">Total Kontribusi</th>
                                     <th class="text-right">Pengembalian Kontribusi</th>
                                     <th>No Peserta</th>
                                     <th>Nama</th>
+                                    <th>Tanggal Lahir</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
@@ -126,12 +131,26 @@
                                             </span>
                                         </td>
                                         <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                        <td class="text-right">{{format_idr($item['refund_kontribusi'])}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_lahir','{{$item['tanggal_lahir']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{date('d-M-Y',strtotime($item['tanggal_lahir']))}}
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_mulai','{{$item['tanggal_mulai']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{date('d-M-Y',strtotime($item['tanggal_mulai']))}}
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_akhir','{{$item['tanggal_akhir']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{date('d-M-Y',strtotime($item['tanggal_akhir']))}}
+                                        </td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
-                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'basic','{{$item['basic']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{format_idr($item['basic'])}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -187,6 +206,7 @@
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
                                         <td>
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_lahir','{{$item['tanggal_lahir']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
                                             {{date('d-M-Y',strtotime($item['tanggal_lahir']))}}
                                         </td>
                                         <td>{{$item['usia']}}</td>
@@ -203,7 +223,7 @@
                                             <a href="javascript:void(0)" wire:click="set_edit({{$k}},'basic','{{$item['basic']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
                                             {{format_idr($item['basic'])}}
                                         </td>
-                                        <td class="text-right">{{format_idr($item['rate'])}}</td>
+                                        <td class="text-right">{{$item['rate']}}</td>
                                         <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                         <td class="text-right">
                                             <a href="javascript:void(0)" wire:click="set_edit({{$k}},'extra_mortalita','{{$item['extra_mortalita']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
@@ -267,7 +287,10 @@
                                         <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'no_ktp ','{{$item['no_ktp']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['no_ktp']}}</td>
                                         <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'jenis_kelamin','{{$item['jenis_kelamin']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['jenis_kelamin']}}</td>
                                         <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'no_telepon','{{$item['no_telepon']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['no_telepon']}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_mulai','{{$item['tanggal_mulai']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                                            {{date('d-M-Y',strtotime($item['tanggal_mulai']))}}
+                                        </td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
@@ -278,20 +301,19 @@
                         </table>
                         <table style="width:100%;" class="my-3" wire:ignore>
                             <tr>
+                                <td style="width: 75px;">
+                                    <a href="javascript:void(0)" wire:click="add_peserta" class="btn btn-info"><i class="fa fa-plus"></i> Add </a>
+                                </td>
                                 <td>
                                     <select class="form-control" id="kepesertaan_id" wire:model="kepesertaan_id">
                                         <option value=""> -- Select Peserta -- </option>
                                     </select>
                                 </td>
-                                <td>
-                                    <a href="javascript:void(0)" wire:click="add_peserta" class="badge badge-info badge-active"><i class="fa fa-plus"></i> add </a>
-                                </td>
+                                
                             </tr>
                         </table>
                     </div>
-                @endif
-
-                
+                @endif                
             </div>
         </div>
     </div>
@@ -309,8 +331,10 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>{{@$label_update_peserta[$field_selected]}}</label>
-                        @if(in_array($field_selected,['tanggal_akhir','tanggal_mulai']))
+                        @if(in_array($field_selected,['tanggal_akhir','tanggal_mulai','tanggal_lahir']))
                             <input type="date" wire:model="value_selected" class="form-control" />
+                        @elseif(in_array($field_selected,['basic','extra_kontribusi','extra_mortalita']))
+                            <input type="number" wire:model="value_selected" class="form-control" />
                         @else
                             <input type="text" wire:model="value_selected" class="form-control" />
                         @endif
@@ -329,9 +353,7 @@
         </div>
     </div>
 </div>
-
 @livewire('endorsement.jenis-perubahan')
-
 @push('after-scripts')
     <link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}"/>
     <script src="{{ asset('assets/vendor/select2/js/select2.min.js') }}"></script>

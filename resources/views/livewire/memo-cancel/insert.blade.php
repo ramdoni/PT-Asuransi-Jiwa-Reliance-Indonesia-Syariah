@@ -84,9 +84,6 @@
                             <tr>
                                 <th></th>
                                 <th>No</th>
-                                <th>Status</th>
-                                <th>No Reas</th>
-                                <th>Reasuradur</th>
                                 <th>No Peserta</th>
                                 <th>Nama</th>
                                 <th>Mulai Asuransi</th>
@@ -108,18 +105,13 @@
                                         <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a>
                                     </td>
                                     <td>{{$k+1}}</td>
-                                    <td>
-                                        {{$item['status_polis']}}
-                                    </td>
-                                    <td>{{$item['reas']}}</td>
-                                    <td>{{$item['reasuradur']}}</td>
                                     <td>{{$item['no_peserta']}}</td>
                                     <td>{{$item['nama']}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-center">{{$item['masa_bulan']}}</td>
                                     <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    <td class="text-right">{{format_idr($item['cancel_kontribusi_netto'])}}</td>
                                 </tr>
                             @endforeach
                             
@@ -127,13 +119,13 @@
                     </table>
                     <table style="width:100%;" class="my-3" wire:ignore>
                         <tr>
+                            <td style="width: 75px;">
+                                <a href="javascript:void(0)" wire:click="add_peserta" class="btn btn-info"><i class="fa fa-plus"></i> Add </a>
+                            </td>
                             <td>
                                 <select class="form-control" id="kepesertaan_id" wire:model="kepesertaan_id">
                                     <option value=""> -- Select Peserta -- </option>
                                 </select>
-                            </td>
-                            <td>
-                                <a href="javascript:void(0)" wire:click="add_peserta" class="badge badge-info badge-active"><i class="fa fa-plus"></i> add </a>
                             </td>
                         </tr>
                     </table>

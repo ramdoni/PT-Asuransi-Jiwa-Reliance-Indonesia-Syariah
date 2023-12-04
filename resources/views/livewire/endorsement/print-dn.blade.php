@@ -95,6 +95,7 @@
         </style>
     </head>
     <body>
+      @if($data->jenis_pengajuan==1)
         <div class="container">
             <img src="{{public_path('assets/img/surat-bg-top.png')}}?v=1" style="width: 100%;" />
             <hr style="margin-bottom: 5px;" />
@@ -135,10 +136,10 @@
                     <td>
                         <table style="width:100%;margin-top: 45px;">
                             <tr>
-                                <td class="text-right">{{format_idr($data->total_kontribusi_gross)}}</td>
+                                <td class="text-right">{{format_idr($total_kontribusi_nett)}}</td>
                             </tr>
                             <tr>
-                                <td class="text-right">{{format_idr($data->kontribusi_netto_perubahan)}}</td>
+                                <td class="text-right">{{format_idr($kontribusi_netto_perubahan)}}</td>
                             </tr>
                         </table>
                     </td>
@@ -148,20 +149,21 @@
                         <strong>Total Refund Kontribusi</strong>
                     </td>
                     <td style="border-top:1px solid;border-bottom: 1px solid;text-align:right;font-weight:bold;">
-                        @if($data->total_kontribusi_gross > $data->kontribusi_netto_perubahan)
-                            {{format_idr($data->total_kontribusi_gross - $data->kontribusi_netto_perubahan)}}
+                        @if($total_kontribusi_nett > $kontribusi_netto_perubahan)
+                            {{format_idr($total_kontribusi_nett - $kontribusi_netto_perubahan)}}
                         @else
-                            {{format_idr($data->kontribusi_netto_perubahan - $data->total_kontribusi_gross)}}
+                            {{format_idr($kontribusi_netto_perubahan - $total_kontribusi_nett)}}
                         @endif
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align:center">Terbilang : 
-                        @if($data->total_kontribusi_gross > $data->kontribusi_netto_perubahan)
-                            {{terbilang($data->total_kontribusi_gross - $data->kontribusi_netto_perubahan)}}
+                        @if($total_kontribusi_nett > $kontribusi_netto_perubahan)
+                            {{terbilang($total_kontribusi_nett - $kontribusi_netto_perubahan)}}
                         @else
-                            {{terbilang($data->kontribusi_netto_perubahan - $data->total_kontribusi_gross)}}
-                        @endif
+                            {{terbilang($kontribusi_netto_perubahan - $total_kontribusi_nett)}}
+                        @endif 
+                        Rupiah
                     </td>
                 </tr>
             </table>
@@ -277,6 +279,8 @@
             </div>
         </div>
         <div class="page-break"></div>
+      @endif
+
         <div class="container">
             <img src="{{public_path('assets/img/surat-bg-top.png')}}" style="width: 100%;" />
             <h5 class="text-center">
@@ -326,10 +330,14 @@
                     <td class="text-center">{!!implode("<br />",$list_nama_peserta)!!}</td>
                     <td class="text-center">{{isset($data->jenis_perubahan->name) ? $data->jenis_perubahan->name : '-'}}</td>
                     <td class="text-center">
-                        {!!implode("<br />",json_decode($data->value_perubahan_before))!!}
+                        @if($data->value_perubahan_before)
+                            {!!implode("<br />",json_decode($data->value_perubahan_before))!!}
+                        @endif
                     </td>
                     <td class="text-center">
-                        {!!implode("<br />",json_decode($data->value_perubahan_after))!!}
+                        @if($data->value_perubahan_after)
+                            {!!implode("<br />",json_decode($data->value_perubahan_after))!!}
+                        @endif
                     </td>
                 </tr>
             </table>
@@ -390,9 +398,20 @@
                     <th class="text-center">MULAI ASURANSI</th>
                     <th class="text-center">AKHIR ASURANSI</th>
                     <th class="text-right">NILAI MANFAAT ASURANSI</th>
-                    <th class="text-right">TOTAL KONTRIBUSI</th>
+                    @if($data->metode_endorse==1)
+                        <th class="text-right">PENGEMBALIAN KONTRIBUSI </th>
+                    @endif
+                    <th class="text-right">KONTRIBUSI</th>
+                    @if($data->jenis_pengajuan==1)
+                        <!-- <th class="text-right">POTONGAN LANGSUNG</th> -->
+                        <th class="text-right">NETT KONTRIBUSI</th>
+                    @endif
                     <th>UW LIMIT</th>
                 </tr>
+                @php($total_nilai_manfaat=0)
+                @php($total_kontribusi=0)
+                @php($total_potongan_langsung=0)
+                @php($total_kontribusi_refund=0)
                 @foreach($data->pesertas as $k => $json)
                     @php($item = json_decode($json->before_data))
                     <tr>
@@ -405,8 +424,19 @@
                         <td class="text-center">{{date('d-M-y',strtotime($item->tanggal_akhir))}}</td>
                         <td class="text-right">{{format_idr($item->basic)}}</td>
                         <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                        @if($data->metode_endorse==1)
+                            <td class="text-right">{{format_idr($item->refund_kontribusi)}}</td>
+                            @php($total_kontribusi_refund +=$item->refund_kontribusi )
+                        @endif
+                        @if($data->jenis_pengajuan==1)
+                            <!-- <td class="text-right">{{format_idr($item->jumlah_potongan_langsung)}}</td> -->
+                            <td class="text-right">{{format_idr($item->kontribusi - ($item->potongan_langsung>0?$item->jumlah_potongan_langsung:0))}}</td>
+                        @endif
                         <td class="text-center">{{$item->uw}}</td>
                     </tr>
+                    @php($total_nilai_manfaat += $item->basic)
+                    @php($total_kontribusi += $item->kontribusi)
+                    @php($total_potongan_langsung += $item->jumlah_potongan_langsung??0)
                 @endforeach
                 <tfoot>
                     <tr>
@@ -417,8 +447,15 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                        <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
+                        <th class="text-right">{{format_idr($total_nilai_manfaat)}}</th>
+                        <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                        @if($data->metode_endorse==1)
+                            <th class="text-right">{{format_idr($total_kontribusi_refund)}}</th>
+                        @endif
+                        @if($data->jenis_pengajuan==1)
+                            <!-- <th class="text-right">{{format_idr($total_potongan_langsung)}}</th> -->
+                            <th class="text-right">{{format_idr($total_kontribusi - ($total_potongan_langsung?$total_potongan_langsung:0))}}</th>
+                        @endif
                         <th></th>
                     </tr>
                 </tfoot>
@@ -436,9 +473,16 @@
                     <th class="text-center">MULAI ASURANSI</th>
                     <th class="text-center">AKHIR ASURANSI</th>
                     <th class="text-right">NILAI MANFAAT ASURANSI</th>
-                    <th class="text-right">TOTAL KONTRIBUSI</th>
+                    <th class="text-right">KONTRIBUSI</th>
+                    @if($data->jenis_pengajuan==1)
+                        <!-- <th class="text-right">POTONGAN LANGSUNG</th> -->
+                        <th class="text-right">NETT KONTRIBUSI</th>
+                    @endif
                     <th>UW LIMIT</th>
                 </tr>
+                @php($total_nilai_manfaat=0)
+                @php($total_kontribusi=0)
+                @php($total_potongan_langsung=0)
                 @foreach($data->pesertas as $k => $json)
                     @php($item = json_decode($json->after_data))
                     <tr>
@@ -451,8 +495,15 @@
                         <td class="text-center">{{date('d-M-y',strtotime($item->tanggal_akhir))}}</td>
                         <td class="text-right">{{format_idr($item->basic)}}</td>
                         <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                        @if($data->jenis_pengajuan==1)
+                            <!-- <td class="text-right">{{format_idr($item->jumlah_potongan_langsung)}}</td> -->
+                            <td class="text-right">{{format_idr($item->kontribusi - ($item->jumlah_potongan_langsung?$item->jumlah_potongan_langsung:0))}}</td>
+                        @endif
                         <td class="text-center">{{$item->uw}}</td>
                     </tr>
+                    @php($total_nilai_manfaat += $item->basic)
+                    @php($total_kontribusi += $item->kontribusi)
+                    @php($total_potongan_langsung += $item->jumlah_potongan_langsung)
                 @endforeach
                 <tfoot>
                     <tr>
@@ -463,15 +514,17 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                        <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
+                        <th class="text-right">{{format_idr($total_nilai_manfaat)}}</th>
+                        <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                        @if($data->jenis_pengajuan==1)
+                            <!-- <th class="text-right">{{format_idr($total_potongan_langsung)}}</th> -->
+                            <th class="text-right">{{format_idr($total_kontribusi - ($total_potongan_langsung?$total_potongan_langsung:0))}}</th>
+                        @endif
                         <th></th>
                     </tr>
                 </tfoot>
             </table>
-
             <br /><br /><br />
-
             <div class="text-center" style="position:relative;float:right;width:200px;">
                 <p>
                     <span style="z-index:3;">Jakarta {{date('d F Y',strtotime($data->tanggal_pengajuan))}},</span> <br />

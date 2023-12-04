@@ -130,11 +130,11 @@
                     <tr>
                         <td>Perihal</td>
                         <td> : </td>
-                        <td>{{$data->perihal_internal_memo}}</td>
+                        <td>Pembayaran Credit Note atas Pengurangan Peserta {{$data->polis->nama}}</td>
                     </tr>
                 </table>
                 <hr />
-                <p>Dengan hormat,<br /><br />
+                <p style="text-align:justify;">Dengan hormat,<br /><br />
                     Bersama ini disampaikan Daftar Pengurangan Peserta dan Credit Note atas Pengurangan Peserta sesuai dengan pengajuan
                     melalui email pada tanggal {{date('d F Y',strtotime($data->tanggal_pengajuan))}}, mohon dapat dilakukan pembayaran dengan data sebagai berikut:
                 </p>
@@ -162,7 +162,11 @@
                     <tr>
                         <td>Nomor Peserta </td>
                         <td> : </td>
-                        <td>{{implode(", ",$list_peserta)}}</td>
+                        <td>
+                            {{$no_peserta_awal}}
+                            {{$no_peserta_akhir ? " sd {$no_peserta_akhir}" : ''}}
+                            <!-- {{implode(", ",$list_peserta)}} -->
+                        </td>
                     </tr>
                     <tr>
                         <td>Periode Asuransi </td>
@@ -190,12 +194,12 @@
                     <tr>
                         <td>Tgl Debit Note</td>
                         <td> : </td>
-                        <td></td>
+                        <td>{{implode(", ",$tgl_debit_notes)}}</td>
                     </tr>
                     <tr>
                         <td>Kontribusi DN</td>
                         <td> : </td>
-                        <td></td>
+                        <td>{{format_idr($kontribusi_dn)}}</td>
                     </tr>
                     <tr>
                         <td>Tujuan Pembayaran</td>
@@ -311,7 +315,9 @@
                 <br />
                 <br />
                 <br />
-                <img src="{{public_path('assets/img/ttd-ahmad-syafei.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
+                <br />
+                <br />
+                <img src="{{public_path('assets/img/ttd-ahmad-syafei.png')}}" style="width: 130px;z-index:2;position:absolute;top:30px;" />
                 <p>
                     <strong><u>Ahmad Syafei</u></strong><br />
                     Head Of Divisi Teknik Syariah
@@ -454,6 +460,8 @@
                     <br />
                     <br />
                     <br />
+                    <br />
+                    <br />
                     <img src="{{public_path('assets/img/ttd-ahmad-syafei.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
                     <strong><u>Ahmad Syafei</u></strong><br />
                     Head of Divisi Teknik Syariah
@@ -505,12 +513,13 @@
                         <td>{{$k+1}}</td>
                         <td>{{$item->no_peserta}}</td>
                         <td>{{$item->nama}}</td>
-                        <td>{{date('d-m-y',strtotime($item->tanggal_lahir))}}</td>
+                        <td>{{date('d-M-y',strtotime($item->tanggal_lahir))}}</td>
                         <td>{{$item->usia}}</td>
-                        <td>{{date('d-m-y',strtotime($item->tanggal_mulai))}}</td>
-                        <td>{{date('d-m-y',strtotime($item->tanggal_akhir))}}</td>
+                        <td>{{date('d-M-y',strtotime($item->tanggal_mulai))}}</td>
+                        <td>{{date('d-M-y',strtotime($item->tanggal_akhir))}}</td>
+                        <td>{{date('d-M-y',strtotime($item->refund_tanggal_efektif))}}</td>
                         <td class="text-right">{{format_idr($item->basic)}}</td>
-                        <td class="text-right">{{format_idr($item->kontribusi)}}</td>
+                        <td class="text-right">{{format_idr($item->refund_kontribusi)}}</td>
                     </tr>
                 @endforeach
                 <tfoot>
@@ -528,6 +537,21 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="text-center" style="position:relative;float: right;width:200px;">
+                <p>
+                    <span style="z-index:3;">Jakarta {{date('d F Y',strtotime($data->tanggal_pengajuan))}},</span> <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <img src="{{public_path('assets/img/ttd-underwriting.png')}}" style="width: 130px;z-index:2;position:absolute;top:20px;" />
+                    <p>
+                        <hr />
+                        Underwriting
+                    </p>
+                    <br />
+                </p>
+            </div>
             <img src="{{public_path('assets/img/surat-bg-footer.png')}}" style="width: 100%;position: absolute;bottom:0;" />
         </div>
     </body>

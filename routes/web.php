@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('polis',App\Http\Livewire\Polis\Index::class)->name('polis.index');
     Route::get('polis/insert',App\Http\Livewire\Polis\Insert::class)->name('polis.insert');
     Route::get('polis/edit/{id}',App\Http\Livewire\Polis\Edit::class)->name('polis.edit');
+    Route::get('polis/print-epolicy/{id}',[App\Http\Controllers\IndexController::class,'printEpolicy'])->name('polis.print-epolicy');
     Route::get('produk',App\Http\Livewire\Produk\Index::class)->name('produk.index');
     Route::get('rate',App\Http\Livewire\Rate\Index::class)->name('rate.index');
     Route::get('reasuradur',App\Http\Livewire\Reasuradur\Index::class)->name('reasuradur.index');
@@ -66,7 +67,12 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('reas-cancel/edit/{id}',App\Http\Livewire\ReasCancel\Edit::class)->name('reas-cancel.edit');
     Route::get('reas-refund',App\Http\Livewire\ReasRefund\Index::class)->name('reas-refund.index');
     Route::get('reas-refund/edit/{id}',App\Http\Livewire\ReasRefund\Edit::class)->name('reas-refund.edit');
-
+    Route::get('reas-endorse',App\Http\Livewire\ReasEndorse\Index::class)->name('reas-endorse.index');
+    Route::get('reas-endorse/edit/{id}',App\Http\Livewire\ReasEndorse\Edit::class)->name('reas-endorse.edit');
+    Route::get('tagihan-soa',App\Http\Livewire\Tagihansoa\Index::class)->name('tagihan-soa.index');
+    Route::get('tagihan-soa/insert',App\Http\Livewire\Tagihansoa\Insert::class)->name('tagihan-soa.insert');
+    Route::get('tagihan-soa/print/{id}',[App\Http\Controllers\PengajuanController::class,'printTagihansoa'])->name('tagihan-soa.print');
+    
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('klaim/insert',App\Http\Livewire\Klaim\Insert::class)->name('klaim.insert');
     Route::get('klaim/edit/{id}',App\Http\Livewire\Klaim\Edit::class)->name('klaim.edit');
@@ -97,7 +103,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('endorsement',App\Http\Livewire\Endorsement\Index::class)->name('endorsement.index');
     Route::get('endorsement/insert',App\Http\Livewire\Endorsement\Insert::class)->name('endorsement.insert');
     Route::get('endorsement/edit/{id}',App\Http\Livewire\Endorsement\Edit::class)->name('endorsement.edit');
-
+    Route::get('epolicy',App\Http\Livewire\Epolicy\Index::class)->name('epolicy.index');
 });
 
 Route::group(['middleware' => ['auth']], function(){
@@ -109,6 +115,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('recovery-claim/print-dn-rekon/{id}',[App\Http\Controllers\RecoveryController::class,'printDNRekon'])->name('recovery-claim.print-dn-rekon');
     Route::get('api/get-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'index'])->name('api.get-kepesertaan');
     Route::get('api/get-klaim-kepesertaan',[\App\Http\Controllers\Api\KepesertaanController::class,'klaimKepesertaan'])->name('api.get-klaim-kepesertaan');
+    Route::get('api/get-listing-soa',[\App\Http\Controllers\Api\KepesertaanController::class,'getListingSoa'])->name('api.get-listing-soa');
+    Route::get('api/get-pengajuan',[\App\Http\Controllers\Api\KepesertaanController::class,'getPengajuan'])->name('api.get-pengajuan');
 });
 
 // Administrator

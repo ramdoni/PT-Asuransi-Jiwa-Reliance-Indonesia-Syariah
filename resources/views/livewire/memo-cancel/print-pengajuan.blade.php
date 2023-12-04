@@ -171,7 +171,7 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td> : </td>
+                        <td></td>
                         <td></td>
                         <td>Potongan Langsung</td>
                         <td>{{$data->polis->potong_langsung}}%</td>
@@ -199,7 +199,7 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td> : </td>
+                        <td></td>
                         <td></td>
                         <td>
                             @if($data->polis->pph)
@@ -216,24 +216,6 @@
                                 {{format_idr($data->pph_amount)}}
                             @endif
                         </td>
-                    </tr>
-                    <tr>
-                        <td>Nomor Peserta</td>
-                        <td> : </td>
-                        <td>
-                            {{$no_peserta_awal}}
-                        </td>
-                        <td>
-                            @if($data->total_peserta>1)
-                                s/d
-                            @endif
-                        </td>
-                        <td>
-                            @if($data->total_peserta>1)
-                                {{$no_peserta_akhir}}
-                            @endif
-                        </td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td>Manfaat Asuransi</td>
@@ -288,7 +270,7 @@
                     </tr>
                     <tr>
                         <td colspan="3" style="padding-top:20px;"><strong>TOTAL PEMBAYARAN CREDIT NOTE</strong></td>
-                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi-$data->total_potongan_langsung)}}</td>
+                        <th colspan="3" class="text-right">Rp. {{format_idr($data->total_kontribusi)}}</td>
                     </tr>
                 </table>
                 <p>Demikian disampaikan,atas perhatian dan kerjasamanya diucapkan terima kasih.</p>
@@ -411,10 +393,10 @@
                                 <td class="text-right">{{format_idr($data->total_ujroh_brokerage)}}</td>
                             </tr>
                             <tr>
-                                <td class="text-right">{{format_idr($data->total_ppn)}}</td>
+                                <td class="text-right">{{format_idr($data->ppn_amount)}}</td>
                             </tr>
                             <tr>
-                                <td class="text-right">{{format_idr($data->total_pph)}}</td>
+                                <td class="text-right">{{format_idr($data->pph_amount)}}</td>
                             </tr>
                         </table>
                     </td>
@@ -424,11 +406,11 @@
                         <strong>Total Refund Kontribusi</strong>
                     </td>
                     <td style="border-top:1px solid;border-bottom: 1px solid;text-align:right;font-weight:bold;">
-                        {{format_idr($data->total_kontribusi - $data->total_potongan_langsung)}}
+                        {{format_idr($data->total_kontribusi)}}
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align:center">Terbilang : {{terbilang($data->total_kontribusi - $data->total_potongan_langsung)}}</td>
+                    <td colspan="2" style="text-align:center">Terbilang : {{terbilang($data->total_kontribusi)}}</td>
                 </tr>
             </table>
             <div style="position: relative;">
@@ -554,6 +536,8 @@
                 <p>
                     Hormat kami,<br />
                     <strong>PT. ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>
+                    <br />
+                    <br />
                     <br />
                     <br />
                     <br />

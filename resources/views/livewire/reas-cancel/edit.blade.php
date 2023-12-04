@@ -83,7 +83,8 @@
                                 <th>Akhir Asuransi</th>
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
-                                <th class="text-right">Pengembalian Kontribusi</th>
+                                <th class="text-right">Gross Kontribusi Reas</th>
+                                <th class="text-right">Net Kontribusi Reas</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -91,6 +92,7 @@
                             <tbody>
                             @php($total_manfaat_asuransi=0)
                             @php($total_kontribusi=0)
+                            @php($total_kontribusi_gross=0)
                             @foreach($data->kepesertaan as $k=>$item)
                                 <tr wire:key="{{$k}}">
                                     <td>
@@ -101,25 +103,26 @@
                                         <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
                                     </td>
                                     <td>{{$k+1}}</td>
-                                    <td>
-                                        {{$item['status_polis']}}
-                                    </td>
+                                    <td>{{$item['status_polis']}}</td>
                                     <td>{{$item['no_peserta']}}</td>
                                     <td>{{$item['nama']}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-center">{{$item['masa_bulan']}}</td>
                                     <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
+                                    <td class="text-right">{{format_idr($item->total_kontribusi_reas)}}</td>
                                     <td class="text-right">{{format_idr($item->net_kontribusi_reas)}}</td>
                                 </tr>
                                 @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
                                 @php($total_kontribusi += $item->net_kontribusi_reas)
+                                @php($total_kontribusi_gross += $item->total_kontribusi_reas)
                             @endforeach
                             </tbody>
                             <tfoot style="border-top: 2px solid #dee2e6;">
                                 <tr>
                                     <th colspan="8" class="text-right">Total</th>
                                     <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi_gross)}}</th>
                                     <th class="text-right">{{format_idr($total_kontribusi)}}</th>
                                 </tr>
                             </tfoot>

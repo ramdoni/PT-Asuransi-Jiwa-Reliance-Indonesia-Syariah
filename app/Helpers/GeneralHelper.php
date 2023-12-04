@@ -355,8 +355,8 @@ function generate_no_voucher($coa_id="",$count="")
 function format_idr($number,$decimal=0)
 {
     if(empty($number) || $number <= 0) return 0;
-    // $number = (int) $number;
-    return number_format($number,$decimal);
+    
+    return number_format((int)$number,$decimal);
 }
 function get_setting($key)
 {

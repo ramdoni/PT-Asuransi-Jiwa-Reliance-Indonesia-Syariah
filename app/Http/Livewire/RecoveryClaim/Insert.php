@@ -23,7 +23,10 @@ class Insert extends Component
     {
         $this->tanggal_pengajuan = date('Y-m-d');
         $this->tanggal_efektif = date('Y-m-d');
-        $this->polis = Polis::where('status_approval',1)->get();
+        $this->polis = Polis::select('polis.*')
+                        ->join('klaim','klaim.polis_id','=','polis.id')
+                        ->groupBy('polis.id')
+                        ->get();
     }
 
     public function updated($propertyName)
@@ -50,6 +53,7 @@ class Insert extends Component
             $this->peserta[$index]['reas'] = isset($peserta->kepesertaan->reas->no_pengajuan) ? $peserta->kepesertaan->reas->no_pengajuan : '-';
             $this->peserta[$index]['reasuradur'] = isset($peserta->kepesertaan->reas->reasuradur->name) ? $peserta->kepesertaan->reas->reasuradur->name : '-';
             $this->peserta[$index]['nilai_klaim'] = $peserta->nilai_klaim_reas;
+            $this->peserta[$index]['status_klaim'] = $peserta->status;
 
             $ids = [];
             foreach($this->peserta as $item){
@@ -71,11 +75,7 @@ class Insert extends Component
         try{
             $this->validate([
                 'polis_id' => 'required',
-                'tanggal_pengajuan' => 'required',
-                'tujuan_pembayaran' => 'required',
-                'nama_bank' => 'required',
-                'no_rekening' => 'required',
-                'tgl_jatuh_tempo' => 'required',
+                'tanggal_pengajuan' => 'required'
             ]);
 
             foreach($this->peserta as $k => $item){
@@ -94,10 +94,7 @@ class Insert extends Component
                 $data->polis_id = $this->polis_id;
                 $data->no_pengajuan = $no_pengajuan;
                 $data->tanggal_pengajuan = $this->tanggal_pengajuan;
-                $data->tujuan_pembayaran = $this->tujuan_pembayaran;
-                $data->nama_bank = $this->nama_bank;
-                $data->no_rekening = $this->no_rekening;
-                $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
+                // $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
                 $data->user_created_id = \Auth::user()->id;
                 $data->kepesertaan_id = $item['id'];
                 $data->nilai_klaim = $item['nilai_klaim'];

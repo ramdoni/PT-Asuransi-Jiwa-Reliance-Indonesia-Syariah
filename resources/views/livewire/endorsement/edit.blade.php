@@ -17,7 +17,7 @@
                             {{$data->tanggal_pengajuan}}
                         </div>
                         <div class="col-md-6">
-                            <label>Jenis Pengajuan</label>
+                            <label>Jenis Pengajuan</label><br />
                             {{($data->jenis_pengajuan==1 ? 'Mempengaruhi Premi' : 'Tidak Mempengaruhi Premi')}}
                         </div>
                     </div>
@@ -28,6 +28,10 @@
                                 {{$data->metode_endorse==1?'Refund' : 'Cancel'}}
                             </div>
                         @endif
+                        <div class="col-md-6">
+                            <label>Jenis Perubahan</label><br />
+                            {{isset($data->jenis_perubahan->name) ? $data->jenis_perubahan->name : '-'}}
+                        </div>
                     </div>
                     @if($data->head_teknik_note || $data->head_syariah_note)
                         <div class="row border-bottom form-group pb-2">
@@ -64,6 +68,7 @@
                         </div>
                     @endif
                     <a href="{{route('endorsement.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
+                    <a href="{{route('endorsement.print-dn',['id'=>$data->id])}}" target="_blank" class="mx-3"><i class="fa fa-print"></i> Print</a>
                     <span wire:loading wire:target="proses_head_teknik,proses_head_syariah">
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <span class="sr-only">{{ __('Loading...') }}</span>
@@ -85,6 +90,7 @@
     <div class="col-md-8">
         <div class="card">
             <div class="body">
+                <h5>Before</h5>
                 <div class="table-responsive">
                     <!-- Refund -->
                     @if($data->metode_endorse==1)
@@ -105,7 +111,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($peserta as $k=>$item)
+                                @foreach($data->pesertas as $k=>$i)
+                                    @php($item=json_decode($i->before_data,true))
                                     <tr wire:key="{{$k}}">
                                         <td>{{$k+1}}</td>
                                         <td>{{$item['refund_tanggal_efektif']}}</td>
@@ -142,39 +149,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($data->kepesertaan))
-                                @foreach($data->kepesertaan as $k=>$item)
-                                    <tr wire:key="{{$k}}">
-                                        <td>
-                                            <span wire:loading wire:target="delete_peserta({{$k}})">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                            <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
-                                        </td>
-                                        <td>{{$k+1}}</td>
-                                        <td>{{$item['no_peserta']}}</td>
-                                        <td>{{$item['nama']}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
-                                        <td>{{$item->usia}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
-                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                            @foreach($data->pesertas as $k=>$i)
+                                @php($item=json_decode($i->before_data,true))
+                                @if(is_null($item['no_peserta'])) @continue @endif
+                                <tr wire:key="{{$k}}">
+                                    <td>
+                                        <span wire:loading wire:target="delete_peserta({{$k}})">
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                        </span>
+                                        <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
+                                    </td>
+                                    <td>{{$k+1}}</td>
+                                    <td>{{$item['no_peserta']}}</td>
+                                    <td>{{$item['nama']}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
+                                    <td>{{$item['usia']}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                    <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
-                        <tfoot style="border-top: 2px solid #dee2e6;">
+                        <!-- <tfoot style="border-top: 2px solid #dee2e6;">
                             <tr>
                                 <th colspan="8" class="text-right">Total</th>
                                 <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
                                 <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
                                 <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
                             </tr>
-                        </tfoot>
+                        </tfoot> -->
                     </table>
                     @else
                         <table class="table m-b-0 c_list table-nowrap" id="data_table">
@@ -195,14 +202,149 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($peserta as $k=>$item)
+                                @foreach($data->pesertas as $k=>$i)
+                                    @php($item=json_decode($i->after_data,true))
                                     <tr wire:key="{{$k}}">
                                         <td>{{$k+1}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
-                                        <td>{{$item->no_ktp}}</td>
-                                        <td>{{$item->jenis_kelamin}}</td>
-                                        <td>{{$item->no_telepon}}</td>
+                                        <td>{{$item['no_ktp']}}</td>
+                                        <td>{{$item['jenis_kelamin']}}</td>
+                                        <td>{{$item['no_telepon']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                        <td class="text-center">{{$item['masa_bulan']}}</td>
+                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+                <br />
+                <br />
+                <br />
+                <h5>After</h5>
+                <div class="table-responsive">
+                    <!-- Refund -->
+                    @if($data->metode_endorse==1)
+                        <table class="table m-b-0 c_list table-nowrap" id="data_table">
+                            <thead style="vertical-align:middle">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal Efektif</th>
+                                    <th>Sisa Masa Asuransi</th>
+                                    <th>No Peserta</th>
+                                    <th>Nama</th>
+                                    <th>Mulai Asuransi</th>
+                                    <th>Akhir Asuransi</th>
+                                    <th class="text-center">Masa Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Kontribusi</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($data->pesertas as $k=>$i)
+                                    @php($item=json_decode($i->after_data,true))
+                                    <tr wire:key="{{$k}}">
+                                        <td>{{$k+1}}</td>
+                                        <td>{{$item['refund_tanggal_efektif']}}</td>
+                                        <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
+                                        <td>{{$item['no_peserta']}}</td>
+                                        <td>{{$item['nama']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                        <td class="text-center">{{$item['masa_bulan']}}</td>
+                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    <!-- Cancel -->
+                    @elseif($data->metode_endorse==2)
+                    <table class="table m-b-0 c_list table-nowrap" id="data_table">
+                        <thead style="vertical-align:middle">
+                            <tr>
+                                <th></th>
+                                <th>No</th>
+                                <th>NO PESERTA</th>
+                                <th>NAMA PESERTA</th>
+                                <th>TGL. LAHIR</th>
+                                <th>USIA</th>
+                                <th>MULAI ASURANSI</th>
+                                <th>AKHIR ASURANSI</th>
+                                <th class="text-right">NILAI MANFAAT ASURANSI</th>
+                                <th class="text-right">TOTAL KONTRIBUSI</th>
+                                <th class="text-right">PENGEMBALIAN KONTRIBUSI</th>
+                                <th class="text-right">PENGEMBALIAN KONTRIBUSI NETTO</th>
+                                <th class="text-center">UW LIMIT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($data->pesertas as $k=>$i)
+                                @php($item=json_decode($i->after_data,true))
+                                <tr wire:key="{{$k}}">
+                                    <td>
+                                        <span wire:loading wire:target="delete_peserta({{$k}})">
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                        </span>
+                                        <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
+                                    </td>
+                                    <td>{{$k+1}}</td>
+                                    <td>{{$item['no_peserta']}}</td>
+                                    <td>{{$item['nama']}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
+                                    <td>{{$item['usia']}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                    <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <!-- <tfoot style="border-top: 2px solid #dee2e6;">
+                            <tr>
+                                <th colspan="8" class="text-right">Total</th>
+                                <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
+                                <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
+                                <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
+                            </tr>
+                        </tfoot> -->
+                    </table>
+                    @else
+                        <table class="table m-b-0 c_list table-nowrap" id="data_table">
+                            <thead style="vertical-align:middle">
+                                <tr>
+                                    <th>No</th>
+                                    <th>No Peserta</th>
+                                    <th>Nama</th>
+                                    <th>No KTP</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>No Telepon</th>
+                                    <th>Mulai Asuransi</th>
+                                    <th>Akhir Asuransi</th>
+                                    <th class="text-center">Masa Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Kontribusi</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($data->pesertas as $k=>$i)
+                                    @php($item=json_decode($i->after_data,true))
+                                    <tr wire:key="{{$k}}">
+                                        <td>{{$k+1}}</td>
+                                        <td>{{$item['no_peserta']}}</td>
+                                        <td>{{$item['nama']}}</td>
+                                        <td>{{$item['no_ktp']}}</td>
+                                        <td>{{$item['jenis_kelamin']}}</td>
+                                        <td>{{$item['no_telepon']}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>

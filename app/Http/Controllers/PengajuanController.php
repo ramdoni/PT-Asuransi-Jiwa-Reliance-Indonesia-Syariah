@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Models\Endorsement;
 use App\Models\User;
+use App\Models\Tagihansoa;
 
 class PengajuanController extends Controller
 {
@@ -23,7 +24,6 @@ class PengajuanController extends Controller
         }
         // $kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('kontribusi');
         
-
         $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
         $extra_mortalita = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita');
         $nilai_manfaat = $id->kepesertaan->where('status_akseptasi',1)->sum('basic');
@@ -33,6 +33,14 @@ class PengajuanController extends Controller
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('livewire.pengajuan.print-dn',['nilai_manfaat'=>$nilai_manfaat,'total_gross'=>$total_gross,'extra_mortalita'=>$extra_mortalita,'total'=>$total,'data'=>$id,'head_teknik'=>$head_teknik,'kontribusi'=>$kontribusi,'extra_kontribusi'=>$extra_kontribusi,'potongan_langsung'=>$id->potongan_langsung]);
 
+        return $pdf->stream(); 
+    }
+
+    public function printTagihansoa(Tagihansoa $id)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.tagihansoa.print',['data'=>$id]);
+
         return $pdf->stream();
     }
 
@@ -41,12 +49,27 @@ class PengajuanController extends Controller
         $pdf = \App::make('dompdf.wrapper');
 
         $list_no_peserta = [];$list_nama_peserta = [];
+        $potongan_langsung_refund = 0; //$id->kontribusi_netto_perubahan*($id->polis->potong_langsung/100);
+        $kontribusi_netto_perubahan = 0; //$id->kontribusi_netto_perubahan - $potongan_langsung_refund;
+        $total_kontribusi_nett = 0; //$id->total_kontribusi_gross - $id->total_potongan_langsung;
+
         foreach($id->kepesertaan as $k=>$item){
             $list_no_peserta[] = $item->no_peserta;
             $list_nama_peserta[] = $item->nama;
         }
 
-        $pdf->loadView('livewire.endorsement.print-dn',['data'=>$id,'list_no_peserta'=>$list_no_peserta,'list_nama_peserta'=>$list_nama_peserta]);
+        foreach($id->pesertas as $i) {
+            $before = json_decode($i->before_data);
+            $after = json_decode($i->after_data);
+            $total_kontribusi_nett += $before->kontribusi - ($before->jumlah_potongan_langsung??0);
+            $kontribusi_netto_perubahan += $after->kontribusi - $after->jumlah_potongan_langsung;
+        }
+
+        // $potongan_langsung_refund = $id->kontribusi_netto_perubahan*($id->polis->potong_langsung/100);
+        // $kontribusi_netto_perubahan = $id->kontribusi_netto_perubahan - $potongan_langsung_refund;
+        // $total_kontribusi_nett = $id->total_kontribusi_gross - $id->total_potongan_langsung;
+        
+        $pdf->loadView('livewire.endorsement.print-dn',['total_kontribusi_nett'=>$total_kontribusi_nett,'kontribusi_netto_perubahan'=>$kontribusi_netto_perubahan,'data'=>$id,'list_no_peserta'=>$list_no_peserta,'list_nama_peserta'=>$list_nama_peserta]);
 
         return $pdf->stream();
     }

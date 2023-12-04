@@ -65,7 +65,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{route('memo-refund.edit', $item->memo_refund_id)}}" target="_blank">{{$item->memo_refund->nomor}}</a>
+                                        <a href="{{route('memo-refund.edit', $item->memo_refund_id)}}" target="_blank">{{isset($item->memo_refund->nomor) ? $item->memo_refund->nomor : '-'}}</a>
                                     </td>
                                     <td>
                                         {{isset($item->reas->reasuradur->name) ? $item->reas->reasuradur->name : '-'}}

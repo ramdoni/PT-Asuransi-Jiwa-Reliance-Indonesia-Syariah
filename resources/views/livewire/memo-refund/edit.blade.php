@@ -103,7 +103,7 @@
                         <span class="sr-only">{{ __('Loading...') }}</span>
                     </span>
                     <button type="button" class="btn btn-info ml-3" wire:loading.remove wire:target="update_data" wire:click="update_data" wire:loading.remove><i class="fa fa-save"></i> {{ __('Update') }}</button>
-
+                    
                     <!-- Approval Head Teknik -->
                     @if($data->status==0 and \Auth::user()->user_access_id==3)
                         <button type="button" class="btn btn-success ml-5" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik(1)" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Approve') }}</button>
@@ -135,6 +135,9 @@
                                 <th>Akhir Asuransi</th>
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
+                                <th class="text-right">EM</th>
+                                <th class="text-right">EK</th>
+                                <th class="text-right">Kontribusi</th>
                                 <th class="text-right">Pengembalian Kontribusi</th>
                                 <th></th>
                             </tr>
@@ -160,6 +163,9 @@
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item->total_kontribusi_dibayar)}}</td>
                                         <td class="text-right">{{format_idr($item->refund_kontribusi)}}</td>
                                     </tr>
                                     @php($total_refund_kontribusi += $item->refund_kontribusi)

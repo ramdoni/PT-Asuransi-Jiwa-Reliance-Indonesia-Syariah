@@ -8,7 +8,7 @@ use App\Models\ReasuradurRate;
 class EditRate extends Component
 {
     public $data;
-    public $reasuradur_id,$nama,$or,$reas,$ri_com,$model_reas,$max_or;
+    public $reasuradur_id,$nama,$or,$reas,$ri_com,$model_reas,$max_or,$persentase_refund,$tabbaru,$type_pengembalian_kontribusi;
     protected $listeners = ['edit-rate'=>'edit'];
     public function render()
     {
@@ -31,6 +31,9 @@ class EditRate extends Component
         $this->ri_com =  $data->ri_com;
         $this->model_reas = $data->model_reas;
         $this->max_or = $data->max_or;
+        $this->persentase_refund = $data->persentase_refund;
+        $this->type_pengembalian_kontribusi = $data->type_pengembalian_kontribusi;
+        $this->tabbaru= $data->tabbaru;
     }
 
     public function save()
@@ -42,9 +45,11 @@ class EditRate extends Component
         $this->data->ri_com = $this->ri_com;
         $this->data->model_reas = $this->model_reas;
         $this->data->max_or = $this->max_or;
+        $this->data->persentase_refund = $this->persentase_refund;
+        $this->data->tabbaru = $this->tabbaru;
+        $this->data->type_pengembalian_kontribusi = $this->type_pengembalian_kontribusi;
         $this->data->save();
 
-        $this->emit('modal','hide');
-        $this->emit('reload-rate');
+        $this->emit('modal','hide');$this->emit('reload-rate');
     }
 }
