@@ -46,6 +46,7 @@
                                 <th>Jenis Pengajuan</th>
                                 <th>Tanggal Pengajuan</th>
                                 <th class="text-center">Total Peserta</th>
+                                <th class="text-center">Selisih</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -85,6 +86,15 @@
                                     <td>{{isset($item->jenis_pengajuan) ? endorse_jenis_pengajuan($item->jenis_pengajuan) : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>
+                                    <td class="text-center">
+                                        @if($item->jenis_dokumen==1)
+                                            <span class="text-danger">
+                                        @else
+                                            <span class="text-success">
+                                        @endif
+                                        {{format_idr(abs($item->selisih))}}
+                                        </span>
+                                    </td>
                                     <td>
                                         <a href="{{route('endorsement.print-dn',['id'=>$item->id])}}" target="_blank" class="mr-2"><i class="fa fa-print"></i> Print</a>
                                         <a href="javascript:void(0)" class="mx-2" data-toggle="modal" wire:click="$set('selected_id',{{$item->id}})" data-target="#modal_confirm_delete"><i class="fa fa-trash text-danger"></i></a>

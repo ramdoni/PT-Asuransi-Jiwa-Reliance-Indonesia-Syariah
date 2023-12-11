@@ -28,18 +28,27 @@
                         </div>
                     </div>
                     <div class="col-md-10">
-                        <a href="{{route('recovery-claim.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Pengajuan</a>
+                        <a href="{{route('recovery-claim.insert')}}" class="btn btn-info float-left mr-3"><i class="fa fa-plus"></i> Pengajuan</a>
                         @if($is_download==false)
                             <a href="javascript:void(0)" class="btn btn-warning" wire:click="$set('is_download',true)"><i class="fa fa-download"></i> Download</a>
                         @endif
+                        @if($is_download)
+                            <select class="form-control float-left" wire:model="filter_polis_id" style="width: 200px;">
+                                <option value=""> -- Polis -- </option>
+                                @foreach($polis as $item)
+                                    <option value="{{$item->polis_id}}">{{$item->polis->no_polis}} / {{$item->polis->nama}}</option>
+                                @endforeach
+                            </select>
+                            @if(count(array_filter($check_id))>0 and $is_download)
+                                <a href="javacript:void(0)" wire:click="downloadExcel" class="btn btn-success ml-2"><i class="fa fa-download"></i> Download</a>
+                                <a href="#" class="text-danger" wire:click="$set('is_download',false)"><i class="fa fa-times"></i></a>
+                                <br />
+                            @endif  
+                        @endif    
                         <span wire:loading>
                             <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
-
-                        @if($is_rekon==false)
-                            <!-- <a href="javascript:void(0)" class="btn btn-danger" wire:click="$set('is_rekon',true)"><i class="fa fa-check"></i> Rekon</a>                             -->
-                        @endif
                     </div>
                 </div>
             </div>
@@ -49,24 +58,10 @@
                         <thead style="vertical-align:middle;background: #eeeeee54">
                             <tr>
                                 <th rowspan="2">No</th>
-                                <th rowspan="2">
-                                @if($is_rekon || $is_download)
-                                    <select class="form-control" wire:model="filter_polis_id" style="width: 200px;">
-                                        <option value=""> -- Polis -- </option>
-                                        @foreach($polis as $item)
-                                            <option value="{{$item->polis_id}}">{{$item->polis->no_polis}} / {{$item->polis->nama}}</option>
-                                        @endforeach
-                                    </select>
-                                @endif    
-                                Status
-                                </th>
+                                <th rowspan="2">Status</th>
                                 <th rowspan="2">
                                     @if($is_rekon || $is_download)
-                                        @if(count(array_filter($check_id))>0 and $is_download)
-                                            <a href="javacript:void(0)" wire:click="downloadExcel" class="btn btn-success ml-2"><i class="fa fa-download"></i> Submit</a>
-                                            <a href="#" class="text-danger" wire:click="$set('is_download',false)"><i class="fa fa-times"></i></a>
-                                            <br />
-                                        @endif  
+                                        
 
                                         <!-- @if(count(array_filter($check_id))>0 and $is_rekon)
                                             <a href="javacript:void(0)" wire:click="generateDn" class="btn btn-danger ml-2">Submit Rekon</a>

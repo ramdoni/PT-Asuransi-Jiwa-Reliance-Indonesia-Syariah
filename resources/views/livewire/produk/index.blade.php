@@ -69,9 +69,7 @@
         </div>
     </div>
 </div>
-
 @livewire('polis.manfaat-asuransi')
-
 <div wire:ignore.self class="modal fade" id="modal_add" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     @livewire('produk.insert')
 </div>

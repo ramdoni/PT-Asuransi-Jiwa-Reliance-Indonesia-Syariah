@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Reasuradur;
+use App\Models\TagihansoaPengajuan;
 
 class Tagihansoa extends Model
 {
@@ -17,5 +18,10 @@ class Tagihansoa extends Model
     public function reasuradur()
     {
         return $this->belongsTo(Reasuradur::class,'reasuradur_id','id');
+    }
+
+    public function kepesertaan()
+    {
+        return $this->hasMany(TagihansoaPengajuan::class,'tagihan_soa_id','id');
     }
 }

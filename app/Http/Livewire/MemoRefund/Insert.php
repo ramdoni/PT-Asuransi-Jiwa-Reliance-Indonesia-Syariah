@@ -164,16 +164,43 @@ class Insert extends Component
                         $peserta->save();
                         $total++;
                         /**
+                         *
                             Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross
                             t            = sisa masa asuransi (dalam bulan)
                             n            = masa asuransi (dalam bulan)
                             %            = persentase pengembalian asuransi (sesuai yang tercantum di Polis)
                          */
-                        $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar);
+                         $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar);
                         
                         if($peserta->net_kontribusi_reas>0 and $peserta->reas_id>0) {
-                            $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? $peserta->reas->rate_uw->persentase_refund : 0; 
-                            $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
+
+                            /**
+                                1.Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross reas atau
+                                2.Nilai Pengembalian Kontribusi = t/n x dana tabarru’reas
+                                3.Nilai Pengembalian Kontribusi = t/n x % x dana tabarru’reas
+                             */
+                            if(isset($peserta->reas->rate_uw->type_pengembalian_kontribusi)){
+                                $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? $peserta->reas->rate_uw->persentase_refund : 0; 
+                                $type_pengembalian = $peserta->reas->rate_uw->type_pengembalian_kontribusi;
+                                // Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross reas atau
+                                if($type_pengembalian==1){
+                                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
+                                }
+                                
+                                if($peserta->reas->rate_uw->tabbaru)
+                                    $dana_tabbaru_reas = ($peserta->reas->rate_uw->tabbaru /100)*$peserta->net_kontribusi_reas;
+                                else
+                                    $dana_tabbaru_reas = $peserta->net_kontribusi_reas;
+                                
+                                // Nilai Pengembalian Kontribusi = t/n x dana tabarru’reas
+                                if($type_pengembalian==2){
+                                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * $data_tabbaru_reas;
+                                }
+                                //Nilai Pengembalian Kontribusi = t/n x % x dana tabarru’reas
+                                if($type_pengembalian==3){
+                                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $data_tabbaru_reas);
+                                }
+                            }
                         }
 
                         $peserta->save();

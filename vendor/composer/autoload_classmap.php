@@ -159,6 +159,7 @@ return array(
     'App\\Http\\Livewire\\RecoveryClaim\\Insert' => $baseDir . '/app/Http/Livewire/RecoveryClaim/Insert.php',
     'App\\Http\\Livewire\\RecoveryClaim\\PrintDn' => $baseDir . '/app/Http/Livewire/RecoveryClaim/PrintDn.php',
     'App\\Http\\Livewire\\Setting' => $baseDir . '/app/Http/Livewire/Setting.php',
+    'App\\Http\\Livewire\\Tagihansoa\\Detail' => $baseDir . '/app/Http/Livewire/Tagihansoa/Detail.php',
     'App\\Http\\Livewire\\Tagihansoa\\Index' => $baseDir . '/app/Http/Livewire/Tagihansoa/Index.php',
     'App\\Http\\Livewire\\Tagihansoa\\Insert' => $baseDir . '/app/Http/Livewire/Tagihansoa/Insert.php',
     'App\\Http\\Livewire\\UserAccess\\Index' => $baseDir . '/app/Http/Livewire/UserAccess/Index.php',

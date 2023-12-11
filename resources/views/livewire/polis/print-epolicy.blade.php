@@ -154,7 +154,7 @@
                 <tr>
                     <td style="vertical-align:top;">Manfaat Asuransi</td>
                     <td style="vertical-align:top;"> : </td>
-                    <td style="vertical-align:top;">{{$data->manfaat_asuransi}}</td>
+                    <td style="vertical-align:top;text-align:justify;">{{$data->manfaat_asuransi}}</td>
                 </tr>
                 <tr>
                     <td>Cara Pembayaran Kontribusi</td>
@@ -177,18 +177,18 @@
                     <td>{{$data->ujrah_atas_pengelolaan}}% dari Kontribusi yang dibayarkan</td>
                 </tr>
                 <tr>
-                    <td>Tanggal Berlakunya Polis</td>
-                    <td> : </td>
-                    <td>Sejak diakseptasi dan disetujui oleh Pengelola sesuai dengan ketentuan penerimaan kepesertaan asuransi</td>
+                    <td style="vertical-align:top;">Tanggal Berlakunya Polis</td>
+                    <td style="vertical-align:top;"> : </td>
+                    <td style="text-align:justify;">Sejak diakseptasi dan disetujui oleh Pengelola sesuai dengan ketentuan penerimaan kepesertaan asuransi</td>
                 </tr>
                 <tr>
                     <td style="vertical-align:top;">Penggunaan Dana <i>Tabarru’</i> hanya untuk</td>
                     <td style="vertical-align:top;"> : </td>
-                    <td>
+                    <td style="vertical-align:top;">
                         <table>
                             <tr>
-                                <td style="width:15px;vertical-align:top;">a.</td>
-                                <td>Pembayaran Manfaat Asuransi kepada Peserta yang mengalami Musibah</td>
+                                <td style="width:15px;vertical-align:top;margin-top:0;padding-top:0;">a.</td>
+                                <td style="padding-top:0;margin-top:0;text-align:justify;">Pembayaran Manfaat Asuransi kepada Peserta yang mengalami Musibah</td>
                             </tr>
                             <tr>
                                 <td>b.</td>
@@ -196,11 +196,11 @@
                             </tr>
                             <tr>
                                 <td>c.</td>
-                                <td>Pembayaran kembali Qardh kepada Pengelola dan atau </td>
+                                <td style="text-align:justify;">Pembayaran kembali Qardh kepada Pengelola dan atau </td>
                             </tr>
                             <tr>
                                 <td style="vertical-align:top;">d.</td>
-                                <td>Pengembalian Dana <i>Tabarru’</i> yang jumlah pembayaran Kontribusi Dana Tabarru’ lebih besar dari seharusnya</td>
+                                <td style="text-align:justify;">Pengembalian Dana <i>Tabarru’</i> yang jumlah pembayaran Kontribusi Dana Tabarru’ lebih besar dari seharusnya</td>
                             </tr>
                         </table>
                     </td>
@@ -211,16 +211,16 @@
                     <td>
                         <table>
                             <tr>
-                                <td style="width:15px;vertical-align:top;">a.</td>
-                                <td>Jumlah pembayaran Kontribusi lebih besar dari seharusnya</td>
+                                <td style="width:15px;vertical-align:top;margin-top:0;padding-top:0;">a.</td>
+                                <td style="padding-top:0;margin-top:0;text-align:justify;">Jumlah pembayaran Kontribusi lebih besar dari seharusnya</td>
                             </tr>
                             <tr>
                                 <td style="vertical-align:top;">b.</td>
-                                <td>Penghentian Polis oleh Peserta sebelum Masa Asuransi berakhir</td>
+                                <td style="text-align:justify;">Penghentian Polis oleh Peserta sebelum Masa Asuransi berakhir</td>
                             </tr>
                             <tr>
                                 <td style="vertical-align:top;">c.</td>
-                                <td>Penghentian Polis oleh Pengelola sebelum Masa Asuransi berakhir</td>
+                                <td style="text-align:justify;">Penghentian Polis oleh Pengelola sebelum Masa Asuransi berakhir</td>
                             </tr>
                         </table>
                     </td>
@@ -231,10 +231,10 @@
                     <td>
                         <table>
                             <tr>
-                                <td style="width:15px;">a.</td>
-                                <td>Dana <i>Tabarru’</i></td>
-                                <td> : </td>
-                                <td>40%</td>
+                                <td style="width:15px;margin-top:0;padding-top:0;">a.</td>
+                                <td style="padding-top:0;margin-top:0">Dana <i>Tabarru’</i></td>
+                                <td style="padding-top:0;margin-top:0"> : </td>
+                                <td style="padding-top:0;margin-top:0">40%</td>
                             </tr>
                             <tr>
                                 <td style="width:20px;">b.</td>
@@ -251,10 +251,10 @@
                     <td>
                         <table>
                             <tr>
-                                <td style="width:20px;">a.</td>
-                                <td>Dana <i>Tabarru’</i></td>
-                                <td> : </td>
-                                <td>40%</td>
+                                <td style="width:20px;padding-top:0;margin-top:0;">a.</td>
+                                <td style="padding-top:0;margin-top:0">Dana <i>Tabarru’</i></td>
+                                <td style="padding-top:0;margin-top:0"> : </td>
+                                <td style="padding-top:0;margin-top:0">40%</td>
                             </tr>
                             <tr>
                                 <td style="width:20px;">b.</td>

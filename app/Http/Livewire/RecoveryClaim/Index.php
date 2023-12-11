@@ -159,8 +159,7 @@ class Index extends Component
                 ->setCellValue('F14', 'AWAL')
                 ->setCellValue('G14', 'AKHIR')
                 ->setCellValue('K14', 'TOTAL KLAIM')
-                ->setCellValue('L14', 'SHARE REAS')
-                ;
+                ->setCellValue('L14', 'SHARE REAS');
         
         $activeSheet->getColumnDimension('A')->setWidth(5.43);
         $activeSheet->getColumnDimension('B')->setWidth(20.14);
@@ -239,6 +238,9 @@ class Index extends Component
         $total_manfaat=0;$total_manfaat_reas=0;$total_klaim=0;$total_share_reas=0;
         $tanggal_pengajuan = date('Y-m-d');
         foreach($data as $k=>$i){
+            $i->rekon_status = 1;
+            $i->save();
+
             $status_klaim = '-';
             if($i->klaim){
                 switch($i->klaim->status_pengajuan){
@@ -285,6 +287,8 @@ class Index extends Component
                 ->setCellValue("K{$num}", $i->nilai_klaim)
                 ->setCellValue("L{$num}", isset($i->klaim->nilai_klaim_reas) ? $i->klaim->nilai_klaim_reas : 0)
                 ->setCellValue("M{$num}", $status_klaim);
+            
+                $activeSheet->getStyle("I{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0');
 
             $total_manfaat +=$i->kepesertaan->basic;
             $total_manfaat_reas +=$i->kepesertaan->nilai_manfaat_asuransi_reas;
@@ -319,8 +323,9 @@ class Index extends Component
         ->setCellValue("I{$num}", $total_manfaat)
         ->setCellValue("J{$num}", $total_manfaat_reas)
         ->setCellValue("K{$num}", $total_klaim)
-        ->setCellValue("L{$num}", $total_share_reas)
-        ;
+        ->setCellValue("L{$num}", $total_share_reas);
+        
+        $activeSheet->getStyle("I{$num}:L{$num}")->getNumberFormat()->setFormatCode('#,##0');
 
         $num += 2;
         $activeSheet->mergeCells("L{$num}:M{$num}");
@@ -366,6 +371,7 @@ class Index extends Component
         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
         header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
         header ('Pragma: public'); // HTTP/1.0
+        $this->filter_polis_id='';$this->is_rekon=false;$this->check_id = [];
         return response()->streamDownload(function() use($writer){
             $writer->save('php://output');
         },date('d-F-Y').'.xlsx');

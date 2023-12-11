@@ -834,6 +834,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Http\\Livewire\\RecoveryClaim\\Insert' => __DIR__ . '/../..' . '/app/Http/Livewire/RecoveryClaim/Insert.php',
         'App\\Http\\Livewire\\RecoveryClaim\\PrintDn' => __DIR__ . '/../..' . '/app/Http/Livewire/RecoveryClaim/PrintDn.php',
         'App\\Http\\Livewire\\Setting' => __DIR__ . '/../..' . '/app/Http/Livewire/Setting.php',
+        'App\\Http\\Livewire\\Tagihansoa\\Detail' => __DIR__ . '/../..' . '/app/Http/Livewire/Tagihansoa/Detail.php',
         'App\\Http\\Livewire\\Tagihansoa\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/Tagihansoa/Index.php',
         'App\\Http\\Livewire\\Tagihansoa\\Insert' => __DIR__ . '/../..' . '/app/Http/Livewire/Tagihansoa/Insert.php',
         'App\\Http\\Livewire\\UserAccess\\Index' => __DIR__ . '/../..' . '/app/Http/Livewire/UserAccess/Index.php',

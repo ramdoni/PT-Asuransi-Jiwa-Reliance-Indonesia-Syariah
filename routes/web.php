@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('tagihan-soa',App\Http\Livewire\Tagihansoa\Index::class)->name('tagihan-soa.index');
     Route::get('tagihan-soa/insert',App\Http\Livewire\Tagihansoa\Insert::class)->name('tagihan-soa.insert');
     Route::get('tagihan-soa/print/{id}',[App\Http\Controllers\PengajuanController::class,'printTagihansoa'])->name('tagihan-soa.print');
+    Route::get('tagihan-soa/detail/{data}',App\Http\Livewire\Tagihansoa\Detail::class)->name('tagihan-soa.detail');
     
     Route::get('klaim',App\Http\Livewire\Klaim\Index::class)->name('klaim.index');
     Route::get('klaim/insert',App\Http\Livewire\Klaim\Insert::class)->name('klaim.insert');

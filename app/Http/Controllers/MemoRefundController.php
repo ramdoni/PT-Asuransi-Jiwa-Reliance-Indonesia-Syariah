@@ -12,6 +12,7 @@ class MemoRefundController extends Controller
     public function printPengajuan(Refund $id)
     {
         $param['list_peserta'] = [];$param['periode_asuransi'] = [];$param['no_debit_notes'] = [];$param['tgl_debit_notes'] = [];$param['kontribusi_dn'] = 0;
+        $param['no_peserta_akhir']='';
         foreach($id->kepesertaan as $k => $item){
             if($k==0)
                 $param['no_peserta_awal'] = $item->no_peserta;

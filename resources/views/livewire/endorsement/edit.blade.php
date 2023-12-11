@@ -33,6 +33,14 @@
                             {{isset($data->jenis_perubahan->name) ? $data->jenis_perubahan->name : '-'}}
                         </div>
                     </div>
+                    @if($data->jenis_pengajuan==1)
+                        <div class="row border-bottom form-group pb-2">
+                            <div class="form-group col-md-6">
+                                <label>Selisih</label><br />
+                                {{format_idr(abs($data->selisih))}}
+                            </div>
+                        </div>
+                    @endif
                     @if($data->head_teknik_note || $data->head_syariah_note)
                         <div class="row border-bottom form-group pb-2">
                             @if($data->head_teknik_note)
@@ -143,9 +151,6 @@
                                 <th>AKHIR ASURANSI</th>
                                 <th class="text-right">NILAI MANFAAT ASURANSI</th>
                                 <th class="text-right">TOTAL KONTRIBUSI</th>
-                                <th class="text-right">PENGEMBALIAN KONTRIBUSI</th>
-                                <th class="text-right">PENGEMBALIAN KONTRIBUSI NETTO</th>
-                                <th class="text-center">UW LIMIT</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,8 +173,6 @@
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                     <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
                                 </tr>
                             @endforeach
@@ -277,10 +280,7 @@
                                 <th>MULAI ASURANSI</th>
                                 <th>AKHIR ASURANSI</th>
                                 <th class="text-right">NILAI MANFAAT ASURANSI</th>
-                                <th class="text-right">TOTAL KONTRIBUSI</th>
                                 <th class="text-right">PENGEMBALIAN KONTRIBUSI</th>
-                                <th class="text-right">PENGEMBALIAN KONTRIBUSI NETTO</th>
-                                <th class="text-center">UW LIMIT</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -302,8 +302,6 @@
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                     <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
                                 </tr>
                             @endforeach

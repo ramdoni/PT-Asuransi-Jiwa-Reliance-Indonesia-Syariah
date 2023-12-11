@@ -78,7 +78,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{route('memo-refund.edit', $item->id)}}">{{$item->nomor}}</a></td>
+                                        <a href="{{route('tagihan-soa.detail', $item->id)}}">{{$item->nomor}}</a></td>
                                     <td>{{isset($item->reasuradur->name) ? $item->reasuradur->name : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->created_at))}}</td>
                                     <td class="text-right">{{format_idr($item->total_manfaat_asuransi)}}</td>

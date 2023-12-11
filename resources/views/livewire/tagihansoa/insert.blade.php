@@ -88,11 +88,21 @@
                                 </tr>
                                 <tr>
                                     <td class="text-right">
-                                        <strong>Refund & Endorsement</strong>
+                                        <strong>Refund</strong>
                                     </td>
-                                    <td class="text-right">Rp. {{format_idr($total_refund+$total_endorse+$total_cancel)}}</td>
+                                    <td class="text-right">Rp. {{format_idr($total_refund)}}</td>
                                 </tr>
                                 <tr>
+                                    <td class="text-right">
+                                        <strong>Endorse</strong>
+                                    </td>
+                                    <td class="text-right">Rp. {{format_idr($total_endorse)}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Cancel</strong>
+                                    </td>
+                                    <td class="text-right">Rp. {{format_idr($total_cancel)}}</td>
                                 </tr>
                                 <tr>
                                     <td class="text-right"><strong>Klaim</strong></td>

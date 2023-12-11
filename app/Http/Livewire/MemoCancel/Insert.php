@@ -94,7 +94,7 @@ class Insert extends Component
                 $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita ;
                 $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
                 $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
-                $this->peserta[$index]['cancel_kontribusi_netto'] = $this->peserta[$index]['total_kontribusi_dibayar'] * ($polis->refund / 100);
+                // $this->peserta[$index]['cancel_kontribusi_netto'] = $this->peserta[$index]['total_kontribusi_dibayar'] * ($polis->refund / 100);
                 $index++;
             }
         }
@@ -255,7 +255,7 @@ class Insert extends Component
                     
                     $reas_cancel->total_peserta = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
                     $reas_cancel->total_manfaat_asuransi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
-                    $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('cancel_kontribusi_netto');
+                    $reas_cancel->total_kontribusi = Kepesertaan::where(['memo_cancel_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('total_kontribusi_reas');
                     $reas_cancel->save();   
                 }
 

@@ -18,19 +18,24 @@
                             </tr>
                         </thead>
                         @foreach($data as $k => $i)
-                            <tr>
+                            @if($is_insert and $i->id==$selected_id) @continue @endif
+                            <tr wire:key="{{$i->id}}">
                                 <td>{{$k+1}}</td>
-                                <td>{{$i->nama}}</td>
+                                <td>
+                                    <a href="javascript:void(0)" wire:click="delete({{$i->id}})"><i class="fa fa-trash text-danger"></i></a>
+                                    <a href="javascript:void(0)" wire:click="edit({{$i->id}})"><i class="fa fa-edit"></i></a>
+                                    {{$i->nama}}
+                                </td>
                                 <td></td>
                             </tr>
                         @endforeach
                     </table>
                     <table class="table m-b-0 c_list table-nowrap" style="width: 100%;">
-                    @if($is_insert)
+                        @if($is_insert)
                             <tr>
                                 <td style="width: 100px;">
-                                    <a href="#" wire:click="$set('is_insert',false)" class="text-danger ml-2"><i class="fa fa-close"></i></a>  
-                                    <a href="#" wire:click="save" class="btn btn-info btn-sm"><i class="fa fa-save"></i> Simpan</a>
+                                    <a href="javascript:void(0)" wire:click="cancel" class="text-danger ml-2"><i class="fa fa-close"></i></a>  
+                                    <a href="javascript:void(0)" wire:click="save" class="btn btn-info btn-sm"><i class="fa fa-save"></i> Simpan</a>
                                 </td>
                                 <td colspan="2">
                                     <input type="text" class="form-control" wire:model="nama" />
@@ -39,7 +44,7 @@
                         @else
                             <tr>
                                 <td colspan="2">
-                                    <a href="#" wire:click="$set('is_insert',true)"><i class="fa fa-plus"></i> Tambah</a>
+                                    <a href="javascript:void(0)" wire:click="insert"><i class="fa fa-plus"></i> Tambah</a>
                                 </td>
                             </tr>
                         @endif

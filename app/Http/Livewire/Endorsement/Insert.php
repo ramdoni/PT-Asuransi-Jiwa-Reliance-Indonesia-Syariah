@@ -404,10 +404,12 @@ class Insert extends Component
         $data->basic_perubahan = $basic_perubahan;
         $data->jenis_dokumen = 1; // 1 = CN, 2 = DN
         
-        if($data->total_kontribusi_gross > $data->kontribusi_netto_perubahan)
+        if($data->total_kontribusi_gross > $data->kontribusi_netto_perubahan){
             $selisih = ($data->total_kontribusi_gross - $data->kontribusi_netto_perubahan);
-        else
+            $data->jenis_dokumen = 2; // 1 = CN, 2 = DN
+        }else{
             $selisih = ($data->kontribusi_netto_perubahan - $data->total_kontribusi_gross);
+        }
         
         $data->selisih = $selisih;
         $data->save();
