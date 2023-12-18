@@ -22,12 +22,17 @@ class PengajuanController extends Controller
         }else{
             $kontribusi = $id->kontribusi;
         }
-        // $kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('kontribusi');
         
-        $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
-        $extra_mortalita = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita');
+        if($id->is_manual==1){
+            $extra_kontribusi = $id->extra_kontribusi;
+            $extra_mortalita = $id->extra_mortalita;
+        }else{
+            $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
+            $extra_mortalita = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita')??$id->extra_mortalita;
+        }
+        
         $nilai_manfaat = $id->kepesertaan->where('status_akseptasi',1)->sum('basic');
-
+        
         $total = $kontribusi+$extra_kontribusi+$extra_mortalita+$id->biaya_sertifikat+$id->biaya_polis_materai+$id->pph - ($id->ppn+$id->potong_langsung+$id->brokerage_ujrah);
         $total_gross = $kontribusi+$extra_kontribusi+$extra_mortalita;
         $pdf = \App::make('dompdf.wrapper');

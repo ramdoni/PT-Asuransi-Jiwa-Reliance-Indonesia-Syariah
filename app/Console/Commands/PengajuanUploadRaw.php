@@ -10,7 +10,7 @@ use App\Models\UnderwritingLimit;
 
 class PengajuanUploadRaw extends Command
 {
-    public $pengajuan_id = 10356;
+    public $pengajuan_id = 10735;
     /**
      * The name and signature of the console command.
      *
@@ -45,7 +45,7 @@ class PengajuanUploadRaw extends Command
         $pengajuan = Pengajuan::find($this->pengajuan_id);
 
         ini_set('memory_limit', '-1'); 
-        $inputFileName = './public/migrasi/kerta-raharja.xlsx';
+        $inputFileName = './public/migrasi/brks-iib.xlsx';
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
