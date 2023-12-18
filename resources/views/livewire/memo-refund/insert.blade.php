@@ -111,7 +111,14 @@
                                     </td>
                                     <td>{{$k+1}}</td>
                                     <td>
-                                        <input type="date" class="form-control" wire:model="peserta.{{$k}}.refund_tanggal_efektif" />
+                                        <div class="input-group mb-3">
+                                            <input type="date" class="form-control" wire:model="peserta.{{$k}}.refund_tanggal_efektif" />
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" title="month">
+                                                    {{hitung_masa_bulan($item['tanggal_mulai'],$item['refund_tanggal_efektif'],3)}}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="text-center">
                                         <span wire:loading wire:target="peserta.{{$k}}.refund_tanggal_efektif">

@@ -75,9 +75,6 @@ class Insert extends Component
             $ujrah = $polis->ujrah_atas_pengelolaan;
 
             foreach($this->peserta as $k => $i){
-                
-
-                
                 if($this->field_selected=='tanggal_mulai' and $this->jenis_pengajuan == 2){
                     $earlier = new \DateTime($value_tanggal_mulai);
                     $later = new \DateTime($i['tanggal_akhir']);
@@ -123,8 +120,8 @@ class Insert extends Component
                 }
 
                 if($this->metode_endorse==1){
-                    $this->peserta[$k]['refund_tanggal_efektif'] = date('Y-m-d');
-                    $this->peserta[$k]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$this->peserta[$k]['tanggal_akhir'],3);
+                    // $this->peserta[$k]['refund_tanggal_efektif'] = date('Y-m-d');
+                    $this->peserta[$k]['refund_sisa_masa_asuransi'] = $this->peserta[$k]['masa_bulan'] - hitung_masa_bulan($this->peserta[$k]['tanggal_mulai'], $this->peserta[$k]['refund_tanggal_efektif'],3);
                     $this->peserta[$k]['refund_kontribusi'] = ($this->peserta[$k]['refund_sisa_masa_asuransi'] / $this->peserta[$k]['masa_bulan']) * (($polis->refund / 100) * $this->peserta[$k]['total_kontribusi_dibayar']);
                 }
 
@@ -158,7 +155,7 @@ class Insert extends Component
             $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta['kontribusi'] + $peserta['extra_kontribusi'] + $peserta['extra_mortalita'];
 
             $this->peserta[$index]['refund_tanggal_efektif'] = date('Y-m-d');
-            $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta['tanggal_akhir'],3);
+            $this->peserta[$index]['refund_sisa_masa_asuransi'] = $peserta['masa_bulan'] - hitung_masa_bulan($peserta['tanggal_mulai'],date('Y-m-d'),3);
             $this->peserta[$index]['refund_kontribusi'] = ($this->peserta[$index]['refund_sisa_masa_asuransi'] / $peserta['masa_bulan']) * (($polis->refund / 100) * $this->peserta[$index]['total_kontribusi_dibayar']);
             
             $ids = [];
@@ -188,7 +185,7 @@ class Insert extends Component
         
         $this->validate($validate);
         
-        // try {
+        try {
             \DB::transaction(function () {
                 $no_pengajuan = 
                 $data = Endorsement::create([
@@ -217,9 +214,9 @@ class Insert extends Component
 
                 return redirect()->route('endorsement.index');
             });
-        // }catch (\Throwable $e) {
-        //     $this->emit('message-error', json_encode($e));
-        // }
+        }catch (\Throwable $e) {
+            $this->emit('message-error', json_encode($e));
+        }
     }
 
     public function tidakMempengaruhiPremi($data)
@@ -264,6 +261,36 @@ class Insert extends Component
         $data->value_perubahan_after = json_encode($value_perubahan_after);
         $data->total_peserta = $total;
         $data->save();
+
+        $reasuradur = Kepesertaan::select('kepesertaan.*')->where('kepesertaan.endorsement_id',$data->id)
+                                ->join('reas','reas.id','=','kepesertaan.reas_id')
+                                ->join('reasuradur','reasuradur.id','=','reas.reasuradur_id')
+                                ->where(function($table){
+                                    $table->where('reasuradur.name','<>','OR')
+                                            ->orWhere('reasuradur.name','<>','');
+                                })
+                                ->groupBy('reasuradur.id')
+                                ->get();
+                
+        foreach($reasuradur as $item){
+            $reas_refund = new ReasEndorse();
+            $reas_refund->endorsement_id = $data->id;
+            $reas_refund->status = 0;
+            $reas_refund->polis_id = $data->polis_id;
+            $reas_refund->tanggal_pengajuan = $data->tanggal_pengajuan;
+            $reas_refund->reas_id = $item->reas_id;
+            $reas_refund->save();
+            
+            $reas_refund->nomor = str_pad($reas_refund->id,6, '0', STR_PAD_LEFT) ."/END-C/AJRI/".numberToRomawi(date('m')).'/'.date('Y');
+            
+            Kepesertaan::where(['endorsement_id'=>$data->id,'reas_id'=>$item->reas_id])->update(['reas_endorse_id'=>$reas_refund->id]);
+ 
+            $reas_refund->total_kontribusi_refund = Kepesertaan::where(['endorsement_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('refund_kontribusi_reas');
+            $reas_refund->total_peserta = Kepesertaan::where(['endorsement_id'=>$data->id,'reas_id'=>$item->reas_id])->get()->count();
+            $reas_refund->total_manfaat_asuransi = Kepesertaan::where(['endorsement_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('nilai_manfaat_asuransi_reas');
+            $reas_refund->total_kontribusi = Kepesertaan::where(['endorsement_id'=>$data->id,'reas_id'=>$item->reas_id])->sum('net_kontribusi_reas');
+            $reas_refund->save();   
+        }
     }
 
     public function mempengaruhiPremi($data)
@@ -277,7 +304,6 @@ class Insert extends Component
         foreach($this->peserta as $k => $item){
             $peserta = Kepesertaan::find($item['id']);
             if($peserta){
-                
                 foreach($this->label_update_peserta as $f=>$v){
                     if($peserta->$f!=$item[$f]){
                         $field_perubahan[] = $f;
@@ -296,6 +322,56 @@ class Insert extends Component
 
                 $peserta->endorsement_id = $data->id;
                 $peserta->total_kontribusi_dibayar = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita;
+                $peserta->refund_sisa_masa_asuransi = $peserta->masa_bulan - hitung_masa_bulan($peserta->tanggal_mulai, $item['refund_tanggal_efektif'],3);
+                $peserta->save();
+
+                /**
+                 *
+                    Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross
+                    t            = sisa masa asuransi (dalam bulan)
+                    n            = masa asuransi (dalam bulan)
+                    %            = persentase pengembalian asuransi (sesuai yang tercantum di Polis)
+                */
+                $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar);
+                
+                // Refund
+                if($this->metode_endorse==1){
+                    if($peserta->net_kontribusi_reas>0 and $peserta->reas_id>0) {
+                        /**
+                            1.Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross reas atau
+                            2.Nilai Pengembalian Kontribusi = t/n x dana tabarru’reas
+                            3.Nilai Pengembalian Kontribusi = t/n x % x dana tabarru’reas
+                            */
+                        if(isset($peserta->reas->rate_uw->type_pengembalian_kontribusi)){
+                            $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? str_replace(",",".",$peserta->reas->rate_uw->persentase_refund) : 0; 
+                            $type_pengembalian = $peserta->reas->rate_uw->type_pengembalian_kontribusi;
+                            $data_tabbaru_reas =  isset($peserta->reas->rate_uw->persentase_refund) ? str_replace(",",".",$peserta->reas->rate_uw->tabbaru) : 0; 
+                            // Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross reas atau
+                            if($type_pengembalian==1){
+                                $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
+                            }
+                            
+                            if($peserta->reas->rate_uw->tabbaru)
+                                $dana_tabbaru_reas = ($peserta->reas->rate_uw->tabbaru /100)*$peserta->net_kontribusi_reas;
+                            else
+                                $dana_tabbaru_reas = $peserta->net_kontribusi_reas;
+                            
+                            // Nilai Pengembalian Kontribusi = t/n x dana tabarru’reas
+                            if($type_pengembalian==2){
+                                $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * $dana_tabbaru_reas;
+                            }
+                            //Nilai Pengembalian Kontribusi = t/n x % x dana tabarru’reas
+                            if($type_pengembalian==3){
+                                $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $dana_tabbaru_reas);
+                            }
+                        }
+                    }
+                }
+                // Cancel
+                if($this->metode_endorse==2){
+                    $peserta->refund_kontribusi_reas = $peserta->net_kontribusi_reas;
+                }
+                
                 $peserta->save();
 
                 $em_perubahan += $item['extra_mortalita'];
@@ -369,7 +445,8 @@ class Insert extends Component
                     $peserta->extra_mortalita+
                     $peserta->pph_amount-($peserta->ppn_amount+$peserta->jumlah_potongan_langsung+$peserta->brokerage_ujrah);
                 
-                $peserta->refund_sisa_masa_asuransi = hitung_masa_bulan($item['refund_tanggal_efektif'],$peserta->tanggal_akhir,3);
+                // $peserta->refund_sisa_masa_asuransi = hitung_masa_bulan($item['refund_tanggal_efektif'],$peserta->tanggal_akhir,3);
+
                 $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar);
                     
                 if($peserta->net_kontribusi_reas>0 and $peserta->reas_id>0){

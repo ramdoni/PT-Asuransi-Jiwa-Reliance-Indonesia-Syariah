@@ -90,6 +90,10 @@
                                 <th>Akhir Asuransi</th>
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
+                                <th class="text-right">Tabarru</th>
+                                <th class="text-right">Ujroh</th>
+                                <th class="text-right">EM</th>
+                                <th class="text-right">EK</th>
                                 <th class="text-right">Pengembalian Kontribusi</th>
                                 <th></th>
                             </tr>
@@ -111,10 +115,13 @@
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-center">{{$item['masa_bulan']}}</td>
                                     <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                    <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                    <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                    <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                    <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
                                     <td class="text-right">{{format_idr($item['cancel_kontribusi_netto'])}}</td>
                                 </tr>
                             @endforeach
-                            
                         </tbody>
                     </table>
                     <table style="width:100%;" class="my-3" wire:ignore>

@@ -35,7 +35,7 @@ class Insert extends Component
         foreach($this->peserta as $k => $i){
             $peserta = Kepesertaan::find($i['id']);
             if($peserta){
-                $this->peserta[$k]['refund_sisa_masa_asuransi'] = hitung_masa_bulan($i['refund_tanggal_efektif'],$peserta->tanggal_akhir,3);
+                $this->peserta[$k]['refund_sisa_masa_asuransi'] = $this->peserta[$k]['masa_bulan'] - hitung_masa_bulan($peserta->tanggal_mulai,$this->peserta[$k]['refund_tanggal_efektif'],3);
                 $this->peserta[$k]['refund_kontribusi'] = ($this->peserta[$k]['refund_sisa_masa_asuransi'] / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $i['total_kontribusi_dibayar']);
             }
         }
@@ -52,10 +52,8 @@ class Insert extends Component
             }
            
             $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta['kontribusi'] + $peserta['extra_kontribusi'] + $peserta['extra_mortalita'] ;
-            // $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
-            // $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
             $this->peserta[$index]['refund_tanggal_efektif'] = date('Y-m-d');
-            $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta['tanggal_akhir'],3);
+            $this->peserta[$index]['refund_sisa_masa_asuransi'] = $this->peserta[$index]['masa_bulan'] - hitung_masa_bulan($peserta['tanggal_mulai'],date('Y-m-d'),3);
             $this->peserta[$index]['refund_kontribusi'] = ($this->peserta[$index]['refund_sisa_masa_asuransi'] / $peserta['masa_bulan']) * (($polis->refund / 100) * $this->peserta[$index]['total_kontribusi_dibayar']);
 
             $ids = [];
@@ -101,7 +99,7 @@ class Insert extends Component
                 $this->peserta[$index]['reas'] = isset($peserta->reas->no_pengajuan) ? $peserta->reas->no_pengajuan : '-';
                 $this->peserta[$index]['reasuradur'] = isset($peserta->reas->reasuradur->name) ? $peserta->reas->reasuradur->name : '-';
                 $this->peserta[$index]['refund_tanggal_efektif'] = date('Y-m-d');
-                $this->peserta[$index]['refund_sisa_masa_asuransi'] = hitung_masa_bulan(date('Y-m-d'),$peserta->tanggal_akhir,3);
+                $this->peserta[$index]['refund_sisa_masa_asuransi'] = $this->peserta[$index]['masa_bulan'] - hitung_masa_bulan($peserta->tanggal_mulai,date('Y-m-d'),3);
                 $this->peserta[$index]['refund_kontribusi'] = ($this->peserta[$index]['refund_sisa_masa_asuransi'] / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $this->peserta[$index]['total_kontribusi_dibayar']);
                 
                 $index++;
@@ -159,7 +157,7 @@ class Insert extends Component
                     if($peserta){
                         $peserta->memo_refund_id = $data->id;
                         $peserta->refund_tanggal_efektif = $item['refund_tanggal_efektif'];
-                        $peserta->refund_sisa_masa_asuransi = hitung_masa_bulan($item['refund_tanggal_efektif'],$peserta->tanggal_akhir,3);
+                        $peserta->refund_sisa_masa_asuransi = $peserta->masa_bulan -  hitung_masa_bulan($peserta->tanggal_mulai,$item['refund_tanggal_efektif'],3);
                         $peserta->total_kontribusi_dibayar = $item['total_kontribusi_dibayar'];
                         $peserta->save();
                         $total++;
@@ -180,8 +178,9 @@ class Insert extends Component
                                 3.Nilai Pengembalian Kontribusi = t/n x % x dana tabarru’reas
                              */
                             if(isset($peserta->reas->rate_uw->type_pengembalian_kontribusi)){
-                                $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? $peserta->reas->rate_uw->persentase_refund : 0; 
+                                $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? str_replace(",",".",$peserta->reas->rate_uw->persentase_refund) : 0; 
                                 $type_pengembalian = $peserta->reas->rate_uw->type_pengembalian_kontribusi;
+                                $data_tabbaru_reas =  isset($peserta->reas->rate_uw->persentase_refund) ? str_replace(",",".",$peserta->reas->rate_uw->tabbaru) : 0; 
                                 // Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross reas atau
                                 if($type_pengembalian==1){
                                     $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
@@ -194,11 +193,11 @@ class Insert extends Component
                                 
                                 // Nilai Pengembalian Kontribusi = t/n x dana tabarru’reas
                                 if($type_pengembalian==2){
-                                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * $data_tabbaru_reas;
+                                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * $dana_tabbaru_reas;
                                 }
                                 //Nilai Pengembalian Kontribusi = t/n x % x dana tabarru’reas
                                 if($type_pengembalian==3){
-                                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $data_tabbaru_reas);
+                                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $dana_tabbaru_reas);
                                 }
                             }
                         }

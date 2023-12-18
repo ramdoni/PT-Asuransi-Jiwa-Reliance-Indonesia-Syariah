@@ -26,6 +26,17 @@
                             <span class="sr-only">{{ __('Loading...') }}</span>
                         </span>
                         <a href="{{route('memo-refund.insert')}}" class="btn btn-info"><i class="fa fa-plus"></i> Refund</a>
+                        @if($is_download)
+                            <select class="form-control float-left mr-2" wire:model="filter_polis_id" style="width: 200px;">
+                                <option value=""> -- Polis -- </option>
+                                @foreach($polis as $item)
+                                    <option value="{{$item->id}}">{{$item->no_polis}} / {{$item->nama}}</option>
+                                @endforeach
+                            </select>
+                            <a href="#" class="btn btn-danger" wire:click="downloadExcel"><i class="fa fa-check-circle"></i> Download ({{count(array_filter($check_id))}})</a>
+                        @else
+                            <a href="#" class="btn btn-warning" wire:click="$set('is_download',true)"><i class="fa fa-download"></i> Download</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -34,7 +45,16 @@
                     <table class="table table-hover m-b-0 c_list table-nowrap" id="data_table">
                         <thead style="vertical-align:middle">
                             <tr>
-                                <th>No</th>
+                                <th class="text-center">
+                                    @if($is_download and $filter_polis_id)
+                                        <label>
+                                            Check All<br />
+                                            <input type="checkbox" wire:model="check_all" wire:click="checked_all" value="1" />
+                                        </label>
+                                    @else
+                                        No
+                                    @endif
+                                </th>
                                 <th class="text-center">Status</th>
                                 <th>No Pengajuan</th>
                                 <th>No Polis</th>
@@ -51,7 +71,13 @@
                         <tbody>
                             @foreach ($data as $k => $item)
                                 <tr>
-                                    <td style="width: 50px;">{{$k+1}}</td>
+                                    <td style="width: 50px;" class="text-center">
+                                        @if($is_download and $filter_polis_id)
+                                            <input type="checkbox" wire:model="check_id.{{$item->id}}" value="{{$item->id}}" />
+                                        @else
+                                            {{$k+1}}
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         @if($item->status==0)
                                             <span class="badge badge-info">Head Teknik</span>

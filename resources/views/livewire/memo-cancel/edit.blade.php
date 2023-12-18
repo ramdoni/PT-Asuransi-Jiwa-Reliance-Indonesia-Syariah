@@ -128,51 +128,76 @@
                             <tr>
                                 <th></th>
                                 <th>No</th>
-                                <th>NO PESERTA</th>
-                                <th>NAMA PESERTA</th>
-                                <th>TGL. LAHIR</th>
-                                <th>USIA</th>
-                                <th>MULAI ASURANSI</th>
-                                <th>AKHIR ASURANSI</th>
-                                <th class="text-right">NILAI MANFAAT ASURANSI</th>
-                                <th class="text-right">TOTAL KONTRIBUSI</th>
-                                <th class="text-right">PENGEMBALIAN KONTRIBUSI</th>
-                                <th class="text-right">PENGEMBALIAN KONTRIBUSI NETTO</th>
-                                <th class="text-center">UW LIMIT</th>
+                                <th>No Peserta</th>
+                                <th>Nama Peserta</th>
+                                <th>Tg. Lahir</th>
+                                <th>Usia</th>
+                                <th>Mulai Asuransi</th>
+                                <th>Akhir Asurani</th>
+                                <th class="text-right">Nilai Manfaat Asuransi</th>
+                                <th class="text-right">Tabarru</th>
+                                <th class="text-right">Ujroh</th>
+                                <th class="text-right">EM</th>
+                                <th class="text-right">EK</th>
+                                <th class="text-right">Total Kontribusi</th>
+                                <th class="text-right">Pengembalian Kontribusi</th>
+                                <th class="text-right">Pengembalian Kontribusi Netto</th>
+                                <th class="text-center">Uw Limit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($data->kepesertaan))
-                                @foreach($data->kepesertaan as $k=>$item)
-                                    <tr wire:key="{{$k}}">
-                                        <td>
-                                            <span wire:loading wire:target="delete_peserta({{$k}})">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                            <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
-                                        </td>
-                                        <td>{{$k+1}}</td>
-                                        <td>{{$item['no_peserta']}}</td>
-                                        <td>{{$item['nama']}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
-                                        <td>{{$item->usia}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
-                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
-                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                            @php($total_tabarru=0)
+                            @php($total_ujrah=0)
+                            @php($total_em=0)
+                            @php($total_ek=0)
+                            @php($total_ek=0)
+                            @php($total_kontribusi=0)
+                            @php($total_kontribusi_dibayar=0)
+                            @foreach($data->kepesertaan as $k=>$item)
+                                <tr wire:key="{{$k}}">
+                                    <td>
+                                        <span wire:loading wire:target="delete_peserta({{$k}})">
+                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                            <span class="sr-only">{{ __('Loading...') }}</span>
+                                        </span>
+                                        <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
+                                    </td>
+                                    <td>{{$k+1}}</td>
+                                    <td>{{$item['no_peserta']}}</td>
+                                    <td>{{$item['nama']}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
+                                    <td>{{$item->usia}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                    <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                    <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                    <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                    <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                    <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                    <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    <td>{{$item['ul']}}</td>
+                                </tr>
+                                @php($total_tabarru +=$item['dana_tabarru'] )
+                                @php($total_ujrah +=$item['dana_ujrah'] )
+                                @php($total_em +=$item['extra_mortalita'] )
+                                @php($total_ek +=$item['extra_kontribusi'] )
+                                @php($total_kontribusi +=$item['kontribusi'] )
+                                @php($total_kontribusi_dibayar +=$item['total_kontribusi_dibayar'] )
+                            @endforeach
                         </tbody>
                         <tfoot style="border-top: 2px solid #dee2e6;">
                             <tr>
                                 <th colspan="8" class="text-right">Total</th>
                                 <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                                <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
-                                <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_tabarru)}}</th>
+                                <th class="text-right">{{format_idr($total_ujrah)}}</th>
+                                <th class="text-right">{{format_idr($total_em)}}</th>
+                                <th class="text-right">{{format_idr($total_ek)}}</th>
+                                <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_kontribusi_dibayar)}}</th>
                             </tr>
                         </tfoot>
                     </table>

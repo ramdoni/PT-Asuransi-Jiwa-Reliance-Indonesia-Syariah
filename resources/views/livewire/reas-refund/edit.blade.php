@@ -83,13 +83,15 @@
                                 <th>Akhir Asuransi</th>
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
-                                <th class="text-right">Pengembalian Kontribusi</th>
+                                <th class="text-right">Kontribusi</th>
+                                <th class="text-right">Refund</th>
                                 <th></th>
                             </tr>
                         </thead>
                         @if(isset($data->kepesertaan))
                             <tbody>
                             @php($total_manfaat_asuransi=0)
+                            @php($total_refund=0)
                             @php($total_kontribusi=0)
                             @foreach($data->kepesertaan as $k=>$item)
                                 <tr wire:key="{{$k}}">
@@ -111,9 +113,11 @@
                                     <td class="text-center">{{$item['masa_bulan']}}</td>
                                     <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
                                     <td class="text-right">{{format_idr($item->net_kontribusi_reas)}}</td>
+                                    <td class="text-right">{{format_idr($item['refund_kontribusi_reas'])}}</td>
                                 </tr>
                                 @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
                                 @php($total_kontribusi += $item->net_kontribusi_reas)
+                                @php($total_refund += $item->refund_kontribusi_reas)
                             @endforeach
                             </tbody>
                             <tfoot style="border-top: 2px solid #dee2e6;">
@@ -121,6 +125,7 @@
                                     <th colspan="8" class="text-right">Total</th>
                                     <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
                                     <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                    <th class="text-right">{{format_idr($total_refund)}}</th>
                                 </tr>
                             </tfoot>
                         @endif

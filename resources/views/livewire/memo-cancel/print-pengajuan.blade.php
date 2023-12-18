@@ -169,11 +169,20 @@
                         <td></td>
                         <td></td>
                     </tr>
+                    
                     <tr>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>Potongan Langsung</td>
+                        <td>Ujroh Brokergae</td>
+                        <td>{{$data->polis->fee_base_brokerage}}%</td>
+                        <td>{{format_idr($data->fee_base_brokerage)}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Potong Langsung</td>
                         <td>{{$data->polis->potong_langsung}}%</td>
                         <td>{{format_idr($data->total_potongan_langsung)}}</td>
                     </tr>
@@ -390,7 +399,7 @@
                                 <td class="text-right">{{format_idr($data->total_potongan_langsung)}}</td>
                             </tr>
                             <tr>
-                                <td class="text-right">{{format_idr($data->total_ujroh_brokerage)}}</td>
+                                <td class="text-right">{{format_idr($data->fee_base_brokerage)}}</td>
                             </tr>
                             <tr>
                                 <td class="text-right">{{format_idr($data->ppn_amount)}}</td>
