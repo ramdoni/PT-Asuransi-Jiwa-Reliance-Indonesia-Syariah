@@ -60,10 +60,13 @@ class KepesertaanController extends Controller
         
         $polis_id = $_GET['polis_id'];
         
-        $data = Kepesertaan::where('polis_id',$polis_id);
+        // $data = Kepesertaan::where('polis_id',$polis_id);
+        $data = Klaim::select('kepesertaan.*')->join("kepesertaan","kepesertaan.klaim_id","=","klaim.id")
+                    ->where('klaim.polis_id',$polis_id)
+                    ->groupBy('kepesertaan.id');
 
         if(isset($_GET['status_akseptasi'])) $data->where(function($table){
-            $table->where('status_polis','Akseptasi')->orWhere('status_polis','Inforce');
+            // $table->where('status_polis','Akseptasi')->orWhere('status_polis','Inforce');
         });
 
         if($keyword) $data->where(function($table) use($keyword){
@@ -71,7 +74,7 @@ class KepesertaanController extends Controller
                         });
 
         if(isset($_GET['selected_id'])){
-            $data->whereNotIn('id',explode('-',$_GET['selected_id']));
+            $data->whereNotIn('kepesertaan.id',explode('-',$_GET['selected_id']));
         }
 
         $items = [];

@@ -119,7 +119,15 @@
                                         </td>
                                         <td>{{$k+1}}</td>
                                         <td>
-                                            <input type="date" class="form-control" wire:model="peserta.{{$k}}.refund_tanggal_efektif" />
+                                            <div class="input-group mb-3">
+                                                <input type="date" class="form-control" wire:model="peserta.{{$k}}.refund_tanggal_efektif" />
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" title="month">
+                                                        {{hitung_masa_bulan($item['tanggal_mulai'],$item['refund_tanggal_efektif'],3)}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!-- <input type="date" class="form-control" wire:model="peserta.{{$k}}.refund_tanggal_efektif" /> -->
                                         </td>
                                         <td class="text-center">
                                             <span wire:loading wire:target="peserta.{{$k}}.refund_tanggal_efektif">
@@ -260,6 +268,7 @@
                                     <th>No</th>
                                     <th>No Peserta</th>
                                     <th>Nama</th>
+                                    <th>Tgl. Lahir</th>
                                     <th>No KTP</th>
                                     <th>Jenis Kelamin</th>
                                     <th>No Telepon</th>
@@ -284,6 +293,7 @@
                                         <td>{{$k+1}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'nama','{{$item['nama']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['nama']}}</td>
+                                        <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'tanggal_lahir','{{$item['tanggal_lahir']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['tanggal_lahir']}}</td>
                                         <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'no_ktp ','{{$item['no_ktp']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['no_ktp']}}</td>
                                         <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'jenis_kelamin','{{$item['jenis_kelamin']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['jenis_kelamin']}}</td>
                                         <td><a href="javascript:void(0)" wire:click="set_edit({{$k}},'no_telepon','{{$item['no_telepon']}}')" data-target="#modal_edit" data-toggle="modal"><i class="fa fa-edit"></i></a>{{$item['no_telepon']}}</td>

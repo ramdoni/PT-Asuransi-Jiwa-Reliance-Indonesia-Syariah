@@ -23,7 +23,7 @@
                                 <td>{{$k+1}}</td>
                                 <td>
                                     <a href="javascript:void(0)" wire:click="delete({{$i->id}})"><i class="fa fa-trash text-danger"></i></a>
-                                    <a href="javascript:void(0)" wire:click="edit({{$i->id}})"><i class="fa fa-edit"></i></a>
+                                    <a href="javascript:void(0)" wire:click="edit({{$i->id}})" class="mx-3"><i class="fa fa-edit"></i></a>
                                     {{$i->nama}}
                                 </td>
                                 <td></td>
@@ -34,11 +34,12 @@
                         @if($is_insert)
                             <tr>
                                 <td style="width: 100px;">
-                                    <a href="javascript:void(0)" wire:click="cancel" class="text-danger ml-2"><i class="fa fa-close"></i></a>  
+                                    <a href="javascript:void(0)" wire:click="cancel" class="text-danger mr-2"><i class="fa fa-close"></i></a>  
                                     <a href="javascript:void(0)" wire:click="save" class="btn btn-info btn-sm"><i class="fa fa-save"></i> Simpan</a>
                                 </td>
                                 <td colspan="2">
-                                    <input type="text" class="form-control" wire:model="nama" />
+                                    <!-- <input type="text" class="form-control" wire:model="nama" /> -->
+                                    <textarea class="form-control" wire:model="nama" style="height: 300px;"></textarea>
                                 </td>
                             </tr>
                         @else

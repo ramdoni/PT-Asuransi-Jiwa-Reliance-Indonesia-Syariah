@@ -8,6 +8,7 @@ use App\Models\Polis;
 use App\Models\Reas;
 use App\Models\Kepesertaan;
 use App\Models\Endorsement;
+use App\Models\EndorsementPeserta;
 
 class ReasEndorse extends Model
 {
@@ -33,5 +34,10 @@ class ReasEndorse extends Model
     public function kepesertaan()
     {
         return $this->hasMany(Kepesertaan::class,'reas_endorse_id','id');
+    }
+
+    public function pesertas()
+    {
+        return $this->hasMany(EndorsementPeserta::class,'endorsement_id','endorsement_id');
     }
 }

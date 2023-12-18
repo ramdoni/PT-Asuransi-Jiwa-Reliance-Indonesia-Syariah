@@ -39,9 +39,9 @@ class Insert extends Component
     public function add_peserta()
     {
         $index = count($this->peserta);
-        $peserta = Klaim::with('kepesertaan')->where('id',$this->kepesertaan_id)->first();
+        $peserta = Klaim::with('kepesertaan')->where('kepesertaan_id',$this->kepesertaan_id)->first();
         if($peserta){
-            $this->peserta[$index]['id'] = $peserta->kepesertaan->id;
+            $this->peserta[$index]['id'] = $peserta->kepesertaan_id;
             $this->peserta[$index]['klaim_id'] = $peserta->id;
             $this->peserta[$index]['no_klaim'] = $peserta->no_pengajuan;
             $this->peserta[$index]['no_peserta'] = $peserta->kepesertaan->no_peserta;

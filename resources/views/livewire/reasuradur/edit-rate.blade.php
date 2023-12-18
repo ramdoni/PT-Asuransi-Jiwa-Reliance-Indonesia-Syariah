@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label>Dana Tabbaru(%)</label>
-                        <input type="number" min=0 class="form-control" wire:model="tabbaru" />
+                        <input type="text" class="form-control" wire:model="tabbaru" />
                     </div>
                 </div>
             </div>

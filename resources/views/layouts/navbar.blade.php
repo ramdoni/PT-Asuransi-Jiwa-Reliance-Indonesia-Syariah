@@ -72,7 +72,16 @@
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
-                            <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Reas</a>
+                                <ul class="dropdown-menu user-menu menu-icon">
+                                    <li><a href="{{ route('reas.index') }}">Pengajuan</a></li>
+                                    <li><a href="{{ route('reas-cancel.index') }}">Cancel</a></li>
+                                    <li><a href="{{ route('reas-refund.index') }}">Refund</a></li>
+                                    <li><a href="{{ route('reas-endorse.index') }}">Endorse</a></li>
+                                    <li><a href="{{ route('tagihan-soa.index') }}">Tagihan SOA</a></li>
+                                </ul>
+                            </li>
                             <li><a class="text-info icon-menu px-1" href="{{ route('recovery-claim.index') }}">Recovery Claim</a></li>
                             <li class="dropdown">
                                 <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Memo</a>
@@ -97,7 +106,16 @@
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
-                            <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Reas</a>
+                                <ul class="dropdown-menu user-menu menu-icon">
+                                    <li><a href="{{ route('reas.index') }}">Pengajuan</a></li>
+                                    <li><a href="{{ route('reas-cancel.index') }}">Cancel</a></li>
+                                    <li><a href="{{ route('reas-refund.index') }}">Refund</a></li>
+                                    <li><a href="{{ route('reas-endorse.index') }}">Endorse</a></li>
+                                    <li><a href="{{ route('tagihan-soa.index') }}">Tagihan SOA</a></li>
+                                </ul>
+                            </li>
                             <li><a class="text-info icon-menu px-1" href="{{ route('recovery-claim.index') }}">Recovery Claim</a></li>
                             <li class="dropdown">
                                 <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Memo</a>
@@ -131,7 +149,16 @@
                             </li>
                             <li><a href="{{ route('peserta.index') }}" class="text-info icon-menu px-1">Database Peserta</a></li>
                             <li><a href="{{ route('klaim.index') }}" class="text-info icon-menu px-1">Klaim</a></li>
-                            <li><a href="{{ route('reas.index') }}" class="text-info icon-menu px-1">Reas</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Reas</a>
+                                <ul class="dropdown-menu user-menu menu-icon">
+                                    <li><a href="{{ route('reas.index') }}">Pengajuan</a></li>
+                                    <li><a href="{{ route('reas-cancel.index') }}">Cancel</a></li>
+                                    <li><a href="{{ route('reas-refund.index') }}">Refund</a></li>
+                                    <li><a href="{{ route('reas-endorse.index') }}">Endorse</a></li>
+                                    <li><a href="{{ route('tagihan-soa.index') }}">Tagihan SOA</a></li>
+                                </ul>
+                            </li>
                             <li><a class="text-info icon-menu px-1" href="{{ route('recovery-claim.index') }}">Recovery Claim</a></li>
                             <li class="dropdown">
                                 <a href="#" class="text-info dropdown-toggle icon-menu px-1" data-toggle="dropdown">Memo</a>

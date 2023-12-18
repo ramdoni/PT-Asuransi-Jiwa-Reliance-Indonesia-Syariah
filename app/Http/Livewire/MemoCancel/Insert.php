@@ -156,12 +156,13 @@ class Insert extends Component
                         $total_kontribusi_tambahan += $peserta->extra_kontribusi;
                         $total_manfaat_asuransi += $peserta->basic;
 
+                        // Potong Lansung
                         if($polis->potong_langsung){
                             $peserta->jumlah_potongan_langsung = $total_kontribusi_gross*($polis->potong_langsung/100);
                             $item['jumlah_potongan_langsung'] = $item['kontribusi']*($polis->potong_langsung/100);
                             $total_potongan_langsung += $peserta->jumlah_potongan_langsung;
                         }
-                        
+
                         if($polis->fee_base_brokerage){
                             $polis->fee_base_brokerage = str_replace(",",".",$polis->fee_base_brokerage);
                             
@@ -225,7 +226,7 @@ class Insert extends Component
                 $data->total_kontribusi_gross = $total_kontribusi_gross;
                 $data->total_potongan_langsung = $total_potongan_langsung;
                 $data->total_kontribusi_tambahan = $total_kontribusi_tambahan;
-                $data->total_kontribusi = Kepesertaan::where('kepesertaan.memo_cancel_id',$data->id)->sum('cancel_kontribusi_netto');
+                $data->total_kontribusi = $total_kontribusi;//Kepesertaan::where('kepesertaan.memo_cancel_id',$data->id)->sum('cancel_kontribusi_netto');
                 $data->total_manfaat_asuransi = $total_manfaat_asuransi;
                 $data->total_peserta = $total;  
                 $data->save();

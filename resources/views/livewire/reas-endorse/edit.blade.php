@@ -70,6 +70,7 @@
     <div class="col-md-8">
         <div class="card">
             <div class="body">
+                <h6>Before</h6>
                 <div class="table-responsive">
                     <table class="table m-b-0 c_list table-nowrap" id="data_table">
                         <thead style="vertical-align:middle">
@@ -79,51 +80,116 @@
                                 <th>Status</th>
                                 <th>No Peserta</th>
                                 <th>Nama</th>
+                                <th>Tgl Lahir</th>
                                 <th>Mulai Asuransi</th>
                                 <th>Akhir Asuransi</th>
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
+                                <th class="text-right">Kontribusi</th>
                                 <th class="text-right">Pengembalian Kontribusi</th>
                                 <th></th>
                             </tr>
                         </thead>
-                        @if(isset($data->kepesertaan))
-                            <tbody>
+                        <tbody>
+                        @php($total_manfaat_asuransi=0)
+                        @php($total_kontribusi=0)
+                        @php($total_refund=0)
+                        @foreach($data->pesertas as $k=>$i)
+                            @php($item=json_decode($i->before_data,true))
+                            <tr wire:key="{{$k}}">
+                                <td>
+                                    <span wire:loading wire:target="delete_peserta({{$k}})">
+                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                    </span>
+                                    <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
+                                </td>
+                                <td>{{$k+1}}</td>
+                                <td>{{$item['status_polis']}}</td>
+                                <td>{{$item['no_peserta']}}</td>
+                                <td>{{$item['nama']}}</td>
+                                <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
+                                <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                <td class="text-center">{{$item['masa_bulan']}}</td>
+                                <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
+                                <td class="text-right">{{format_idr($item['net_kontribusi_reas'])}}</td>
+                                <td class="text-right">{{format_idr($item['refund_kontribusi_reas'])}}</td>
+                            </tr>
+                            @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
+                            @php($total_kontribusi += $item['net_kontribusi_reas'])
+                            @php($total_refund += $item['refund_kontribusi_reas'])
+                        @endforeach
+                        </tbody>
+                        <tfoot style="border-top: 2px solid #dee2e6;">
+                            <tr>
+                                <th colspan="9" class="text-right">Total</th>
+                                <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
+                                <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_refund)}}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div><hr />
+                <h6>After</h6>
+                <div class="table-responsive">
+                    <table class="table m-b-0 c_list table-nowrap" id="data_table">
+                        <thead style="vertical-align:middle">
+                            <tr>
+                                <th></th>
+                                <th>No</th>
+                                <th>Status</th>
+                                <th>No Peserta</th>
+                                <th>Nama</th>
+                                <th>Tgl Lahir</th>
+                                <th>Mulai Asuransi</th>
+                                <th>Akhir Asuransi</th>
+                                <th class="text-center">Masa Asuransi</th>
+                                <th class="text-right">Nilai Manfaat Asuransi</th>
+                                <th class="text-right">Kontribusi</th>
+                                <th class="text-right">Pengembalian Kontribusi</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             @php($total_manfaat_asuransi=0)
                             @php($total_kontribusi=0)
-                            @foreach($data->kepesertaan as $k=>$item)
-                                <tr wire:key="{{$k}}">
-                                    <td>
-                                        <span wire:loading wire:target="delete_peserta({{$k}})">
-                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                            <span class="sr-only">{{ __('Loading...') }}</span>
-                                        </span>
-                                        <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
-                                    </td>
-                                    <td>{{$k+1}}</td>
-                                    <td>
-                                        {{$item['status_polis']}}
-                                    </td>
-                                    <td>{{$item['no_peserta']}}</td>
-                                    <td>{{$item['nama']}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
-                                    <td class="text-center">{{$item['masa_bulan']}}</td>
-                                    <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
-                                    <td class="text-right">{{format_idr($item->refund_kontribusi_reas)}}</td>
-                                </tr>
-                                @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
-                                @php($total_kontribusi += $item->refund_kontribusi_reas)
-                            @endforeach
-                            </tbody>
-                            <tfoot style="border-top: 2px solid #dee2e6;">
-                                <tr>
-                                    <th colspan="8" class="text-right">Total</th>
-                                    <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
-                                    <th class="text-right">{{format_idr($total_kontribusi)}}</th>
-                                </tr>
-                            </tfoot>
-                        @endif
+                            @php($total_refund=0)
+                            @foreach($data->pesertas as $k=>$i)
+                            @php($item=json_decode($i->after_data,true))
+                            <tr wire:key="{{$k}}">
+                                <td>
+                                    <span wire:loading wire:target="delete_peserta({{$k}})">
+                                        <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                        <span class="sr-only">{{ __('Loading...') }}</span>
+                                    </span>
+                                    <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
+                                </td>
+                                <td>{{$k+1}}</td>
+                                <td>{{$item['status_polis']}}</td>
+                                <td>{{$item['no_peserta']}}</td>
+                                <td>{{$item['nama']}}</td>
+                                <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
+                                <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                <td class="text-center">{{$item['masa_bulan']}}</td>
+                                <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
+                                <td class="text-right">{{format_idr($item['net_kontribusi_reas'])}}</td>
+                                <td class="text-right">{{format_idr($item['refund_kontribusi_reas'])}}</td>
+                            </tr>
+                            @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
+                            @php($total_kontribusi += $item['net_kontribusi_reas'])
+                            @php($total_refund += $item['refund_kontribusi_reas'])
+                        @endforeach
+                        </tbody>
+                        <tfoot style="border-top: 2px solid #dee2e6;">
+                            <tr>
+                                <th colspan="9" class="text-right">Total</th>
+                                <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
+                                <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_refund)}}</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

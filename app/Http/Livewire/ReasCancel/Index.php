@@ -97,9 +97,9 @@ class Index extends Component
         $activeSheet->setCellValue('A4', 'NOMOR POLIS')
                     ->setCellValue('C4', " : {$polis->no_polis}")
                     ->setCellValue('A5', 'PEMEGANG POLIS')
-                    ->setCellValue('C5', " : {$polis->no_polis}")
+                    ->setCellValue('C5', " : {$polis->s}")
                     ->setCellValue('A6', 'PRODUK ASURANSI')
-                    ->setCellValue('C6', " : {$polis->produk->NAMA}")
+                    ->setCellValue('C6', " : {$polis->produk->nama}")
                     ->setCellValue('A7', 'CARA PEMBAYARAN KONSTRIBUSI')
                     ->setCellValue('C7', " : SEKALIGUS");
         

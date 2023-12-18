@@ -1,80 +1,77 @@
 @section('sub-title', $data->no_pengajuan)
 @section('title', 'Endorse')
 <div class="row clearfix">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <div class="card">
             <div class="body">
                 <form id="basic-form" method="post" wire:submit.prevent="submit">
                     <div class="row form-group border-bottom pb-2">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <strong>{{ __('Polis') }}</strong><br />
                             {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}
                         </div>
-                    </div>
-                    <div class="row form-group border-bottom pb-2">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label>Tanggal Pengajuan</label><br />
-                            {{$data->tanggal_pengajuan}}
+                            {{date('d-M-Y',strtotime($data->tanggal_pengajuan))}}
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <label>Jenis Pengajuan</label><br />
                             {{($data->jenis_pengajuan==1 ? 'Mempengaruhi Premi' : 'Tidak Mempengaruhi Premi')}}
                         </div>
-                    </div>
-                    <div class="row border-bottom form-group pb-2">
                         @if($data->jenis_pengajuan==1)
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <label>Metode Endorse</label><br />
                                 {{$data->metode_endorse==1?'Refund' : 'Cancel'}}
                             </div>
                         @endif
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row form-group border-bottom pb-2">
+                        <div class="col-md-4">
                             <label>Jenis Perubahan</label><br />
                             {{isset($data->jenis_perubahan->name) ? $data->jenis_perubahan->name : '-'}}
                         </div>
-                    </div>
-                    @if($data->jenis_pengajuan==1)
-                        <div class="row border-bottom form-group pb-2">
-                            <div class="form-group col-md-6">
+                        @if($data->jenis_pengajuan==1)
+                            <div class="form-group col-md-4">
                                 <label>Selisih</label><br />
                                 {{format_idr(abs($data->selisih))}}
                             </div>
-                        </div>
-                    @endif
-                    @if($data->head_teknik_note || $data->head_syariah_note)
-                        <div class="row border-bottom form-group pb-2">
-                            @if($data->head_teknik_note)
-                                <div class="col-md-6">
-                                    <label>Note Head Teknik</label><br />
-                                    {{$data->head_teknik_note}}
-                                </div>
-                            @endif
-                            @if($data->head_syariah_note)
-                                <div class="col-md-6">
-                                    <label>Note Head Syariah</label><br />
-                                    {{$data->head_syariah_note}}
-                                </div>
-                            @endif
-                        </div>
-                    @endif
-                    @if($data->status==1 and \Auth::user()->user_access_id==3)
-                        <div class="form-group border-bottom pb-2">
-                            <label>Note</label>
-                            <textarea class="form-control" wire:model="note"></textarea>
-                            @error('note')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                    @endif
-                    @if($data->status==2 and \Auth::user()->user_access_id==4)
-                        <div class="form-group border-bottom pb-2">
-                            <label>Note</label>
-                            <textarea class="form-control" wire:model="note"></textarea>
-                            @error('note')
-                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
-                            @enderror
-                        </div>
-                    @endif
+                        @endif
+                        @if($data->head_teknik_note || $data->head_syariah_note)
+                            <div class="row border-bottom form-group pb-2">
+                                @if($data->head_teknik_note)
+                                    <div class="col-md-6">
+                                        <label>Note Head Teknik</label><br />
+                                        {{$data->head_teknik_note}}
+                                    </div>
+                                @endif
+                                @if($data->head_syariah_note)
+                                    <div class="col-md-6">
+                                        <label>Note Head Syariah</label><br />
+                                        {{$data->head_syariah_note}}
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+                        @if($data->status==1 and \Auth::user()->user_access_id==3)
+                            <div class="form-group border-bottom pb-2">
+                                <label>Note</label>
+                                <textarea class="form-control" wire:model="note"></textarea>
+                                @error('note')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div>
+                        @endif
+                        @if($data->status==2 and \Auth::user()->user_access_id==4)
+                            <div class="form-group border-bottom pb-2">
+                                <label>Note</label>
+                                <textarea class="form-control" wire:model="note"></textarea>
+                                @error('note')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div>
+                        @endif
+                    </div>
+                   
                     <a href="{{route('endorsement.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <a href="{{route('endorsement.print-dn',['id'=>$data->id])}}" target="_blank" class="mx-3"><i class="fa fa-print"></i> Print</a>
                     <span wire:loading wire:target="proses_head_teknik,proses_head_syariah">
@@ -95,15 +92,15 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="card">
             <div class="body">
-                <h5>Before</h5>
+                <h6>Before</h6>
                 <div class="table-responsive">
                     <!-- Refund -->
                     @if($data->metode_endorse==1)
                         <table class="table m-b-0 c_list table-nowrap" id="data_table">
-                            <thead style="vertical-align:middle">
+                            <thead style="vertical-align:middle;background: #eeeeeebd;">
                                 <tr>
                                     <th>No</th>
                                     <th>Tanggal Efektif</th>
@@ -112,18 +109,30 @@
                                     <th>Nama</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
-                                    <th class="text-right">Nilai Manfaat Asuransi</th>
-                                    <th class="text-right">Nilai Manfaat Asuransi</th>
-                                    <th></th>
+                                    <th class="text-right">Tabarru</th>
+                                    <th class="text-right">Ujroh</th>
+                                    <th class="text-right">EM</th>
+                                    <th class="text-right">EK</th>
+                                    <th class="text-right">Kontribusi</th>
+                                    <th class="text-right">Pengembalian Kontribusi</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php($total_basic=0)
+                                @php($total_tabarru=0)
+                                @php($total_ujrah=0)
+                                @php($total_em=0)
+                                @php($total_ek=0)
+                                @php($total_kontribusi=0)
+                                @php($total_kontribusi_net=0)
                                 @foreach($data->pesertas as $k=>$i)
+                                    @php($after=json_decode($i->after_data,true))
                                     @php($item=json_decode($i->before_data,true))
                                     <tr wire:key="{{$k}}">
                                         <td>{{$k+1}}</td>
-                                        <td>{{$item['refund_tanggal_efektif']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($after['refund_tanggal_efektif']))}}</td>
                                         <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
@@ -131,29 +140,65 @@
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item['refund_kontribusi'])}}</td>
                                     </tr>
+                                    @php($total_basic += $item['basic'])
+                                    @php($total_tabarru += $item['dana_tabarru'])
+                                    @php($total_ujrah += $item['dana_ujrah'])
+                                    @php($total_em += $item['extra_mortalita'])
+                                    @php($total_ek += $item['extra_kontribusi'])
+                                    @php($total_kontribusi += $item['kontribusi'])
+                                    @php($total_kontribusi_net += $item['refund_kontribusi'])
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
+                                    <th colspan="8" class="text-right">Total</th>
+                                    <th class="text-right">{{format_idr($total_basic)}}</th>
+                                    <th class="text-right">{{format_idr($total_tabarru)}}</th>
+                                    <th class="text-right">{{format_idr($total_ujrah)}}</th>
+                                    <th class="text-right">{{format_idr($total_em)}}</th>
+                                    <th class="text-right">{{format_idr($total_ek)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi_net)}}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     <!-- Cancel -->
                     @elseif($data->metode_endorse==2)
                     <table class="table m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="vertical-align:middle">
+                        <thead style="vertical-align:middle;background: #eeeeeebd;">
                             <tr>
                                 <th></th>
                                 <th>No</th>
-                                <th>NO PESERTA</th>
-                                <th>NAMA PESERTA</th>
-                                <th>TGL. LAHIR</th>
-                                <th>USIA</th>
-                                <th>MULAI ASURANSI</th>
-                                <th>AKHIR ASURANSI</th>
-                                <th class="text-right">NILAI MANFAAT ASURANSI</th>
-                                <th class="text-right">TOTAL KONTRIBUSI</th>
+                                <th>No Peserta</th>
+                                <th>Nama Peserta</th>
+                                <th>Tgl. lahir</th>
+                                <th>Usia</th>
+                                <th>Mulai Asuransi</th>
+                                <th>Akhir Asuransi</th>
+                                <th class="text-right">Nilai Manfaat Asuransi</th>
+                                <th class="text-right">Tabarru</th>
+                                <th class="text-right">Ujroh</th>
+                                <th class="text-right">EM</th>
+                                <th class="text-right">EK</th>
+                                <th class="text-right">Total Kontribusi</th>
+                                <th class="text-right">Pengembalian Kontribusi Nett</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php($total_basic=0)
+                            @php($total_tabarru=0)
+                            @php($total_ujrah=0)
+                            @php($total_em=0)
+                            @php($total_ek=0)
+                            @php($total_kontribusi=0)
+                            @php($total_kontribusi_nett=0)
                             @foreach($data->pesertas as $k=>$i)
                                 @php($item=json_decode($i->before_data,true))
                                 @if(is_null($item['no_peserta'])) @continue @endif
@@ -173,22 +218,38 @@
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                     <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                     <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                    <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                    <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                    <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                    <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                    <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                     <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
                                 </tr>
+                                @php($total_basic += $item['basic'])
+                                @php($total_tabarru += $item['dana_tabarru'])
+                                @php($total_ujrah += $item['dana_ujrah'])
+                                @php($total_em += $item['extra_mortalita'])
+                                @php($total_ek += $item['extra_kontribusi'])
+                                @php($total_kontribusi += $item['kontribusi'])
+                                @php($total_kontribusi_nett += $item['total_kontribusi_dibayar'])
                             @endforeach
                         </tbody>
-                        <!-- <tfoot style="border-top: 2px solid #dee2e6;">
-                            <tr>
+                        <tfoot>
+                            <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
                                 <th colspan="8" class="text-right">Total</th>
-                                <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                                <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
-                                <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_basic)}}</th>
+                                <th class="text-right">{{format_idr($total_tabarru)}}</th>
+                                <th class="text-right">{{format_idr($total_ujrah)}}</th>
+                                <th class="text-right">{{format_idr($total_em)}}</th>
+                                <th class="text-right">{{format_idr($total_ek)}}</th>
+                                <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                <th class="text-right">{{format_idr($total_kontribusi_nett)}}</th>
                             </tr>
-                        </tfoot> -->
+                        </tfoot>
                     </table>
                     @else
                         <table class="table m-b-0 c_list table-nowrap" id="data_table">
-                            <thead style="vertical-align:middle">
+                            <thead style="vertical-align:middle;background: #eeeeeebd;">
                                 <tr>
                                     <th>No</th>
                                     <th>No Peserta</th>
@@ -196,15 +257,26 @@
                                     <th>No KTP</th>
                                     <th>Jenis Kelamin</th>
                                     <th>No Telepon</th>
+                                    <th>Tanggal Lahir</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
                                     <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Tabarru</th>
+                                    <th class="text-right">Ujroh</th>
+                                    <th class="text-right">EM</th>
+                                    <th class="text-right">EK</th>
                                     <th class="text-right">Kontribusi</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php($total_basic=0)
+                                @php($total_tabarru=0)
+                                @php($total_ujrah=0)
+                                @php($total_em=0)
+                                @php($total_ek=0)
+                                @php($total_kontribusi=0)
+                                @php($total_kontribusi_nett=0)
                                 @foreach($data->pesertas as $k=>$i)
                                     @php($item=json_decode($i->after_data,true))
                                     <tr wire:key="{{$k}}">
@@ -214,26 +286,47 @@
                                         <td>{{$item['no_ktp']}}</td>
                                         <td>{{$item['jenis_kelamin']}}</td>
                                         <td>{{$item['no_telepon']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
                                         <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
                                     </tr>
+                                    @php($total_basic += $item['basic'])
+                                    @php($total_tabarru += $item['dana_tabarru'])
+                                    @php($total_ujrah += $item['dana_ujrah'])
+                                    @php($total_em += $item['extra_mortalita'])
+                                    @php($total_ek += $item['extra_kontribusi'])
+                                    @php($total_kontribusi += $item['total_kontribusi_dibayar'])
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
+                                    <th colspan="10" class="text-right">Total</th>
+                                    <th class="text-right">{{format_idr($total_basic)}}</th>
+                                    <th class="text-right">{{format_idr($total_tabarru)}}</th>
+                                    <th class="text-right">{{format_idr($total_ujrah)}}</th>
+                                    <th class="text-right">{{format_idr($total_em)}}</th>
+                                    <th class="text-right">{{format_idr($total_ek)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     @endif
                 </div>
+                <hr />
                 <br />
-                <br />
-                <br />
-                <h5>After</h5>
+                <h6>After</h6>
                 <div class="table-responsive">
                     <!-- Refund -->
                     @if($data->metode_endorse==1)
                         <table class="table m-b-0 c_list table-nowrap" id="data_table">
-                            <thead style="vertical-align:middle">
+                            <thead style="vertical-align:middle;background: #eeeeeebd;">
                                 <tr>
                                     <th>No</th>
                                     <th>Tanggal Efektif</th>
@@ -244,16 +337,27 @@
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
                                     <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Tabarru</th>
+                                    <th class="text-right">Ujroh</th>
+                                    <th class="text-right">EM</th>
+                                    <th class="text-right">EK</th>
                                     <th class="text-right">Kontribusi</th>
-                                    <th></th>
+                                    <th class="text-right">Kontribusi Nett</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php($total_basic=0)
+                                @php($total_tabarru=0)
+                                @php($total_ujrah=0)
+                                @php($total_em=0)
+                                @php($total_ek=0)
+                                @php($total_kontribusi=0)
+                                @php($total_kontribusi_nett=0)
                                 @foreach($data->pesertas as $k=>$i)
                                     @php($item=json_decode($i->after_data,true))
                                     <tr wire:key="{{$k}}">
                                         <td>{{$k+1}}</td>
-                                        <td>{{$item['refund_tanggal_efektif']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['refund_tanggal_efektif']))}}</td>
                                         <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
@@ -261,60 +365,107 @@
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                         <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
                                     </tr>
+                                    @php($total_basic += $item['basic'])
+                                    @php($total_tabarru += $item['dana_tabarru'])
+                                    @php($total_ujrah += $item['dana_ujrah'])
+                                    @php($total_em += $item['extra_mortalita'])
+                                    @php($total_ek += $item['extra_kontribusi'])
+                                    @php($total_kontribusi += $item['kontribusi'])
+                                    @php($total_kontribusi_nett += $item['total_kontribusi_dibayar'])
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
+                                    <th colspan="8" class="text-right">Total</th>
+                                    <th class="text-right">{{format_idr($total_basic)}}</th>
+                                    <th class="text-right">{{format_idr($total_tabarru)}}</th>
+                                    <th class="text-right">{{format_idr($total_ujrah)}}</th>
+                                    <th class="text-right">{{format_idr($total_em)}}</th>
+                                    <th class="text-right">{{format_idr($total_ek)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi_nett)}}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     <!-- Cancel -->
                     @elseif($data->metode_endorse==2)
-                    <table class="table m-b-0 c_list table-nowrap" id="data_table">
-                        <thead style="vertical-align:middle">
-                            <tr>
-                                <th></th>
-                                <th>No</th>
-                                <th>NO PESERTA</th>
-                                <th>NAMA PESERTA</th>
-                                <th>TGL. LAHIR</th>
-                                <th>USIA</th>
-                                <th>MULAI ASURANSI</th>
-                                <th>AKHIR ASURANSI</th>
-                                <th class="text-right">NILAI MANFAAT ASURANSI</th>
-                                <th class="text-right">PENGEMBALIAN KONTRIBUSI</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($data->pesertas as $k=>$i)
-                                @php($item=json_decode($i->after_data,true))
-                                <tr wire:key="{{$k}}">
-                                    <td>
-                                        <span wire:loading wire:target="delete_peserta({{$k}})">
-                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                            <span class="sr-only">{{ __('Loading...') }}</span>
-                                        </span>
-                                        <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
-                                    </td>
-                                    <td>{{$k+1}}</td>
-                                    <td>{{$item['no_peserta']}}</td>
-                                    <td>{{$item['nama']}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
-                                    <td>{{$item['usia']}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
-                                    <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
-                                    <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                        <table class="table m-b-0 c_list table-nowrap" id="data_table">
+                            <thead style="vertical-align:middle;background: #eeeeeebd;">
+                                <tr>
+                                    <th></th>
+                                    <th>No</th>
+                                    <th>No Peserta</th>
+                                    <th>Nama Peserta</th>
+                                    <th>Tgl Lahir</th>
+                                    <th>Usia</th>
+                                    <th>Mulai Asuransi</th>
+                                    <th>Akhir Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Tabarru</th>
+                                    <th class="text-right">Ujroh</th>
+                                    <th class="text-right">EM</th>
+                                    <th class="text-right">EK</th>
+                                    <th class="text-right">Kontribusi Nett</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                        <!-- <tfoot style="border-top: 2px solid #dee2e6;">
-                            <tr>
-                                <th colspan="8" class="text-right">Total</th>
-                                <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                                <th class="text-right">{{format_idr($data->total_kontribusi_gross)}}</th>
-                                <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
-                            </tr>
-                        </tfoot> -->
-                    </table>
+                            </thead>
+                            <tbody>
+                                @php($total_basic=0)
+                                @php($total_tabarru=0)
+                                @php($total_ujrah=0)
+                                @php($total_em=0)
+                                @php($total_ek=0)
+                                @php($total_kontribusi=0)
+                                @foreach($data->pesertas as $k=>$i)
+                                    @php($item=json_decode($i->after_data,true))
+                                    <tr wire:key="{{$k}}">
+                                        <td>
+                                            <span wire:loading wire:target="delete_peserta({{$k}})">
+                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                                <span class="sr-only">{{ __('Loading...') }}</span>
+                                            </span>
+                                            <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
+                                        </td>
+                                        <td>{{$k+1}}</td>
+                                        <td>{{$item['no_peserta']}}</td>
+                                        <td>{{$item['nama']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
+                                        <td>{{$item['usia']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
+                                        <td class="text-right">{{format_idr($item['basic'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item['nett_kontribusi'])}}</td>
+                                    </tr>
+                                    @php($total_basic += $item['basic'])
+                                    @php($total_tabarru += $item['dana_tabarru'])
+                                    @php($total_ujrah += $item['dana_ujrah'])
+                                    @php($total_em += $item['extra_mortalita'])
+                                    @php($total_ek += $item['extra_kontribusi'])
+                                    @php($total_kontribusi += $item['total_kontribusi_dibayar'])
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
+                                    <th colspan="8" class="text-right">Total</th>
+                                    <th class="text-right">{{format_idr($total_basic)}}</th>
+                                    <th class="text-right">{{format_idr($total_tabarru)}}</th>
+                                    <th class="text-right">{{format_idr($total_ujrah)}}</th>
+                                    <th class="text-right">{{format_idr($total_em)}}</th>
+                                    <th class="text-right">{{format_idr($total_ek)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     @else
                         <table class="table m-b-0 c_list table-nowrap" id="data_table">
                             <thead style="vertical-align:middle">
@@ -329,11 +480,21 @@
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
                                     <th class="text-right">Nilai Manfaat Asuransi</th>
+                                    <th class="text-right">Tabarru</th>
+                                    <th class="text-right">Ujroh</th>
+                                    <th class="text-right">EM</th>
+                                    <th class="text-right">EK</th>
                                     <th class="text-right">Kontribusi</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php($total_basic=0)
+                                @php($total_tabarru=0)
+                                @php($total_ujrah=0)
+                                @php($total_em=0)
+                                @php($total_ek=0)
+                                @php($total_kontribusi=0)
                                 @foreach($data->pesertas as $k=>$i)
                                     @php($item=json_decode($i->after_data,true))
                                     <tr wire:key="{{$k}}">
@@ -347,10 +508,31 @@
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
                                         <td class="text-right">{{format_idr($item['basic'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_tabarru'])}}</td>
+                                        <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
+                                        <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                     </tr>
+                                    @php($total_basic += $item['basic'])
+                                    @php($total_tabarru += $item['dana_tabarru'])
+                                    @php($total_ujrah += $item['dana_ujrah'])
+                                    @php($total_em += $item['extra_mortalita'])
+                                    @php($total_ek += $item['extra_kontribusi'])
+                                    @php($total_kontribusi += $item['total_kontribusi_dibayar'])
                                 @endforeach
                             </tbody>
+                            <tfoot>
+                                <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
+                                    <th colspan="9" class="text-right">Total</th>
+                                    <th class="text-right">{{format_idr($total_basic)}}</th>
+                                    <th class="text-right">{{format_idr($total_tabarru)}}</th>
+                                    <th class="text-right">{{format_idr($total_ujrah)}}</th>
+                                    <th class="text-right">{{format_idr($total_em)}}</th>
+                                    <th class="text-right">{{format_idr($total_ek)}}</th>
+                                    <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     @endif
                 </div>
