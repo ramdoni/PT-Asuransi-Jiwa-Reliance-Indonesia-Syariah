@@ -57,24 +57,29 @@ class PengajuanController extends Controller
         $potongan_langsung_refund = 0; //$id->kontribusi_netto_perubahan*($id->polis->potong_langsung/100);
         $kontribusi_netto_perubahan = 0; //$id->kontribusi_netto_perubahan - $potongan_langsung_refund;
         $total_kontribusi_nett = 0; //$id->total_kontribusi_gross - $id->total_potongan_langsung;
+        $total_kontribusi_pengembalian = 0;
 
         foreach($id->kepesertaan as $k=>$item){
             $list_no_peserta[] = $item->no_peserta;
             $list_nama_peserta[] = $item->nama;
+            $total_kontribusi_pengembalian += $item->refund_kontribusi;
         }
 
         foreach($id->pesertas as $i) {
             $before = json_decode($i->before_data);
             $after = json_decode($i->after_data);
-            $total_kontribusi_nett += $before->kontribusi - ($before->jumlah_potongan_langsung??0);
-            $kontribusi_netto_perubahan += $after->kontribusi - $after->jumlah_potongan_langsung;
+            $total_kontribusi_nett += $before->nett_kontribusi; //$before->kontribusi - ($before->jumlah_potongan_langsung??0);
+            $kontribusi_netto_perubahan += $after->nett_kontribusi;//$after->kontribusi - $after->jumlah_potongan_langsung;
         }
+
+        $param = ['total_kontribusi_nett'=>$total_kontribusi_nett,'kontribusi_netto_perubahan'=>$kontribusi_netto_perubahan,'data'=>$id,'list_no_peserta'=>$list_no_peserta,'list_nama_peserta'=>$list_nama_peserta];
+        $param['total_kontribusi_pengembalian'] = $total_kontribusi_pengembalian;
 
         // $potongan_langsung_refund = $id->kontribusi_netto_perubahan*($id->polis->potong_langsung/100);
         // $kontribusi_netto_perubahan = $id->kontribusi_netto_perubahan - $potongan_langsung_refund;
         // $total_kontribusi_nett = $id->total_kontribusi_gross - $id->total_potongan_langsung;
         
-        $pdf->loadView('livewire.endorsement.print-dn',['total_kontribusi_nett'=>$total_kontribusi_nett,'kontribusi_netto_perubahan'=>$kontribusi_netto_perubahan,'data'=>$id,'list_no_peserta'=>$list_no_peserta,'list_nama_peserta'=>$list_nama_peserta]);
+        $pdf->loadView('livewire.endorsement.print-dn',$param);
 
         return $pdf->stream();
     }

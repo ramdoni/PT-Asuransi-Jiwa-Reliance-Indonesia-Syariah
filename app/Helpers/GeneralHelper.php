@@ -111,7 +111,7 @@ function hitung_masa_bulan($start,$end,$masa_asuransi=1){
 
     if($masa_asuransi==2) $today->modify('+1 day');
     if($masa_asuransi==3) {
-        if($hari>1) $bulan = $bulan-1;
+        if($hari>1) $bulan = $bulan+1;
 
         return $bulan;
     }

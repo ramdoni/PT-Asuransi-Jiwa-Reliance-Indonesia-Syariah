@@ -53,6 +53,12 @@ class Insert extends Component
         if($propertyName=='jenis_pengajuan'){
             $this->reset('metode_endorse');
         }
+        $polis = Polis::find($this->polis_id);
+
+        foreach($this->peserta as $k => $i){
+            $this->peserta[$k]['refund_sisa_masa_asuransi'] = $this->peserta[$k]['masa_bulan'] - hitung_masa_bulan($this->peserta[$k]['tanggal_mulai'], $this->peserta[$k]['refund_tanggal_efektif'],3);
+            $this->peserta[$k]['refund_kontribusi'] = ($this->peserta[$k]['refund_sisa_masa_asuransi'] / $this->peserta[$k]['masa_bulan']) * (($polis->refund / 100) * $this->peserta[$k]['total_kontribusi_dibayar']);
+        }   
     }
 
     public function set_edit($k,$field,$value)
@@ -68,7 +74,7 @@ class Insert extends Component
         if($this->field_selected=='tanggal_mulai') $value_tanggal_mulai = $this->peserta[$this->key_selected][$this->field_selected];
 
         $this->peserta[$this->key_selected][$this->field_selected] = $this->value_selected;
-        if(in_array($this->field_selected,['extra_mortalita','extra_kontribusi','basic','tanggal_mulai','tanggal_akhir','tanggal_lahir'])){
+        if(in_array($this->field_selected,['refund_tanggal_efektif','extra_mortalita','extra_kontribusi','basic','tanggal_mulai','tanggal_akhir','tanggal_lahir'])){
             $polis = Polis::find($this->polis_id);
 
             $iuran_tabbaru = $polis->iuran_tabbaru;
@@ -91,7 +97,7 @@ class Insert extends Component
                 $this->peserta[$k]['masa'] = hitung_masa($this->peserta[$k]['tanggal_mulai'],$this->peserta[$k]['tanggal_akhir']);
                 $this->peserta[$k]['masa_bulan'] = hitung_masa_bulan($this->peserta[$k]['tanggal_mulai'],$this->peserta[$k]['tanggal_akhir'],$masa_asuransi);
 
-                if($polis->rate_single_usia=='Usia' || $polis->rate_single_usia==""){
+                // if($polis->rate_single_usia=='Usia' || $polis->rate_single_usia==""){
                     $rate = Rate::where(['tahun'=>$this->peserta[$k]['usia'],'bulan'=>$this->peserta[$k]['masa_bulan'],'polis_id'=>$this->polis_id])->first();
 
                     if(!$rate || $rate->rate ==0 || $rate->rate ==""){
@@ -101,7 +107,7 @@ class Insert extends Component
                         $this->peserta[$k]['rate'] = $rate ? $rate->rate : 0;
                         $this->peserta[$k]['kontribusi'] = $this->peserta[$k]['rate']==0 ? 0 : ($this->peserta[$k]['basic'] * $this->peserta[$k]['rate']/1000);
                     }
-                }
+                // }
 
                 $this->peserta[$k]['dana_tabarru'] = ($this->peserta[$k]['kontribusi']*$iuran_tabbaru)/100; // persen ngambil dari daftarin polis
                 $this->peserta[$k]['dana_ujrah'] = ($this->peserta[$k]['kontribusi']*$ujrah)/100;
@@ -346,16 +352,18 @@ class Insert extends Component
                             $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? str_replace(",",".",$peserta->reas->rate_uw->persentase_refund) : 0; 
                             $type_pengembalian = $peserta->reas->rate_uw->type_pengembalian_kontribusi;
                             $data_tabbaru_reas =  isset($peserta->reas->rate_uw->persentase_refund) ? str_replace(",",".",$peserta->reas->rate_uw->tabbaru) : 0; 
+                            $reas_tabarru = str_replace(",",".",$peserta->reas->rate_uw->tabbaru);
+
+                            
+                            if($peserta->reas->rate_uw->tabbaru)
+                                $dana_tabbaru_reas = ($reas_tabarru/100)*$peserta->net_kontribusi_reas;
+                            else
+                                $dana_tabbaru_reas = $peserta->net_kontribusi_reas;
+
                             // Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross reas atau
                             if($type_pengembalian==1){
                                 $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
                             }
-                            
-                            if($peserta->reas->rate_uw->tabbaru)
-                                $dana_tabbaru_reas = ($peserta->reas->rate_uw->tabbaru /100)*$peserta->net_kontribusi_reas;
-                            else
-                                $dana_tabbaru_reas = $peserta->net_kontribusi_reas;
-                            
                             // Nilai Pengembalian Kontribusi = t/n x dana tabarru’reas
                             if($type_pengembalian==2){
                                 $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * $dana_tabbaru_reas;
@@ -436,9 +444,9 @@ class Insert extends Component
                 $total_manfaat_asuransi += $peserta->basic;
 
                 $item['nett_kontribusi'] = $item['kontribusi']+
-                    $item['extra_kontribusi']+
-                    $item['extra_mortalita']+
-                    $item['pph_amount']-($item['ppn_amount']+$item['jumlah_potongan_langsung']+$item['brokerage_ujrah']);
+                                            $item['extra_kontribusi']+
+                                            $item['extra_mortalita']+
+                                            $item['pph_amount']-($item['ppn_amount']+$item['jumlah_potongan_langsung']+$item['brokerage_ujrah']);
                 
                 $peserta->nett_kontribusi = $peserta->kontribusi+
                     $peserta->extra_kontribusi+

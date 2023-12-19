@@ -10,25 +10,27 @@
                             <strong>{{ __('Polis') }}</strong><br />
                             {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}</p>
                     </div>
-                    <div class="form-group border-bottom">
-                        <p>    
+                    <div class="form-group border-bottom row">
+                        <div class="col-md-6">    
                             <strong>Tanggal Pengajuan</strong><br />
                             {{date('d M Y',strtotime($data->tanggal_pengajuan))}}
-                        </p>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Status : </strong>
+                                @if($data->status==0)
+                                    <span class="badge badge-warning">Head Teknik</span>
+                                @endif
+                                @if($data->status==1)
+                                    <span class="badge badge-warning">Head Syariah</span>
+                                @endif
+                                @if($data->status==2)
+                                    <span class="badge badge-success">Selesai</span>
+                            @endif
+                        </div>
                     </div>
                     <div class="form-group border-bottom">
-                        <p>
-                            <strong>Status : </strong>
-                            @if($data->status==0)
-                                <span class="badge badge-warning">Head Teknik</span>
-                            @endif
-                            @if($data->status==1)
-                                <span class="badge badge-warning">Head Syariah</span>
-                            @endif
-                            @if($data->status==2)
-                                <span class="badge badge-success">Selesai</span>
-                            @endif
-                        </p>
+                        <strong>No Endorsement</strong><br />
+                        {{isset($data->endorsement->no_pengajuan) ? $data->endorsement->no_pengajuan : '-'}} 
                     </div>
                     @if($data->head_teknik_note)
                         <div class="form-group border-bottom">
@@ -147,7 +149,6 @@
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
                                 <th class="text-right">Kontribusi</th>
-                                <th class="text-right">Pengembalian Kontribusi</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -175,7 +176,6 @@
                                 <td class="text-center">{{$item['masa_bulan']}}</td>
                                 <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
                                 <td class="text-right">{{format_idr($item['net_kontribusi_reas'])}}</td>
-                                <td class="text-right">{{format_idr($item['refund_kontribusi_reas'])}}</td>
                             </tr>
                             @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
                             @php($total_kontribusi += $item['net_kontribusi_reas'])

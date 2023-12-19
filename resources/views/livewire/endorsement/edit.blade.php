@@ -107,10 +107,11 @@
                                     <th>Sisa Masa Asuransi</th>
                                     <th>No Peserta</th>
                                     <th>Nama</th>
+                                    <th>Tgl Lahir</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
-                                    <th class="text-right">Nilai Manfaat Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
+                                    <th class="text-right">Nilai Manfaat Asuransi</th>
                                     <th class="text-right">Tabarru</th>
                                     <th class="text-right">Ujroh</th>
                                     <th class="text-right">EM</th>
@@ -136,6 +137,7 @@
                                         <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
@@ -158,7 +160,7 @@
                             </tbody>
                             <tfoot>
                                 <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
-                                    <th colspan="8" class="text-right">Total</th>
+                                    <th colspan="9" class="text-right">Total</th>
                                     <th class="text-right">{{format_idr($total_basic)}}</th>
                                     <th class="text-right">{{format_idr($total_tabarru)}}</th>
                                     <th class="text-right">{{format_idr($total_ujrah)}}</th>
@@ -174,7 +176,6 @@
                     <table class="table m-b-0 c_list table-nowrap" id="data_table">
                         <thead style="vertical-align:middle;background: #eeeeeebd;">
                             <tr>
-                                <th></th>
                                 <th>No</th>
                                 <th>No Peserta</th>
                                 <th>Nama Peserta</th>
@@ -188,7 +189,7 @@
                                 <th class="text-right">EM</th>
                                 <th class="text-right">EK</th>
                                 <th class="text-right">Total Kontribusi</th>
-                                <th class="text-right">Pengembalian Kontribusi Nett</th>
+                                <th class="text-right">Kontribusi Nett</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,13 +204,6 @@
                                 @php($item=json_decode($i->before_data,true))
                                 @if(is_null($item['no_peserta'])) @continue @endif
                                 <tr wire:key="{{$k}}">
-                                    <td>
-                                        <span wire:loading wire:target="delete_peserta({{$k}})">
-                                            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                            <span class="sr-only">{{ __('Loading...') }}</span>
-                                        </span>
-                                        <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
-                                    </td>
                                     <td>{{$k+1}}</td>
                                     <td>{{$item['no_peserta']}}</td>
                                     <td>{{$item['nama']}}</td>
@@ -223,7 +217,7 @@
                                     <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
                                     <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
                                     <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                    <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                    <td class="text-right">{{format_idr($item['nett_kontribusi'])}}</td>
                                 </tr>
                                 @php($total_basic += $item['basic'])
                                 @php($total_tabarru += $item['dana_tabarru'])
@@ -231,12 +225,12 @@
                                 @php($total_em += $item['extra_mortalita'])
                                 @php($total_ek += $item['extra_kontribusi'])
                                 @php($total_kontribusi += $item['kontribusi'])
-                                @php($total_kontribusi_nett += $item['total_kontribusi_dibayar'])
+                                @php($total_kontribusi_nett += $item['nett_kontribusi'])
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
-                                <th colspan="8" class="text-right">Total</th>
+                                <th colspan="7" class="text-right">Total</th>
                                 <th class="text-right">{{format_idr($total_basic)}}</th>
                                 <th class="text-right">{{format_idr($total_tabarru)}}</th>
                                 <th class="text-right">{{format_idr($total_ujrah)}}</th>
@@ -257,7 +251,7 @@
                                     <th>No KTP</th>
                                     <th>Jenis Kelamin</th>
                                     <th>No Telepon</th>
-                                    <th>Tanggal Lahir</th>
+                                    <th>Tgl Lahir</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
@@ -278,7 +272,7 @@
                                 @php($total_kontribusi=0)
                                 @php($total_kontribusi_nett=0)
                                 @foreach($data->pesertas as $k=>$i)
-                                    @php($item=json_decode($i->after_data,true))
+                                    @php($item=json_decode($i->before_data,true))
                                     <tr wire:key="{{$k}}">
                                         <td>{{$k+1}}</td>
                                         <td>{{$item['no_peserta']}}</td>
@@ -295,14 +289,14 @@
                                         <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
                                         <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
                                         <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                     </tr>
                                     @php($total_basic += $item['basic'])
                                     @php($total_tabarru += $item['dana_tabarru'])
                                     @php($total_ujrah += $item['dana_ujrah'])
                                     @php($total_em += $item['extra_mortalita'])
                                     @php($total_ek += $item['extra_kontribusi'])
-                                    @php($total_kontribusi += $item['total_kontribusi_dibayar'])
+                                    @php($total_kontribusi += $item['kontribusi'])
                                 @endforeach
                             </tbody>
                             <tfoot>
@@ -333,6 +327,7 @@
                                     <th>Sisa Masa Asuransi</th>
                                     <th>No Peserta</th>
                                     <th>Nama</th>
+                                    <th>Tgl Lahir</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
@@ -361,6 +356,7 @@
                                         <td class="text-center">{{$item['refund_sisa_masa_asuransi']}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
@@ -370,7 +366,7 @@
                                         <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
                                         <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
                                         <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
-                                        <td class="text-right">{{format_idr($item['total_kontribusi_dibayar'])}}</td>
+                                        <td class="text-right">{{format_idr($item['nett_kontribusi'])}}</td>
                                     </tr>
                                     @php($total_basic += $item['basic'])
                                     @php($total_tabarru += $item['dana_tabarru'])
@@ -378,12 +374,12 @@
                                     @php($total_em += $item['extra_mortalita'])
                                     @php($total_ek += $item['extra_kontribusi'])
                                     @php($total_kontribusi += $item['kontribusi'])
-                                    @php($total_kontribusi_nett += $item['total_kontribusi_dibayar'])
+                                    @php($total_kontribusi_nett += $item['nett_kontribusi'])
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
-                                    <th colspan="8" class="text-right">Total</th>
+                                    <th colspan="9" class="text-right">Total</th>
                                     <th class="text-right">{{format_idr($total_basic)}}</th>
                                     <th class="text-right">{{format_idr($total_tabarru)}}</th>
                                     <th class="text-right">{{format_idr($total_ujrah)}}</th>
@@ -399,7 +395,6 @@
                         <table class="table m-b-0 c_list table-nowrap" id="data_table">
                             <thead style="vertical-align:middle;background: #eeeeeebd;">
                                 <tr>
-                                    <th></th>
                                     <th>No</th>
                                     <th>No Peserta</th>
                                     <th>Nama Peserta</th>
@@ -412,6 +407,7 @@
                                     <th class="text-right">Ujroh</th>
                                     <th class="text-right">EM</th>
                                     <th class="text-right">EK</th>
+                                    <th class="text-right">Total Kontribusi</th>
                                     <th class="text-right">Kontribusi Nett</th>
                                 </tr>
                             </thead>
@@ -422,16 +418,10 @@
                                 @php($total_em=0)
                                 @php($total_ek=0)
                                 @php($total_kontribusi=0)
+                                @php($total_nett_kontribusi=0)
                                 @foreach($data->pesertas as $k=>$i)
                                     @php($item=json_decode($i->after_data,true))
                                     <tr wire:key="{{$k}}">
-                                        <td>
-                                            <span wire:loading wire:target="delete_peserta({{$k}})">
-                                                <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
-                                                <span class="sr-only">{{ __('Loading...') }}</span>
-                                            </span>
-                                            <!-- <a href="javascript:void(0)" wire:loading.remove wire:target="delete_peserta({{$k}})" wire:click="delete_peserta({{$k}})"><i class="fa fa-trash text-danger"></i></a> -->
-                                        </td>
                                         <td>{{$k+1}}</td>
                                         <td>{{$item['no_peserta']}}</td>
                                         <td>{{$item['nama']}}</td>
@@ -444,6 +434,7 @@
                                         <td class="text-right">{{format_idr($item['dana_ujrah'])}}</td>
                                         <td class="text-right">{{format_idr($item['extra_mortalita'])}}</td>
                                         <td class="text-right">{{format_idr($item['extra_kontribusi'])}}</td>
+                                        <td class="text-right">{{format_idr($item['kontribusi'])}}</td>
                                         <td class="text-right">{{format_idr($item['nett_kontribusi'])}}</td>
                                     </tr>
                                     @php($total_basic += $item['basic'])
@@ -451,18 +442,20 @@
                                     @php($total_ujrah += $item['dana_ujrah'])
                                     @php($total_em += $item['extra_mortalita'])
                                     @php($total_ek += $item['extra_kontribusi'])
-                                    @php($total_kontribusi += $item['total_kontribusi_dibayar'])
+                                    @php($total_nett_kontribusi += $item['nett_kontribusi'])
+                                    @php($total_kontribusi += $item['kontribusi'])
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
-                                    <th colspan="8" class="text-right">Total</th>
+                                    <th colspan="7" class="text-right">Total</th>
                                     <th class="text-right">{{format_idr($total_basic)}}</th>
                                     <th class="text-right">{{format_idr($total_tabarru)}}</th>
                                     <th class="text-right">{{format_idr($total_ujrah)}}</th>
                                     <th class="text-right">{{format_idr($total_em)}}</th>
                                     <th class="text-right">{{format_idr($total_ek)}}</th>
                                     <th class="text-right">{{format_idr($total_kontribusi)}}</th>
+                                    <th class="text-right">{{format_idr($total_nett_kontribusi)}}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -476,6 +469,7 @@
                                     <th>No KTP</th>
                                     <th>Jenis Kelamin</th>
                                     <th>No Telepon</th>
+                                    <th>Tgl Lahir</th>
                                     <th>Mulai Asuransi</th>
                                     <th>Akhir Asuransi</th>
                                     <th class="text-center">Masa Asuransi</th>
@@ -485,7 +479,6 @@
                                     <th class="text-right">EM</th>
                                     <th class="text-right">EK</th>
                                     <th class="text-right">Kontribusi</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -504,6 +497,7 @@
                                         <td>{{$item['no_ktp']}}</td>
                                         <td>{{$item['jenis_kelamin']}}</td>
                                         <td>{{$item['no_telepon']}}</td>
+                                        <td>{{date('d-M-Y',strtotime($item['tanggal_lahir']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                         <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                         <td class="text-center">{{$item['masa_bulan']}}</td>
@@ -519,12 +513,12 @@
                                     @php($total_ujrah += $item['dana_ujrah'])
                                     @php($total_em += $item['extra_mortalita'])
                                     @php($total_ek += $item['extra_kontribusi'])
-                                    @php($total_kontribusi += $item['total_kontribusi_dibayar'])
+                                    @php($total_kontribusi += $item['kontribusi'])
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr style="border-top:2px solid  #eee;background: #eeeeeebd;">
-                                    <th colspan="9" class="text-right">Total</th>
+                                    <th colspan="10" class="text-right">Total</th>
                                     <th class="text-right">{{format_idr($total_basic)}}</th>
                                     <th class="text-right">{{format_idr($total_tabarru)}}</th>
                                     <th class="text-right">{{format_idr($total_ujrah)}}</th>
