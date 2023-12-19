@@ -354,11 +354,13 @@ class Insert extends Component
                             $data_tabbaru_reas =  isset($peserta->reas->rate_uw->persentase_refund) ? str_replace(",",".",$peserta->reas->rate_uw->tabbaru) : 0; 
                             $reas_tabarru = str_replace(",",".",$peserta->reas->rate_uw->tabbaru);
 
-                            
                             if($peserta->reas->rate_uw->tabbaru)
                                 $dana_tabbaru_reas = ($reas_tabarru/100)*$peserta->net_kontribusi_reas;
                             else
                                 $dana_tabbaru_reas = $peserta->net_kontribusi_reas;
+
+                            $refund_reas =  ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $dana_tabbaru_reas);
+                            $refund_reas_net =  ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
 
                             // Nilai Pengembalian Kontribusi = t/n x % x kontribusi gross reas atau
                             if($type_pengembalian==1){
@@ -457,10 +459,10 @@ class Insert extends Component
 
                 $peserta->refund_kontribusi = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($peserta->polis->refund / 100) * $peserta->total_kontribusi_dibayar);
                     
-                if($peserta->net_kontribusi_reas>0 and $peserta->reas_id>0){
-                    $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? $peserta->reas->rate_uw->persentase_refund : 0; 
-                    $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
-                }
+                // if($peserta->net_kontribusi_reas>0 and $peserta->reas_id>0){
+                //     $refund_reas_persen = isset($peserta->reas->rate_uw->persentase_refund) ? $peserta->reas->rate_uw->persentase_refund : 0; 
+                //     $peserta->refund_kontribusi_reas = ($peserta->refund_sisa_masa_asuransi / $peserta->masa_bulan) * (($refund_reas_persen / 100) * $peserta->net_kontribusi_reas);
+                // }
 
                 EndorsementPeserta::create([
                     'endorsement_id'=>$data->id,

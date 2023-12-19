@@ -28,6 +28,10 @@ class Index extends Component
         Kepesertaan::where('endorsement_id',$this->selected_id)->update(['endorsement_id'=>null]);
         EndorsementPeserta::where('endorsement_id', $this->selected_id)->delete();
         
+        // find reas
+        $reas = ReasEndorse::where('endorsement_id',$this->selected_id)->first();
+        if($reas) $reas->delete();
+        
         $this->emit('message-success','Deleted');$this->emit('modal','hide');
     }
 }

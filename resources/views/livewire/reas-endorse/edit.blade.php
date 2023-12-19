@@ -187,7 +187,6 @@
                                 <th colspan="9" class="text-right">Total</th>
                                 <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
                                 <th class="text-right">{{format_idr($total_kontribusi)}}</th>
-                                <th class="text-right">{{format_idr($total_refund)}}</th>
                             </tr>
                         </tfoot>
                     </table>
