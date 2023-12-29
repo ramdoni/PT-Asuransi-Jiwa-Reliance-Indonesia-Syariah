@@ -12,6 +12,8 @@ use App\Models\Rate;
 use App\Models\Pengajuan;
 use App\Models\ReasEndorse;
 use App\Models\UnderwritingLimit;
+use App\Models\ReasuradurRateRates;
+use App\Models\ReasuradurRateUw;
 
 class Insert extends Component
 {
@@ -126,7 +128,6 @@ class Insert extends Component
                 }
 
                 if($this->metode_endorse==1){
-                    // $this->peserta[$k]['refund_tanggal_efektif'] = date('Y-m-d');
                     $this->peserta[$k]['refund_sisa_masa_asuransi'] = $this->peserta[$k]['masa_bulan'] - hitung_masa_bulan($this->peserta[$k]['tanggal_mulai'], $this->peserta[$k]['refund_tanggal_efektif'],3);
                     $this->peserta[$k]['refund_kontribusi'] = ($this->peserta[$k]['refund_sisa_masa_asuransi'] / $this->peserta[$k]['masa_bulan']) * (($polis->refund / 100) * $this->peserta[$k]['total_kontribusi_dibayar']);
                 }
@@ -191,7 +192,7 @@ class Insert extends Component
         
         $this->validate($validate);
         
-        try {
+        // try {
             \DB::transaction(function () {
                 $no_pengajuan = 
                 $data = Endorsement::create([
@@ -220,9 +221,9 @@ class Insert extends Component
 
                 return redirect()->route('endorsement.index');
             });
-        }catch (\Throwable $e) {
-            $this->emit('message-error', json_encode($e));
-        }
+        // }catch (\Throwable $e) {
+        //     $this->emit('message-error', json_encode($e));
+        // }
     }
 
     public function tidakMempengaruhiPremi($data)
@@ -377,9 +378,91 @@ class Insert extends Component
                         }
                     }
                 }
+                
                 // Cancel
                 if($this->metode_endorse==2){
                     $peserta->refund_kontribusi_reas = $peserta->net_kontribusi_reas;
+                }
+
+                if($peserta->net_kontribusi_reas>0 and $peserta->reas_id>0) {
+                    $or = $peserta->reas->reas;
+                    $ajri = $peserta->reas->or;
+                    $ri_com = $peserta->reas->ri_com;
+                    $perhitungan_usia = $peserta->reas->perhitungan_usia;
+                    $manfaat_asuransi = $item['basic'];
+                    $item['usia_reas'] = $item['tanggal_lahir'] ? hitung_umur($item['tanggal_lahir'],$perhitungan_usia,$item['tanggal_mulai']) : '0';
+
+                    // Calculate Reas
+                    $reas_manfaat_asuransi_ajri = ($item['basic']*$ajri)/100;
+
+                    if($item['is_double_reas']==1){
+                        if($item['akumulasi_ganda_reas']>=100000000){
+                            $item['nilai_manfaat_asuransi_reas'] = $manfaat_asuransi;
+                            $item['reas_manfaat_asuransi_ajri'] = 0;
+                        }else{
+                            $akumulasi_reas = $item['akumulasi_ganda_reas'] + $reas_manfaat_asuransi_ajri;
+
+                            if($akumulasi_reas > 100000000){
+                                $sisa_akumulasi_ajri = 100000000 - $item['akumulasi_ganda_reas'];
+                                $sisa_akumulasi_reas = $manfaat_asuransi - $sisa_akumulasi_ajri;
+                            }else{
+                                $sisa_akumulasi_reas = ($manfaat_asuransi*$or)/100;
+                                $sisa_akumulasi_ajri = ($manfaat_asuransi*$ajri)/100;
+                            }
+                            $item['nilai_manfaat_asuransi_reas'] = $sisa_akumulasi_reas;
+                            $item['reas_manfaat_asuransi_ajri'] = $sisa_akumulasi_ajri;
+                        }
+                    }else{
+                        if($reas_manfaat_asuransi_ajri>=100000000){
+                            $item['nilai_manfaat_asuransi_reas'] = $manfaat_asuransi - 100000000;
+                            $item['reas_manfaat_asuransi_ajri'] = 100000000;
+                        }else{
+                            $item['nilai_manfaat_asuransi_reas'] = ($manfaat_asuransi*$or)/100;
+                            $item['reas_manfaat_asuransi_ajri'] = ($manfaat_asuransi*$ajri)/100;
+                        }
+                    }
+                    // kontribusi reas
+                    $rate = ReasuradurRateRates::where(['tahun'=>$item['usia_reas'],'bulan'=>$item['masa_bulan'],'reasuradur_rate_id'=>$peserta->reas->reasuradur_rate_id])->first();
+                    if($rate){
+                        $item['rate_reas'] = $rate->rate;
+                        $item['total_kontribusi_reas'] = ($rate->rate*$item['nilai_manfaat_asuransi_reas'])/1000;
+                    }else {
+                        $item['rate_reas'] = 0;
+                        $item['total_kontribusi_reas'] = 0;
+                    }
+                    if($ri_com)
+                        $item['ujroh_reas'] = ($item['total_kontribusi_reas'] * $ri_com) / 100;
+                    else
+                        $item['ujroh_reas'] = 0;
+
+                    // ul
+                    $uw = ReasuradurRateUw::whereRaw("{$manfaat_asuransi} BETWEEN min_amount and max_amount")->where(['usia'=>$item['usia_reas'],'reasuradur_rate_id'=>$peserta->reas->reasuradur_rate_id])->first();
+                    if(!$uw) $uw = ReasuradurRateUw::where(['usia'=>$item['usia_reas'],'reasuradur_rate_id'=>$peserta->reas->reasuradur_rate_id])->orderBy('max_amount','ASC')->first();
+                    if($uw) $item['ul_reas'] = $uw->keterangan;
+
+                    $item['net_kontribusi_reas'] = $item['total_kontribusi_reas'] + $item['reas_extra_kontribusi'] - $item['ujroh_reas'];
+
+                    if($item['total_kontribusi_reas']<=0){
+                        $item['nilai_manfaat_asuransi_reas'] = 0;
+                        $item['reas_manfaat_asuransi_ajri'] = $item['basic'];
+                        $item['status_reas'] = 2; // tidak direaskan karna distribusinya 0
+                    }else $item['status_reas'] = 1;
+
+                    if(isset($peserta->reas->rate_uw->or)){
+                        if($peserta->reas->rate_uw->or==100.00){
+                            $item['status_reas'] = 2;
+                            $item['nilai_manfaat_asuransi_reas'] = 0;
+                            $item['total_kontribusi_reas'] = 0;
+                            $item['net_kontribusi_reas'] = 0;
+                        }
+                    }
+                    if(strtoupper($peserta->reas->reasuradur->name) =='OR'){
+                        $item['status_reas'] = 2;
+                        $item['nilai_manfaat_asuransi_reas'] = 0;
+                        $item['total_kontribusi_reas'] = 0;
+                        $item['net_kontribusi_reas'] = 0;
+                    }
+                    // end calculate reas
                 }
                 
                 $peserta->save();

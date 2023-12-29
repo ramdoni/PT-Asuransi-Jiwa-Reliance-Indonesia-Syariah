@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Endorsement;
 use App\Models\EndorsementPeserta;
 use App\Models\Kepesertaan;
+use App\Models\ReasEndorse;
 use Livewire\WithPagination;
 
 class Index extends Component

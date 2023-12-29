@@ -32,6 +32,12 @@
                         <strong>No Endorsement</strong><br />
                         {{isset($data->endorsement->no_pengajuan) ? $data->endorsement->no_pengajuan : '-'}} 
                     </div>
+                    <div class="form-group">
+                        <label>Reas</label><br />
+                        {{isset($data->reas->reasuradur->name) ? $data->reas->reasuradur->name : '-'}}
+                         /
+                        {{isset($data->reas->rate_uw->nama) ? $data->reas->rate_uw->nama : '-'}}
+                    </div>
                     @if($data->head_teknik_note)
                         <div class="form-group border-bottom">
                             <p>
@@ -87,6 +93,7 @@
                                 <th>Akhir Asuransi</th>
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
+                                <th class="text-right">Nilai Manfaat Asuransi Reas</th>
                                 <th class="text-right">Kontribusi</th>
                                 <th class="text-right">Pengembalian Kontribusi</th>
                                 <th></th>
@@ -96,6 +103,7 @@
                         @php($total_manfaat_asuransi=0)
                         @php($total_kontribusi=0)
                         @php($total_refund=0)
+                        @php($total_basic=0)
                         @foreach($data->pesertas as $k=>$i)
                             @php($item=json_decode($i->before_data,true))
                             <tr wire:key="{{$k}}">
@@ -114,10 +122,12 @@
                                 <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                 <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                 <td class="text-center">{{$item['masa_bulan']}}</td>
+                                <td class="text-right">{{format_idr($item['basic'])}}</td>
                                 <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
                                 <td class="text-right">{{format_idr($item['net_kontribusi_reas'])}}</td>
                                 <td class="text-right">{{format_idr($item['refund_kontribusi_reas'])}}</td>
                             </tr>
+                            @php($total_basic += $item['basic'])
                             @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
                             @php($total_kontribusi += $item['net_kontribusi_reas'])
                             @php($total_refund += $item['refund_kontribusi_reas'])
@@ -126,6 +136,7 @@
                         <tfoot style="border-top: 2px solid #dee2e6;">
                             <tr>
                                 <th colspan="9" class="text-right">Total</th>
+                                <th class="text-right">{{format_idr($total_basic)}}</th>
                                 <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
                                 <th class="text-right">{{format_idr($total_kontribusi)}}</th>
                                 <th class="text-right">{{format_idr($total_refund)}}</th>
@@ -148,7 +159,8 @@
                                 <th>Akhir Asuransi</th>
                                 <th class="text-center">Masa Asuransi</th>
                                 <th class="text-right">Nilai Manfaat Asuransi</th>
-                                <th class="text-right">Kontribusi</th>
+                                <th class="text-right">Nilai Manfaat Asuransi Reas</th>
+                                <th class="text-right">Kontribusi</th>h>
                                 <th></th>
                             </tr>
                         </thead>
@@ -156,6 +168,7 @@
                             @php($total_manfaat_asuransi=0)
                             @php($total_kontribusi=0)
                             @php($total_refund=0)
+                            @php($total_basic=0)
                             @foreach($data->pesertas as $k=>$i)
                             @php($item=json_decode($i->after_data,true))
                             <tr wire:key="{{$k}}">
@@ -174,9 +187,11 @@
                                 <td>{{date('d-M-Y',strtotime($item['tanggal_mulai']))}}</td>
                                 <td>{{date('d-M-Y',strtotime($item['tanggal_akhir']))}}</td>
                                 <td class="text-center">{{$item['masa_bulan']}}</td>
+                                <td class="text-right">{{format_idr($item['basic'])}}</td>
                                 <td class="text-right">{{format_idr($item['nilai_manfaat_asuransi_reas'])}}</td>
                                 <td class="text-right">{{format_idr($item['net_kontribusi_reas'])}}</td>
                             </tr>
+                            @php($total_basic += $item['basic'])
                             @php($total_manfaat_asuransi += $item['nilai_manfaat_asuransi_reas'])
                             @php($total_kontribusi += $item['net_kontribusi_reas'])
                             @php($total_refund += $item['refund_kontribusi_reas'])
@@ -185,6 +200,7 @@
                         <tfoot style="border-top: 2px solid #dee2e6;">
                             <tr>
                                 <th colspan="9" class="text-right">Total</th>
+                                <th class="text-right">{{format_idr($total_basic)}}</th>
                                 <th class="text-right">{{format_idr($total_manfaat_asuransi)}}</th>
                                 <th class="text-right">{{format_idr($total_kontribusi)}}</th>
                             </tr>
