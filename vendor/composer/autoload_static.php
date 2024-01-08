@@ -871,6 +871,7 @@ class ComposerStaticInitabcd8f8bea5473bc9441ed54d30dd685
         'App\\Models\\JenisPerubahan' => __DIR__ . '/../..' . '/app/Models/JenisPerubahan.php',
         'App\\Models\\Kabupaten' => __DIR__ . '/../..' . '/app/Models/Kabupaten.php',
         'App\\Models\\Kepesertaan' => __DIR__ . '/../..' . '/app/Models/Kepesertaan.php',
+        'App\\Models\\KepesertaanTemp' => __DIR__ . '/../..' . '/app/Models/KepesertaanTemp.php',
         'App\\Models\\Klaim' => __DIR__ . '/../..' . '/app/Models/Klaim.php',
         'App\\Models\\KlaimJenis' => __DIR__ . '/../..' . '/app/Models/KlaimJenis.php',
         'App\\Models\\KlaimKategoriPenyakit' => __DIR__ . '/../..' . '/app/Models/KlaimKategoriPenyakit.php',

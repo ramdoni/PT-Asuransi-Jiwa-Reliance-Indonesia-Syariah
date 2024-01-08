@@ -148,6 +148,7 @@ class Insert extends Component
                     $peserta = Kepesertaan::find($item['id']);
                     if($peserta){
                         $peserta->memo_cancel_id = $data->id;
+                        $peserta->status_polis = 'Surrender';
                         $peserta->total_kontribusi_dibayar = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita;
                         $peserta->save();
                         $total++;

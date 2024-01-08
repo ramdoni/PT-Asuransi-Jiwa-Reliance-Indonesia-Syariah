@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Kepesertaan;
+use App\Models\KepesertaanTemp;
 
 class PesertaController extends Controller
 {
@@ -21,10 +22,24 @@ class PesertaController extends Controller
         
         return $pdf->stream();
     }
-    public function printSertifikasi(Kepesertaan $id)
+    public function printSertifikasi($id)
     {
+        $data = Kepesertaan::where('no_peserta',$id)->first();
+
         $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadView('livewire.peserta.print-sertifikat',['data'=>$id]);
+        $pdf->loadView('livewire.peserta.print-sertifikat',['data'=>$data]);
+        
+        // $pdf->save('sertifikat/'.$id->no_peserta. '.pdf');
+        // return $pdf->download('sertifikat-'.$id->no_peserta. '.pdf');
+        return $pdf->stream();
+    }
+
+    public function printByNoSertifikat($id)
+    {
+        $data = Kepesertaan::where('no_sertifikat',$id)->first();
+
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadView('livewire.peserta.print-sertifikat',['data'=>$data]);
         
         // $pdf->save('sertifikat/'.$id->no_peserta. '.pdf');
         // return $pdf->download('sertifikat-'.$id->no_peserta. '.pdf');

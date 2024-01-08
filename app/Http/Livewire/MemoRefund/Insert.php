@@ -155,6 +155,7 @@ class Insert extends Component
                 foreach($this->peserta as $k => $item){
                     $peserta = Kepesertaan::find($item['id']);
                     if($peserta){
+                        $peserta->status_polis = 'Surrender';
                         $peserta->memo_refund_id = $data->id;
                         $peserta->refund_tanggal_efektif = $item['refund_tanggal_efektif'];
                         $peserta->refund_sisa_masa_asuransi = $peserta->masa_bulan -  hitung_masa_bulan($peserta->tanggal_mulai,$item['refund_tanggal_efektif'],3);

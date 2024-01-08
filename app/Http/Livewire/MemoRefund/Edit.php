@@ -5,6 +5,7 @@ namespace App\Http\Livewire\MemoRefund;
 use Livewire\Component;
 use App\Models\Refund;
 use App\Models\ReasRefund;
+use App\Models\Kepesertaan;
 
 class Edit extends Component
 {
@@ -67,6 +68,8 @@ class Edit extends Component
         $this->data->head_syariah_note = $this->note;
         $this->data->status = 2;
         $this->data->save();
+
+        Kepesertaan::where('memo_refund_id',$this->data->id)->update(['status_polis'=>'Surrender']);
 
         // find reas refund
         ReasRefund::where('memo_refund_id',$this->data->id)->update(['status'=>2]);

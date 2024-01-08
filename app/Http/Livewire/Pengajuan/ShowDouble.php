@@ -18,8 +18,7 @@ class ShowDouble extends Component
     {
         $this->data = Kepesertaan::where(['tanggal_lahir'=>$data->tanggal_lahir,'nama'=>$data->nama])
             ->where(function($table){
-                $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi')
-                    ->orWhere('status_akseptasi',1);
+                $table->where('status_polis','Inforce')->orWhere('status_polis','Akseptasi');
             })->get();
     }
 

@@ -232,6 +232,7 @@
                                             <th>Tgl Stnc</th>
                                             <th>UL</th>
                                             <th>Ket</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -336,6 +337,11 @@
                                                 <td>{{$item->tanggal_stnc ? date('d-M-Y',strtotime($item->tanggal_stnc)) : '-'}}</td>
                                                 <td>{{$item->ul}}</td>
                                                 <td>{{$item->keterangan}}</td>
+                                                <td>
+                                                    @if($item->no_sertifikat)
+                                                        <a href="{{route('print-by-no-sertifikat',$item->no_sertifikat)}}" target="_blank"><i class="fa fa-download"></i></a>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                         @if($data->kepesertaan->count()==0)
@@ -483,7 +489,7 @@
                                                 <td>
                                                     {{$item->keterangan}}
                                                     @if($item->packet)
-                                                        <a href="{{route('print-sertifikasi',$item->id)}}" target="_blank"><i class="fa fa-download"></i></a>
+                                                        <a href="{{route('print-sertifikasi',$item->no_peserta)}}" target="_blank"><i class="fa fa-download"></i></a>
                                                     @endif
                                                 </td>
                                             </tr>

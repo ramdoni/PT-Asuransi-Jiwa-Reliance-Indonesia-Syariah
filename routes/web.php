@@ -18,6 +18,7 @@ Route::get('/', Home::class)->name('home')->middleware('auth');
 Route::get('login', App\Http\Livewire\Login::class)->name('login');
 
 Route::get('generate-sertifikat/{id}',[App\Http\Controllers\PesertaController::class,'printSertifikasi'])->name('print-sertifikasi');
+Route::get('generate-by-no-sertifikat/{id}',[App\Http\Controllers\PesertaController::class,'printByNoSertifikat'])->name('print-by-no-sertifikat');
 Route::get('preview-sertifikat/{id}',[App\Http\Controllers\PesertaController::class,'previewSertifikat'])->name('preview-sertifikat');
 
 // All login

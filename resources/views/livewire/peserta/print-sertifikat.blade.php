@@ -54,7 +54,7 @@
         </style>
     </head>
     <body>
-        <img src="assets/img/bg-sertifikat.jpeg" style="width: 21cm;height: 600px;position: absolute; top:0;right:0;z-index:1" />
+        <img src="assets/img/bg-sertifikat.png" style="width: 21cm;height: 600px;position: absolute; top:0;right:0;z-index:1" />
         <div class="container" style="z-index:2;padding-top: 70px;height: 600px;">
             <p  style="text-align: center;margin-bottom:0;">Bismillahirrahmanirrahim</p>
             <h5 style="text-align: center;margin-top:0;padding-top:0;">
@@ -67,11 +67,19 @@
                     <td style="width: 5px;"> : </td>
                     <td>{{$data->nama}}</td>
                 </tr>
-                <tr>
-                    <td>Nomor Peserta</td>
-                    <td> : </td>
-                    <td>{{$data->no_peserta}}</td>
-                </tr>
+                @if($data->no_sertifikat)
+                    <tr>
+                        <td>Nomor Sertifikat</td>
+                        <td> : </td>
+                        <td>{{$data->no_sertifikat}}</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td>Nomor Peserta</td>
+                        <td> : </td>
+                        <td>{{$data->no_peserta}}</td>
+                    </tr>
+                @endif
                 <tr>
                     <td>Tanggal Lahir</td>
                     <td> : </td>
@@ -125,7 +133,9 @@
                     <tr>
                         <td>Kontribusi Gross </td>
                         <td> : </td>
-                        <td>{{isset($data->kontribusi) ? format_idr($data->kontribusi) : '-'}}</td>
+                        <td>
+                            {{format_idr($data->basic*($data->rate/1000))}}
+                        </td>
                     </tr>
                     <tr>
                         <td>Extra Kontribusi </td>
@@ -135,7 +145,7 @@
                     <tr>
                         <th style="text-align: left;">Total Kontribusi </th>
                         <th> : </th>
-                        <th>{{format_idr($data->extra_mortalita+$data->kontribusi+$data->extra_kontribusi)}}</th>
+                        <th>{{format_idr($data->extra_mortalita+($data->basic*($data->rate/1000))+$data->extra_kontribusi)}}</th>
                     </tr>
                 </table>
             </div>
@@ -235,7 +245,7 @@
                 <p style="text-align:center"><strong>CATATAN: SYARAT-SYARAT DAN KETENTUAN ASURANSI YANG LENGKAP TERDAPAT DALAM POLIS</strong></p>
             </div>
         </div>
-        <img src="assets/img/bg-sertifikat.jpeg" style="width: 21cm;height: 700px;position: absolute; bottom:0;right:0;z-index:0" />
+        <img src="assets/img/bg-sertifikat.png" style="width: 21cm;height: 600px;position: absolute; bottom:0;right:0;z-index:0" />
         @if($data->ari_data)
             @php($data_ari = json_decode($data->ari_data))
             <div class="page_break"></div> 

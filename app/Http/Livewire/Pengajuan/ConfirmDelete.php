@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Pengajuan;
 
 use Livewire\Component;
+use App\Models\Kepesertaan;
 
 class ConfirmDelete extends Component
 {
@@ -19,6 +20,11 @@ class ConfirmDelete extends Component
 
     public function delete()
     {
+        $find = Kepesertaan::find($this->selected_id);
+        if($find){
+            \LogActivity::add("[web][Pengajuan][$find->pengajuan_id] {$find->nama} delete peserta");
+        }
+
         \App\Models\Kepesertaan::find($this->selected_id)->delete();
         
         $this->emit('reload-page');

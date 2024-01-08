@@ -259,6 +259,7 @@ class Insert extends Component
                 }
 
                 $peserta->endorsement_id = $data->id;
+                $peserta->status_polis = 'Surrender';
                 $peserta->save();
             }
         }
@@ -327,6 +328,7 @@ class Insert extends Component
                     }
                 }
 
+                $peserta->status_polis = 'Surrender';
                 $peserta->endorsement_id = $data->id;
                 $peserta->total_kontribusi_dibayar = $peserta->kontribusi + $peserta->extra_kontribusi + $peserta->extra_mortalita;
                 $peserta->refund_sisa_masa_asuransi = $peserta->masa_bulan - hitung_masa_bulan($peserta->tanggal_mulai, $item['refund_tanggal_efektif'],3);

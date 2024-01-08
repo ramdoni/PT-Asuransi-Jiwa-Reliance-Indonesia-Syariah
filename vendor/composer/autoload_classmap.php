@@ -196,6 +196,7 @@ return array(
     'App\\Models\\JenisPerubahan' => $baseDir . '/app/Models/JenisPerubahan.php',
     'App\\Models\\Kabupaten' => $baseDir . '/app/Models/Kabupaten.php',
     'App\\Models\\Kepesertaan' => $baseDir . '/app/Models/Kepesertaan.php',
+    'App\\Models\\KepesertaanTemp' => $baseDir . '/app/Models/KepesertaanTemp.php',
     'App\\Models\\Klaim' => $baseDir . '/app/Models/Klaim.php',
     'App\\Models\\KlaimJenis' => $baseDir . '/app/Models/KlaimJenis.php',
     'App\\Models\\KlaimKategoriPenyakit' => $baseDir . '/app/Models/KlaimKategoriPenyakit.php',

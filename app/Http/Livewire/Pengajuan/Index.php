@@ -21,7 +21,10 @@ class Index extends Component
     public function render()
     {
         $data = Pengajuan::with(['polis','account_manager','reas'])
-                ->orderBy('created_at','DESC');
+                // ->orderBy('created_at','DESC')
+                ->orderByRaw('IF(status = 6, 0,1)')
+                ->orderBy('created_at','DESC')
+                ;
 
         if($this->filter_keyword) $data->where(function($table){
             foreach(\Illuminate\Support\Facades\Schema::getColumnListing('pengajuan') as $column){
@@ -62,6 +65,7 @@ class Index extends Component
                 ->whereNotNull('payment_date')
                 ->whereNull('memo_ujroh_id');
         }
+
         
         return view('livewire.pengajuan.index')->with([
                 'data'=>$data->paginate(100),
