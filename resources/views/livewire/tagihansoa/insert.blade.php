@@ -44,6 +44,27 @@
                                 <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label>Nama Bank</label>
+                            <input type="text" class="form-control" wire:model="bank_name" />
+                            @error('bank_name')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Rekening</label>
+                            <input type="text" class="form-control" wire:model="bank_no_rekening" />
+                            @error('bank_no_rekening')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Owner</label>
+                            <input type="text" class="form-control" wire:model="bank_owner" />
+                            @error('owner_bank')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <h6 class="text-right">Summary</h6>

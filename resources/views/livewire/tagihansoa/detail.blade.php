@@ -5,6 +5,10 @@
         <div class="card">
             <div class="body">
                 <div class="row">
+                    <div class="col-md-12">
+                        <h6>Summary</h6>
+                        <hr />
+                    </div>
                     <div class="col-md-6">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -27,11 +31,38 @@
                                 <label>Period</label><br />
                                 {{$data->period}}
                             </div>
+                            <div class="form-group col-md-12">
+                                <label>Nama Bank</label>
+                                <input type="text" class="form-control" wire:model="bank_name" />
+                                @error('bank_name')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Nomor Rekening</label>
+                                <input type="text" class="form-control" wire:model="bank_no_rekening" />
+                                @error('bank_no_rekening')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label>Bank Owner</label>
+                                <input type="text" class="form-control" wire:model="bank_owner" />
+                                @error('owner_bank')
+                                    <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                                @enderror
+                            </div>
+                            <div class="col-md-12">
+                                <span wire:loading wire:target="update_rekening">
+                                    <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                                    <span class="sr-only">{{ __('Loading...') }}</span>
+                                </span>
+                                <a href="javascript:void(0)" wire:loading.remove wire:target="update_rekening" wire:click="update_rekening" class="btn btn-info">Update Rekening</a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <h6 class="text-right">Summary</h6>
-                        <hr />
+                        
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>

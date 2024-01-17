@@ -38,17 +38,6 @@
                 padding:2px 5px;
                 margin:0;
             }
-            /* table.border tr{
-                border:1px solid #000;
-            } */
-            /* table.border tr td:first-child{
-                border-left: 0.5px solid #000;
-                border-top: 0.5px solid #000;
-            }
-            table.border tr td:last-child{
-                border-right: 0.5px solid #000;
-            } */
-
             ol {
                 margin:0 0 1.5em;
                 padding:0;
@@ -111,9 +100,14 @@
             <h1 class="text-center">MEMO INTERNAL</h1>
             <table>
                 <tr>
-                    <td>Nomor, Tanggal</td>
+                    <td>Nomor</td>
                     <td> : </td>
-                    <td>{{$data->no_pengajuan}}, {{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
+                    <td>{{$data->nomor}}</td>
+                </tr>
+                <tr>
+                    <td>Tanggal</td>
+                    <td> : </td>
+                    <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
                 </tr>
                 <tr>
                     <td>Kepada</td>
@@ -208,16 +202,13 @@
                         <br />
                         <br />
                         <br />
-                        <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
-                        
+                            <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
                         <br>
                         <br>
                         <br>
                         <br>
                         <u>Ahmad Syafei</u><br />
                         Head of Teknik Syariah
-                        <br>
-                        <span style="z-index: 3">Dept. Underwriting Syariah</span>
                     </td>
                     <td style="width:30%;">
                         Diterima oleh,<br />
@@ -232,12 +223,115 @@
                     </td>
                 </tr>
             </table>
-            <p>Bank Syariah Indonesia - Cabang Thamrin<br />
-                A/C IDR: 7001391628<br />
-                A/N Nasional Re qq Cabang Syariah
+            <p>{{$data->bank_name}}<br />
+                A/C IDR: {{$data->bank_no_rekening}}<br />
+                A/N {{$data->bank_owner}}
             </p>
         </div>
+
         <div class="page-break"></div>
+        
+        <div>
+            <hr style="margin-bottom:1px;" />
+            <hr style="margin-top:0" />
+            <h1 class="text-center">DEBIT NOTE</h1>
+            <h1 class="text-center">No : {{$data->nomor_cn_dn}}</h1>
+            <hr style="margin-bottom:1px;" />
+            <hr style="margin-top:0" />
+            <table style="width:50%;float:left">
+                <tr>
+                    <td>Date</td>
+                    <td> : </td>
+                    <td>{{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
+                </tr>
+                <tr>
+                    <td>I/M No</td>
+                    <td> : </td>
+                    <td>{{$data->nomor}}</td>
+                </tr>
+                <tr>
+                    <td>To</td>
+                    <td> : </td>
+                    <td>Div. Finance & Accounting</td>
+                </tr>
+            </table>
+            <table style="width:50%;float:left">
+                <tr>
+                    <td>Reinsurance</td>
+                    <td> : </td>
+                    <td>{{isset($data->reasuradur->name) ? $data->reasuradur->name : '-'}}</td>
+                </tr>
+                <tr>
+                    <td>Period</td>
+                    <td> : </td>
+                    <td>{{$data->period}}</td>
+                </tr>
+                <tr>
+                    <td>Due Date</td>
+                    <td> : </td>
+                    <td>{{date('d-M-Y',strtotime($data->tgl_jatuh_tempo))}}</td>
+                </tr>
+            </table>
+            <div style="clear:both"></div>
+            <br />
+            <table style="width: 80%;margin:auto;" class="style2">
+                <tr>
+                    <th>Description</th>
+                    <th class="text-center">Curr</th>
+                    <th class="text-center">Balance</td>
+                </tr>
+                <tr>
+                    <td>Kontribusi Gross</td>
+                    <td class="text-center">IDR</td>
+                    <td class="text-right">{{format_idr($data->kontribusi_gross)}}</td>
+                </tr>
+                <tr>
+                    <td>Ujroh</td>
+                    <td class="text-center">IDR</td>
+                    <td class="text-right">{{format_idr($data->ujroh)}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Kontribusi Nett</strong></td>
+                    <td class="text-center"><strong>IDR</strong></td>
+                    <td class="text-right">{{format_idr($data->kontribusi_netto)}}</td>
+                </tr>
+                <tr>
+                    <td>Refund</td>
+                    <td class="text-center">IDR</td>
+                    <td class="text-right">-{{format_idr($data->refund)}}</td>
+                </tr>
+                <tr>
+                    <td>Claim</td>
+                    <td class="text-center">IDR</td>
+                    <td class="text-right">-{{format_idr($data->klaim)}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Kontribusi Dibayar/diterima</strong></td>
+                    <td class="text-center"><strong>IDR</strong></td>
+                    <td class="text-right"><strong>{{format_idr(abs($data->total_kontribusi_dibayar))}}</strong></td>
+                </tr>
+            </table>
+            <p>Terbilan :#{{terbilang(abs($data->total_kontribusi_dibayar))}}</p>
+            <div style="float:right; widht: 300px;position:relative;text-align:center;">
+                Jakarta, {{date('d F Y',strtotime($data->tanggal_pengajuan))}}
+                <br />
+                <br />
+                <br />
+                <br />
+                <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
+                <br>
+                <br>
+                <br>
+                <br>
+                <u>Ahmad Syafei</u><br />
+                Head of Teknik Syariah
+                <br>
+                <span style="z-index: 3">Dept. Underwriting Syariah</span>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+        
         <div>
             <hr style="margin-bottom:1px;" />
             <hr style="margin-top:0" />

@@ -22,7 +22,7 @@ class Insert extends Component
     public $tanggal_pengajuan,$period,$tgl_jatuh_tempo,$total_manfaat_asuransi_reas=0,$type_pengajuan=1;
     public $total_ujroh=0,$total_kontribusi_netto=0,$nomor_syr,$total_refund=0,$total_endorse=0,$total_cancel=0,$total_kontribusi_dibayar=0;
     public $type_pengajuan_arr= [1=>'Kontribusi Reas',2=>'Recovery Claim',3=> 'Refund',4=>'Endorse',5=>'Claim'];
-    public $start_date,$end_date;
+    public $start_date,$end_date,$bank_name,$bank_no_rekening,$bank_owner;
     public function render()
     {
         return view('livewire.tagihansoa.insert');
@@ -59,10 +59,11 @@ class Insert extends Component
 
         $this->validate($validate);
 
-        // 046/REAS-IM/AJRI-US/IX/2023
-        $param['nomor'] = str_pad(Tagihansoa::count(),6, '0', STR_PAD_LEFT) ."/REAS-IM/AJRI-US/".numberToRomawi(date('m')).'/'.date('Y');
+        // 050/REAS-IM/AJRI-US/I/2024
+        $running_number = get_setting('running_number_tagihan_soa')+1;
+        $param['nomor'] = str_pad($running_number,3, '0', STR_PAD_LEFT) ."/REAS-IM/AJRI-US/".numberToRomawi(date('m')).'/'.date('Y');
         $param['nomor_syr'] = $this->nomor_syr;
-        $param['nomor_cn_dn'] = "CN.".str_pad(Tagihansoa::count(),3, '0', STR_PAD_LEFT) .".RRS03.US.".date('m').'.'.date('Y');
+        $param['nomor_cn_dn'] = "CN.".str_pad($running_number,3, '0', STR_PAD_LEFT) .".RRS03.US.".date('m').'.'.date('Y');
         $param['status_pembayaran'] = 0;
         $param['status'] = 0;
         $param['reasuradur_id'] = $this->reasuradur_id;
@@ -79,9 +80,14 @@ class Insert extends Component
         $param['klaim'] = $this->total_klaim;
         $param['total_kontribusi_dibayar'] = $this->total_kontribusi_dibayar;
         $param['is_cn'] = $this->total_kontribusi_dibayar >0 ? 1:0;
+        $param['bank_name'] = $this->bank_name;
+        $param['bank_no_rekening'] = $this->bank_no_rekening;
+        $param['bank_owner'] = $this->bank_owner;
 
         $tagihan = Tagihansoa::create($param);
         
+        update_setting('running_number_tagihan_soa',$running_number);
+
         foreach($this->pengajuans as $i){
             TagihansoaPengajuan::create([
                 'tagihan_soa_id' => $tagihan->id,

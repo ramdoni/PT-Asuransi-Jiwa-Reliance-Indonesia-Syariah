@@ -43,6 +43,8 @@ class Setting extends Component
         $this->running_number_refund_cn = get_setting('running_number_refund_cn');
         $this->running_number_recovery_claim = get_setting('running_number_recovery_claim');
         $this->running_number_dn_recovery_claim = get_setting('running_number_dn_recovery_claim');
+        $this->running_number_dn_recovery_claim = get_setting('running_number_dn_recovery_claim');
+        $this->running_number_tagihan_soa = get_setting('running_number_tagihan_soa');
 
         \LogActivity::add("Setting");
     }
@@ -68,6 +70,7 @@ class Setting extends Component
         update_setting('running_number_refund_cn',$this->running_number_refund_cn);
         update_setting('running_number_recovery_claim',$this->running_number_recovery_claim);
         update_setting('running_number_dn_recovery_claim',$this->running_number_dn_recovery_claim);
+        update_setting('running_number_tagihan_soa',$this->running_number_tagihan_soa);
         
         \LogActivity::add("Setting Update Polis");
 
