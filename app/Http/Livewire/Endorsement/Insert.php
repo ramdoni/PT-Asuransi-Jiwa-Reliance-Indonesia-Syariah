@@ -192,7 +192,7 @@ class Insert extends Component
         
         $this->validate($validate);
         
-        // try {
+        try {
             \DB::transaction(function () {
                 $no_pengajuan = 
                 $data = Endorsement::create([
@@ -221,9 +221,9 @@ class Insert extends Component
 
                 return redirect()->route('endorsement.index');
             });
-        // }catch (\Throwable $e) {
-        //     $this->emit('message-error', json_encode($e));
-        // }
+        }catch (\Throwable $e) {
+            $this->emit('message-error', json_encode($e));
+        }
     }
 
     public function tidakMempengaruhiPremi($data)

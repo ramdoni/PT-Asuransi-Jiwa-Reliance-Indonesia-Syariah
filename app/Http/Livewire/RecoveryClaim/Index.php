@@ -13,7 +13,7 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $selected_id,$is_download=false,$filter=[],$is_rekon=false,$check_id=[],$polis=[],$filter_polis_id;
-    
+    public $filter_peserta;
     public function render()
     {
         $data = $this->get_data();
@@ -44,12 +44,22 @@ class Index extends Component
 
     public function get_data()
     {
-        $data = RecoveryClaim::with(['polis','kepesertaan','klaim'])->orderBy('id','DESC');
+        $data = RecoveryClaim::with(['polis','klaim'])->orderBy('id','DESC')
+            ->whereHas('kepesertaan', function($q)
+                {   
+                    if($this->filter_peserta) {
+                        $q->where('nama', 'LIKE', "%{$this->filter_peserta}%")
+                            ->orWhere('no_peserta', 'LIKE', "%{$this->filter_peserta}%");
+                    }
+                });
+
         foreach($this->filter as $k=>$v){
             $data->where($k,$v);
         }
         
         if($this->filter_polis_id) $data->where('polis_id',$this->filter_polis_id);
+        
+        
 
         return $data;
     }

@@ -10,7 +10,7 @@ use App\Models\User;
 class MemoUjroh extends Model
 {
     use HasFactory;
-
+    protected $guarded = [];
     protected $table = 'memo_ujroh';
 
     public function polis()

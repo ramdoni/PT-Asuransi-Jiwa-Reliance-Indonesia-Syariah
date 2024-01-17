@@ -81,8 +81,8 @@
                                             </a>
                                         @endif
                                     </td>
-                                    <td>{{isset($item->polis->nama) ? Str::limit($item->polis->nama,50) : '-'}}</td>
-                                    <td>{{isset($item->polis->produk->nama) ? $item->polis->produk->nama : '-'}}</td>
+                                    <td>{{isset($item->polis->nama) ? Str::limit($item->polis->nama,30) : '-'}}</td>
+                                    <td>{{isset($item->polis->produk->nama) ? Str::limit($item->polis->produk->nama,30) : '-'}}</td>
                                     <td>{{isset($item->jenis_pengajuan) ? endorse_jenis_pengajuan($item->jenis_pengajuan) : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->tanggal_pengajuan))}}</td>
                                     <td class="text-center">{{$item->total_peserta}}</td>

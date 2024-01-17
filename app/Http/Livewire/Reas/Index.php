@@ -12,7 +12,7 @@ class Index extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $filter_keyword;
+    public $filter_keyword,$filter_status;
     public function render()
     {
         $data  = Reas::with(['pengajuan','reasuradur','rate_uw'])->withCount('kepesertaan')->orderBy('id','DESC');
@@ -22,6 +22,8 @@ class Index extends Component
                 $table->orWhere($column,'LIKE',"%{$this->filter_keyword}%");
             }
         });
+
+        if($this->filter_status) $data->where('status',$this->filter_status);
 
         return view('livewire.reas.index')->with(['data'=>$data->paginate(100)]);
     }

@@ -20,52 +20,17 @@ class Index extends Component
     public $start_tanggal_akseptasi,$end_tanggal_akseptasi,$polis_pengajuan,$polis_id,$memo_selected=[];
     public function render()
     {
-        $data = Pengajuan::with(['polis','account_manager','reas'])
-                // ->orderBy('created_at','DESC')
-                ->orderByRaw('IF(status = 6, 0,1)')
-                ->orderBy('created_at','DESC')
-                ;
-
-        if($this->filter_keyword) $data->where(function($table){
-            foreach(\Illuminate\Support\Facades\Schema::getColumnListing('pengajuan') as $column){
-                $table->orWhere($column,'LIKE',"%{$this->filter_keyword}%");
-            }
-        });
-        if($this->filter_status_invoice) $data->where('status_invoice',$this->filter_status_invoice);
-        if($this->filter_status) $data->where('status',$this->filter_status);
-        if($this->start_tanggal_pengajuan and $this->end_tanggal_pengajuan){
-            if($this->start_tanggal_pengajuan == $this->end_tanggal_pengajuan)
-                $data->whereDate('created_at',$this->start_tanggal_pengajuan);
-            else
-                $data->whereBetween('created_at',[$this->start_tanggal_pengajuan,$this->end_tanggal_pengajuan]);
-        }
-
-        if($this->start_tanggal_pembayaran and $this->end_tanggal_pembayaran){
-            if($this->start_tanggal_pembayaran == $this->end_tanggal_pembayaran)
-                $data->whereDate('payment_date',$this->start_tanggal_pembayaran);
-            else
-                $data->whereBetween('payment_date',[$this->start_tanggal_pembayaran,$this->end_tanggal_pembayaran]);
-        }
-
-        if($this->start_tanggal_akseptasi and $this->end_tanggal_akseptasi){
-            if($this->start_tanggal_akseptasi == $this->end_tanggal_akseptasi)
-                $data->whereDate('head_syariah_submit',$this->start_tanggal_akseptasi);
-            else
-                $data->whereBetween('head_syariah_submit',[$this->start_tanggal_akseptasi,$this->end_tanggal_akseptasi]);
-        }
-        
-        if($this->polis_id) $data->where('polis_id',$this->polis_id);
+        $data = $this->data();
 
         $total_all = clone $data;
         $total_paid = clone $data;
         $total_unpaid = clone $data;
 
         if($this->is_pengajuan_memo_ujroh) {
-            $data->where('status',3)
+            $data->where('pengajuan.status',3)
                 ->whereNotNull('payment_date')
                 ->whereNull('memo_ujroh_id');
         }
-
         
         return view('livewire.pengajuan.index')->with([
                 'data'=>$data->paginate(100),
@@ -77,10 +42,51 @@ class Index extends Component
             ]);
     }
 
+    public function data()
+    {
+        $data = Pengajuan::select('pengajuan.*')->with(['polis','account_manager','reas'])
+                // ->orderBy('created_at','DESC')
+                ->orderByRaw('IF(pengajuan.status = 6, 0,1)')
+                ->orderBy('pengajuan.created_at','DESC')
+                ->join('polis','polis.id','=','pengajuan.polis_id')
+                ;
+        if($this->filter_keyword) $data->where(function($table){
+            // foreach(\Illuminate\Support\Facades\Schema::getColumnListing('pengajuan') as $column){
+            foreach(['pengajuan.no_pengajuan','pengajuan.dn_number','pengajuan.no_surat','polis.no_polis','polis.nama'] as $column){
+                $table->orWhere($column,'LIKE',"%{$this->filter_keyword}%");
+            }
+        });
+        if($this->filter_status_invoice) $data->where('pengajuan.status_invoice',$this->filter_status_invoice);
+        if($this->filter_status) $data->where('status',$this->filter_status);
+        if($this->start_tanggal_pengajuan and $this->end_tanggal_pengajuan){
+            if($this->start_tanggal_pengajuan == $this->end_tanggal_pengajuan)
+                $data->whereDate('pengajuan.created_at',$this->start_tanggal_pengajuan);
+            else
+                $data->whereBetween('pengajuan.created_at',[$this->start_tanggal_pengajuan,$this->end_tanggal_pengajuan]);
+        }
+
+        if($this->start_tanggal_pembayaran and $this->end_tanggal_pembayaran){
+            if($this->start_tanggal_pembayaran == $this->end_tanggal_pembayaran)
+                $data->whereDate('pengajuan.payment_date',$this->start_tanggal_pembayaran);
+            else
+                $data->whereBetween('pengajuan.payment_date',[$this->start_tanggal_pembayaran,$this->end_tanggal_pembayaran]);
+        }
+
+        if($this->start_tanggal_akseptasi and $this->end_tanggal_akseptasi){
+            if($this->start_tanggal_akseptasi == $this->end_tanggal_akseptasi)
+                $data->whereDate('pengajuan.head_syariah_submit',$this->start_tanggal_akseptasi);
+            else
+                $data->whereBetween('pengajuan.head_syariah_submit',[$this->start_tanggal_akseptasi,$this->end_tanggal_akseptasi]);
+        }
+
+        if($this->polis_id) $data->where('pengajuan.polis_id',$this->polis_id);
+
+        return $data;
+    }
+
     public function mount()
     {
-        $this->polis_pengajuan = Pengajuan::with('polis')->where('pengajuan.status',3)
-                                    ->groupBy('polis_id')->get();
+        $this->polis_pengajuan = Pengajuan::with('polis')->where('pengajuan.status',3)->groupBy('polis_id')->get();
     }
 
     public function updated($propertyName)
@@ -248,6 +254,268 @@ class Index extends Component
         return redirect()->route('pengajuan.index');
     }
     
+    public function downloadAll()
+    {
+        $data = $this->data();
+        $objPHPExcel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("PMT System")
+                                    ->setLastModifiedBy("Stalavista System")
+                                    ->setTitle("Office 2007 XLSX Product Database")
+                                    ->setSubject("Daftar Peserta")
+                                    ->setKeywords("office 2007 openxml php");
+
+        $title = 'DAFTAR KEPESERTAAN ASURANSI JIWA KUMPULAN SYARIAH';
+
+        $activeSheet = $objPHPExcel->setActiveSheetIndex(0);
+        $activeSheet->setCellValue('A1', $title);
+        $activeSheet->mergeCells("A1:O1");
+        $activeSheet->getRowDimension('1')->setRowHeight(34);
+        $activeSheet->getStyle('A1')->applyFromArray([
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+            ],
+            'font' => [
+                'size' => 16,
+                'bold' => true,
+            ]
+        ]);;
+
+        $activeSheet
+                ->setCellValue('A2', 'NO')
+                ->setCellValue('B2', 'BULAN')
+                ->setCellValue('C2', 'USER MEMO')
+                ->setCellValue('D2', 'USER AKSEPTASI')
+                ->setCellValue('E2', 'TRANSAKSI ID')
+                ->setCellValue('F2', 'BERKAS AKSEPTASI')
+                ->setCellValue('G2', 'TGL PENGAJUAN EMAIL')
+                ->setCellValue('H2', 'TGL PRODUKSI')
+                ->setCellValue('I2', 'PRODUKSI AKRUAL')
+                ->setCellValue('J2', 'BORDERO')
+                ->setCellValue('K2', 'NO MEMO')
+                ->setCellValue('L2', 'NO DEBIT NOTE')
+                ->setCellValue('M2', 'NO POLIS')
+                ->setCellValue('N2', 'PEMEGANG POLIS')
+                ->setCellValue('O2', 'ALAMAT')
+                ->setCellValue('P2', 'CABANG')
+                ->setCellValue('Q2', 'JENIS PRODUK')
+                ->setCellValue('R2', 'JML KEPESERTAAN TERTUNDA')
+                ->setCellValue('S2', 'MANFAAT KEPESERTAAN TERTUNDA')
+                ->setCellValue('T2', 'KONTRIBUSI KEPESERTAAN TERTUNDA')
+                ->setCellValue('U2', 'JML KEPESERTAAN')
+                ->setCellValue('V2', 'NO KEPESERTAAN AWAL')
+                ->setCellValue('W2', 's/d')
+                ->setCellValue('X2', 'NO KEPESERTAAN AKHIR')
+                ->setCellValue('Y2', 'MASA AWAL ASURANSI')
+                ->setCellValue('Z2', 'MASA AKHIR ASURANSI')
+                ->setCellValue('AA2', 'NILAI MANFAAT')
+                ->setCellValue('AB2', 'DANA TABBARU')
+                ->setCellValue('AC2', 'DANA UJRAH')
+                ->setCellValue('AD2', 'KONTRIBUSI')
+                ->setCellValue('AE2', 'EXTRA KONTRIBUSI')
+                ->setCellValue('AF2', 'TOTAL KONTRIBUSI')
+                ->setCellValue('AG2', 'POT LANGSUNG(%)')
+                ->setCellValue('AH2', 'JML DISCOUNT')
+                ->setCellValue('AI2', 'STATUS POTONGAN')
+                ->setCellValue('AJ2', 'HANDLING FEE')
+                ->setCellValue('AK2', 'JML FEE')
+                ->setCellValue('AL2', 'PPH')
+                ->setCellValue('AM2', 'JML PPH')
+                ->setCellValue('AN2', 'PPN')
+                ->setCellValue('AO2', 'JML PPN')
+                ->setCellValue('AP2', 'BIAYA POLIS')
+                ->setCellValue('AQ2', 'extPst')
+                ->setCellValue('AR2', 'NETT KONTRIBUSI')
+                ->setCellValue('AS2', 'TERBILANG')
+                ->setCellValue('AT2', 'TGL UPDATE DATABASE')
+                ->setCellValue('AU2', 'TGL UPDATE SISTEM')
+                ->setCellValue('AV2', 'NO BERKAS SISTEM')
+                ->setCellValue('AW2', 'TGL POSTING SISTEM')
+                ->setCellValue('AX2', 'KET POSTING')
+                ->setCellValue('AY2', 'GRACE PERIOD')
+                ->setCellValue('AZ2', 'GRACE PERIOD')
+                ->setCellValue('BA2', 'TGL JATUH TEMPO')
+                ->setCellValue('BC2', 'TGL LUNAS');
+
+        $activeSheet->getStyle("A2:BC2")->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER
+                    ],
+                ]);
+        
+
+        $activeSheet->getColumnDimension('A')->setAutoSize(true);
+        $activeSheet->getColumnDimension('B')->setAutoSize(true);
+        $activeSheet->getColumnDimension('C')->setAutoSize(true);
+        $activeSheet->getColumnDimension('D')->setAutoSize(true);
+        $activeSheet->getColumnDimension('E')->setAutoSize(true);
+        $activeSheet->getColumnDimension('F')->setAutoSize(true);
+        $activeSheet->getColumnDimension('G')->setAutoSize(true);
+        $activeSheet->getColumnDimension('H')->setAutoSize(true);
+        $activeSheet->getColumnDimension('I')->setAutoSize(true);
+        $activeSheet->getColumnDimension('J')->setAutoSize(true);
+        $activeSheet->getColumnDimension('K')->setAutoSize(true);
+        $activeSheet->getColumnDimension('L')->setAutoSize(true);
+        $activeSheet->getColumnDimension('M')->setAutoSize(true);
+        $activeSheet->getColumnDimension('N')->setAutoSize(true);
+        $activeSheet->getColumnDimension('O')->setAutoSize(true);
+        $activeSheet->getColumnDimension('P')->setAutoSize(true);
+        $activeSheet->getColumnDimension('Q')->setAutoSize(true);
+        $activeSheet->getColumnDimension('R')->setAutoSize(true);
+        $activeSheet->getColumnDimension('S')->setAutoSize(true);
+        $activeSheet->getColumnDimension('T')->setAutoSize(true);
+        $activeSheet->getColumnDimension('U')->setAutoSize(true);
+        $activeSheet->getColumnDimension('V')->setAutoSize(true);
+        $activeSheet->getColumnDimension('W')->setAutoSize(true);
+        $activeSheet->getColumnDimension('X')->setAutoSize(true);
+        $activeSheet->getColumnDimension('Y')->setAutoSize(true);
+        $activeSheet->getColumnDimension('Z')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AA')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AB')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AC')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AD')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AE')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AF')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AG')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AH')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AI')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AJ')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AK')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AL')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AM')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AN')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AO')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AP')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AQ')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AR')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AS')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AT')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AU')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AV')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AW')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AX')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AY')->setAutoSize(true);
+        $activeSheet->getColumnDimension('AZ')->setAutoSize(true);
+        $activeSheet->getColumnDimension('BA')->setAutoSize(true);
+        $activeSheet->getColumnDimension('BC')->setAutoSize(true);
+        $num=3;
+        $k=0;
+        // $data = $data->withCount(['ditolak','diterima']);
+        foreach($data->get() as $k => $i){
+            $k++;
+            
+            $sum_tertunda = Kepesertaan::selectRaw('count(*) as total_qty,sum(kontribusi) as total_kontribusi,sum(basic) as total_basic')
+                            ->where(['pengajuan_id'=>$i->id,'status_akseptasi'=>2])->first();
+
+            $activeSheet
+                ->setCellValue('A'.$num,$k)
+                ->setCellValue('B'.$num,date('F',strtotime($i->created_at)))
+                ->setCellValue('C'.$num,isset($i->account_manager->name) ? $i->account_manager->name : '-')
+                ->setCellValue('D'.$num,'-')
+                ->setCellValue('E'.$num,$i->id.'/'.date("m/Y",strtotime($i->created_at)))
+                ->setCellValue('F'.$num,'-')
+                ->setCellValue('G'.$num,date("d-m-Y",strtotime($i->created_at)))
+                ->setCellValue('H'.$num,date("Y_m",strtotime($i->created_at)))
+                ->setCellValue('I'.$num,"-")
+                ->setCellValue('J'.$num,"-")
+                ->setCellValue('K'.$num,$i->no_pengajuan)
+                ->setCellValue('L'.$num,$i->dn_number)
+                ->setCellValue('M'.$num,isset($i->polis->no_polis) ? $i->polis->no_polis : '-')
+                ->setCellValue('N'.$num,isset($i->polis->nama) ? $i->polis->nama : '-')
+                ->setCellValue('O'.$num,isset($i->polis->alamat) ? $i->polis->alamat : '-')
+                ->setCellValue('P'.$num,"-") // CABANG
+                ->setCellValue('Q'.$num,isset($i->polis->produk->nama) ? $i->polis->produk->nama : '-')
+                ->setCellValue('R'.$num,$sum_tertunda->total_qty) // JML KEPESERTAAN TERTUNDA
+                ->setCellValue('S'.$num,$sum_tertunda->total_basic) // KONTRIBUSI KEPESERTAAN TERTUNDA
+                ->setCellValue('T'.$num,$sum_tertunda->total_kontribusi)
+                ->setCellValue('U'.$num,$i->total_approve) 
+                ->setCellValue('V'.$num,$i->no_peserta_awal) 
+                ->setCellValue('W'.$num,'s/d') 
+                ->setCellValue('X'.$num,$i->no_peserta_akhir) 
+                ->setCellValue('Y'.$num,"-") 
+                ->setCellValue('Z'.$num,"-") 
+                ->setCellValue('AA'.$num,$i->basic) 
+                ->setCellValue('AB'.$num,$i->dana_tabbaru) 
+                ->setCellValue('AC'.$num,$i->dana_ujrah) 
+                ->setCellValue('AD'.$num,$i->kontribusi) 
+                ->setCellValue('AE'.$num,$i->extra_kontribusi) 
+                ->setCellValue('AF'.$num,$i->net_kontribusi) 
+                ->setCellValue('AG'.$num,$i->potong_langsung_persen) 
+                ->setCellValue('AH'.$num,$i->potong_langsung) 
+                ->setCellValue('AI'.$num,"-") 
+                ->setCellValue('AJ'.$num,"-") 
+                ->setCellValue('AK'.$num,"-") 
+                ->setCellValue('AL'.$num,$i->pph_persen) 
+                ->setCellValue('AM'.$num,$i->pph) 
+                ->setCellValue('AN'.$num,$i->ppn_persen) 
+                ->setCellValue('AO'.$num,$i->ppn) 
+                ->setCellValue('AP'.$num,$i->biaya_polis_materai) 
+                ->setCellValue('AQ'.$num,$i->biaya_sertifikat) 
+                ->setCellValue('AR'.$num,"-") 
+                ->setCellValue('AS'.$num,$i->net_kontribusi) 
+                ->setCellValue('AT'.$num,terbilang($i->net_kontibusi)) 
+                ->setCellValue('AU'.$num,date('d-M-Y',strtotime($i->updated_at))) 
+                ->setCellValue('AV'.$num,date('d-M-Y',strtotime($i->updated_at))) 
+                ->setCellValue('AW'.$num,1) 
+                ->setCellValue('AX'.$num,$i->head_syariah_submit ? date('d-M-Y',strtotime($i->head_syariah_submit)) : '-') 
+                ->setCellValue('AY'.$num,"-") 
+                ->setCellValue('AZ'.$num,"-") 
+                ->setCellValue('BA'.$num,$i->tanggal_jatuh_tempo ? date('d-M-Y',strtotime($i->tanggal_jatuh_tempo)):'-') 
+                ->setCellValue('BC'.$num,$i->payment_date ? date('d-M-Y',strtotime($i->payment_date)):'-');
+
+                $activeSheet->getStyle("S{$num}:T{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("AA{$num}:AF{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+                // if($i->extra_mortalita) $activeSheet->getStyle("L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                // if($i->extra_kontribusi) $activeSheet->getStyle("M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+                // $activeSheet->getStyle("N{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+
+            $activeSheet->getStyle("A{$num}:BC{$num}")->applyFromArray([
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => '000000'],
+                    ]
+                ],
+            ]);
+            $num++;
+        }
+
+        // Rename worksheet
+        $activeSheet->setTitle('Pengajuan');
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPHPExcel, "Xlsx");
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="pengajuan.xlsx"');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        return response()->streamDownload(function() use($writer){
+            $writer->save('php://output');
+        },'pengajuan.xlsx');
+    }
+
+
     public function downloadExcel($data,$status=1)
     {
         $data = Pengajuan::find($data);

@@ -112,18 +112,22 @@
             <table>
                 <tr>
                     <td>Nomor, Tanggal</td>
+                    <td> : </td>
                     <td>{{$data->no_pengajuan}}, {{date('d F Y',strtotime($data->tanggal_pengajuan))}}</td>
                 </tr>
                 <tr>
                     <td>Kepada</td>
+                    <td> : </td>
                     <td>Yth. Dept Accounting dan Finance</td>
                 </tr>
                 <tr>
                     <td>Dari</td>
+                    <td> : </td>
                     <td>Dept. Reasuransi Syariah</td>
                 </tr>
                 <tr>
                     <td>Hal</td>
+                    <td> : </td>
                     <td>Kontribusi Reas ke PT. Reasuransi Nasional Indonesia Syariah</td>
                 </tr>
             </table>
@@ -204,7 +208,7 @@
                         <br />
                         <br />
                         <br />
-                        <img src="{{asset('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
+                        <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
                         
                         <br>
                         <br>
@@ -321,7 +325,7 @@
                 <br />
                 <br />
                 <br />
-                <img src="{{asset('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
+                <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
                 <br>
                 <br>
                 <br>

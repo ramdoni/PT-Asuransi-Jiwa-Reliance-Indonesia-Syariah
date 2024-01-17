@@ -26,6 +26,7 @@ class PengajuanController extends Controller
         if($id->is_manual==1){
             $extra_kontribusi = $id->extra_kontribusi;
             $extra_mortalita = $id->extra_mortalita;
+            $kontribusi = $id->kontribusi;
         }else{
             $extra_kontribusi = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_kontribusi');
             $extra_mortalita = $id->kepesertaan->where('status_akseptasi',1)->sum('extra_mortalita')??$id->extra_mortalita;

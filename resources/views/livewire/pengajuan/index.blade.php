@@ -158,6 +158,7 @@
                                     Action
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a href="javascript:void(0)" wire:click="downloadAll" class="dropdown-item"><i class="fa fa-download"></i> Download</a>
                                         <a href="{{route('pengajuan.insert')}}" class="dropdown-item"><i class="fa fa-plus"></i> Pengajuan</a>
                                         @if($is_pengajuan_reas==false)
                                             <a href="javascript:void(0)" wire:click="$set('is_pengajuan_reas',true)" class="dropdown-item"><i class="fa fa-plus"></i> Reas</a>

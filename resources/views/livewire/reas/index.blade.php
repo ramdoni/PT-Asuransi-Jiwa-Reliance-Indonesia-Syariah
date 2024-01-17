@@ -15,6 +15,15 @@
                                     <div class="from-group my-2">
                                         <input type="text" class="form-control" wire:model="filter_keyword" placeholder="Keyword" />
                                     </div>
+                                    <div class="from-group my-2">
+                                        <select class="form-control" wire:model="filter_status">
+                                            <option value=""> -- Status -- </option>
+                                            <option value="0">Reasuransi</option>
+                                            <option value="1">Head Teknik</option>
+                                            <option value="2">Head Syariah</option>
+                                            <option value="3">Selesai</option>
+                                        </select>
+                                    </div>
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>
                             </div>

@@ -16,11 +16,14 @@
                                         <select class="form-control" wire:model="filter.reas_status">
                                             <option value="">-- Status -- </option>
                                             <option value="0">Submitted</option>
-                                            <option value="1">Terkirim</option>
+                                            <option value="1">Terima</option>
                                             <option value="2">Batal</option>
                                             <option value="3">Pending</option>
                                             <option value="4">Tolak</option>
                                         </select>
+                                    </div>
+                                    <div class="from-group my-2">
+                                        <input type="text" class="form-control" wire:model="filter_peserta" placeholder="Nama / No Peserta" >
                                     </div>
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>
