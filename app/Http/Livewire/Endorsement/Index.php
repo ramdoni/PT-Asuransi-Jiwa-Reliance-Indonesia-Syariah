@@ -26,8 +26,11 @@ class Index extends Component
     {
         Endorsement::find($this->selected_id)->delete();
 
-        Kepesertaan::where('endorsement_id',$this->selected_id)->update(['endorsement_id'=>null]);
-        EndorsementPeserta::where('endorsement_id', $this->selected_id)->delete();
+        $kepesertaan =  Kepesertaan::where('endorsement_id',$this->selected_id)->first();
+        if($kepesertaan) $kepesertaan->update(['endorsement_id'=>null]);
+
+        $end_kepesertaan = EndorsementPeserta::where('endorsement_id', $this->selected_id)->first();
+        if($end_kepesertaan) $end_kepesertaan->delete();
         
         // find reas
         $reas = ReasEndorse::where('endorsement_id',$this->selected_id)->first();

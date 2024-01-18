@@ -205,7 +205,9 @@ class Insert extends Component
                     'status'=>1
                 ]);
 
-                $no_pengajuan = str_pad($data->id,4, '0', STR_PAD_LEFT) ."/UWS-M-END/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                $running_number = get_setting('running_number_endorse')+1;
+                $no_pengajuan = str_pad($running_number,4, '0', STR_PAD_LEFT) ."/UWS-M-END/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                update_setting('running_number_endorse',$running_number);
 
                 Endorsement::find($data->id)->update(['no_pengajuan'=>$no_pengajuan]);
 

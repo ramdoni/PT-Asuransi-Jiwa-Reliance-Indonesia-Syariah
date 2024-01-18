@@ -20,7 +20,9 @@ class Setting extends Component
     public $phone;
     public $website;
     public $address,$running_number_nota_penutupan,$running_number_sb,$running_surat,$running_number_memo_ujroh,
-            $running_number_refund,$running_number_refund_cn,$running_number_dn_recovery_claim;
+            $running_number_refund,$running_number_refund_cn,$running_number_dn_recovery_claim,$running_number_tagihan_soa,
+            $running_number_endorse,$running_number_cancel;
+        
     public function render()
     {
         return view('livewire.setting')->with(['title'=>'General']);
@@ -45,6 +47,8 @@ class Setting extends Component
         $this->running_number_dn_recovery_claim = get_setting('running_number_dn_recovery_claim');
         $this->running_number_dn_recovery_claim = get_setting('running_number_dn_recovery_claim');
         $this->running_number_tagihan_soa = get_setting('running_number_tagihan_soa');
+        $this->running_number_endorse = get_setting('running_number_endorse');
+        $this->running_number_cancel = get_setting('running_number_cancel');
 
         \LogActivity::add("Setting");
     }
@@ -71,6 +75,8 @@ class Setting extends Component
         update_setting('running_number_recovery_claim',$this->running_number_recovery_claim);
         update_setting('running_number_dn_recovery_claim',$this->running_number_dn_recovery_claim);
         update_setting('running_number_tagihan_soa',$this->running_number_tagihan_soa);
+        update_setting('running_number_endorse',$this->running_number_endorse);
+        update_setting('running_number_cancel',$this->running_number_cancel);
         
         \LogActivity::add("Setting Update Polis");
 

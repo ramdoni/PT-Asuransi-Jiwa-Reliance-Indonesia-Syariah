@@ -6,7 +6,7 @@
             /* body { margin: 0px; } */
             * {
                 font-family: Arial, Helvetica, sans-serif;
-                font-size:13px;
+                font-size:12px;
             }
             h1 {font-size: 20px;}
             .container {
@@ -92,6 +92,9 @@
             table.style2 tr td,table.style2 tr th {
                 border: 1px solid;
                 padding:4px 4px'
+            }
+            table.no-padding tr td {
+                padding-top:0;
             }
         </style>
     </head>
@@ -185,7 +188,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Kontribusi yang dibayar/diterima</td>
+                    <td>Kontribusi yang
+                        @if($data->is_cn==1) 
+                            dibayar/<s>diterima</s>
+                        @else
+                            <s>dibayar</s>/diterima
+                        @endif
+                    </td>
                     <td>Rp</td>
                     <th class="text-right">
                         {{$data->is_cn==1?'-':''}}    
@@ -231,14 +240,14 @@
 
         <div class="page-break"></div>
         
-        <div>
+        <div  style="margin-top:-20px;">
             <hr style="margin-bottom:1px;" />
             <hr style="margin-top:0" />
-            <h1 class="text-center">DEBIT NOTE</h1>
-            <h1 class="text-center">No : {{$data->nomor_cn_dn}}</h1>
+            <h2 class="text-center" style="padding-top:0;margin-top:0;padding-bottom:0;margin-bottom:0;">DEBIT NOTE</h2>
+            <h2 class="text-center" style="padding-top:0;margin-top:0;padding-bottom:0;margin-bottom:0;">No : {{$data->nomor_cn_dn}}</h2>
             <hr style="margin-bottom:1px;" />
             <hr style="margin-top:0" />
-            <table style="width:50%;float:left">
+            <table style="width:50%;float:left" class="no-padding">
                 <tr>
                     <td>Date</td>
                     <td> : </td>
@@ -255,7 +264,7 @@
                     <td>Div. Finance & Accounting</td>
                 </tr>
             </table>
-            <table style="width:50%;float:left">
+            <table style="width:50%;float:left" class="no-padding">
                 <tr>
                     <td>Reinsurance</td>
                     <td> : </td>
@@ -273,8 +282,7 @@
                 </tr>
             </table>
             <div style="clear:both"></div>
-            <br />
-            <table style="width: 80%;margin:auto;" class="style2">
+            <table style="width: 90%;margin:auto;" class="style2">
                 <tr>
                     <th>Description</th>
                     <th class="text-center">Curr</th>
@@ -306,40 +314,43 @@
                     <td class="text-right">-{{format_idr($data->klaim)}}</td>
                 </tr>
                 <tr>
-                    <td><strong>Kontribusi Dibayar/diterima</strong></td>
+                    <td><strong>Kontribusi 
+                        @if($data->is_cn==1) 
+                            Dibayar/<s>diterima</s>
+                        @else
+                            <s>Dibayar</s>/diterima
+                        @endif</strong></td>
                     <td class="text-center"><strong>IDR</strong></td>
                     <td class="text-right"><strong>{{format_idr(abs($data->total_kontribusi_dibayar))}}</strong></td>
                 </tr>
             </table>
-            <p>Terbilan :#{{terbilang(abs($data->total_kontribusi_dibayar))}}</p>
+            <p>Terbilang :#{{terbilang(abs($data->total_kontribusi_dibayar))}}</p>
             <div style="float:right; widht: 300px;position:relative;text-align:center;">
                 Jakarta, {{date('d F Y',strtotime($data->tanggal_pengajuan))}}
                 <br />
                 <br />
                 <br />
                 <br />
-                <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
-                <br>
+                <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 110px;z-index:2;position:absolute;top:20px;" />
                 <br>
                 <br>
                 <br>
                 <u>Ahmad Syafei</u><br />
                 Head of Teknik Syariah
                 <br>
-                <span style="z-index: 3">Dept. Underwriting Syariah</span>
             </div>
+            <div style="clear:both;">&nbsp;</div>
         </div>
-
-        <div class="page-break"></div>
-        
+        <hr />
+        <br />
         <div>
             <hr style="margin-bottom:1px;" />
             <hr style="margin-top:0" />
-            <h1 class="text-center">DEBIT NOTE</h1>
-            <h1 class="text-center">No : {{$data->nomor_cn_dn}}</h1>
+            <h2 class="text-center" style="padding-top:0;margin-top:0;padding-bottom:0;margin-bottom:0;">DEBIT NOTE</h2>
+            <h2 class="text-center" style="padding-top:0;margin-top:0;padding-bottom:0;margin-bottom:0;">No : {{$data->nomor_cn_dn}}</h2>
             <hr style="margin-bottom:1px;" />
             <hr style="margin-top:0" />
-            <table style="width:50%;float:left">
+            <table style="width:50%;float:left" class="no-padding">
                 <tr>
                     <td>Date</td>
                     <td> : </td>
@@ -356,7 +367,7 @@
                     <td>Div. Finance & Accounting</td>
                 </tr>
             </table>
-            <table style="width:50%;float:left">
+            <table style="width:50%;float:left" class="no-padding">
                 <tr>
                     <td>Reinsurance</td>
                     <td> : </td>
@@ -374,8 +385,7 @@
                 </tr>
             </table>
             <div style="clear:both"></div>
-            <br />
-            <table style="width: 80%;margin:auto;" class="style2">
+            <table style="width: 90%;margin:auto;" class="style2">
                 <tr>
                     <th>Description</th>
                     <th class="text-center">Curr</th>
@@ -407,27 +417,30 @@
                     <td class="text-right">-{{format_idr($data->klaim)}}</td>
                 </tr>
                 <tr>
-                    <td><strong>Kontribusi Dibayar/diterima</strong></td>
+                    <td><strong>Kontribusi 
+                        @if($data->is_cn==1) 
+                            Dibayar/<s>diterima</s>
+                        @else
+                            <s>Dibayar</s>/diterima
+                        @endif</strong></td>
                     <td class="text-center"><strong>IDR</strong></td>
                     <td class="text-right"><strong>{{format_idr(abs($data->total_kontribusi_dibayar))}}</strong></td>
                 </tr>
             </table>
-            <p>Terbilan :#{{terbilang(abs($data->total_kontribusi_dibayar))}}</p>
+            <p>Terbilang :#{{terbilang(abs($data->total_kontribusi_dibayar))}}</p>
             <div style="float:right; widht: 300px;position:relative;text-align:center;">
                 Jakarta, {{date('d F Y',strtotime($data->tanggal_pengajuan))}}
                 <br />
                 <br />
                 <br />
                 <br />
-                <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 120px;z-index:2;position:absolute;top:20px;" />
-                <br>
+                <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 110px;z-index:2;position:absolute;top:20px;" />
                 <br>
                 <br>
                 <br>
                 <u>Ahmad Syafei</u><br />
                 Head of Teknik Syariah
                 <br>
-                <span style="z-index: 3">Dept. Underwriting Syariah</span>
             </div>
         </div>
     </body>

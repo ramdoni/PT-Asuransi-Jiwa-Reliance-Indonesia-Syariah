@@ -137,10 +137,14 @@ class Insert extends Component
                 $data->requester_id = \Auth::user()->id;
                 $data->save();
 
-                $data->nomor_cn = $polis->no_polis . '/'. str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                $running_number = get_setting('running_number_cancel')+1;
+
+                $data->nomor_cn = $polis->no_polis . '/'. str_pad($running_number,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
                 // 036/UW-M-CNCL/AJRIUS/X/2023
-                $data->nomor = str_pad($data->id,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                $data->nomor = str_pad($running_number_cancel,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
                 $data->save();
+
+                update_setting('running_number_cancel',$running_number);
                 
                 $total = 0;$total_kontribusi=0;$total_manfaat_asuransi = 0;$total_kontribusi_gross=0;$total_kontribusi_tambahan=0;
                 $total_potongan_langsung = 0;$total_ujroh_brokerage=0;$total_ppn=0;$total_pph=0;

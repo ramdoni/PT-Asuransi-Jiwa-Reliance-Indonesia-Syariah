@@ -61,9 +61,10 @@ class Insert extends Component
 
         // 050/REAS-IM/AJRI-US/I/2024
         $running_number = get_setting('running_number_tagihan_soa')+1;
+        $param['is_cn'] = $this->total_kontribusi_dibayar >0 ? 1:0;
         $param['nomor'] = str_pad($running_number,3, '0', STR_PAD_LEFT) ."/REAS-IM/AJRI-US/".numberToRomawi(date('m')).'/'.date('Y');
         $param['nomor_syr'] = $this->nomor_syr;
-        $param['nomor_cn_dn'] = "CN.".str_pad($running_number,3, '0', STR_PAD_LEFT) .".RRS03.US.".date('m').'.'.date('Y');
+        $param['nomor_cn_dn'] = ($param['is_cn']==1 ? "CN." : 'DN.').str_pad($running_number,3, '0', STR_PAD_LEFT) .".RRS03.US.".date('m').'.'.date('Y');
         $param['status_pembayaran'] = 0;
         $param['status'] = 0;
         $param['reasuradur_id'] = $this->reasuradur_id;
@@ -79,7 +80,6 @@ class Insert extends Component
         $param['endorsement'] = $this->total_endorse;
         $param['klaim'] = $this->total_klaim;
         $param['total_kontribusi_dibayar'] = $this->total_kontribusi_dibayar;
-        $param['is_cn'] = $this->total_kontribusi_dibayar >0 ? 1:0;
         $param['bank_name'] = $this->bank_name;
         $param['bank_no_rekening'] = $this->bank_no_rekening;
         $param['bank_owner'] = $this->bank_owner;
@@ -128,7 +128,7 @@ class Insert extends Component
             $temp = Reas::find($this->pengajuan_id);
             if($temp){
                 $this->pengajuans[$index]['no_pengajuan'] = $temp->no_pengajuan;
-                $this->pengajuans[$index]['nominal'] = $temp->kontribusi_netto;
+                $this->pengajuans[$index]['nominal'] = $temp->manfaat_asuransi_reas;
                 $this->pengajuans[$index]['manfaat_asuransi_reas'] = $temp->manfaat_asuransi_reas;
                 $this->pengajuans[$index]['manfaat_asuransi_ajri'] = $temp->manfaat_asuransi_ajri;
                 $this->pengajuans[$index]['kontribusi'] = $temp->kontribusi;
@@ -175,6 +175,7 @@ class Insert extends Component
     public function calculate()
     {
         $this->total_kontribusi=0;$this->total_manfaat_asuransi_reas=0;$this->total_kontribusi_netto=0;$this->total_manfaat_asuransi=0;$this->total_ujroh=0;$this->total_refund=0;
+        $this->total_klaim=0;
         foreach($this->pengajuans as $i){
             if($i['type_pengajuan']==1){
                 $this->total_kontribusi += $i['kontribusi'];

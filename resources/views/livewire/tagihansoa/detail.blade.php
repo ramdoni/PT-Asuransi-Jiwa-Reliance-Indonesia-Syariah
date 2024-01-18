@@ -62,7 +62,6 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>
@@ -165,15 +164,87 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($data->kepesertaan as $k => $i)
-                            @php($item=json_decode($i->raw_data))
+                            @php($total_kontribusi_reas=0)
+                            @php($total_recovery_claim=0)
+                            @php($total_refund=0)
+                            @php($total_endorse=0)
+                            @php($total_claim=0)
+                            @foreach($data->kepesertaan as $k => $i)
+                                @php($item=json_decode($i->raw_data))
+                                <tr>
+                                    <td style="width: 50px;">{{$k+1}}</td>
+                                    <td>{{$type_pengajuan_arr[$item->type_pengajuan]}}</td>
+                                    <td>
+                                        @if($item->type_pengajuan==1)
+                                            <a href="{{route('reas.edit',$item->id)}}" target="_blank">
+                                                {{$item->no_pengajuan}}
+                                            </a>
+                                        @elseif($item->type_pengajuan==2)
+                                            <a href="{{route('recovery-claim.edit',$item->id)}}" target="_blank">
+                                                {{$item->no_pengajuan}}
+                                            </a>
+                                        @else
+                                            {{$item->no_pengajuan}}
+                                        @endif
+                                    </td>
+                                    <td class="text-right">
+                                        @if($item->type_pengajuan==1)
+                                            @php($total_kontribusi_reas += $item->manfaat_asuransi_reas)
+                                        @elseif($item->type_pengajuan==2)
+                                            @php($total_recovery_claim += $item->nominal)
+                                        @elseif($item->type_pengajuan==3)
+                                            @php($total_refund += $item->nominal)
+                                        @elseif($item->type_pengajuan==4)
+                                            @php($total_endorse += $item->nominal)
+                                        @elseif($item->type_pengajuan==5)
+                                            @php($total_claim += $item->nominal)
+                                        @endif
+                                        {{format_idr($item->nominal)}}
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot style="background: #eeeeee42;">
                             <tr>
-                                <td style="width: 50px;">{{$k+1}}</td>
-                                <td>{{$type_pengajuan_arr[$item->type_pengajuan]}}</td>
-                                <td>{{$item->no_pengajuan}}</td>
-                                <td class="text-right">{{format_idr($item->nominal)}}</td>
+                                <th></th>
+                                <th colspan="2" class="text-right">Total Kontribusi Reas</th>
+                                <td class="text-right">{{format_idr($total_kontribusi_reas)}}</td>
                             </tr>
-                        @endforeach
+                            @if($total_recovery_claim>0)
+                                <tr>
+                                    <th></th>
+                                    <th colspan="2" class="text-right">Total Recovery Claim</th>
+                                    <td class="text-right">{{format_idr($total_recovery_claim)}}</td>
+                                </tr>
+                            @endif
+                            @if($total_refund>0)
+                                <tr>
+                                    <th></th>
+                                    <th colspan="2" class="text-right">Total Refund</th>
+                                    <td class="text-right">{{format_idr($total_refund)}}</td>
+                                </tr>
+                            @endif
+                            @if($total_endorse>0)
+                                <tr>
+                                    <th></th>
+                                    <th colspan="2" class="text-right">Total Endorse</th>
+                                    <td class="text-right">{{format_idr($total_endorse)}}</td>
+                                </tr>
+                            @endif
+                            @if($total_claim>0)
+                                <tr>
+                                    <th></th>
+                                    <th colspan="2" class="text-right">Total Claim</th>
+                                    <td class="text-right">{{format_idr($total_claim)}}</td>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th></th>
+                                <th colspan="2" class="text-right">Total</th>
+                                <td class="text-right">{{format_idr($total_kontribusi_reas+$total_recovery_claim)}}</td>
+                            </tr>
+                        </tfoot>
                     </table>
                     <hr />
                 </div>

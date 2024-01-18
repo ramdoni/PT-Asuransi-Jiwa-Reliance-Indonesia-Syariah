@@ -122,6 +122,18 @@
                                     <label>Running Nomor DN Recovery Claim</label>
                                     <input type="text" class="form-control" placeholder="" wire:model="running_number_dn_recovery_claim">
                                 </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Tagihan SOA</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_tagihan_soa">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Endorse</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_endorse">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Cancel</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_cancel">
+                                </div>
                                 <div class="col-12">
                                     <hr />
                                     <button type="submit" class="btn btn-info">Simpan Perubahan</button>
