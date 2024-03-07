@@ -5,6 +5,8 @@ namespace App\Http\Livewire\MemoCancel;
 use Livewire\Component;
 use App\Models\MemoCancel;
 use App\Models\ReasCancel;
+use App\Models\Finance\Expense;
+use App\Models\Finance\Polis;
 
 class Edit extends Component
 {
@@ -41,13 +43,28 @@ class Edit extends Component
         $this->emit('message-success','Data Updated.');
     }
 
+    public function submit_underwriting()
+    {
+        \LogActivity::add("Memo Cancel Staff Teknik #{$this->data->id}");
+
+        $this->data->underwriting_submitted = date('Y-m-d H:i:s');
+        $this->data->underwriting_note = $this->note;
+        $this->data->status = 1;
+        $this->data->save();
+
+        // find reas cancel
+        ReasCancel::where('memo_cancel_id',$this->data->id)->update(['status'=>1]);
+
+        $this->emit('message-success','Memo Cancel berhasil disubmit');
+    }
+
     public function submit_head_teknik()
     {
         \LogActivity::add("Memo Cancel Head Teknik #{$this->data->id}");
 
         $this->data->head_teknik_submitted = date('Y-m-d H:i:s');
         $this->data->head_teknik_note = $this->note;
-        $this->data->status = 1;
+        $this->data->status = 2;
         $this->data->save();
 
         // find reas cancel
@@ -62,11 +79,32 @@ class Edit extends Component
 
         $this->data->head_syariah_submitted = date('Y-m-d H:i:s');
         $this->data->head_syariah_note = $this->note;
-        $this->data->status = 2;
+        $this->data->status = 3;
         $this->data->save();
 
         // find reas cancel
         ReasCancel::where('memo_cancel_id',$this->data->id)->update(['status'=>2]);
+
+        $polis = Polis::where('no_polis',$this->data->polis->no_polis)->first();
+        if(!$polis){
+            $polis = Polis::create([
+                'no_polis'=>$this->data->polis->no_polis,
+                'pemegang_polis'=>$this->data->polis->nama
+            ]);
+        }
+
+        Expense::updateOrCreate(['reference_no'=>$this->data->nomor],[
+            'policy_id'=>$polis->id,
+            'recipient'=> $this->data->polis->no_polis ." / ". $this->data->polis->nama,
+            'reference_no'=>$this->data->nomor,
+            'reference_type'=>'Cancelation',
+            'reference_date'=>$this->data->tanggal_pengajuan,
+            // 'description'=>$description,
+            'payment_amount'=>$this->data->total_kontribusi,
+            'nominal'=>$this->data->total_kontribusi,
+            'transaction_id'=>$this->data->id,
+            'transaction_table'=>'memo_cancel'
+        ]);
 
         $this->emit('message-success','Memo Cancel berhasil disubmit');
     }

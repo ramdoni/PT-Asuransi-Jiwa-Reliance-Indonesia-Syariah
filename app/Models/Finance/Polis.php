@@ -12,4 +12,6 @@ class Polis extends Model
     protected $table = 'policys';
 
     protected $connection = 'finance';
+
+    protected $guarded = [];
 }

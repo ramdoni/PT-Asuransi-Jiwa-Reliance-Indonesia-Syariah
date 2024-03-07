@@ -6,12 +6,15 @@
         <div class="card">
             <div class="body">
                 <ul class="nav nav-tabs">                                
-                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Settings">General</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#polis">Polis</a></li>
+                    <li class="nav-item" wire:ignore><a class="nav-link active" data-toggle="tab" href="#Settings">General</a></li>
+                    <li class="nav-item" wire:ignore><a class="nav-link" data-toggle="tab" href="#polis">Running Number</a></li>
+                    <li class="nav-item" wire:ignore><a class="nav-link" data-toggle="tab" href="#tab_memo_cancel">Memo Cancel</a></li>
+                    <li class="nav-item" wire:ignore><a class="nav-link" data-toggle="tab" href="#tab_memo_endorse">Memo Endorse</a></li>
+                    <li class="nav-item" wire:ignore><a class="nav-link" data-toggle="tab" href="#tab_memo_refund">Memo Refund</a></li>
                 </ul>
             </div>
             <div class="tab-content">
-                <div class="tab-pane active" id="Settings">
+                <div class="tab-pane active" id="Settings" wire:ignore>
                     <div class="body">
                         <form wire:submit.prevent="save">
                             <div class="row">
@@ -86,7 +89,67 @@
                         </form>
                     </div>
                 </div>
-                <div class="tab-pane" id="polis">
+                <div class="tab-pane" id="tab_memo_cancel" wire:ignore>
+                    <div class="body">
+                        <form  wire:submit.prevent="updateCancel">
+                            <div class="row clearfix">   
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Cancel</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_cancel">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor CN </label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_cancel_cn">
+                                </div>
+                                <div class="col-12">
+                                    <hr />
+                                    <button type="submit" class="btn btn-info">Simpan Perubahan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>              
+                </div>
+                <div class="tab-pane" id="tab_memo_endorse" wire:ignore>
+                    <div class="body">
+                        <form  wire:submit.prevent="updateEndorse">
+                            <div class="row clearfix">   
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Endorse</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_endorse">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Endorse CN/DN</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_endorse_cn_dn">
+                                </div>
+                                <div class="col-12">
+                                    <hr />
+                                    <button type="submit" class="btn btn-info">Simpan Perubahan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>              
+                </div>
+                <div class="tab-pane" id="tab_memo_refund" wire:ignore>
+                    <div class="body">
+                        <form  wire:submit.prevent="updateRefund">
+                            <div class="row clearfix">   
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Refund</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_refund">
+                                </div>
+                                <div class="form-group col-md-3">                                                
+                                    <label>Running Nomor Refund CN</label>
+                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_refund_cn">
+                                </div>
+                                <div class="col-12">
+                                    <hr />
+                                    <button type="submit" class="btn btn-info">Simpan Perubahan</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>              
+                </div>
+                <div class="tab-pane" id="polis" wire:ignore>
                     <div class="body">
                         <form  wire:submit.prevent="updatePolis">
                             <div class="row clearfix">
@@ -107,14 +170,6 @@
                                     <input type="text" class="form-control" placeholder="" wire:model="running_number_memo_ujroh">
                                 </div>
                                 <div class="form-group col-md-3">                                                
-                                    <label>Running Nomor Refund</label>
-                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_refund">
-                                </div>
-                                <div class="form-group col-md-3">                                                
-                                    <label>Running Nomor Refund CN</label>
-                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_refund_cn">
-                                </div>
-                                <div class="form-group col-md-3">                                                
                                     <label>Running Nomor Recovery Claim</label>
                                     <input type="text" class="form-control" placeholder="" wire:model="running_number_recovery_claim">
                                 </div>
@@ -125,14 +180,6 @@
                                 <div class="form-group col-md-3">                                                
                                     <label>Running Nomor Tagihan SOA</label>
                                     <input type="text" class="form-control" placeholder="" wire:model="running_number_tagihan_soa">
-                                </div>
-                                <div class="form-group col-md-3">                                                
-                                    <label>Running Nomor Endorse</label>
-                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_endorse">
-                                </div>
-                                <div class="form-group col-md-3">                                                
-                                    <label>Running Nomor Cancel</label>
-                                    <input type="text" class="form-control" placeholder="" wire:model="running_number_cancel">
                                 </div>
                                 <div class="col-12">
                                     <hr />

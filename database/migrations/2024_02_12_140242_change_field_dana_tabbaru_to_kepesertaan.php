@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldJenisDokumenToEndorsement extends Migration
+class ChangeFieldDanaTabbaruToKepesertaan extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class AddFieldJenisDokumenToEndorsement extends Migration
      */
     public function up()
     {
-        Schema::table('endorsement', function (Blueprint $table) {
-            $table->string('no_cn_or_dn',200)->nullable();
-            $table->boolean('jenis_dokumen')->nullable();
-            $table->bigInteger('selisih')->nullable();
+        Schema::table('kepesertaan', function (Blueprint $table) {
+            $table->decimal('dana_tabarru',19,2)->change();
         });
     }
 
@@ -27,7 +25,7 @@ class AddFieldJenisDokumenToEndorsement extends Migration
      */
     public function down()
     {
-        Schema::table('endorsement', function (Blueprint $table) {
+        Schema::table('kepesertaan', function (Blueprint $table) {
             //
         });
     }

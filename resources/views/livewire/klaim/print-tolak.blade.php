@@ -8,12 +8,25 @@
                 size: 210mm 297mm; 
                 margin-left:0;
                 margin-right:0;
+                padding-top:0;
+                margin-top:0;
+                margin-bottom:0;
+                
             }
             .container {
                 margin-left: 2.54cm;
                 margin-right: 2.54cm;
             }
-            body { margin: 0px; }
+            body { 
+                margin: 0px; 
+                padding-top: 80px;
+                padding-bottom:30px;
+                margin-top:20px;
+                background: url(assets/img/kop-surat-2.png);
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: contain;
+            }
             * {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size:10pt;
@@ -53,11 +66,9 @@
     </head>
     <body>
         <div class="container">
-
-            <img src="{{public_path('assets/img/surat-bg-top.png')}}?v=1" style="width: 100%;" />
             <div style="clear:both;"></div>
             <br />
-        <div style="width:50%;float:left">
+            <div style="width:50%;float:left">
                 <p>Jakarta, {{date('d F Y',strtotime($data->head_devisi_date))}}</p>
             </div>
             <div style="width:50%;float:left">
@@ -156,7 +167,7 @@
             <strong><i>Ahmad Syafei</i></strong><br />
             Head of Teknik Syariah
         </div>
-        <img src="{{public_path('assets/img/surat-bg-bottom.png')}}?v=1" style="width: 95%;
-            position:absolute;bottom:0;left:20px;right:0;margin:auto;" />
+        <!-- <img src="{{public_path('assets/img/surat-bg-bottom.png')}}?v=1" style="width: 95%;
+            position:absolute;bottom:0;left:20px;right:0;margin:auto;" /> -->
     </body>
 </html>

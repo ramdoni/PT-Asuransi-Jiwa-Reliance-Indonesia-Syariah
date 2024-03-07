@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeFieldTabbaruToReasuradurRate extends Migration
+class AddFieldBankToEndorsement extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class ChangeFieldTabbaruToReasuradurRate extends Migration
      */
     public function up()
     {
-        Schema::table('reasuradur_rate', function (Blueprint $table) {
-            $table->decimal('tabbaru',6,2)->change()->nullable();
+        Schema::table('endorsement', function (Blueprint $table) {
+            $table->string('bank_name',100)->nullable();
+            $table->string('bank_no_rekening',50)->nullable();
+            $table->string('bank_owner',100)->nullable();
         });
     }
 
@@ -25,7 +27,7 @@ class ChangeFieldTabbaruToReasuradurRate extends Migration
      */
     public function down()
     {
-        Schema::table('reasuradur_rate', function (Blueprint $table) {
+        Schema::table('endorsement', function (Blueprint $table) {
             //
         });
     }

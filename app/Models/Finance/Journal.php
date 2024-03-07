@@ -12,4 +12,7 @@ class Journal extends Model
     protected $table = 'journals';
 
     protected $connection = 'finance';
+    
+    protected $guarded = [];
+
 }

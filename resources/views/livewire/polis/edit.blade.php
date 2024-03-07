@@ -25,7 +25,7 @@
                         <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
                             <div class="form-group">
                                 <label> Maintenance (%)</label>
-                                <input type="text" class="form-control" wire:model="maintenance" />
+                                <input type="number" class="form-control" wire:model="maintenance" />
                             </div>
                             <div class="form-group">
                                 <label>Penerima Pembayaran</label>
@@ -44,7 +44,7 @@
                         <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
                             <div class="form-group">
                                 <label>Admin Agency (%)</label>
-                                <input type="text" class="form-control" wire:model="admin_agency" />
+                                <input type="number" class="form-control" wire:model="admin_agency" />
                             </div>
                             <div class="form-group">
                                 <label>Penerima Pembayaran</label>
@@ -66,7 +66,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Agen Penutup (%)</label>
-                                <input type="text" class="form-control" wire:model="agen_penutup" />
+                                <input type="number" class="form-control" wire:model="agen_penutup" />
                             </div>
                             <div class="form-group">
                                 <label>Penerima Pembayaran</label>
@@ -84,7 +84,7 @@
                         <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
                             <div class="form-group">
                                 <label>Ujroh Handling Fee (%)</label>
-                                <input type="text" class="form-control" wire:model="ujroh_handling_fee_broker" />
+                                <input type="number" class="form-control" wire:model="ujroh_handling_fee_broker" />
                             </div>
                             <div class="form-group">
                                 <label>Penerima Pembayaran</label>
@@ -103,7 +103,7 @@
                         <div class="col-md-2 mr-4 pt-2 shadow-none bg-light rounded">
                             <div class="form-group">
                                 <label>Referal Fee (%)</label>
-                                <input type="text" class="form-control" wire:model="referal_fee" />
+                                <input type="number" class="form-control" wire:model="referal_fee" />
                             </div>
                             <div class="form-group">
                                 <label>Penerima Pembayaran</label>
@@ -689,6 +689,18 @@
                                             <option>{{$i->nama}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Running Nomor Refund CN</label>
+                                    <input type="text" class="form-control" wire:model="running_number_refund_cn" />
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Running Nomor Cancel CN</label>
+                                    <input type="text" class="form-control" wire:model="running_number_cancel_cn" />
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Running Nomor Endorse CN/DN</label>
+                                    <input type="text" class="form-control" wire:model="running_number_endorse_cn_dn" />
                                 </div>
                             </div>
                         </div>

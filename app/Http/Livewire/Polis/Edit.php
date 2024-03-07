@@ -30,7 +30,7 @@ class Edit extends Component
     public $ujroh_handling_fee_broker_penerima,$ujroh_handling_fee_broker_nama_bank,$ujroh_handling_fee_broker_no_rekening;
     public $referal_fee_penerima,$referal_fee_nama_bank,$referal_fee_no_rekening,$peserta,$manfaat_asuransi,$terbit_polis;
 
-    public $data,$tab_active=1;
+    public $data,$tab_active=1,$running_number_refund_cn,$running_number_cancel_cn,$running_number_endorse_cn_dn;
     protected $listeners = ['set-id'=>'set_id'];
     public function render()
     {
@@ -180,6 +180,9 @@ class Edit extends Component
         $this->peserta = $this->data->peserta;
         $this->manfaat_asuransi = $this->data->manfaat_asuransi;
         $this->terbit_polis = $this->data->terbit_polis;
+        $this->running_number_refund_cn = $this->data->running_number_refund_cn;
+        $this->running_number_cancel_cn = $this->data->running_number_cancel_cn;
+        $this->running_number_endorse_cn_dn = $this->data->running_number_endorse_cn_dn;
     }
     
     public function updated($propertyName)
@@ -377,9 +380,15 @@ class Edit extends Component
         $this->data->referal_fee_nama_bank = $this->referal_fee_nama_bank;
         $this->data->referal_fee_no_rekening = $this->referal_fee_no_rekening;
         $this->data->terbit_polis = $this->terbit_polis;
+
+        $this->data->running_number_refund_cn = $this->running_number_refund_cn;
+        $this->data->running_number_cancel_cn = $this->running_number_cancel_cn;
+        $this->data->running_number_endorse_cn_dn = $this->running_number_endorse_cn_dn;
         $this->data->save();  
 
         session()->flash('message-success',__('Polis berhasil disimpan'));
+        
+        \LogActivity::add("Edit Polis {$this->data->nama}");
 
         return redirect()->route('polis.edit',$this->data->id);
     }

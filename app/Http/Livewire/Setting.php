@@ -21,7 +21,7 @@ class Setting extends Component
     public $website;
     public $address,$running_number_nota_penutupan,$running_number_sb,$running_surat,$running_number_memo_ujroh,
             $running_number_refund,$running_number_refund_cn,$running_number_dn_recovery_claim,$running_number_tagihan_soa,
-            $running_number_endorse,$running_number_cancel;
+            $running_number_endorse,$running_number_cancel,$running_number_cancel_cn,$running_number_endorse_cn_dn;
         
     public function render()
     {
@@ -48,7 +48,9 @@ class Setting extends Component
         $this->running_number_dn_recovery_claim = get_setting('running_number_dn_recovery_claim');
         $this->running_number_tagihan_soa = get_setting('running_number_tagihan_soa');
         $this->running_number_endorse = get_setting('running_number_endorse');
+        $this->running_number_endorse_cn_dn = get_setting('running_number_endorse_cn_dn');
         $this->running_number_cancel = get_setting('running_number_cancel');
+        $this->running_number_cancel_cn = get_setting('running_number_cancel_cn');
 
         \LogActivity::add("Setting");
     }
@@ -64,19 +66,39 @@ class Setting extends Component
         \LogActivity::add("Setting Update");
     }
 
+    public function updateEndorse()
+    {
+        update_setting('running_number_endorse',$this->running_number_endorse);
+        update_setting('running_number_endorse_cn_dn',$this->running_number_endorse_cn_dn);
+
+        $this->emit('message-success',__('Data saved successfully'));
+    }
+
+    public function updateCancel()
+    {
+        update_setting('running_number_cancel',$this->running_number_cancel);
+        update_setting('running_number_cancel_cn',$this->running_number_cancel_cn);
+
+        $this->emit('message-success',__('Data saved successfully'));
+    }
+
+    public function updateRefund()
+    {
+        update_setting('running_number_refund',$this->running_number_refund);
+        update_setting('running_number_refund_cn',$this->running_number_refund_cn);
+
+        $this->emit('message-success',__('Data saved successfully'));
+    }
+
     public function updatePolis()
     {
         update_setting('running_number_nota_penutupan',$this->running_number_nota_penutupan);
         update_setting('running_number_sb',$this->running_number_sb);
         update_setting('running_surat',$this->running_surat);
         update_setting('running_number_memo_ujroh',$this->running_number_memo_ujroh);
-        update_setting('running_number_refund',$this->running_number_refund);
-        update_setting('running_number_refund_cn',$this->running_number_refund_cn);
         update_setting('running_number_recovery_claim',$this->running_number_recovery_claim);
         update_setting('running_number_dn_recovery_claim',$this->running_number_dn_recovery_claim);
         update_setting('running_number_tagihan_soa',$this->running_number_tagihan_soa);
-        update_setting('running_number_endorse',$this->running_number_endorse);
-        update_setting('running_number_cancel',$this->running_number_cancel);
         
         \LogActivity::add("Setting Update Polis");
 

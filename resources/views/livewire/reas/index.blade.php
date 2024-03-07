@@ -13,7 +13,18 @@
                             <div class="dropdown-menu show-form-filter" x-show="open_dropdown">
                                 <form class="p-2">
                                     <div class="from-group my-2">
-                                        <input type="text" class="form-control" wire:model="filter_keyword" placeholder="Keyword" />
+                                        <input type="text" class="form-control" wire:model="filter_keyword" placeholder="No Pengajuan" />
+                                    </div>
+                                    <div class="from-group my-2">
+                                        <input type="text" class="form-control" wire:model="filter_polis" placeholder="No Polis / Pemegang Polis" />
+                                    </div>
+                                    <div class="from-group my-2">
+                                        <select class="form-control" wire:model="filter_reasuradur_id">
+                                            <option value=""> -- Reasuradur -- </option>
+                                            @foreach(\App\Models\Reasuradur::get() as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="from-group my-2">
                                         <select class="form-control" wire:model="filter_status">

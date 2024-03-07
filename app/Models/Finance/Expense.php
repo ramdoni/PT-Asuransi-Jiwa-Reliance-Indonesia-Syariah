@@ -12,4 +12,6 @@ class Expense extends Model
     protected $table = 'expenses';
     
     protected $connection = 'finance';
+
+    protected $guarded = [];
 }

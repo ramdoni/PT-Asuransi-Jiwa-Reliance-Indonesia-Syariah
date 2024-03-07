@@ -32,7 +32,11 @@
                                     </tr>
                                     <tr>
                                         <td><strong>No Polis</strong></td>
-                                        <td>:  {{isset($data->polis->no_polis) ? $data->polis->no_polis .' / '.$data->polis->nama  : '-'}}</td>
+                                        <td>:
+                                            <a href="{{route('polis.edit',$data->polis_id)}}" target="_blank">  
+                                                {{isset($data->polis->no_polis) ? $data->polis->no_polis .' / '.$data->polis->nama  : '-'}}
+                                            </a>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Tanggal Pengajuan</strong></td>

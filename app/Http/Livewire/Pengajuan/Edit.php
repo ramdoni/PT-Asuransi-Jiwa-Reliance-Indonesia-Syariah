@@ -671,6 +671,7 @@ class Edit extends Component
                     
         $this->data->net_kontribusi = $total;
 
+
         $select_tertunda =  Kepesertaan::select(\DB::raw("SUM(basic) as total_nilai_manfaat"),
                                         \DB::raw("SUM(dana_tabarru) as total_dana_tabbaru"),
                                         \DB::raw("SUM(dana_ujrah) as total_dana_ujrah"),
@@ -831,6 +832,8 @@ class Edit extends Component
             $new->saldo = ($new->debit!=0 ? $new->debit : ($new->kredit!=0?$new->kredit : 0));
             $new->save();
         }
+        
+        $this->data->save();
     }
 
     public function set_id(Kepesertaan $data)

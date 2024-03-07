@@ -11,13 +11,19 @@ class Index extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    public $selected_id,$filter_keyword;
+    public $selected_id,$filter_keyword,$filter_polis;
 
     public function render()
     {
-        $data = MemoUjroh::orderBy('id','DESC');
+        $data = MemoUjroh::select('memo_ujroh.*')->orderBy('memo_ujroh.id','DESC')
+                            ->join('polis','polis.id','=','memo_ujroh.polis_id');
         
-        if($this->filter_keyword) $data->where('nomor','LIKE',"%{$this->filter_keyword}%");
+        if($this->filter_keyword) $data->where('memo_ujroh.nomor','LIKE',"%{$this->filter_keyword}%");
+
+        if($this->filter_polis) $data->where(function($table){
+            $table->where('polis.no_polis','LIKE',"%{$this->filter_polis}%")
+                    ->orWhere('polis.nama','LIKE',"%{$this->filter_polis}%");
+        });
         
         return view('livewire.memo-ujroh.index')->with(['data'=>$data->paginate(100)]);
     }

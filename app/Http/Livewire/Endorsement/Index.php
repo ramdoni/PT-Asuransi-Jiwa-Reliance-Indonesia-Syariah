@@ -24,18 +24,16 @@ class Index extends Component
 
     public function delete()
     {
+        $end_kepesertaan = EndorsementPeserta::where('endorsement_id', $this->selected_id)->delete();
+
         Endorsement::find($this->selected_id)->delete();
 
-        $kepesertaan =  Kepesertaan::where('endorsement_id',$this->selected_id)->first();
-        if($kepesertaan) $kepesertaan->update(['endorsement_id'=>null]);
-
-        $end_kepesertaan = EndorsementPeserta::where('endorsement_id', $this->selected_id)->first();
-        if($end_kepesertaan) $end_kepesertaan->delete();
-        
+        $kepesertaan =  Kepesertaan::where('endorsement_id',$this->selected_id)
+                            ->update(['endorsement_id'=>null,'status_polis'=>'Inforce']);
+                            
         // find reas
-        $reas = ReasEndorse::where('endorsement_id',$this->selected_id)->first();
-        if($reas) $reas->delete();
-        
+        $reas = ReasEndorse::where('endorsement_id',$this->selected_id)->delete();
+            
         $this->emit('message-success','Deleted');$this->emit('modal','hide');
     }
 }

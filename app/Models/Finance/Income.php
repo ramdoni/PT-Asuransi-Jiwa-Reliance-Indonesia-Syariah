@@ -12,4 +12,6 @@ class Income extends Model
     protected $table = 'income';
 
     protected $connection = 'finance';
+    
+    protected $guarded = [];
 }

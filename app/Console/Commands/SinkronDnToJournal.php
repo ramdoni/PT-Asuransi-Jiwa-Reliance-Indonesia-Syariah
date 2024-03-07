@@ -87,18 +87,19 @@ class SinkronDnToJournal extends Command
 
         // return;
 
-        foreach(Pengajuan::where('status',3)->get() as $k => $data){
+        // foreach(Pengajuan::where('status',3)->get() as $k => $data){
+        foreach(Pengajuan::where('id',10823)->get() as $k => $data){
 
-            $income = Income::where(['transaction_table'=>'syariah_underwriting','transaction_id' => $data->id])->first();
-            if(!$income) continue;
-            $this->warn("Income ID {$income->id}");
+            //$income = Income::where(['transaction_table'=>'syariah_underwriting','transaction_id' => $data->id])->first();
+            //if(!$income) continue;
+            //$this->warn("Income ID {$income->id}");
 
-            $journal = Journal::where(['transaction_id' => $income->id,'transaction_table'=>'konven_underwriting'])->first();
-            if($journal){
-                $this->warn("Journal ID {$journal->id}");
-                $journal->delete();
-            }
-            $income->delete();
+            // $journal = Journal::where(['transaction_id' => $income->id,'transaction_table'=>'konven_underwriting'])->first();
+            // if($journal){
+            //     $this->warn("Journal ID {$journal->id}");
+            //    $journal->delete();
+            // }
+            // $income->delete();
             $this->warn("--------------------------------");
 
             $this->error("{$k}. No Pengajuan : {$data->no_pengajuan}");
@@ -129,7 +130,7 @@ class SinkronDnToJournal extends Command
                         $this->data->pph-($this->data->ppn+$this->data->potong_langsung+$this->data->brokerage_ujrah);
 
             $this->data->net_kontribusi = $total;
-            $this->data->save();
+            // $this->data->save();
 
             // // find polis
             $polis = Polis::where('no_polis',$this->data->polis->no_polis)->first();

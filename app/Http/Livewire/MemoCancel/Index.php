@@ -31,10 +31,18 @@ class Index extends Component
 
     public function data()
     {
-        $data = MemoCancel::orderBy('id','DESC');
+        $data = MemoCancel::select('memo_cancel.*')->orderBy('memo_cancel.id','DESC')
+                    ->join('polis','polis.id','=','memo_cancel.polis_id');
         
-        if($this->filter_keyword) $data->where('nomor',"LIKE","%{$this->filter_keyword}%");
-        if($this->filter_polis_id) $data->where('polis_id',$this->filter_polis_id);
+        if($this->filter_keyword) {
+            $data->where(function($table){
+                $table->where('memo_cancel.nomor',"LIKE","%{$this->filter_keyword}%")
+                ->orWhere('polis.nama','LIKE',"%{$this->filter_keyword}%")
+                ->orWhere('polis.no_polis','LIKE',"%{$this->filter_keyword}%");
+            });
+        }
+            
+        if($this->filter_polis_id) $data->where('memo_cancel.polis_id',$this->filter_polis_id);
 
         return $data;
     }
@@ -55,7 +63,7 @@ class Index extends Component
     {
         MemoCancel::find($this->selected_id)->delete();
         
-        Kepesertaan::where('memo_cancel_id',$this->selected_id)->update(['memo_cancel_id'=>null,'reas_cancel_id'=>null]);
+        Kepesertaan::where('memo_cancel_id',$this->selected_id)->update(['memo_cancel_id'=>null,'reas_cancel_id'=>null,'status_polis'=>'Inforce']);
         
         ReasCancel::where('memo_cancel_id',$this->selected_id)->delete();
 

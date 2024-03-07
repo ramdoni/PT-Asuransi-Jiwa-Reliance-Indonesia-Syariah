@@ -197,8 +197,8 @@
                     </td>
                     <td>Rp</td>
                     <th class="text-right">
-                        {{$data->is_cn==1?'-':''}}    
-                    {{format_idr(abs($data->total_kontribusi_dibayar))}}</th>
+                        {{format_idr(abs($data->total_kontribusi_dibayar))}}
+                    </th>
                 </tr>
             </table>
             <p>Demikian disampaikan, atas perhatian dan kerjasamanya kami ucapkan terimakasih.</p>

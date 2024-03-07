@@ -74,6 +74,27 @@
                                 @enderror
                             </div>
                         @endif
+                        <!-- <div class="form-group col-md-12">
+                            <label>Nama Bank</label>
+                            <input type="text" class="form-control" wire:model="bank_name" />
+                            @error('bank_name')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Nomor Rekening</label>
+                            <input type="text" class="form-control" wire:model="bank_no_rekening" />
+                            @error('bank_no_rekening')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Bank Owner</label>
+                            <input type="text" class="form-control" wire:model="bank_owner" />
+                            @error('owner_bank')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div> -->
                     </div>
                     <hr>
                     <a href="{{route('endorsement.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>

@@ -34,6 +34,8 @@ class KlaimController extends Controller
             $id->no_surat_tolak = $id->id. '/KLM-APV/AJRIUS/'.numberToRomawi(date('m')).'/'. date('Y');
             $id->save();
         }
+        
+        // return view('livewire.klaim.print-tolak',['data'=>$id]);
 
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadView('livewire.klaim.print-tolak',['data'=>$id])->setPaper([0, 0, 210, 297], 'landscape');;

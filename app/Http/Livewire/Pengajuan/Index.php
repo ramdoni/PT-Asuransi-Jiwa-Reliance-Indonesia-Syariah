@@ -57,12 +57,12 @@ class Index extends Component
             }
         });
         if($this->filter_status_invoice) $data->where('pengajuan.status_invoice',$this->filter_status_invoice);
-        if($this->filter_status) $data->where('status',$this->filter_status);
+        if($this->filter_status) $data->where('pengajuan.status',$this->filter_status);
         if($this->start_tanggal_pengajuan and $this->end_tanggal_pengajuan){
             if($this->start_tanggal_pengajuan == $this->end_tanggal_pengajuan)
                 $data->whereDate('pengajuan.created_at',$this->start_tanggal_pengajuan);
             else
-                $data->whereBetween('pengajuan.created_at',[$this->start_tanggal_pengajuan,$this->end_tanggal_pengajuan]);
+                $data->whereBetween('pengajuan.created_at',[$this->start_tanggal_pengajuan." 00:00:00",$this->end_tanggal_pengajuan." 23:59:59"]);
         }
 
         if($this->start_tanggal_pembayaran and $this->end_tanggal_pembayaran){
@@ -98,6 +98,10 @@ class Index extends Component
         if($propertyName =='is_pengajuan_memo_ujroh' and $this->is_pengajuan_memo_ujroh==false){
             $this->check_id = [];
         }
+
+        if($propertyName=='polis_id'){
+            $this->check_id = [];
+        }
     }
 
     public function submit_memo_ujroh()
@@ -120,8 +124,9 @@ class Index extends Component
             update_setting('running_number_memo_ujroh',$increment);
             
             foreach($this->memo_selected as $item){
-                $item->memo_ujroh_id = $data->id;
-                $item->save();                
+                Pengajuan::find($item->id)->update(['memo_ujroh_id'=>$data->id]);
+                // $item->memo_ujroh_id = $data->id;
+                // $item->save();                
             }
 
             $polis = Polis::find($data->polis_id);
@@ -191,7 +196,7 @@ class Index extends Component
                 $total_agen_penutup += $agen_penutup;    
                 $total_admin_agency += $admin_agency;    
                 $total_ujroh_handling_fee_broker += $ujroh_handling_fee_broker;    
-                $total_referal_fee += $data->referal_fee; 
+                $total_referal_fee += $referal_fee; 
             }
 
             $data->total_maintenance = $total_maintenance;
@@ -307,36 +312,37 @@ class Index extends Component
                 ->setCellValue('V2', 'NO KEPESERTAAN AWAL')
                 ->setCellValue('W2', 's/d')
                 ->setCellValue('X2', 'NO KEPESERTAAN AKHIR')
-                ->setCellValue('Y2', 'MASA AWAL ASURANSI')
-                ->setCellValue('Z2', 'MASA AKHIR ASURANSI')
-                ->setCellValue('AA2', 'NILAI MANFAAT')
+                ->setCellValue('Y2', 'TGL MULAI ASURANSI')
+                ->setCellValue('Z2', 'TGL AKHIR ASURANSI')
+                ->setCellValue('AA2', 'UANG ASURANSI')
                 ->setCellValue('AB2', 'DANA TABBARU')
                 ->setCellValue('AC2', 'DANA UJRAH')
                 ->setCellValue('AD2', 'KONTRIBUSI')
                 ->setCellValue('AE2', 'EXTRA KONTRIBUSI')
-                ->setCellValue('AF2', 'TOTAL KONTRIBUSI')
-                ->setCellValue('AG2', 'POT LANGSUNG(%)')
-                ->setCellValue('AH2', 'JML DISCOUNT')
-                ->setCellValue('AI2', 'STATUS POTONGAN')
-                ->setCellValue('AJ2', 'HANDLING FEE')
-                ->setCellValue('AK2', 'JML FEE')
-                ->setCellValue('AL2', 'PPH')
-                ->setCellValue('AM2', 'JML PPH')
-                ->setCellValue('AN2', 'PPN')
-                ->setCellValue('AO2', 'JML PPN')
-                ->setCellValue('AP2', 'BIAYA POLIS')
-                ->setCellValue('AQ2', 'extPst')
-                ->setCellValue('AR2', 'NETT KONTRIBUSI')
-                ->setCellValue('AS2', 'TERBILANG')
-                ->setCellValue('AT2', 'TGL UPDATE DATABASE')
-                ->setCellValue('AU2', 'TGL UPDATE SISTEM')
-                ->setCellValue('AV2', 'NO BERKAS SISTEM')
-                ->setCellValue('AW2', 'TGL POSTING SISTEM')
-                ->setCellValue('AX2', 'KET POSTING')
-                ->setCellValue('AY2', 'GRACE PERIOD')
+                ->setCellValue('AF2', 'EXTRA MORTALITY')
+                ->setCellValue('AG2', 'TOTAL KONTRIBUSI')
+                ->setCellValue('AH2', 'POT LANGSUNG(%)')
+                ->setCellValue('AI2', 'JML DISCOUNT')
+                ->setCellValue('AJ2', 'STATUS POTONGAN')
+                ->setCellValue('AK2', 'HANDLING FEE')
+                ->setCellValue('AL2', 'JML FEE')
+                ->setCellValue('AM2', 'PPH')
+                ->setCellValue('AN2', 'JML PPH')
+                ->setCellValue('AO2', 'PPN')
+                ->setCellValue('AP2', 'JML PPN')
+                ->setCellValue('AQ2', 'BIAYA POLIS')
+                ->setCellValue('AR2', 'extPst')
+                ->setCellValue('AS2', 'NETT KONTRIBUSI')
+                ->setCellValue('AT2', 'TERBILANG')
+                ->setCellValue('AU2', 'TGL UPDATE DATABASE')
+                ->setCellValue('AP2', 'TGL UPDATE SISTEM')
+                ->setCellValue('AW2', 'NO BERKAS SISTEM')
+                ->setCellValue('AX2', 'TGL POSTING SISTEM')
+                ->setCellValue('AY2', 'KET POSTING')
                 ->setCellValue('AZ2', 'GRACE PERIOD')
-                ->setCellValue('BA2', 'TGL JATUH TEMPO')
-                ->setCellValue('BC2', 'TGL LUNAS');
+                ->setCellValue('AA2', 'GRACE PERIOD')
+                ->setCellValue('BB2', 'TGL JATUH TEMPO')
+                ->setCellValue('BD2', 'TGL LUNAS');
 
         $activeSheet->getStyle("A2:BC2")->applyFromArray([
                     'font' => [
@@ -413,6 +419,7 @@ class Index extends Component
         $activeSheet->getColumnDimension('AZ')->setAutoSize(true);
         $activeSheet->getColumnDimension('BA')->setAutoSize(true);
         $activeSheet->getColumnDimension('BC')->setAutoSize(true);
+        $activeSheet->getColumnDimension('BD')->setAutoSize(true);
         $num=3;
         $k=0;
         // $data = $data->withCount(['ditolak','diterima']);
@@ -433,7 +440,7 @@ class Index extends Component
                 ->setCellValue('H'.$num,date("Y_m",strtotime($i->created_at)))
                 ->setCellValue('I'.$num,"-")
                 ->setCellValue('J'.$num,"-")
-                ->setCellValue('K'.$num,$i->no_pengajuan)
+                ->setCellValue('K'.$num,$i->no_surat)
                 ->setCellValue('L'.$num,$i->dn_number)
                 ->setCellValue('M'.$num,isset($i->polis->no_polis) ? $i->polis->no_polis : '-')
                 ->setCellValue('N'.$num,isset($i->polis->nama) ? $i->polis->nama : '-')
@@ -454,32 +461,42 @@ class Index extends Component
                 ->setCellValue('AC'.$num,$i->dana_ujrah) 
                 ->setCellValue('AD'.$num,$i->kontribusi) 
                 ->setCellValue('AE'.$num,$i->extra_kontribusi) 
-                ->setCellValue('AF'.$num,$i->net_kontribusi) 
-                ->setCellValue('AG'.$num,$i->potong_langsung_persen) 
-                ->setCellValue('AH'.$num,$i->potong_langsung) 
-                ->setCellValue('AI'.$num,"-") 
+                ->setCellValue('AF'.$num,$i->extra_mortalita) 
+                ->setCellValue('AG'.$num,$i->net_kontribusi) 
+                ->setCellValue('AH'.$num,$i->potong_langsung_persen) 
+                ->setCellValue('AI'.$num,$i->potong_langsung) 
                 ->setCellValue('AJ'.$num,"-") 
-                ->setCellValue('AK'.$num,"-") 
-                ->setCellValue('AL'.$num,$i->pph_persen) 
-                ->setCellValue('AM'.$num,$i->pph) 
-                ->setCellValue('AN'.$num,$i->ppn_persen) 
-                ->setCellValue('AO'.$num,$i->ppn) 
-                ->setCellValue('AP'.$num,$i->biaya_polis_materai) 
-                ->setCellValue('AQ'.$num,$i->biaya_sertifikat) 
-                ->setCellValue('AR'.$num,"-") 
+                ->setCellValue('AK'.$num,$i->polis->fee_base_brokerage) 
+                ->setCellValue('AL'.$num,$i->brokerage_ujrah) 
+                ->setCellValue('AM'.$num,$i->pph_persen) 
+                ->setCellValue('AN'.$num,$i->pph) 
+                ->setCellValue('AO'.$num,$i->ppn_persen) 
+                ->setCellValue('AP'.$num,$i->ppn) 
+                ->setCellValue('AQ'.$num,$i->biaya_polis_materai) 
+                ->setCellValue('AR'.$num,$i->biaya_sertifikat) 
                 ->setCellValue('AS'.$num,$i->net_kontribusi) 
-                ->setCellValue('AT'.$num,terbilang($i->net_kontibusi)) 
-                ->setCellValue('AU'.$num,date('d-M-Y',strtotime($i->updated_at))) 
+                ->setCellValue('AT'.$num,terbilang($i->net_kontribusi)) 
+                ->setCellValue('AU'.$num,'-') 
                 ->setCellValue('AV'.$num,date('d-M-Y',strtotime($i->updated_at))) 
-                ->setCellValue('AW'.$num,1) 
-                ->setCellValue('AX'.$num,$i->head_syariah_submit ? date('d-M-Y',strtotime($i->head_syariah_submit)) : '-') 
-                ->setCellValue('AY'.$num,"-") 
+                ->setCellValue('AW'.$num,date('d-M-Y',strtotime($i->updated_at))) 
+                ->setCellValue('AX'.$num,1) 
+                ->setCellValue('AY'.$num,$i->head_syariah_submit ? date('d-M-Y',strtotime($i->head_syariah_submit)) : '-') 
                 ->setCellValue('AZ'.$num,"-") 
-                ->setCellValue('BA'.$num,$i->tanggal_jatuh_tempo ? date('d-M-Y',strtotime($i->tanggal_jatuh_tempo)):'-') 
-                ->setCellValue('BC'.$num,$i->payment_date ? date('d-M-Y',strtotime($i->payment_date)):'-');
+                ->setCellValue('AA'.$num,"-") 
+                ->setCellValue('BB'.$num,$i->tanggal_jatuh_tempo ? date('d-M-Y',strtotime($i->tanggal_jatuh_tempo)):'-') 
+                ->setCellValue('BD'.$num,$i->payment_date ? date('d-M-Y',strtotime($i->payment_date)):'-');
 
-                $activeSheet->getStyle("S{$num}:T{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
-                $activeSheet->getStyle("AA{$num}:AF{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
+                $activeSheet->getStyle("S{$num}:T{$num}")->getNumberFormat()->setFormatCode('#,##0');
+                $activeSheet->getStyle("AA{$num}:AG{$num}")->getNumberFormat()->setFormatCode('#,##0');
+                $activeSheet->getStyle("AL{$num}")->getNumberFormat()->setFormatCode('#,##0');
+                $activeSheet->getStyle("AI{$num}:AI{$num}")->getNumberFormat()->setFormatCode('#,##0');
+                $activeSheet->getStyle("AN{$num}")->getNumberFormat()->setFormatCode('#,##0');
+                $activeSheet->getStyle("AS{$num}")->getNumberFormat()->setFormatCode('#,##0');
+                $activeSheet->getStyle("AP{$num}:AR{$num}")->getNumberFormat()->setFormatCode('#,##0');
+                
+                $activeSheet->getStyle("K{$num}")->getNumberFormat()->setFormatCode('#');
+                $activeSheet->getStyle("K{$num}")
+                ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 // if($i->extra_mortalita) $activeSheet->getStyle("L{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
                 // if($i->extra_kontribusi) $activeSheet->getStyle("M{$num}")->getNumberFormat()->setFormatCode('#,##0.00');
@@ -512,7 +529,7 @@ class Index extends Component
         header ('Pragma: public'); // HTTP/1.0
         return response()->streamDownload(function() use($writer){
             $writer->save('php://output');
-        },'pengajuan.xlsx');
+        },'pengajuan-'.date('d-m-Y').'.xlsx');
     }
 
 

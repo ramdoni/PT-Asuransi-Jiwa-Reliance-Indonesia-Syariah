@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableEpolicy extends Migration
+class AddFieldUnderwritingToMemoCancel extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateTableEpolicy extends Migration
      */
     public function up()
     {
-        Schema::create('epolicies', function (Blueprint $table) {
-            $table->id();
-            $table->integer('polis_id')->nullable();
-            $table->timestamps();
+        Schema::table('memo_cancel', function (Blueprint $table) {
+            $table->dateTime('underwriting_submitted')->nullable();
+            $table->text('underwriting_note')->nullable();
         });
     }
 
@@ -27,6 +26,8 @@ class CreateTableEpolicy extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('epolicies');
+        Schema::table('memo_cancel', function (Blueprint $table) {
+            //
+        });
     }
 }

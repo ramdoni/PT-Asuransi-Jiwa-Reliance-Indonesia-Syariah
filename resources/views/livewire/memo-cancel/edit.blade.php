@@ -102,16 +102,20 @@
                         </div>
                     @endif
                     <a href="{{route('memo-cancel.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
-                    <span wire:loading wire:target="submit_head_teknik,submit_head_syariah,update_data">
+                    <span wire:loading wire:target="submit_head_teknik,submit_head_syariah,update_data,submit_underwriting">
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <span class="sr-only">{{ __('Loading...') }}</span>
                     </span>
+                    <!-- Proses Staff / Underwriting -->
+                    @if($data->status==0 and \Auth::user()->user_access_id==2)
+                        <button type="button" class="btn btn-warning ml-3" wire:click="submit_underwriting" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
+                    @endif
                     <!-- Approval Head Teknik -->
-                    @if($data->status==0 and \Auth::user()->user_access_id==3)
+                    @if($data->status==1 and \Auth::user()->user_access_id==3)
                         <button type="button" class="btn btn-warning ml-3" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
                     @endif
                     <!-- Approval Head Syariah -->
-                    @if($data->status==1 and \Auth::user()->user_access_id==4)
+                    @if($data->status==2 and \Auth::user()->user_access_id==4)
                         <button type="button" class="btn btn-warning ml-3" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
                     @endif
                     <button type="button" class="btn btn-info ml-3" wire:loading.remove wire:target="update_data" wire:click="update_data" wire:loading.remove><i class="fa fa-save"></i> {{ __('Update') }}</button>

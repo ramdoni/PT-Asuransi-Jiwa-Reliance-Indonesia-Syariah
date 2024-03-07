@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldTanggalPengajuanToTagihanSoa extends Migration
+class AddFieldHeadTeknikDateToTagihanSoa extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,12 @@ class AddFieldTanggalPengajuanToTagihanSoa extends Migration
     public function up()
     {
         Schema::table('tagihan_soa', function (Blueprint $table) {
-            $table->date('tanggal_pengajuan')->nullable();
+            $table->dateTime('head_teknik_submitted')->nullable();
+            $table->dateTime('head_syariah_submitted')->nullable();
+        });
+
+        Schema::table('reas', function (Blueprint $table) {
+            $table->integer('tagihan_soa_id')->nullable();
         });
     }
 

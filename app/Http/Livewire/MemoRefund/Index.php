@@ -55,7 +55,7 @@ class Index extends Component
     public function delete()
     {
         Refund::find($this->selected_id)->delete();
-        Kepesertaan::where('memo_refund_id',$this->selected_id)->update(['memo_refund_id'=>null]);
+        Kepesertaan::where('memo_refund_id',$this->selected_id)->update(['memo_refund_id'=>null,'status_polis'=>'Inforce']);
 
         $this->emit('message-success','Deleted');$this->emit('modal','hide');
     }

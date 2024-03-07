@@ -18,7 +18,9 @@ class Index extends Component
 
     public function render()
     {
-        $data = Kepesertaan::orderBy('id','DESC')->with(['polis','polis.produk'])->whereNotNull('no_peserta');
+        $data = Kepesertaan::orderBy('id','DESC')
+            ->with(['polis','polis.produk','pengajuan'])
+                ->whereNotNull('no_peserta');
 
         if($this->filter_keyword) $data->where(function($table){
             $table->where('nama','LIKE',"%{$this->filter_keyword}%")

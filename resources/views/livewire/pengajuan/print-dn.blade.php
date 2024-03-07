@@ -132,20 +132,37 @@
                 </tr>
             </table>
             <p>Pembayaran Kontribusi dapat dilakukan melalui transfer ke rekening sebagai berikut:</p>
-            <table>
-                <tr>
-                    <td><strong>Bank</strong></td>
-                    <td><strong>: Bank Syariah Indonesia</strong></td>
-                </tr>
-                <tr>
-                    <td><strong>Atas Nama</strong></td>
-                    <td><strong>: PT Asuransi Jiwa Reliance Indonesia</strong></td>
-                </tr>
-                <tr>
-                    <td><strong>Nomor Rekening</strong></td>
-                    <td><strong>: 8382828230</strong></td>
-                </tr>
-            </table>
+            @if(in_array($data->polis_id,[76,75]))
+                <table>
+                    <tr>
+                        <td><strong>Bank</strong></td>
+                        <td><strong>: Bank Riau Kepri Syariah</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Atas Nama</strong></td>
+                        <td><strong>: PT Asuransi Jiwa Reliance Indonesia</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nomor Rekening</strong></td>
+                        <td><strong>: 1910800080</strong></td>
+                    </tr>
+                </table>
+            @else
+                <table>
+                    <tr>
+                        <td><strong>Bank</strong></td>
+                        <td><strong>: Bank Syariah Indonesia</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Atas Nama</strong></td>
+                        <td><strong>: PT Asuransi Jiwa Reliance Indonesia</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nomor Rekening</strong></td>
+                        <td><strong>: 8382828230</strong></td>
+                    </tr>
+                </table>
+            @endif
             <p>
                 Hormat Kami,<br />
                 <strong>PT ASURANSI JIWA RELIANCE INDONESIA UNIT SYARIAH</strong>

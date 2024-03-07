@@ -72,6 +72,7 @@
                         <thead style="background: #eee;text-transform: uppercase;">
                             <tr>
                                 <th>No</th>
+                                <th>No Pengajuan</th>
                                 <th>Nomor Polis</th>
                                 <th>Pemegang Polis</th>
                                 <th>Produk</th>
@@ -149,6 +150,13 @@
                                 <tr>
                                     <td style="width: 50px;">{{ $num }}</td>
                                     <td>
+                                        @if($item->pengajuan_id)
+                                            <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">    
+                                                {{isset($item->pengajuan) ? $item->pengajuan->no_pengajuan : ''}}
+                                            </a> 
+                                        @endif
+                                    </td>
+                                    <td>
                                         @if(isset($item->polis->no_polis))
                                             <a href="{{route('polis.edit',$item->polis_id)}}">{{$item->polis->no_polis}}</a>
                                         @else
@@ -193,7 +201,15 @@
                                     <td>{{$item->rate}}</td>
                                     <td>{{$item->total_dn}}</td>
                                     <td>{{$item->no_reg}}</td>
-                                    <td>{{$item->no_debit_note}}</td>
+                                    <td>
+                                        @if($item->pengajuan_id)
+                                            <a href="{{route('pengajuan.edit',$item->pengajuan_id)}}" target="_blank">    
+                                                {{isset($item->pengajuan) ? $item->pengajuan->dn_number : ''}}
+                                            </a>
+                                        @else    
+                                            {{$item->no_debit_note}}
+                                        @endif
+                                    </td>
                                     <td>{{$item->tahun_produksi}}</td>
                                     <td>{{$item->produksi_akrual}}</td>
                                     <td>{{$item->issued_accepted_date}}</td>

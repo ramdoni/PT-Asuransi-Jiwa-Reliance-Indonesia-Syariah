@@ -40,14 +40,14 @@
                             </tr>
                             <tr>
                                 @foreach($get_bulan as $bulan)
-                                    <td>{{$bulan->bulan}}</td>
+                                    <th>{{$bulan->bulan}}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $k => $item)
                                 <tr>
-                                    <td>{{$item->tahun}}</td>
+                                    <th>{{$item->tahun}}</th>
                                     @foreach($get_bulan as $bulan)
                                         <td><a href="javascript:void(0)" data-toggle="modal" data-target="#modal_edit" wire:click="$emit('set_id',{'tahun':{{$item->tahun}},'bulan':{{$bulan->bulan}},'rate':{{isset($raw_data[$item->tahun][$bulan->bulan]) ? $raw_data[$item->tahun][$bulan->bulan] : '-'}}})">{{isset($raw_data[$item->tahun][$bulan->bulan]) ? $raw_data[$item->tahun][$bulan->bulan] : '-'}}</a></td>
                                     @endforeach

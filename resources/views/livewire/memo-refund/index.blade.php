@@ -83,7 +83,7 @@
                                             <span class="badge badge-info">Head Teknik</span>
                                         @endif
                                         @if($item->status==1)
-                                            <span class="badge badge-info">Head Syariah</span>
+                                            <span class="badge badge-danger">Head Syariah</span>
                                         @endif
                                         @if($item->status==2)
                                             <span class="badge badge-success badge-active"><i class="fa fa-check-circle"></i> Selesai</span>

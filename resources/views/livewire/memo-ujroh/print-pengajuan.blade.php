@@ -7,8 +7,9 @@
             * {
                 font-family: Arial, Helvetica, sans-serif;
                 font-size:11px;
+                line-height:1;
             }
-            h1 {font-size: 20px;}
+            h1 {font-size: 18px;}
             .container {padding-left:20px;padding-right:20px;}
             .text-center {
                 text-align:center;
@@ -31,7 +32,7 @@
             table.border tr td,table.border tr th {
                 border-top:1px solid #000;
                 border-right:1px solid #000;
-                padding:2px 5px;
+                padding:1px 5px;
                 margin:0;
             }
             /* table.border tr{
@@ -70,8 +71,8 @@
         </style>
     </head>
     <body>
-        <div class="container">
-            <h1 class="text-center">INTERNAL MEMO</h1>
+        <div class="container" style="padding-top:5px;">
+            <h1 class="text-center" style="margin-bottom:0px;">INTERNAL MEMO</h1>
             <table>
                 <tr>
                     <td style="width:150px;">Kepada</td>
@@ -262,7 +263,7 @@
                     </td>
                     <td>
                         <img src="{{public_path('assets/img/ahmad_syafei.png')}}" style="width: 70px;" />
-                        <p style="padding-bottom:0;margin-bottom:0;">
+                        <p style="padding-bottom:0;margin-bottom:0;margin-top:0;">
                             @if(isset($data->user_teknik->nama))
                                 {{$data->user_teknik->nama}}
                             @else

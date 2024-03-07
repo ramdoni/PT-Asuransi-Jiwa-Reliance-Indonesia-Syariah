@@ -32,6 +32,7 @@ class Insert extends Component
         'no_ktp' => 'No KTP',
         'no_telepon' => 'No Telepon'
     ];
+    public $bank_name,$bank_no_rekening,$bank_owner;
     
     protected $listeners = ['reload-page'=>'$refresh'];
 
@@ -202,14 +203,23 @@ class Insert extends Component
                     'metode_endorse' => $this->metode_endorse,
                     'requester_id' => \Auth::user()->id,
                     'jenis_perubahan_id' => $this->jenis_perubahan_id,
-                    'status'=>1
+                    'status'=>1,
+                    'bank_name'=>$this->bank_name,
+                    'bank_no_rekening'=>$this->bank_no_rekening,
+                    'bank_owner'=>$this->bank_owner
                 ]);
 
                 $running_number = get_setting('running_number_endorse')+1;
                 $no_pengajuan = str_pad($running_number,4, '0', STR_PAD_LEFT) ."/UWS-M-END/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
                 update_setting('running_number_endorse',$running_number);
+                
+                // 0001/UWS-M-END/AJRIUS/I/2024
+                $polis = Polis::find($this->polis_id);
+                $running_number_cn = $polis->running_number_endorse_cn_dn + 1;
+                $no_cn_or_dn = str_pad($running_number_cn,4, '0', STR_PAD_LEFT) ."/UWS-M-END/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                $polis->update(['running_number_endorse_cn_dn'=>$running_number_cn]);
 
-                Endorsement::find($data->id)->update(['no_pengajuan'=>$no_pengajuan]);
+                Endorsement::find($data->id)->update(['no_pengajuan'=>$no_pengajuan,'no_cn_or_dn'=>$no_cn_or_dn]);
 
                 if($this->jenis_pengajuan==2){
                     $this->tidakMempengaruhiPremi($data);

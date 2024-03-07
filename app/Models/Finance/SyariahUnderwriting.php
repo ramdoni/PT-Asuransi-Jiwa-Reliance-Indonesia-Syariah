@@ -12,4 +12,7 @@ class SyariahUnderwriting extends Model
     protected $table = 'syariah_underwritings';
 
     protected $connection = 'finance';
+
+    protected $guarded = [];
+
 }

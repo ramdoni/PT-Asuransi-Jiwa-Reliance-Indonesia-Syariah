@@ -53,11 +53,19 @@
                                 @enderror
                             </div>
                             <div class="col-md-12">
-                                <span wire:loading wire:target="update_rekening">
+                                <span wire:loading wire:target="update_rekening,submit_head_teknik,submit_head_syariah">
                                     <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                                     <span class="sr-only">{{ __('Loading...') }}</span>
                                 </span>
-                                <a href="javascript:void(0)" wire:loading.remove wire:target="update_rekening" wire:click="update_rekening" class="btn btn-info">Update Rekening</a>
+                                <a href="javascript:void(0)" wire:loading.remove wire:target="update_rekening" wire:click="update_rekening" class="btn btn-info"><i class="fa fa-save"></i> Update Rekening</a>
+                                <!-- Approval Head Teknik -->
+                                @if($data->status==0 and \Auth::user()->user_access_id==3)
+                                    <button type="button" class="btn btn-warning ml-3 float-right" wire:loading.remove wire:target="submit_head_teknik" wire:click="submit_head_teknik" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
+                                @endif
+                                <!-- Approval Head Syariah -->
+                                @if($data->status==1 and \Auth::user()->user_access_id==4)
+                                    <button type="button" class="btn btn-warning ml-3 float-right" wire:loading.remove wire:target="submit_head_syariah" wire:click="submit_head_syariah" wire:loading.remove><i class="fa fa-check-circle"></i> {{ __('Submit Pengajuan') }}</button>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -8,7 +8,10 @@
                     <div class="form-group border-bottom">
                         <p>
                             <strong>{{ __('Polis') }}</strong><br />
-                            {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}</p>
+                            <a href="{{route('polis.edit',$data->polis_id)}}" target="_blank">
+                                {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}
+                            </a>
+                        </p>
                     </div>
                     <div class="form-group border-bottom row">
                         <p class="col-md-6">    

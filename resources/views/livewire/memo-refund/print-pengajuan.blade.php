@@ -298,11 +298,11 @@
                         </p>
                     </td>
                     <td style="width: 180px;padding-top:40px;padding-bottom:40px;" class="text-right">
-                        <strong>{{format_idr($data->total_kontribusi)}}</strong>
+                        <strong>{{format_idr($total_pengembalian_kontribusi)}}</strong>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">Terbilang : {{terbilang($data->total_kontribusi)}}</td>
+                    <td colspan="2">Terbilang : {{terbilang($total_pengembalian_kontribusi)}}</td>
                 </tr>
             </table>
             <br />
@@ -409,7 +409,7 @@
                             <tr>
                                 <td style="width: 40%;">Pengembalian Kontribusi</td>
                                 <td> : Rp. </td>
-                                <td class="text-right">{{format_idr($data->total_kontribusi)}}</td>
+                                <td class="text-right">{{format_idr($total_pengembalian_kontribusi)}}</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -533,7 +533,8 @@
                         <th></th>
                         <th></th>
                         <th class="text-right">{{format_idr($data->total_manfaat_asuransi)}}</th>
-                        <th class="text-right">{{format_idr($data->total_kontribusi)}}</th>
+                        <!-- <th class="text-right">{{format_idr($data->total_kontribusi)}}</th> -->
+                        <th class="text-right">{{format_idr($total_pengembalian_kontribusi)}}</th>
                     </tr>
                 </tfoot>
             </table>

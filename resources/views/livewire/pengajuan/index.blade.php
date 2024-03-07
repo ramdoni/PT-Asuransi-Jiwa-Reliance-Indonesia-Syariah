@@ -279,7 +279,7 @@
                                     </td>
                                     <td>{{$item->payment_date ? date('d-M-Y',strtotime($item->payment_date)) : '-'}}</td>
                                     <td>{{date('d-M-Y',strtotime($item->created_at))}}</td>
-                                    <td>{{$item->head_syariah_submit ? date('d-F-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
+                                    <td>{{$item->head_syariah_submit ? date('d-M-Y',strtotime($item->head_syariah_submit)) : '-'}}</td>
                                     <td>{{$item->head_syariah_submit ? calculate_aging($item->created_at,$item->head_syariah_submit) : calculate_aging($item->created_at,date('Y-m-d'))}}</td>
                                     <td class="text-center">{{$item->total_akseptasi}}</td>
                                     <td class="text-center">

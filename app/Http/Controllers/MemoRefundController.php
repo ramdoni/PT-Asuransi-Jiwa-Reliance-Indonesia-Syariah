@@ -13,6 +13,7 @@ class MemoRefundController extends Controller
     {
         $param['list_peserta'] = [];$param['periode_asuransi'] = [];$param['no_debit_notes'] = [];$param['tgl_debit_notes'] = [];$param['kontribusi_dn'] = 0;
         $param['no_peserta_akhir']='';
+        $param['total_pengembalian_kontribusi'] = 0;
         foreach($id->kepesertaan as $k => $item){
             if($k==0)
                 $param['no_peserta_awal'] = $item->no_peserta;
@@ -25,6 +26,7 @@ class MemoRefundController extends Controller
             $param['no_debit_notes'][] = $item->pengajuan->dn_number;
             $param['tgl_debit_notes'][] = $item->pengajuan->head_syariah_submit ? date('d F Y',strtotime($item->pengajuan->head_syariah_submit)) : date('d F Y',strtotime($item->pengajuan->created_at));
             $param['kontribusi_dn'] += $item->kontribusi;
+            $param['total_pengembalian_kontribusi'] += $item->refund_kontribusi;
         }
 
         $param['data'] = $id;

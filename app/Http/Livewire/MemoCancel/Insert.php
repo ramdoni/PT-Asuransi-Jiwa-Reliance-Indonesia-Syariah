@@ -46,7 +46,7 @@ class Insert extends Component
             }
             
             $this->peserta[$index]['total_kontribusi_dibayar'] = $peserta['kontribusi'] + $peserta['extra_kontribusi'] + $peserta['extra_mortalita'];
-            $this->peserta[$index]['cancel_kontribusi_netto'] = round($this->peserta[$index]['total_kontribusi_dibayar'] * ($polis->refund / 100));
+            $this->peserta[$index]['cancel_kontribusi_netto'] = $this->peserta[$index]['total_kontribusi_dibayar'];//round($this->peserta[$index]['total_kontribusi_dibayar'] * ($polis->refund / 100));
 
             $ids = [];
             foreach($this->peserta as $item){
@@ -137,14 +137,21 @@ class Insert extends Component
                 $data->requester_id = \Auth::user()->id;
                 $data->save();
 
+                // No Surat: 040/UW-M-CNCL/AJRIUS/I/2024
+                // NO CN: No Polis/Running NUmber/UW-M-CNCL/AJRIUS/BLN/THN
+                
                 $running_number = get_setting('running_number_cancel')+1;
-
-                $data->nomor_cn = $polis->no_polis . '/'. str_pad($running_number,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                $running_number_cn = $polis->running_number_cancel_cn+1;
+                
+                $data->nomor_cn = $polis->no_polis . '/'. str_pad($running_number_cn,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
                 // 036/UW-M-CNCL/AJRIUS/X/2023
-                $data->nomor = str_pad($running_number_cancel,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
+                $data->nomor = str_pad($running_number,6, '0', STR_PAD_LEFT) ."/UWS-M-CNCL/AJRIUS/".numberToRomawi(date('m')).'/'.date('Y');
                 $data->save();
 
                 update_setting('running_number_cancel',$running_number);
+                
+                $polis->running_number_cancel_cn = $running_number_cn;
+                $polis->save();
                 
                 $total = 0;$total_kontribusi=0;$total_manfaat_asuransi = 0;$total_kontribusi_gross=0;$total_kontribusi_tambahan=0;
                 $total_potongan_langsung = 0;$total_ujroh_brokerage=0;$total_ppn=0;$total_pph=0;

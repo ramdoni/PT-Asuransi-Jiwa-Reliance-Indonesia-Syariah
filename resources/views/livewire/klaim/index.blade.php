@@ -13,7 +13,10 @@
                             <div class="dropdown-menu show-form-filter" x-show="open_dropdown">
                                 <form class="p-2">
                                     <div class="from-group my-2">
-                                        <input type="text" class="form-control" wire:model="filter_keyword" placeholder="Keyword" />
+                                        <input type="text" class="form-control" wire:model="filter_keyword" placeholder="No Pengajuan, No/Nama Peserta" />
+                                    </div>
+                                    <div class="from-group my-2">
+                                        <input type="text" class="form-control" wire:model="filter_polis" placeholder="Nomor / Pemegang Polis" />
                                     </div>
                                     <a href="javascript:void(0)" wire:click="clear_filter()"><small>Clear filter</small></a>
                                 </form>

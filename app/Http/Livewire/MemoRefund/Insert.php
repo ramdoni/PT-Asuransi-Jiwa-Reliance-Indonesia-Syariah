@@ -125,6 +125,7 @@ class Insert extends Component
             "peserta"    => "required|array",
             "peserta.*"  => "required",
         ]);
+        
         try {
             \DB::transaction(function () {
                 $polis = Polis::find($this->polis_id);
@@ -134,20 +135,23 @@ class Insert extends Component
                 $data->tanggal_efektif = $this->tanggal_efektif;
                 $data->tujuan_pembayaran = $this->tujuan_pembayaran;
                 $data->nama_bank = $this->nama_bank;
-                $data->no_peserta_awal = $this->no_peserta_awal;
-                $data->no_peserta_akhir = $this->no_peserta_akhir;
+                $data->nomor_peserta_awal = $this->no_peserta_awal;
+                $data->nomor_peserta_akhir = $this->no_peserta_akhir;
                 $data->no_rekening = $this->no_rekening;
                 $data->tgl_jatuh_tempo = $this->tgl_jatuh_tempo;
                 $data->user_created_id = \Auth::user()->id;
                 $data->status = 0;
                 $running_number = get_setting('running_number_refund')+1;
-                $running_number_cn = get_setting('running_number_refund')+1;
+                $running_number_cn = $polis->running_number_refund_cn+1;
 
                 $data->nomor = str_pad($running_number,4, '0', STR_PAD_LEFT) ."/UW-RFND-CN-R/".numberToRomawi(date('m')).'/'.date('Y');
                 $data->nomor_cn = $polis->no_polis . '/'. str_pad($running_number_cn,4, '0', STR_PAD_LEFT) ."/AJRIUS-CN-R/".numberToRomawi(date('m')).'/'.date('Y');
                 $data->save();
 
                 update_setting('running_number_refund',$running_number);
+
+                $polis->running_number_refund_cn = $running_number_cn;
+                $polis->save();
 
                 // 036/UW-M-CNCL/AJRIUS/X/2023
                 $total = 0;$total_kontribusi=0;$total_manfaat_asuransi = 0;$total_kontribusi_gross=0;$total_kontribusi_tambahan=0;

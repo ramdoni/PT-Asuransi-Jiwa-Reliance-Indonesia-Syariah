@@ -12,4 +12,7 @@ class Coa extends Model
     protected $table = 'coas';
 
     protected $connection = 'finance';
+
+    protected $guarded = [];
+
 }

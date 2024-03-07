@@ -22,7 +22,7 @@
                             <tr>
                                 @if(isset($get_bulan))
                                     @foreach($get_bulan as $bulan)
-                                        <td class="text-right">{{$bulan->bulan}}</td>
+                                        <th class="text-right">{{$bulan->bulan}}</th>
                                     @endforeach
                                 @endif
                             </tr>
@@ -31,7 +31,7 @@
                             @if($data)
                                 @foreach ($data as $k => $item)
                                     <tr>
-                                        <td class="text-right">{{$item->tahun}}</td>
+                                        <th class="text-center">{{$item->tahun}}</th>
                                         @foreach($get_bulan as $bulan)
                                             <td class="text-right">{{isset($raw_data[$item->tahun][$bulan->bulan]) ? $raw_data[$item->tahun][$bulan->bulan] : '-'}}</td>
                                         @endforeach

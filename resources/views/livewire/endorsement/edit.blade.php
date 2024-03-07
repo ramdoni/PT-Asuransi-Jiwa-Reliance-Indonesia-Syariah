@@ -8,7 +8,9 @@
                     <div class="row form-group border-bottom pb-2">
                         <div class="col-md-4">
                             <strong>{{ __('Polis') }}</strong><br />
-                            {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}
+                            <a href="{{route('polis.edit',$data->polis_id)}}" target="_blank">
+                                {{(isset($data->polis->no_polis) ? $data->polis->no_polis ." / ". $data->polis->nama : '')}}
+                            </a>
                         </div>
                         <div class="col-md-3">
                             <label>Tanggal Pengajuan</label><br />
@@ -52,6 +54,31 @@
                                 @endif
                             </div>
                         @endif
+                        <!-- <div class="col-md-12">
+                            <hr>
+                        </div>    
+                        <div class="form-group col-md-4">
+                            <label>Nama Bank</label>
+                            <input type="text" class="form-control" wire:model="bank_name" />
+                            @error('bank_name')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Nomor Rekening</label>
+                            <input type="text" class="form-control" wire:model="bank_no_rekening" />
+                            @error('bank_no_rekening')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Bank Owner</label>
+                            <input type="text" class="form-control" wire:model="bank_owner" />
+                            @error('owner_bank')
+                                <ul class="parsley-errors-list filled" id="parsley-id-29"><li class="parsley-required">{{ $message }}</li></ul>
+                            @enderror
+                        </div> -->
+
                         @if($data->status==1 and \Auth::user()->user_access_id==3)
                             <div class="form-group border-bottom pb-2">
                                 <label>Note</label>
@@ -74,6 +101,7 @@
                    
                     <a href="{{route('endorsement.index')}}"><i class="fa fa-arrow-left"></i> {{ __('Back') }}</a>
                     <a href="{{route('endorsement.print-dn',['id'=>$data->id])}}" target="_blank" class="mx-3"><i class="fa fa-print"></i> Print</a>
+                    <!-- <a href="javascript:void(0)" wire:click="update_rekening"  class="btn btn-success mx-3"><i class="fa fa-save"></i> Update Rekening Bank</a> -->
                     <span wire:loading wire:target="proses_head_teknik,proses_head_syariah">
                         <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                         <span class="sr-only">{{ __('Loading...') }}</span>
